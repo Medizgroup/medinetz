@@ -1,0 +1,775 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// schema.prisma
+
+
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserRole {
+  LIMITED     // 1
+  VIEWER      // 2
+  COORDINATOR // 3
+  ADMIN       // 4
+}
+
+enum CaseStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING
+  CLOSED
+}
+
+enum CasePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum OrganizationType {
+  ROUTINE
+  PREGNANCY
+  MANAGEMENT
+  CUSTOM
+}
+
+enum ActivityAction {
+  CREATED
+  UPDATED
+  COMMENTED
+  ASSIGNED
+  CLOSED
+  REOPENED
+  MENTIONED
+  ATTACHED
+}
+
+enum NotificationType {
+  MENTION
+  ASSIGNMENT
+  COMMENT
+  CASE_UPDATE
+  PROTOCOL_UPDATE
+}
+
+enum ExpenseCategory {
+  DOCTOR
+  INTERPRETER
+  MEDICATION
+  LAB
+  OTHER
+}
+
+enum ResourceAvailability {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+// ============================================================
+//! 1. AUTH & USERS
+// ============================================================
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+
+
+    // Better Auth expected
+  name          String?
+  emailVerified Boolean  @default(false) @map("email_verified")
+  image         String?  // optional (avatar), Better Auth nutzt oft "image"
+
+  // Deine Felder (optional behalten)
+  firstName     String?  @map("first_name")
+  lastName      String?  @map("last_name")
+  avatarUrl     String?  @map("avatar_url")
+
+  isActive      Boolean  @default(false) @map("is_active")
+  lastLoginAt   DateTime? @map("last_login_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+
+  // Relations
+  sessions              Session[]
+  accounts              Account[]
+  organizationMembers   OrganizationMember[]
+  organizationInvites   OrganizationInvite[] @relation("InvitedBy")
+  preferences           UserPreference?
+
+  // Cases
+  createdCases          Case[]               @relation("CaseCreator")
+  assignedCases         Case[]               @relation("CaseAssignee")
+  closedCases           Case[]               @relation("CaseClosedBy")
+  caseComments          CaseComment[]
+  watchedCases          CaseWatcher[]
+
+  // Protocols
+  createdProtocols      Protocol[]           @relation("ProtocolCreator")
+  protocolComments      ProtocolComment[]
+
+  // Resources
+  createdDoctors        Doctor[]             @relation("DoctorCreator")
+  createdInterpreters   Interpreter[]        @relation("InterpreterCreator")
+  caseDoctorsCreated    CaseDoctor[]         @relation("CaseDoctorCreator")
+  caseInterpretersCreated CaseInterpreter[]  @relation("CaseInterpreterCreator")
+  caseCostsCreated      CaseCost[]           @relation("CaseCostCreator")
+
+  // Financials
+  createdDonations      Donation[]           @relation("DonationCreator")
+  generatedReports      FinancialReport[]    @relation("ReportGenerator")
+
+  // System
+  activities            Activity[]
+  notifications         Notification[]
+  mentions              Mention[]            @relation("MentionedUser")
+  mentioning            Mention[]            @relation("MentioningUser")
+  todos                 Todo[]
+  attachmentUploads     CaseAttachment[]     @relation("AttachmentUploader")
+
+  @@index([email])
+  @@index([isActive])
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+  @@map("verification")
+}
+
+model Organization {
+  id          String             @id @default(uuid())
+  name        String
+  slug        String             @unique
+  description String?
+  type        OrganizationType   @default(CUSTOM)
+  color       String?            // Hex color
+  isArchived  Boolean            @default(false) @map("is_archived")
+  settings    Json?              // Project-specific settings
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+
+  // Relations
+  members     OrganizationMember[]
+  invites     OrganizationInvite[]
+  cases       Case[]
+  protocols   Protocol[]
+  budgets     Budget[]
+  donations   Donation[]
+  expenses    Expense[]
+  activities  Activity[]
+
+  @@index([slug])
+  @@index([isArchived])
+  @@map("organizations")
+  financialReports FinancialReport[] @relation("ReportGenerator")
+}
+
+model OrganizationMember {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  userId         String   @map("user_id")
+  role           UserRole
+  joinedAt       DateTime @default(now()) @map("joined_at")
+  invitedBy      String?  @map("invited_by")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+  @@index([role])
+  @@map("organization_members")
+}
+
+model OrganizationInvite {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  email          String
+  role           UserRole
+  invitedBy      String   @map("invited_by")
+  token          String   @unique
+  expiresAt      DateTime @map("expires_at")
+  acceptedAt     DateTime? @map("accepted_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  inviter      User         @relation("InvitedBy", fields: [invitedBy], references: [id])
+
+  @@index([organizationId, email])
+  @@index([token])
+  @@map("organization_invites")
+}
+
+model UserPreference {
+  userId                 String   @id @map("user_id")
+  language               String   @default("de")
+  timezone               String   @default("Europe/Berlin")
+  emailNotifications     Boolean  @default(true) @map("email_notifications")
+  defaultOrganizationId  String?  @map("default_organization_id")
+  uiSettings             Json?    @map("ui_settings") // Theme, compact mode, etc.
+  updatedAt              DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+// ============================================================
+// 2. RESSOURCEN (INSTANZ-WEIT)
+// ============================================================
+
+model Doctor {
+  id                   String                @id @default(uuid())
+  name                 String
+  specialty            String?
+  languages            String[]              // Array: ['de', 'en', 'ar']
+  phone                String?
+  email                String?
+  address              String?
+  practiceName         String?               @map("practice_name")
+  notes                String?               // Interne Notizen
+  isActive             Boolean               @default(true) @map("is_active")
+  availability         ResourceAvailability? @default(MEDIUM)
+  acceptsNewPatients   Boolean               @default(true) @map("accepts_new_patients")
+  tags                 String[]              // Optional: Projekt-Tags
+  createdAt            DateTime              @default(now()) @map("created_at")
+  updatedAt            DateTime              @updatedAt @map("updated_at")
+  createdBy            String                @map("created_by")
+
+  creator     User         @relation("DoctorCreator", fields: [createdBy], references: [id])
+  caseDoctors CaseDoctor[]
+
+  @@index([specialty])
+  @@index([isActive])
+  @@index([languages]) // GIN index in PostgreSQL
+  @@index([tags])
+  @@map("doctors")
+}
+
+model Interpreter {
+  id            String                @id @default(uuid())
+  name          String
+  languages     String[]              // Array: ['de', 'ar'], ['de', 'fa']
+  phone         String?
+  email         String?
+  address       String?
+  notes         String?
+  isActive      Boolean               @default(true) @map("is_active")
+  availability  ResourceAvailability? @default(MEDIUM)
+  hourlyRate    Decimal?              @map("hourly_rate") @db.Decimal(10, 2)
+  tags          String[]
+  createdAt     DateTime              @default(now()) @map("created_at")
+  updatedAt     DateTime              @updatedAt @map("updated_at")
+  createdBy     String                @map("created_by")
+
+  creator           User              @relation("InterpreterCreator", fields: [createdBy], references: [id])
+  caseInterpreters  CaseInterpreter[]
+
+  @@index([isActive])
+  @@index([languages])
+  @@index([tags])
+  @@map("interpreters")
+}
+
+model ResourceTag {
+  id             String   @id @default(uuid())
+  name           String   @unique
+  type           String   // 'project', 'specialty', 'language', 'custom'
+  color          String?
+  organizationId String?  @map("organization_id") // NULL = instanz-weit
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([type])
+  @@index([organizationId])
+  @@map("resource_tags")
+}
+
+// ============================================================
+// 3. CASES (PROJEKT-SPEZIFISCH)
+// ============================================================
+
+model Case {
+  id               String        @id @default(uuid())
+  organizationId   String        @map("organization_id")
+  caseNumber       Int           @map("case_number") // #1, #2, #3...
+  
+  // Case Info
+  title            String
+  description      String?       @db.Text
+  status           CaseStatus    @default(OPEN)
+  priority         CasePriority  @default(MEDIUM)
+  sensitivityLevel Int           @default(1) @map("sensitivity_level") // 1-3
+  
+  // Patient Info (anonymized)
+  patientPseudonym String        @map("patient_pseudonym")
+  patientLanguage  String?       @map("patient_language")
+  patientNotes     String?       @map("patient_notes") @db.Text
+  
+  // Assignment
+  creatorId        String        @map("creator_id")
+  assigneeId       String?       @map("assignee_id")
+  closedBy         String?       @map("closed_by")
+  
+  // Costs
+  totalCosts       Decimal       @default(0) @map("total_costs") @db.Decimal(10, 2)
+  estimatedCosts   Decimal?      @map("estimated_costs") @db.Decimal(10, 2)
+  
+  // Timestamps
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  closedAt         DateTime?     @map("closed_at")
+  dueDate          DateTime?     @map("due_date")
+
+  // Relations
+  organization      Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator           User            @relation("CaseCreator", fields: [creatorId], references: [id])
+  assignee          User?           @relation("CaseAssignee", fields: [assigneeId], references: [id])
+  closedByUser      User?           @relation("CaseClosedBy", fields: [closedBy], references: [id])
+  
+  comments          CaseComment[]
+  doctors           CaseDoctor[]
+  interpreters      CaseInterpreter[]
+  costs             CaseCost[]
+  watchers          CaseWatcher[]
+  labels            CaseLabel[]
+  attachments       CaseAttachment[]
+  protocolCases     ProtocolCase[]
+  expenses          Expense[]
+
+  @@unique([organizationId, caseNumber])
+  @@index([organizationId, status])
+  @@index([organizationId, assigneeId])
+  @@index([organizationId, createdAt(sort: Desc)])
+  @@index([status])
+  @@index([priority])
+  @@index([creatorId])
+  @@index([assigneeId])
+  @@index([patientPseudonym])
+  @@map("cases")
+}
+
+model CaseComment {
+  id         String    @id @default(uuid())
+  caseId     String    @map("case_id")
+  userId     String    @map("user_id")
+  content    String    @db.Text
+  isInternal Boolean   @default(false) @map("is_internal")
+  editedAt   DateTime? @map("edited_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  case     Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id])
+  mentions Mention[]
+
+  @@index([caseId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("case_comments")
+}
+
+model CaseDoctor {
+  id              String    @id @default(uuid())
+  caseId          String    @map("case_id")
+  doctorId        String    @map("doctor_id")
+  appointmentDate DateTime? @map("appointment_date") @db.Date
+  appointmentNotes String?  @map("appointment_notes") @db.Text
+  invoiceReceived Boolean   @default(false) @map("invoice_received")
+  invoiceAmount   Decimal?  @map("invoice_amount") @db.Decimal(10, 2)
+  invoiceDate     DateTime? @map("invoice_date") @db.Date
+  invoicePaid     Boolean   @default(false) @map("invoice_paid")
+  diagnosis       String?   @db.Text
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  createdBy       String    @map("created_by")
+
+  case    Case   @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  doctor  Doctor @relation(fields: [doctorId], references: [id])
+  creator User   @relation("CaseDoctorCreator", fields: [createdBy], references: [id])
+
+  @@index([caseId])
+  @@index([doctorId])
+  @@index([invoicePaid])
+  @@map("case_doctors")
+}
+
+model CaseInterpreter {
+  id              String    @id @default(uuid())
+  caseId          String    @map("case_id")
+  interpreterId   String    @map("interpreter_id")
+  appointmentDate DateTime? @map("appointment_date") @db.Date
+  hoursWorked     Decimal?  @map("hours_worked") @db.Decimal(5, 2)
+  cost            Decimal?  @db.Decimal(10, 2)
+  invoiceReceived Boolean   @default(false) @map("invoice_received")
+  invoicePaid     Boolean   @default(false) @map("invoice_paid")
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  createdBy       String    @map("created_by")
+
+  case        Case        @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  interpreter Interpreter @relation(fields: [interpreterId], references: [id])
+  creator     User        @relation("CaseInterpreterCreator", fields: [createdBy], references: [id])
+
+  @@index([caseId])
+  @@index([interpreterId])
+  @@index([invoicePaid])
+  @@map("case_interpreters")
+}
+
+model CaseCost {
+  id          String          @id @default(uuid())
+  caseId      String          @map("case_id")
+  category    ExpenseCategory
+  description String
+  amount      Decimal         @db.Decimal(10, 2)
+  invoiceDate DateTime?       @map("invoice_date") @db.Date
+  invoicePaid Boolean         @default(false) @map("invoice_paid")
+  notes       String?         @db.Text
+  createdAt   DateTime        @default(now()) @map("created_at")
+  createdBy   String          @map("created_by")
+
+  case    Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  creator User @relation("CaseCostCreator", fields: [createdBy], references: [id])
+
+  @@index([caseId])
+  @@index([category])
+  @@index([invoicePaid])
+  @@map("case_costs")
+}
+
+model CaseWatcher {
+  id        String   @id @default(uuid())
+  caseId    String   @map("case_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([caseId, userId])
+  @@index([userId])
+  @@map("case_watchers")
+}
+
+model CaseLabel {
+  id        String   @id @default(uuid())
+  caseId    String   @map("case_id")
+  label     String
+  color     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([label])
+  @@map("case_labels")
+}
+
+model CaseAttachment {
+  id         String   @id @default(uuid())
+  caseId     String   @map("case_id")
+  filename   String
+  filePath   String   @map("file_path")
+  fileSize   Int?     @map("file_size") // bytes
+  mimeType   String?  @map("mime_type")
+  uploadedBy String   @map("uploaded_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  case     Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  uploader User @relation("AttachmentUploader", fields: [uploadedBy], references: [id])
+
+  @@index([caseId])
+  @@index([uploadedBy])
+  @@map("case_attachments")
+}
+
+// ============================================================
+// 4. PROTOCOLS (PROJEKT-SPEZIFISCH)
+// ============================================================
+
+model Protocol {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  protocolNumber Int      @map("protocol_number") // #1, #2, #3...
+  
+  date           DateTime @db.Date // Plenum date
+  title          String
+  description    String?  @db.Text
+  
+  creatorId      String   @map("creator_id")
+  
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User              @relation("ProtocolCreator", fields: [creatorId], references: [id])
+  comments       ProtocolComment[]
+  protocolCases  ProtocolCase[]
+
+  @@unique([organizationId, protocolNumber])
+  @@index([organizationId])
+  @@index([date(sort: Desc)])
+  @@index([creatorId])
+  @@map("protocols")
+}
+
+model ProtocolComment {
+  id         String   @id @default(uuid())
+  protocolId String   @map("protocol_id")
+  userId     String   @map("user_id")
+  content    String   @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  protocol Protocol  @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id])
+  mentions Mention[]
+
+  @@index([protocolId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("protocol_comments")
+}
+
+model ProtocolCase {
+  id         String   @id @default(uuid())
+  protocolId String   @map("protocol_id")
+  caseId     String   @map("case_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  case     Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@unique([protocolId, caseId])
+  @@index([caseId])
+  @@map("protocol_cases")
+}
+
+// ============================================================
+// 5. FINANZEN
+// ============================================================
+
+model Donation {
+  id             String   @id @default(uuid())
+  organizationId String?  @map("organization_id") // NULL = übergreifend
+  amount         Decimal  @db.Decimal(10, 2)
+  donorName      String?  @map("donor_name") // Optional, anonymisiert
+  donationDate   DateTime @map("donation_date") @db.Date
+  purpose        String?  // 'general', 'pregnancy', 'emergency'
+  notes          String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  createdBy      String   @map("created_by")
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  creator      User          @relation("DonationCreator", fields: [createdBy], references: [id])
+
+  @@index([organizationId])
+  @@index([donationDate(sort: Desc)])
+  @@map("donations")
+}
+
+model Expense {
+  id             String          @id @default(uuid())
+  organizationId String          @map("organization_id")
+  caseId         String?         @map("case_id") // Optional: kann case-spezifisch sein
+  category       ExpenseCategory
+  amount         Decimal         @db.Decimal(10, 2)
+  expenseDate    DateTime        @map("expense_date") @db.Date
+  description    String?
+  createdAt      DateTime        @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  case         Case?        @relation(fields: [caseId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([caseId])
+  @@index([category])
+  @@index([expenseDate(sort: Desc)])
+  @@map("expenses")
+}
+
+model Budget {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  year           Int
+  month          Int?     // 1-12, NULL = Jahresbudget
+  plannedAmount  Decimal  @map("planned_amount") @db.Decimal(10, 2)
+  notes          String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, year, month])
+  @@map("budgets")
+}
+
+model FinancialReport {
+  id             String   @id @default(uuid())
+  organizationId String?  @map("organization_id") // NULL = übergreifend
+  reportType     String   @map("report_type") // 'annual', 'quarterly', 'funding_request'
+  periodStart    DateTime @map("period_start") @db.Date
+  periodEnd      DateTime @map("period_end") @db.Date
+  totalDonations Decimal? @map("total_donations") @db.Decimal(10, 2)
+  totalExpenses  Decimal? @map("total_expenses") @db.Decimal(10, 2)
+  caseCount      Int?     @map("case_count")
+  reportData     Json?    @map("report_data") // Vollständiger Report als JSON
+  generatedAt    DateTime @default(now()) @map("generated_at")
+  generatedBy    String   @map("generated_by")
+
+  organization Organization? @relation("ReportGenerator", fields: [organizationId], references: [id], onDelete: SetNull)
+  generator    User          @relation("ReportGenerator", fields: [generatedBy], references: [id])
+
+  @@index([organizationId])
+  @@index([periodStart, periodEnd])
+  @@index([generatedAt(sort: Desc)])
+  @@map("financial_reports")
+}
+
+// ============================================================
+// 6. SYSTEM
+// ============================================================
+
+model Activity {
+  id             String         @id @default(uuid())
+  organizationId String?        @map("organization_id") // NULL = übergreifend
+  userId         String         @map("user_id")
+  action         ActivityAction
+  targetType     String         @map("target_type") // 'case', 'protocol', 'comment', etc.
+  targetId       String         @map("target_id")
+  metadata       Json?          // Extra info
+  createdAt      DateTime       @default(now()) @map("created_at")
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id])
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([targetType])
+  @@index([targetId])
+  @@index([createdAt(sort: Desc)])
+  @@index([organizationId, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([targetType, targetId])
+  @@map("activities")
+}
+
+model Notification {
+  id         String           @id @default(uuid())
+  userId     String           @map("user_id")
+  type       NotificationType
+  title      String
+  message    String?          @db.Text
+  targetType String?          @map("target_type") // 'case', 'protocol', 'comment'
+  targetId   String?          @map("target_id")
+  read       Boolean          @default(false)
+  readAt     DateTime?        @map("read_at")
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt(sort: Desc)])
+  @@index([userId, read, createdAt(sort: Desc)])
+  @@map("notifications")
+}
+
+
+
+model Mention {
+  id                String   @id @default(uuid())
+  mentionedUserId   String   @map("mentioned_user_id")
+  mentioningUserId  String   @map("mentioning_user_id")
+  targetType        String   @map("target_type") // 'case_comment', 'protocol_comment'
+  targetId          String   @map("target_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  mentionedUser  User             @relation("MentionedUser", fields: [mentionedUserId], references: [id], onDelete: Cascade)
+  mentioningUser User             @relation("MentioningUser", fields: [mentioningUserId], references: [id])
+
+  caseComment    CaseComment?     @relation(fields: [targetId], references: [id], onDelete: Cascade, map: "mentions_case_comment_target_id_fkey")
+  protocolComment ProtocolComment? @relation(fields: [targetId], references: [id], onDelete: Cascade, map: "mentions_protocol_comment_target_id_fkey")
+
+  @@index([mentionedUserId])
+  @@index([targetType, targetId])
+  @@map("mentions")
+}
+
+model Todo {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  title       String
+  description String?   @db.Text
+  done        Boolean   @default(false)
+  priority    Int       @default(2) // 1=Low, 2=Medium, 3=High
+  dueDate     DateTime? @map("due_date") @db.Date
+  targetType  String?   @map("target_type") // Optional: 'case', 'protocol'
+  targetId    String?   @map("target_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  completedAt DateTime? @map("completed_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([done])
+  @@index([dueDate])
+  @@index([userId, done])
+  @@map("todos")
+}
