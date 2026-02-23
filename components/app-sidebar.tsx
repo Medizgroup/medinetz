@@ -2,19 +2,26 @@
 
 import * as React from "react";
 import {
+  Baby,
   BookOpen,
   Bot,
-  Command,
+  Form,
   Frame,
-  HeartPlus,
+  GalleryHorizontal,
+  GalleryHorizontalEnd,
+  GalleryVerticalEnd,
+  History,
   Home,
   Leaf,
   LifeBuoy,
+  ListTodo,
   Map,
   PieChart,
   Send,
   Settings2,
-  SquareTerminal,
+  Siren,
+  ToolCase,
+  Users,
 } from "lucide-react";
 
 import {
@@ -45,69 +52,24 @@ const data = {
       icon: Home,
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Protokolle",
+      url: "/protocols",
+      icon: Form,
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      title: "Fälle",
+      url: "/cases",
+      icon: GalleryVerticalEnd,
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      title: "Todo's",
+      url: "/todos",
+      icon: ListTodo,
+    },
+    {
+      title: "Aktivitäten",
+      url: "/activities",
+      icon: History,
     },
   ],
   navSecondary: [
@@ -124,19 +86,19 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
-      url: "#",
+      name: "Routine",
+      url: "/routine",
       icon: Frame,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
+      name: "Schwangerschaft",
+      url: "/pregnancy",
+      icon: Siren,
     },
     {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      name: "Management",
+      url: "/management",
+      icon: GalleryHorizontalEnd,
     },
   ],
 };
@@ -166,9 +128,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
     </Sidebar>
   );
 }
