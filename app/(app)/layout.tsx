@@ -22,7 +22,6 @@ export default async function AppLayout({
     select: { isActive: true },
   });
 
-  // Eingeloggt, aber inaktiv → inactive page
   if (!user?.isActive) {
     redirect("/inactive");
   }
