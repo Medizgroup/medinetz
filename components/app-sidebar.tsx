@@ -2,26 +2,22 @@
 
 import * as React from "react";
 import {
-  Baby,
   BookOpen,
-  Bot,
+  CircleQuestionMark,
+  CreditCard,
+  Folder,
   Form,
   Frame,
-  GalleryHorizontal,
   GalleryHorizontalEnd,
   GalleryVerticalEnd,
   History,
   Home,
+  Languages,
   Leaf,
-  LifeBuoy,
   ListTodo,
-  Map,
-  PieChart,
   Send,
-  Settings2,
   Siren,
-  ToolCase,
-  Users,
+  Stethoscope,
 } from "lucide-react";
 
 import {
@@ -36,14 +32,16 @@ import {
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
 import { NavSecondary } from "./nav-secondary";
-import { NavUser } from "./nav-user";
+import { NavUser } from "./dash-project";
 import Link from "next/link";
+import { NavRessources } from "./nav-ressources";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+  project: {
+    projectName: "Routine",
+    projectAvatar: "",
+    projectUrl: "/routine",
+    projectIcon: Frame,
   },
   navMain: [
     {
@@ -71,12 +69,17 @@ const data = {
       url: "/activities",
       icon: History,
     },
+    {
+      title: "Wikis",
+      url: "/wikis",
+      icon: BookOpen,
+    },
   ],
   navSecondary: [
     {
-      title: "Support",
+      title: "Hilfe",
       url: "#",
-      icon: LifeBuoy,
+      icon: CircleQuestionMark,
     },
     {
       title: "Feedback",
@@ -99,6 +102,30 @@ const data = {
       name: "Management",
       url: "/management",
       icon: GalleryHorizontalEnd,
+    },
+  ],
+  ressources: [
+    {
+      name: "Ressourcen",
+      url: "/ressources",
+      icon: Folder,
+      items: [
+        {
+          name: "Praxis und Ärzte",
+          url: "/doctors",
+          icon: Stethoscope,
+        },
+        {
+          name: "Dolmetscher",
+          url: "/interpreters",
+          icon: Languages,
+        },
+      ],
+    },
+    {
+      name: "Finanzen",
+      url: "/finance",
+      icon: CreditCard,
     },
   ],
 };
@@ -126,8 +153,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
+        <NavRessources ressources={data.ressources} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser project={data.project} />
+      </SidebarFooter>
     </Sidebar>
   );
 }
