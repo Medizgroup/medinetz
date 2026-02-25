@@ -31,7 +31,7 @@ export function NavRessources({
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Ressourcen</SidebarGroupLabel>
-      <SidebarMenu>
+      <SidebarMenu className="pt-2 px-2">
         {ressources.map((item) => (
           <SidebarMenuItem key={item.name}>
             <Collapsible>
