@@ -28,9 +28,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 export default function UserBadge() {
   return (
     <Menu>
-      <MenuTrigger render={<Button size="icon-lg" variant="ghost" />}>
-        <Avatar className="size-7">
-          <AvatarImage src="https://github.com/shadcn.png" />
+      <MenuTrigger render={<Button size="icon-xl" variant="ghost" />}>
+        <Avatar className="size-8">
+          <AvatarImage src="https://api.dicebear.com/9.x/lorelei/svg?backgroundType[]&backgroundRotation=360,-50,-30&glassesProbability=90&backgroundColor[]&seed=Brian" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </MenuTrigger>
