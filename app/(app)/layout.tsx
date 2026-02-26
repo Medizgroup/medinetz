@@ -27,7 +27,7 @@ export default async function AppLayout({
   const h = await headers();
   const session = await auth.api.getSession({ headers: h });
 
-  // Nicht eingeloggt → login
+  // Nicht eingeloggt redirect zu login
   if (!session?.user?.id) {
     redirect("/sign-in");
   }

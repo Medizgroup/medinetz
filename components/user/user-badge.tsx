@@ -1,3 +1,4 @@
+"use client";
 import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,19 @@ import {
 } from "@/components/ui/menu";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 export default function UserBadge() {
+  const router = useRouter();
+  const logOut = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/signin"); // redirect to login page
+        },
+      },
+    });
+  };
   return (
     <Menu>
       <MenuTrigger
@@ -33,10 +46,16 @@ export default function UserBadge() {
         </Avatar>
       </MenuTrigger>
       <MenuPopup className="w-56">
+        <MenuItem className="flex gap-0 flex-col items-start ">
+          <span>Brian Neumann</span>
+          <span className="text-xs text-muted-foreground">mail@mail.com</span>
+        </MenuItem>
+
+        <MenuSeparator />
         <MenuGroup>
           <MenuGroupLabel>Konto</MenuGroupLabel>
           <MenuItem>Status</MenuItem>
-          <MenuItem>Profil</MenuItem>
+          <MenuItem>Profil bearbeiten</MenuItem>
           <MenuItem>Einstellungen</MenuItem>
         </MenuGroup>
 
@@ -47,7 +66,7 @@ export default function UserBadge() {
           <MenuSub>
             <MenuSubTrigger>Organisations</MenuSubTrigger>
             <MenuSubPopup>
-              <MenuItem>Eine Org. hinzufügen</MenuItem>
+              <MenuItem>Org. hinzufügen</MenuItem>
               <MenuItem>Org. verwalten</MenuItem>
             </MenuSubPopup>
           </MenuSub>
@@ -76,7 +95,7 @@ export default function UserBadge() {
           <MenuItem>App Theme</MenuItem>
         </MenuGroup>
         <MenuSeparator />
-        <MenuItem variant="destructive">
+        <MenuItem variant="destructive" onClick={logOut}>
           <LogOut aria-hidden="true" />
           Sich abmelden
         </MenuItem>

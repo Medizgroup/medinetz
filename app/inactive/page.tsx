@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { RouteIcon } from "lucide-react";
 import {
   Empty,
   EmptyDescription,
@@ -8,12 +9,24 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { RouteIcon } from "lucide-react";
+import RefreshComponent from "./refresh-component";
+import prisma from "@/lib/prisma";
+
 export default async function InactivePage() {
   const h = await headers();
   const session = await auth.api.getSession({ headers: h });
 
   if (!session?.user) redirect("/sign-in");
+
+  // DB-Check: aktiv?
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { isActive: true },
+  });
+
+  if (user?.isActive) {
+    redirect("/home");
+  }
 
   return (
     <Empty>
@@ -27,6 +40,7 @@ export default async function InactivePage() {
           dich erst freischalten.
         </EmptyDescription>
       </EmptyHeader>
+      <RefreshComponent />
     </Empty>
   );
 }

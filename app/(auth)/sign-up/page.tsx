@@ -188,7 +188,7 @@ export default function SignUpPage() {
         return;
       }
 
-      router.replace("/dashboard");
+      router.replace("/home");
     } catch (e) {
       setServerError(e instanceof Error ? e.message : "Unbekannter Fehler.");
     } finally {

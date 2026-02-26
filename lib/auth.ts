@@ -36,7 +36,6 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
-          // Better Auth erwartet Better-Auth Feldnamen (nicht DB column names). :contentReference[oaicite:2]{index=2}
           return {
             data: {
               ...user,
