@@ -1,23 +1,13 @@
-import {
-  PauseIcon,
-  PlayIcon,
-  SkipBackIcon,
-  SkipForwardIcon,
-  TrashIcon,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   Menu,
-  MenuCheckboxItem,
   MenuGroup,
   MenuGroupLabel,
   MenuItem,
   MenuPopup,
-  MenuRadioGroup,
-  MenuRadioItem,
   MenuSeparator,
-  MenuShortcut,
   MenuSub,
   MenuSubPopup,
   MenuSubTrigger,
@@ -28,79 +18,67 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 export default function UserBadge() {
   return (
     <Menu>
-      <MenuTrigger render={<Button size="icon-xl" variant="ghost" />}>
-        <Avatar className="size-8">
+      <MenuTrigger
+        render={
+          <Button
+            size="icon-xl"
+            variant="ghost"
+            className="rounded-full border"
+          />
+        }>
+        <span className="absolute h-1.5 w-1.5 bg-green-500 rounded-full top-0.5 right-0.75 -0"></span>
+        <Avatar className="size-8 b">
           <AvatarImage src="https://api.dicebear.com/9.x/lorelei/svg?backgroundType[]&backgroundRotation=360,-50,-30&glassesProbability=90&backgroundColor[]&seed=Brian" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </MenuTrigger>
-      <MenuPopup>
+      <MenuPopup className="w-56">
         <MenuGroup>
-          <MenuGroupLabel>Playback</MenuGroupLabel>
-          <MenuItem>
-            <PlayIcon aria-hidden="true" />
-            Play
-            <MenuShortcut>⌘P</MenuShortcut>
-          </MenuItem>
-          <MenuItem disabled>
-            <PauseIcon aria-hidden="true" />
-            Pause
-            <MenuShortcut>⇧⌘P</MenuShortcut>
-          </MenuItem>
-          <MenuItem>
-            <SkipBackIcon aria-hidden="true" />
-            Previous
-            <MenuShortcut>⌘[</MenuShortcut>
-          </MenuItem>
-          <MenuItem>
-            <SkipForwardIcon aria-hidden="true" />
-            Next
-            <MenuShortcut>⌘]</MenuShortcut>
-          </MenuItem>
+          <MenuGroupLabel>Konto</MenuGroupLabel>
+          <MenuItem>Status</MenuItem>
+          <MenuItem>Profil</MenuItem>
+          <MenuItem>Einstellungen</MenuItem>
         </MenuGroup>
+
         <MenuSeparator />
-        <MenuCheckboxItem>Shuffle</MenuCheckboxItem>
-        <MenuCheckboxItem>Repeat</MenuCheckboxItem>
-        <MenuCheckboxItem disabled>Enhanced Audio</MenuCheckboxItem>
+        {/* Admin Panel */}
+        <MenuGroup>
+          <MenuGroupLabel>Admin</MenuGroupLabel>
+          <MenuSub>
+            <MenuSubTrigger>Organisations</MenuSubTrigger>
+            <MenuSubPopup>
+              <MenuItem>Eine Org. hinzufügen</MenuItem>
+              <MenuItem>Org. verwalten</MenuItem>
+            </MenuSubPopup>
+          </MenuSub>
+          <MenuSub>
+            <MenuSubTrigger>Benutzer</MenuSubTrigger>
+            <MenuSubPopup>
+              <MenuItem>Benutzer verwalten</MenuItem>
+              <MenuItem>Benutzer freigeben</MenuItem>
+              <MenuItem>Benutzer hinzufügen</MenuItem>
+            </MenuSubPopup>
+          </MenuSub>
+          <MenuSub>
+            <MenuSubTrigger>Ressourcen</MenuSubTrigger>
+            <MenuSubPopup>
+              <MenuItem>Praxen und Instituten </MenuItem>
+              <MenuItem>Dolmetscher</MenuItem>
+            </MenuSubPopup>
+          </MenuSub>
+          <MenuItem>Finanzen</MenuItem>
+        </MenuGroup>
+
         <MenuSeparator />
         <MenuGroup>
-          <MenuGroupLabel>Sort by</MenuGroupLabel>
-          <MenuRadioGroup>
-            <MenuRadioItem value="artist">Artist</MenuRadioItem>
-            <MenuRadioItem value="album">Album</MenuRadioItem>
-            <MenuRadioItem value="title">Title</MenuRadioItem>
-          </MenuRadioGroup>
+          <MenuGroupLabel>preference</MenuGroupLabel>
+          <MenuItem>Benachrichtigung</MenuItem>
+          <MenuItem>App Theme</MenuItem>
         </MenuGroup>
-        <MenuSeparator />
-        <MenuCheckboxItem variant="switch">Auto save</MenuCheckboxItem>
-        <MenuSeparator />
-        <MenuSub>
-          <MenuSubTrigger>Add to Playlist</MenuSubTrigger>
-          <MenuSubPopup>
-            <MenuItem>Jazz</MenuItem>
-            <MenuSub>
-              <MenuSubTrigger>Rock</MenuSubTrigger>
-              <MenuSubPopup>
-                <MenuItem>Hard Rock</MenuItem>
-                <MenuItem>Soft Rock</MenuItem>
-                <MenuItem>Classic Rock</MenuItem>
-                <MenuSeparator />
-                <MenuItem>Metal</MenuItem>
-                <MenuItem>Punk</MenuItem>
-                <MenuItem>Grunge</MenuItem>
-                <MenuItem>Alternative</MenuItem>
-                <MenuItem>Indie</MenuItem>
-                <MenuItem>Electronic</MenuItem>
-              </MenuSubPopup>
-            </MenuSub>
-            <MenuItem>Pop</MenuItem>
-          </MenuSubPopup>
-        </MenuSub>
         <MenuSeparator />
         <MenuItem variant="destructive">
-          <TrashIcon aria-hidden="true" />
-          Delete
-          <MenuShortcut>⌘⌫</MenuShortcut>
+          <LogOut aria-hidden="true" />
+          Sich abmelden
         </MenuItem>
       </MenuPopup>
     </Menu>

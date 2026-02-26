@@ -4,7 +4,7 @@ import {
   TimelineDate,
   TimelineItem,
 } from "@/components/ui/timeline";
-import { Check, Form, GalleryVerticalEnd } from "lucide-react";
+import { Form, GalleryVerticalEnd } from "lucide-react";
 import { Button } from "../ui/button";
 
 const items = [
