@@ -1,5 +1,9 @@
-import React from "react";
+import ProfileComponent from "@/components/settings/profile-component";
 
 export default function Page() {
-  return <div>Hello World !</div>;
+  return (
+    <div>
+      <ProfileComponent />
+    </div>
+  );
 }

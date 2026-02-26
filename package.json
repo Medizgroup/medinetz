@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
+    "@dicebear/collection": "^9.3.2",
+    "@dicebear/core": "^9.3.2",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "^7.4.1",

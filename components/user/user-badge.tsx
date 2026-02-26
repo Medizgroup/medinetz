@@ -18,6 +18,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 export default function UserBadge() {
   const router = useRouter();
   const logOut = async () => {
@@ -55,8 +56,10 @@ export default function UserBadge() {
         <MenuGroup>
           <MenuGroupLabel>Konto</MenuGroupLabel>
           <MenuItem>Status</MenuItem>
-          <MenuItem>Profil bearbeiten</MenuItem>
-          <MenuItem>Einstellungen</MenuItem>
+          <MenuItem render={<Link href="/settings/profile" />}>
+            Profil bearbeiten
+          </MenuItem>
+          <MenuItem render={<Link href="/settings" />}>Einstellungen</MenuItem>
         </MenuGroup>
 
         <MenuSeparator />
