@@ -37,11 +37,10 @@ export default function UserBadge() {
           <Button
             size="icon-xl"
             variant="ghost"
-            className="rounded-full border"
+            className="rounded-full border "
           />
         }>
-        <span className="absolute h-1.5 w-1.5 bg-green-500 rounded-full top-0.5 right-0.75 -0"></span>
-        <Avatar className="size-8 b">
+        <Avatar className="size-8 ">
           <AvatarImage src="https://api.dicebear.com/9.x/lorelei/svg?backgroundType[]&backgroundRotation=360,-50,-30&glassesProbability=90&backgroundColor[]&seed=Brian" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>

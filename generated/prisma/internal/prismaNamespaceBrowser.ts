@@ -107,6 +107,7 @@ export const UserScalarFieldEnum = {
   image: 'image',
   firstName: 'firstName',
   lastName: 'lastName',
+  displayName: 'displayName',
   avatarUrl: 'avatarUrl',
   isActive: 'isActive',
   lastLoginAt: 'lastLoginAt',

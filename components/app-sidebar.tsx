@@ -35,6 +35,8 @@ import { NavSecondary } from "./nav-secondary";
 import { NavUser } from "./dash-project";
 import Link from "next/link";
 import { NavRessources } from "./nav-ressources";
+import { NavSettings } from "./settings/nav/nav-settings";
+import { usePathname } from "next/navigation";
 
 const data = {
   project: {
@@ -131,6 +133,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -138,8 +141,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="bg-accent text-indigo-500 flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Leaf className="size-5" />
+                <div className="bg-accent text-indigo-500 flex aspect-square size-10 items-center justify-center rounded-lg">
+                  <Leaf className="size-6" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Medinetz</span>
@@ -150,12 +153,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
-        <NavRessources ressources={data.ressources} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
-      </SidebarContent>
+      {pathname.startsWith("/settings") ? (
+        <SidebarContent>
+          <NavSettings />
+          {/* <NavProjects projects={data.projects} /> */}
+          {/* <NavRessources ressources={data.ressources} /> */}
+          <NavSecondary items={data.navSecondary} className="mt-auto" />
+        </SidebarContent>
+      ) : (
+        <SidebarContent>
+          <NavMain items={data.navMain} />
+          <NavProjects projects={data.projects} />
+          <NavRessources ressources={data.ressources} />
+          <NavSecondary items={data.navSecondary} className="mt-auto" />
+        </SidebarContent>
+      )}
+
       <SidebarFooter>
         <NavUser project={data.project} />
       </SidebarFooter>

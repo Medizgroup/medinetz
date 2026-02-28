@@ -6,7 +6,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
@@ -15,6 +20,7 @@ import { LoreleiAvatarDialog } from "@/components/avatar/lorelei-avatar-dialog";
 const schema = z.object({
   firstName: z.string().trim().min(1, "Bitte Vornamen angeben.").max(80),
   lastName: z.string().trim().min(1, "Bitte Nachnamen angeben.").max(80),
+  displayName: z.string().trim().min(1, "Bitte Anzeigenamen angeben.").max(80),
   // speichern wir als URL oder data-uri (beides ok)
   avatarUrl: z.string().min(1).optional().nullable(),
 });
@@ -31,6 +37,9 @@ export default function ProfilePage() {
     isActive: boolean;
     emailVerified: boolean;
     name?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    displayName?: string;
   } | null>(null);
 
   const form = useForm<FormValues>({
@@ -57,6 +66,7 @@ export default function ProfilePage() {
       }
       const data = await res.json();
 
+      console.log("Profile data loaded:", data);
       if (!mounted) return;
 
       const u = data.user;
@@ -66,6 +76,8 @@ export default function ProfilePage() {
         isActive: u.isActive,
         emailVerified: u.emailVerified,
         name: u.name,
+        firstName: u.firstName,
+        lastName: u.lastName,
       });
 
       form.reset({
@@ -93,7 +105,6 @@ export default function ProfilePage() {
         firstName: values.firstName,
         lastName: values.lastName,
         avatarUrl: values.avatarUrl,
-        // optional: name automatisch aus first+last
         name: `${values.firstName} ${values.lastName}`.trim(),
       }),
     });
@@ -118,140 +129,193 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex items-center justify-center p-10">
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-5xl">
-        <Separator className="my-8" />
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          <div>
-            <h2 className="text-balance font-semibold text-foreground">
-              Personal information
-            </h2>
-            <p className="text-pretty mt-1 text-sm leading-6 text-muted-foreground">
-              Bearbeite deine persönlichen Daten und dein Profilbild.
-            </p>
-          </div>
-
-          <div className="sm:max-w-3xl md:col-span-2">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
-              <div className="col-span-full sm:col-span-3">
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="firstName">First name</FieldLabel>
-                  <Input
-                    id="firstName"
-                    placeholder="Emma"
-                    disabled={saving}
-                    {...form.register("firstName")}
-                  />
-                  <p className="text-xs text-red-500">
-                    {form.formState.errors.firstName?.message}
-                  </p>
-                </Field>
-              </div>
-
-              <div className="col-span-full sm:col-span-3">
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="lastName">Last name</FieldLabel>
-                  <Input
-                    id="lastName"
-                    placeholder="Crown"
-                    disabled={saving}
-                    {...form.register("lastName")}
-                  />
-                  <p className="text-xs text-red-500">
-                    {form.formState.errors.lastName?.message}
-                  </p>
-                </Field>
-              </div>
-
-              <div className="col-span-full">
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <Input id="email" value={userMeta.email} disabled readOnly />
-                  <FieldDescription>
-                    Email kann nicht geändert werden.
-                  </FieldDescription>
-                </Field>
-              </div>
-
-              <div className="col-span-full sm:col-span-3">
-                <Field className="gap-2">
-                  <FieldLabel>Status</FieldLabel>
-                  <Input
-                    value={userMeta.isActive ? "Aktiv" : "Inaktiv"}
-                    disabled
-                    readOnly
-                  />
-                  <FieldDescription>
-                    Accounts müssen ggf. von einem Admin freigeschaltet werden.
-                  </FieldDescription>
-                </Field>
-              </div>
-
-              <div className="col-span-full sm:col-span-3">
-                <Field className="gap-2">
-                  <FieldLabel>Email verifiziert</FieldLabel>
-                  <Input
-                    value={userMeta.emailVerified ? "Ja" : "Nein"}
-                    disabled
-                    readOnly
-                  />
-                </Field>
-              </div>
-
-              <div className="col-span-full">
-                <Field className="gap-2">
-                  <FieldLabel>Profilbild</FieldLabel>
-
-                  <div className="flex items-center gap-4">
-                    <div className="size-16 overflow-hidden rounded-2xl border">
-                      {/* fallback: wenn leer, kann dicebear später default setzen */}
-                      {avatarUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={avatarUrl} alt="Avatar" className="size-16" />
-                      ) : (
-                        <div className="size-16 bg-muted" />
-                      )}
-                    </div>
-
-                    <LoreleiAvatarDialog
-                      seed={userMeta.id}
-                      value={avatarUrl}
-                      onPick={(url) =>
-                        form.setValue("avatarUrl", url, { shouldDirty: true })
-                      }
+    <>
+      <div className="px-10">
+        <h3 className="text-2xl font-semibold">Profil</h3>
+      </div>
+      <div className="flex items-center justify-center p-10">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full max-w-7xl">
+          <div className="grid grid-cols-1">
+            <div>
+              <h2 className="text-balance text-xl font-semibold text-foreground">
+                Avatar
+              </h2>
+              <p className="text-pretty my-1 text-sm leading-6 text-muted-foreground">
+                Du kannst dein Avatar bearbeiten oder entfernen.
+              </p>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
+                <div className="size-20 sm:size-44 overflow-hidden ">
+                  {avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={avatarUrl}
+                      alt="Avatar"
+                      className="size-20 sm:size-44"
                     />
+                  ) : (
+                    <div className="size-20 sm:size-44 bg-muted rounded-3xl" />
+                  )}
+                </div>
 
+                <div className="flex  sm:flex-row flex-col gap-4">
+                  <LoreleiAvatarDialog
+                    seed={userMeta.name ?? userMeta.id}
+                    value={avatarUrl}
+                    onPick={(url) =>
+                      form.setValue("avatarUrl", url, { shouldDirty: true })
+                    }
+                  />
+
+                  {avatarUrl && (
                     <Button
                       type="button"
-                      variant="ghost"
+                      variant="destructive-outline"
                       disabled={saving}
+                      className="rounded-full"
                       onClick={() =>
-                        form.setValue("avatarUrl", null, { shouldDirty: true })
+                        form.setValue("avatarUrl", null, {
+                          shouldDirty: true,
+                        })
                       }>
-                      Entfernen
+                      Avatar löschen
                     </Button>
-                  </div>
-
-                  <FieldDescription>
-                    Avatar wird mit DiceBear (Lorelei Neutral) erstellt.
-                  </FieldDescription>
-                </Field>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          <Separator className="my-8" />
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+            <div>
+              <h2 className="text-balance font-semibold text-foreground">
+                Anzeige Name
+              </h2>
+              <p className="text-pretty mt-1 text-sm leading-6 text-muted-foreground">
+                Das ist ihr öffentlicher Name der in der App angezeigt wird. Er
+                kann individual angepasst werden
+              </p>
+            </div>
 
-        <Separator className="my-8" />
+            <div className="sm:max-w-3xl md:col-span-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
+                <div className="col-span-full ">
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="displayName">Anzeige Name</FieldLabel>
+                    <Input
+                      id="displayName"
+                      placeholder="Brian Smith (Urlaub)"
+                      defaultValue={userMeta.displayName ?? ""}
+                      disabled={saving}
+                      {...form.register("displayName")}
+                    />
+                    <FieldError>
+                      {form.formState.errors.displayName?.message}
+                    </FieldError>
+                  </Field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Separator className="my-8" />
 
-        <div className="flex items-center justify-end space-x-4">
-          <Button type="button" variant="outline" className="whitespace-nowrap">
-            Go back
-          </Button>
-          <Button type="submit" className="whitespace-nowrap" disabled={saving}>
-            {saving ? "Speichere…" : "Save settings"}
-          </Button>
-        </div>
-      </form>
-    </div>
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+            <div>
+              <h2 className="text-balance font-semibold text-foreground">
+                Personal information
+              </h2>
+              <p className="text-pretty mt-1 text-sm leading-6 text-muted-foreground">
+                Bearbeite deine persönlichen Daten und dein Profilbild.
+              </p>
+            </div>
+
+            <div className="sm:max-w-3xl md:col-span-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
+                <div className="col-span-full sm:col-span-3">
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="firstName">Nachname</FieldLabel>
+                    <Input
+                      id="firstName"
+                      placeholder="Emma"
+                      defaultValue={userMeta.firstName ?? ""}
+                      disabled={saving}
+                      {...form.register("firstName")}
+                    />
+                    <FieldError>
+                      {form.formState.errors.firstName?.message}
+                    </FieldError>
+                  </Field>
+                </div>
+
+                <div className="col-span-full sm:col-span-3">
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="lastName">Vorname</FieldLabel>
+                    <Input
+                      id="lastName"
+                      placeholder="Crown"
+                      defaultValue={userMeta.lastName ?? ""}
+                      disabled={saving}
+                      {...form.register("lastName")}
+                    />
+                    <FieldError>
+                      {form.formState.errors.lastName?.message}
+                    </FieldError>
+                  </Field>
+                </div>
+
+                <div className="col-span-full">
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="email">Email</FieldLabel>
+                    <Input
+                      id="email"
+                      value={userMeta.email}
+                      disabled
+                      readOnly
+                    />
+                    <FieldDescription>
+                      Email kann nicht geändert werden.
+                    </FieldDescription>
+                  </Field>
+                </div>
+
+                <div className="col-span-full sm:col-span-3">
+                  <Field className="gap-2">
+                    <FieldLabel>Status</FieldLabel>
+                    <Input
+                      value={userMeta.isActive ? "Aktiv" : "Inaktiv"}
+                      disabled
+                      readOnly
+                    />
+                  </Field>
+                </div>
+
+                <div className="col-span-full sm:col-span-3">
+                  <Field className="gap-2">
+                    <FieldLabel>Email verifiziert</FieldLabel>
+                    <Input
+                      value={userMeta.emailVerified ? "Ja" : "Nein"}
+                      disabled
+                      readOnly
+                    />
+                  </Field>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Separator className="my-8" />
+
+          <div className="flex items-center justify-end space-x-4">
+            <Button
+              type="submit"
+              className="whitespace-nowrap rounded-full"
+              disabled={saving}>
+              {saving ? "Speichere…" : "Speichern"}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }

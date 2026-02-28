@@ -32,6 +32,7 @@ export type UserMinAggregateOutputType = {
   image: string | null
   firstName: string | null
   lastName: string | null
+  displayName: string | null
   avatarUrl: string | null
   isActive: boolean | null
   lastLoginAt: Date | null
@@ -47,6 +48,7 @@ export type UserMaxAggregateOutputType = {
   image: string | null
   firstName: string | null
   lastName: string | null
+  displayName: string | null
   avatarUrl: string | null
   isActive: boolean | null
   lastLoginAt: Date | null
@@ -62,6 +64,7 @@ export type UserCountAggregateOutputType = {
   image: number
   firstName: number
   lastName: number
+  displayName: number
   avatarUrl: number
   isActive: number
   lastLoginAt: number
@@ -79,6 +82,7 @@ export type UserMinAggregateInputType = {
   image?: true
   firstName?: true
   lastName?: true
+  displayName?: true
   avatarUrl?: true
   isActive?: true
   lastLoginAt?: true
@@ -94,6 +98,7 @@ export type UserMaxAggregateInputType = {
   image?: true
   firstName?: true
   lastName?: true
+  displayName?: true
   avatarUrl?: true
   isActive?: true
   lastLoginAt?: true
@@ -109,6 +114,7 @@ export type UserCountAggregateInputType = {
   image?: true
   firstName?: true
   lastName?: true
+  displayName?: true
   avatarUrl?: true
   isActive?: true
   lastLoginAt?: true
@@ -197,6 +203,7 @@ export type UserGroupByOutputType = {
   image: string | null
   firstName: string | null
   lastName: string | null
+  displayName: string | null
   avatarUrl: string | null
   isActive: boolean
   lastLoginAt: Date | null
@@ -233,6 +240,7 @@ export type UserWhereInput = {
   image?: Prisma.StringNullableFilter<"User"> | string | null
   firstName?: Prisma.StringNullableFilter<"User"> | string | null
   lastName?: Prisma.StringNullableFilter<"User"> | string | null
+  displayName?: Prisma.StringNullableFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -273,6 +281,7 @@ export type UserOrderByWithRelationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   firstName?: Prisma.SortOrderInput | Prisma.SortOrder
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -316,6 +325,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   image?: Prisma.StringNullableFilter<"User"> | string | null
   firstName?: Prisma.StringNullableFilter<"User"> | string | null
   lastName?: Prisma.StringNullableFilter<"User"> | string | null
+  displayName?: Prisma.StringNullableFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -356,6 +366,7 @@ export type UserOrderByWithAggregationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   firstName?: Prisma.SortOrderInput | Prisma.SortOrder
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -377,6 +388,7 @@ export type UserScalarWhereWithAggregatesInput = {
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   firstName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   lastName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  displayName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -392,6 +404,7 @@ export type UserCreateInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -432,6 +445,7 @@ export type UserUncheckedCreateInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -472,6 +486,7 @@ export type UserUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -512,6 +527,7 @@ export type UserUncheckedUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -552,6 +568,7 @@ export type UserCreateManyInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -567,6 +584,7 @@ export type UserUpdateManyMutationInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -582,6 +600,7 @@ export type UserUncheckedUpdateManyInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -597,6 +616,7 @@ export type UserCountOrderByAggregateInput = {
   image?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -612,6 +632,7 @@ export type UserMaxOrderByAggregateInput = {
   image?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -627,6 +648,7 @@ export type UserMinOrderByAggregateInput = {
   image?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -1026,6 +1048,7 @@ export type UserCreateWithoutSessionsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1065,6 +1088,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1120,6 +1144,7 @@ export type UserUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1159,6 +1184,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1198,6 +1224,7 @@ export type UserCreateWithoutAccountsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1237,6 +1264,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1292,6 +1320,7 @@ export type UserUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1331,6 +1360,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1370,6 +1400,7 @@ export type UserCreateWithoutOrganizationMembersInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1409,6 +1440,7 @@ export type UserUncheckedCreateWithoutOrganizationMembersInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1464,6 +1496,7 @@ export type UserUpdateWithoutOrganizationMembersInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1503,6 +1536,7 @@ export type UserUncheckedUpdateWithoutOrganizationMembersInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1542,6 +1576,7 @@ export type UserCreateWithoutOrganizationInvitesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1581,6 +1616,7 @@ export type UserUncheckedCreateWithoutOrganizationInvitesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1636,6 +1672,7 @@ export type UserUpdateWithoutOrganizationInvitesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1675,6 +1712,7 @@ export type UserUncheckedUpdateWithoutOrganizationInvitesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1714,6 +1752,7 @@ export type UserCreateWithoutPreferencesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1753,6 +1792,7 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1808,6 +1848,7 @@ export type UserUpdateWithoutPreferencesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1847,6 +1888,7 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1886,6 +1928,7 @@ export type UserCreateWithoutCreatedDoctorsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1925,6 +1968,7 @@ export type UserUncheckedCreateWithoutCreatedDoctorsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -1980,6 +2024,7 @@ export type UserUpdateWithoutCreatedDoctorsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2019,6 +2064,7 @@ export type UserUncheckedUpdateWithoutCreatedDoctorsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2058,6 +2104,7 @@ export type UserCreateWithoutCreatedInterpretersInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2097,6 +2144,7 @@ export type UserUncheckedCreateWithoutCreatedInterpretersInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2152,6 +2200,7 @@ export type UserUpdateWithoutCreatedInterpretersInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2191,6 +2240,7 @@ export type UserUncheckedUpdateWithoutCreatedInterpretersInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2230,6 +2280,7 @@ export type UserCreateWithoutCreatedCasesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2269,6 +2320,7 @@ export type UserUncheckedCreateWithoutCreatedCasesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2313,6 +2365,7 @@ export type UserCreateWithoutAssignedCasesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2352,6 +2405,7 @@ export type UserUncheckedCreateWithoutAssignedCasesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2396,6 +2450,7 @@ export type UserCreateWithoutClosedCasesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2435,6 +2490,7 @@ export type UserUncheckedCreateWithoutClosedCasesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2490,6 +2546,7 @@ export type UserUpdateWithoutCreatedCasesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2529,6 +2586,7 @@ export type UserUncheckedUpdateWithoutCreatedCasesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2579,6 +2637,7 @@ export type UserUpdateWithoutAssignedCasesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2618,6 +2677,7 @@ export type UserUncheckedUpdateWithoutAssignedCasesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2668,6 +2728,7 @@ export type UserUpdateWithoutClosedCasesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2707,6 +2768,7 @@ export type UserUncheckedUpdateWithoutClosedCasesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2746,6 +2808,7 @@ export type UserCreateWithoutCaseCommentsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2785,6 +2848,7 @@ export type UserUncheckedCreateWithoutCaseCommentsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2840,6 +2904,7 @@ export type UserUpdateWithoutCaseCommentsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2879,6 +2944,7 @@ export type UserUncheckedUpdateWithoutCaseCommentsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2918,6 +2984,7 @@ export type UserCreateWithoutCaseDoctorsCreatedInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -2957,6 +3024,7 @@ export type UserUncheckedCreateWithoutCaseDoctorsCreatedInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3012,6 +3080,7 @@ export type UserUpdateWithoutCaseDoctorsCreatedInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3051,6 +3120,7 @@ export type UserUncheckedUpdateWithoutCaseDoctorsCreatedInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3090,6 +3160,7 @@ export type UserCreateWithoutCaseInterpretersCreatedInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3129,6 +3200,7 @@ export type UserUncheckedCreateWithoutCaseInterpretersCreatedInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3184,6 +3256,7 @@ export type UserUpdateWithoutCaseInterpretersCreatedInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3223,6 +3296,7 @@ export type UserUncheckedUpdateWithoutCaseInterpretersCreatedInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3262,6 +3336,7 @@ export type UserCreateWithoutCaseCostsCreatedInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3301,6 +3376,7 @@ export type UserUncheckedCreateWithoutCaseCostsCreatedInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3356,6 +3432,7 @@ export type UserUpdateWithoutCaseCostsCreatedInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3395,6 +3472,7 @@ export type UserUncheckedUpdateWithoutCaseCostsCreatedInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3434,6 +3512,7 @@ export type UserCreateWithoutWatchedCasesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3473,6 +3552,7 @@ export type UserUncheckedCreateWithoutWatchedCasesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3528,6 +3608,7 @@ export type UserUpdateWithoutWatchedCasesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3567,6 +3648,7 @@ export type UserUncheckedUpdateWithoutWatchedCasesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3606,6 +3688,7 @@ export type UserCreateWithoutAttachmentUploadsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3645,6 +3728,7 @@ export type UserUncheckedCreateWithoutAttachmentUploadsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3700,6 +3784,7 @@ export type UserUpdateWithoutAttachmentUploadsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3739,6 +3824,7 @@ export type UserUncheckedUpdateWithoutAttachmentUploadsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3778,6 +3864,7 @@ export type UserCreateWithoutCreatedProtocolsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3817,6 +3904,7 @@ export type UserUncheckedCreateWithoutCreatedProtocolsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3872,6 +3960,7 @@ export type UserUpdateWithoutCreatedProtocolsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3911,6 +4000,7 @@ export type UserUncheckedUpdateWithoutCreatedProtocolsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3950,6 +4040,7 @@ export type UserCreateWithoutProtocolCommentsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -3989,6 +4080,7 @@ export type UserUncheckedCreateWithoutProtocolCommentsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4044,6 +4136,7 @@ export type UserUpdateWithoutProtocolCommentsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4083,6 +4176,7 @@ export type UserUncheckedUpdateWithoutProtocolCommentsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4122,6 +4216,7 @@ export type UserCreateWithoutCreatedDonationsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4161,6 +4256,7 @@ export type UserUncheckedCreateWithoutCreatedDonationsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4216,6 +4312,7 @@ export type UserUpdateWithoutCreatedDonationsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4255,6 +4352,7 @@ export type UserUncheckedUpdateWithoutCreatedDonationsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4294,6 +4392,7 @@ export type UserCreateWithoutGeneratedReportsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4333,6 +4432,7 @@ export type UserUncheckedCreateWithoutGeneratedReportsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4388,6 +4488,7 @@ export type UserUpdateWithoutGeneratedReportsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4427,6 +4528,7 @@ export type UserUncheckedUpdateWithoutGeneratedReportsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4466,6 +4568,7 @@ export type UserCreateWithoutActivitiesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4505,6 +4608,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4560,6 +4664,7 @@ export type UserUpdateWithoutActivitiesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4599,6 +4704,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4638,6 +4744,7 @@ export type UserCreateWithoutNotificationsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4677,6 +4784,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4732,6 +4840,7 @@ export type UserUpdateWithoutNotificationsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4771,6 +4880,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4810,6 +4920,7 @@ export type UserCreateWithoutMentionsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4849,6 +4960,7 @@ export type UserUncheckedCreateWithoutMentionsInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4893,6 +5005,7 @@ export type UserCreateWithoutMentioningInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4932,6 +5045,7 @@ export type UserUncheckedCreateWithoutMentioningInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -4987,6 +5101,7 @@ export type UserUpdateWithoutMentionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5026,6 +5141,7 @@ export type UserUncheckedUpdateWithoutMentionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5076,6 +5192,7 @@ export type UserUpdateWithoutMentioningInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5115,6 +5232,7 @@ export type UserUncheckedUpdateWithoutMentioningInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5154,6 +5272,7 @@ export type UserCreateWithoutTodosInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -5193,6 +5312,7 @@ export type UserUncheckedCreateWithoutTodosInput = {
   image?: string | null
   firstName?: string | null
   lastName?: string | null
+  displayName?: string | null
   avatarUrl?: string | null
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -5248,6 +5368,7 @@ export type UserUpdateWithoutTodosInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5287,6 +5408,7 @@ export type UserUncheckedUpdateWithoutTodosInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5564,6 +5686,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   image?: boolean
   firstName?: boolean
   lastName?: boolean
+  displayName?: boolean
   avatarUrl?: boolean
   isActive?: boolean
   lastLoginAt?: boolean
@@ -5605,6 +5728,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   firstName?: boolean
   lastName?: boolean
+  displayName?: boolean
   avatarUrl?: boolean
   isActive?: boolean
   lastLoginAt?: boolean
@@ -5620,6 +5744,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   firstName?: boolean
   lastName?: boolean
+  displayName?: boolean
   avatarUrl?: boolean
   isActive?: boolean
   lastLoginAt?: boolean
@@ -5635,6 +5760,7 @@ export type UserSelectScalar = {
   image?: boolean
   firstName?: boolean
   lastName?: boolean
+  displayName?: boolean
   avatarUrl?: boolean
   isActive?: boolean
   lastLoginAt?: boolean
@@ -5642,7 +5768,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "emailVerified" | "image" | "firstName" | "lastName" | "avatarUrl" | "isActive" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "emailVerified" | "image" | "firstName" | "lastName" | "displayName" | "avatarUrl" | "isActive" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -5711,6 +5837,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     image: string | null
     firstName: string | null
     lastName: string | null
+    displayName: string | null
     avatarUrl: string | null
     isActive: boolean
     lastLoginAt: Date | null
@@ -6171,6 +6298,7 @@ export interface UserFieldRefs {
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly firstName: Prisma.FieldRef<"User", 'String'>
   readonly lastName: Prisma.FieldRef<"User", 'String'>
+  readonly displayName: Prisma.FieldRef<"User", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>

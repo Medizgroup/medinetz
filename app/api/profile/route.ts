@@ -19,6 +19,7 @@ export async function GET() {
       name: true,
       firstName: true,
       lastName: true,
+      // displayName: true,
       avatarUrl: true,
       image: true,
       isActive: true,

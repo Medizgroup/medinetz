@@ -95,7 +95,8 @@ model User {
   // Deine Felder (optional behalten)
   firstName     String?  @map("first_name")
   lastName      String?  @map("last_name")
-  avatarUrl     String?  @map("avatar_url")
+  displayName   String?  @map("display_name")
+  avatarUrl     String?  @map("avatar_url") @db.Text
 
   isActive      Boolean  @default(false) @map("is_active")
   lastLoginAt   DateTime? @map("last_login_at")
