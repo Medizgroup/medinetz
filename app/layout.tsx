@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Medinetz",
-  description: "Medinetz is a platform for managing medical records and patient data",
+  description:
+    "Medinetz is a platform for managing medical records and patient data",
 };
 
 export default function RootLayout({
@@ -25,9 +27,10 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ToastProvider>
+          <AnchoredToastProvider>{children}</AnchoredToastProvider>
+        </ToastProvider>
       </body>
     </html>
   );

@@ -1,21 +1,63 @@
+// app/(app)/profile/actions.ts
 "use server";
 
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
-const h = await headers();
-const session = await auth.api.getSession({ headers: h });
+import prisma from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { profileSchema, type FormErrors } from "@/lib/types/auth";
 
-const userId = session?.user?.id;
+type ActionState =
+  | { ok: true }
+  | { ok: false; errors: FormErrors; message?: string };
 
-export async function updateUser(formData: FormData) {
-  if (!userId) {
-    throw new Error("Unauthorized");
+function toErrors(error: z.ZodError): FormErrors {
+  const { fieldErrors } = z.flattenError(error);
+  return fieldErrors as FormErrors;
+}
+
+export async function updateProfileAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) {
+    return { ok: false, errors: {}, message: "Nicht eingeloggt." };
   }
 
-  const firstName = formData.get("firstName")?.toString() || undefined;
-  const lastName = formData.get("lastName")?.toString() || undefined;
-  const avatarUrl = formData.get("avatarUrl")?.toString() || undefined;
-  const name = formData.get("name")?.toString() || undefined;
-  const displayName = formData.get("displayName")?.toString() || undefined;
+  // FormData -> Object
+  const raw = Object.fromEntries(formData.entries());
+
+  // avatarUrl kann "" sein (wenn gelöscht). Wir normalisieren zu null.
+  const normalized = {
+    ...raw,
+    avatarUrl:
+      raw.avatarUrl === "" || raw.avatarUrl === undefined
+        ? null
+        : raw.avatarUrl,
+  };
+
+  const parsed = profileSchema.safeParse(normalized);
+  if (!parsed.success) {
+    return { ok: false, errors: toErrors(parsed.error) };
+  }
+
+  const { firstName, lastName, displayName, avatarUrl } = parsed.data;
+  const computedName = displayName.trim() || `${firstName} ${lastName}`.trim();
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: {
+      firstName,
+      lastName,
+      displayName,
+      avatarUrl: avatarUrl ?? null,
+      name: computedName,
+    },
+  });
+
+  revalidatePath("/profile");
+  return { ok: true };
 }

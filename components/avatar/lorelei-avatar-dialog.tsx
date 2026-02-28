@@ -5,10 +5,9 @@ import { createAvatar } from "@dicebear/core";
 import { lorelei } from "@dicebear/collection";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,

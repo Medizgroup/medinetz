@@ -1,9 +1,8 @@
+// app/(app)/profile/profile-form.tsx
 "use client";
 
 import * as React from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,131 +11,67 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
+import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
 import { LoreleiAvatarDialog } from "@/components/avatar/lorelei-avatar-dialog";
+import { updateProfileAction } from "@/app/(app)/actions/users/profile";
+import { toastManager } from "../ui/toast";
 
-const schema = z.object({
-  firstName: z.string().trim().min(1, "Bitte Vornamen angeben.").max(80),
-  lastName: z.string().trim().min(1, "Bitte Nachnamen angeben.").max(80),
-  displayName: z.string().trim().min(1, "Bitte Anzeigenamen angeben.").max(80),
-  // speichern wir als URL oder data-uri (beides ok)
-  avatarUrl: z.string().min(1).optional().nullable(),
-});
+type UserDTO = {
+  id: string;
+  email: string;
+  isActive: boolean;
+  emailVerified: boolean;
+  name: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  displayName: string | null;
+  avatarUrl: string | null;
+};
 
-type FormValues = z.infer<typeof schema>;
+type ActionState =
+  | { ok: true }
+  | { ok: false; errors: Record<string, string | string[]>; message?: string };
 
-export default function ProfilePage() {
-  const [loading, setLoading] = React.useState(true);
-  const [saving, setSaving] = React.useState(false);
+const initialState: ActionState = { ok: false, errors: {} };
 
-  const [userMeta, setUserMeta] = React.useState<{
-    id: string;
-    email: string;
-    isActive: boolean;
-    emailVerified: boolean;
-    name?: string | null;
-    firstName?: string | null;
-    lastName?: string | null;
-    displayName?: string;
-  } | null>(null);
+export default function ProfileForm({ user }: { user: UserDTO }) {
+  const [state, formAction, pending] = useActionState(
+    updateProfileAction,
+    initialState,
+  );
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      avatarUrl: null,
-    },
-    mode: "onSubmit",
-  });
+  const [avatarUrl, setAvatarUrl] = React.useState<string | null>(
+    user.avatarUrl,
+  );
 
-  const avatarUrl = form.watch("avatarUrl");
-
+  // Optional: Success Toast/Message
   React.useEffect(() => {
-    let mounted = true;
-
-    async function load() {
-      setLoading(true);
-      const res = await fetch("/api/profile", { cache: "no-store" });
-      if (!res.ok) {
-        setLoading(false);
-        return;
-      }
-      const data = await res.json();
-
-      console.log("Profile data loaded:", data);
-      if (!mounted) return;
-
-      const u = data.user;
-      setUserMeta({
-        id: u.id,
-        email: u.email,
-        isActive: u.isActive,
-        emailVerified: u.emailVerified,
-        name: u.name,
-        firstName: u.firstName,
-        lastName: u.lastName,
+    if (state.ok) {
+      toastManager.add({
+        description: "Deine Änderungen wurden gespeichert.",
+        title: "Success!",
+        type: "success",
       });
-
-      form.reset({
-        firstName: u.firstName ?? "",
-        lastName: u.lastName ?? "",
-        avatarUrl: u.avatarUrl ?? null,
-      });
-
-      setLoading(false);
     }
-
-    load();
-    return () => {
-      mounted = false;
-    };
-  }, [form]);
-
-  async function onSubmit(values: FormValues) {
-    setSaving(true);
-
-    const res = await fetch("/api/profile", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        avatarUrl: values.avatarUrl,
-        name: `${values.firstName} ${values.lastName}`.trim(),
-      }),
-    });
-
-    setSaving(false);
-
-    if (!res.ok) {
-      // du kannst hier FieldError/Toast anschließen
-      alert("Speichern fehlgeschlagen.");
-      return;
-    }
-
-    alert("Profil gespeichert ");
-  }
-
-  if (loading) {
-    return <div className="p-10">Lade Profil…</div>;
-  }
-
-  if (!userMeta) {
-    return <div className="p-10">Nicht eingeloggt.</div>;
-  }
+  }, [state.ok]);
 
   return (
     <>
       <div className="px-10">
         <h3 className="text-2xl font-semibold">Profil</h3>
       </div>
+
       <div className="flex items-center justify-center p-10">
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
+        <Form
+          action={formAction}
+          errors={!state.ok ? state.errors : {}}
           className="w-full max-w-7xl">
+          <input type="hidden" name="avatarUrl" value={avatarUrl ?? ""} />
+
+          {/* AVATAR */}
           <div className="grid grid-cols-1">
             <div>
               <h2 className="text-balance text-xl font-semibold text-foreground">
@@ -145,8 +80,9 @@ export default function ProfilePage() {
               <p className="text-pretty my-1 text-sm leading-6 text-muted-foreground">
                 Du kannst dein Avatar bearbeiten oder entfernen.
               </p>
+
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
-                <div className="size-20 sm:size-44 overflow-hidden ">
+                <div className="size-20 sm:size-44 overflow-hidden">
                   {avatarUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -159,120 +95,113 @@ export default function ProfilePage() {
                   )}
                 </div>
 
-                <div className="flex  sm:flex-row flex-col gap-4">
+                <div className="flex sm:flex-row flex-col gap-4">
                   <LoreleiAvatarDialog
-                    seed={userMeta.name ?? userMeta.id}
+                    seed={user.name ?? user.id}
                     value={avatarUrl}
-                    onPick={(url) =>
-                      form.setValue("avatarUrl", url, { shouldDirty: true })
-                    }
+                    onPick={(url) => setAvatarUrl(url)}
                   />
 
                   {avatarUrl && (
                     <Button
                       type="button"
                       variant="destructive-outline"
-                      disabled={saving}
+                      disabled={pending}
                       className="rounded-full"
-                      onClick={() =>
-                        form.setValue("avatarUrl", null, {
-                          shouldDirty: true,
-                        })
-                      }>
+                      onClick={() => setAvatarUrl(null)}>
                       Avatar löschen
                     </Button>
                   )}
                 </div>
               </div>
+
+              {/* optional global errors */}
+              {state.ok === false && state.message ? (
+                <p className="mt-2 text-sm text-red-500">{state.message}</p>
+              ) : null}
             </div>
           </div>
+
           <Separator className="my-8" />
+
+          {/* DISPLAY NAME */}
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             <div>
               <h2 className="text-balance font-semibold text-foreground">
                 Anzeige Name
               </h2>
               <p className="text-pretty mt-1 text-sm leading-6 text-muted-foreground">
-                Das ist ihr öffentlicher Name der in der App angezeigt wird. Er
-                kann individual angepasst werden
+                Das ist dein öffentlicher Name in der App.
               </p>
             </div>
 
             <div className="sm:max-w-3xl md:col-span-2">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
-                <div className="col-span-full ">
-                  <Field className="gap-2">
+                <div className="col-span-full">
+                  <Field name="displayName" className="gap-2">
                     <FieldLabel htmlFor="displayName">Anzeige Name</FieldLabel>
                     <Input
                       id="displayName"
+                      name="displayName"
                       placeholder="Brian Smith (Urlaub)"
-                      defaultValue={userMeta.displayName ?? ""}
-                      disabled={saving}
-                      {...form.register("displayName")}
+                      defaultValue={user.displayName ?? ""}
+                      disabled={pending}
                     />
-                    <FieldError>
-                      {form.formState.errors.displayName?.message}
-                    </FieldError>
+                    <FieldError />
                   </Field>
                 </div>
               </div>
             </div>
           </div>
+
           <Separator className="my-8" />
 
+          {/* PERSONAL */}
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             <div>
               <h2 className="text-balance font-semibold text-foreground">
                 Personal information
               </h2>
               <p className="text-pretty mt-1 text-sm leading-6 text-muted-foreground">
-                Bearbeite deine persönlichen Daten und dein Profilbild.
+                Bearbeite deine persönlichen Daten.
               </p>
             </div>
 
             <div className="sm:max-w-3xl md:col-span-2">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
                 <div className="col-span-full sm:col-span-3">
-                  <Field className="gap-2">
-                    <FieldLabel htmlFor="firstName">Nachname</FieldLabel>
+                  {/* Achtung: Labels bei dir waren vertauscht – ich korrigiere */}
+                  <Field name="firstName" className="gap-2">
+                    <FieldLabel htmlFor="firstName">Vorname</FieldLabel>
                     <Input
                       id="firstName"
+                      name="firstName"
                       placeholder="Emma"
-                      defaultValue={userMeta.firstName ?? ""}
-                      disabled={saving}
-                      {...form.register("firstName")}
+                      defaultValue={user.firstName ?? ""}
+                      disabled={pending}
                     />
-                    <FieldError>
-                      {form.formState.errors.firstName?.message}
-                    </FieldError>
+                    <FieldError />
                   </Field>
                 </div>
 
                 <div className="col-span-full sm:col-span-3">
-                  <Field className="gap-2">
-                    <FieldLabel htmlFor="lastName">Vorname</FieldLabel>
+                  <Field name="lastName" className="gap-2">
+                    <FieldLabel htmlFor="lastName">Nachname</FieldLabel>
                     <Input
                       id="lastName"
+                      name="lastName"
                       placeholder="Crown"
-                      defaultValue={userMeta.lastName ?? ""}
-                      disabled={saving}
-                      {...form.register("lastName")}
+                      defaultValue={user.lastName ?? ""}
+                      disabled={pending}
                     />
-                    <FieldError>
-                      {form.formState.errors.lastName?.message}
-                    </FieldError>
+                    <FieldError />
                   </Field>
                 </div>
 
                 <div className="col-span-full">
                   <Field className="gap-2">
                     <FieldLabel htmlFor="email">Email</FieldLabel>
-                    <Input
-                      id="email"
-                      value={userMeta.email}
-                      disabled
-                      readOnly
-                    />
+                    <Input id="email" value={user.email} disabled readOnly />
                     <FieldDescription>
                       Email kann nicht geändert werden.
                     </FieldDescription>
@@ -283,7 +212,7 @@ export default function ProfilePage() {
                   <Field className="gap-2">
                     <FieldLabel>Status</FieldLabel>
                     <Input
-                      value={userMeta.isActive ? "Aktiv" : "Inaktiv"}
+                      value={user.isActive ? "Aktiv" : "Inaktiv"}
                       disabled
                       readOnly
                     />
@@ -294,7 +223,7 @@ export default function ProfilePage() {
                   <Field className="gap-2">
                     <FieldLabel>Email verifiziert</FieldLabel>
                     <Input
-                      value={userMeta.emailVerified ? "Ja" : "Nein"}
+                      value={user.emailVerified ? "Ja" : "Nein"}
                       disabled
                       readOnly
                     />
@@ -304,17 +233,15 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <Separator className="my-8" />
-
           <div className="flex items-center justify-end space-x-4">
             <Button
               type="submit"
               className="whitespace-nowrap rounded-full"
-              disabled={saving}>
-              {saving ? "Speichere…" : "Speichern"}
+              disabled={pending}>
+              {pending ? "Speichere…" : "Speichern"}
             </Button>
           </div>
-        </form>
+        </Form>
       </div>
     </>
   );

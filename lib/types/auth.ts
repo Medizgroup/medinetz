@@ -28,3 +28,20 @@ export const fullSignUpSchema = emailStepSchema
   .merge(passwordStepSchema);
 
 export type FullSignUpValues = z.infer<typeof fullSignUpSchema>;
+
+// Update der User Profile
+export const profileSchema = z.object({
+  firstName: z.string().trim().min(1, "Bitte Vornamen angeben.").max(80),
+  lastName: z.string().trim().min(1, "Bitte Nachnamen angeben.").max(80),
+  displayName: z.string().trim().min(1, "Bitte Anzeigenamen angeben.").max(80),
+  avatarUrl: z
+    .string()
+    .trim()
+    .min(1, "Ungültige Avatar-URL.")
+    .nullable()
+    .optional(),
+});
+
+export type ProfileValues = z.infer<typeof profileSchema>;
+
+export type FormErrors = Record<string, string | string[]>;
