@@ -7,11 +7,7 @@ import { z } from "zod";
 
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { profileSchema, type FormErrors } from "@/lib/types/auth";
-
-type ActionState =
-  | { ok: true }
-  | { ok: false; errors: FormErrors; message?: string };
+import { ActionState, profileSchema, type FormErrors } from "@/lib/types/auth";
 
 function toErrors(error: z.ZodError): FormErrors {
   const { fieldErrors } = z.flattenError(error);

@@ -58,6 +58,7 @@ export const ModelName = {
   Organization: 'Organization',
   OrganizationMember: 'OrganizationMember',
   OrganizationInvite: 'OrganizationInvite',
+  OrganizationJoinRequest: 'OrganizationJoinRequest',
   UserPreference: 'UserPreference',
   Doctor: 'Doctor',
   Interpreter: 'Interpreter',
@@ -204,6 +205,20 @@ export const OrganizationInviteScalarFieldEnum = {
 } as const
 
 export type OrganizationInviteScalarFieldEnum = (typeof OrganizationInviteScalarFieldEnum)[keyof typeof OrganizationInviteScalarFieldEnum]
+
+
+export const OrganizationJoinRequestScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  message: 'message',
+  status: 'status',
+  decidedBy: 'decidedBy',
+  decidedAt: 'decidedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type OrganizationJoinRequestScalarFieldEnum = (typeof OrganizationJoinRequestScalarFieldEnum)[keyof typeof OrganizationJoinRequestScalarFieldEnum]
 
 
 export const UserPreferenceScalarFieldEnum = {

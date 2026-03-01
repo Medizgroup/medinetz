@@ -19,7 +19,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-export default function UserBadge() {
+export default function UserBadge({
+  user,
+}: {
+  user: {
+    email: string;
+    avatarUrl: string | null;
+    id: string;
+    displayName: string | null;
+  };
+}) {
   const router = useRouter();
   const logOut = async () => {
     await authClient.signOut({
@@ -41,14 +50,14 @@ export default function UserBadge() {
           />
         }>
         <Avatar className="size-8 ">
-          <AvatarImage src="https://api.dicebear.com/9.x/lorelei/svg?backgroundType[]&backgroundRotation=360,-50,-30&glassesProbability=90&backgroundColor[]&seed=Brian" />
+          <AvatarImage src={user.avatarUrl ?? ""} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </MenuTrigger>
       <MenuPopup className="w-56">
         <MenuItem className="flex gap-0 flex-col items-start ">
-          <span>Brian Neumann</span>
-          <span className="text-xs text-muted-foreground">mail@mail.com</span>
+          <span className="truncate">{user.displayName} </span>
+          <span className="text-xs text-muted-foreground">{user.email}</span>
         </MenuItem>
 
         <MenuSeparator />

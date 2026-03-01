@@ -45,3 +45,28 @@ export const profileSchema = z.object({
 export type ProfileValues = z.infer<typeof profileSchema>;
 
 export type FormErrors = Record<string, string | string[]>;
+
+export const changeEmailSchema = z.object({
+  email: z.string().trim().email("Bitte eine gültige Email angeben."),
+});
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(6, "Mindestens 6 Zeichen."),
+    newPassword: z.string().min(8, "Mindestens 8 Zeichen."),
+    confirmPassword: z.string().min(8, "Mindestens 8 Zeichen."),
+  })
+  .refine((v) => v.newPassword === v.confirmPassword, {
+    message: "Passwörter stimmen nicht überein.",
+    path: ["confirmPassword"],
+  });
+
+export const settingsSchema = z.object({
+  emailNotifications: z.enum(["true", "false"]).transform((v) => v === "true"),
+  timezone: z.string().trim().min(1).optional(),
+  language: z.string().trim().min(1).optional(),
+});
+
+export type ActionState =
+  | { ok: true }
+  | { ok: false; errors: FormErrors; message?: string };

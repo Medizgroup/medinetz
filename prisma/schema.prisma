@@ -78,6 +78,12 @@ enum ResourceAvailability {
   LOW
 }
 
+enum JoinRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 // ============================================================
 //! 1. AUTH & USERS
 // ============================================================
@@ -110,7 +116,8 @@ model User {
   organizationMembers   OrganizationMember[]
   organizationInvites   OrganizationInvite[] @relation("InvitedBy")
   preferences           UserPreference?
-
+  organizationJoinRequests OrganizationJoinRequest[]
+  decidedJoinRequests OrganizationJoinRequest[] @relation("JoinRequestDecider")
   // Cases
   createdCases          Case[]               @relation("CaseCreator")
   assignedCases         Case[]               @relation("CaseAssignee")
@@ -213,6 +220,7 @@ model Organization {
   donations   Donation[]
   expenses    Expense[]
   activities  Activity[]
+  joinRequests OrganizationJoinRequest[]
 
   @@index([slug])
   @@index([isArchived])
@@ -256,6 +264,27 @@ model OrganizationInvite {
   @@index([token])
   @@map("organization_invites")
 }
+
+model OrganizationJoinRequest {
+  id             String            @id @default(uuid())
+  organizationId String            @map("organization_id")
+  userId         String            @map("user_id")
+  message        String?           @db.Text
+  status         JoinRequestStatus @default(PENDING)
+  decidedBy      String?           @map("decided_by")
+  decidedAt      DateTime?         @map("decided_at")
+  createdAt      DateTime          @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  decider      User?        @relation("JoinRequestDecider", fields: [decidedBy], references: [id])
+
+  @@unique([organizationId, userId])
+  @@index([organizationId, status])
+  @@index([userId, status])
+  @@map("organization_join_requests")
+}
+
 
 model UserPreference {
   userId                 String   @id @map("user_id")

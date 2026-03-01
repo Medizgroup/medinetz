@@ -92,3 +92,12 @@ export const ResourceAvailability = {
 } as const
 
 export type ResourceAvailability = (typeof ResourceAvailability)[keyof typeof ResourceAvailability]
+
+
+export const JoinRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type JoinRequestStatus = (typeof JoinRequestStatus)[keyof typeof JoinRequestStatus]

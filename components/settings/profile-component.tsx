@@ -203,7 +203,7 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
                     <FieldLabel htmlFor="email">Email</FieldLabel>
                     <Input id="email" value={user.email} disabled readOnly />
                     <FieldDescription>
-                      Email kann nicht geändert werden.
+                      Die Email kann nur bei Account geändert werden.
                     </FieldDescription>
                   </Field>
                 </div>

@@ -391,6 +391,7 @@ export const ModelName = {
   Organization: 'Organization',
   OrganizationMember: 'OrganizationMember',
   OrganizationInvite: 'OrganizationInvite',
+  OrganizationJoinRequest: 'OrganizationJoinRequest',
   UserPreference: 'UserPreference',
   Doctor: 'Doctor',
   Interpreter: 'Interpreter',
@@ -429,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo"
+    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -948,6 +949,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.OrganizationInviteCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.OrganizationInviteCountAggregateOutputType> | number
+        }
+      }
+    }
+    OrganizationJoinRequest: {
+      payload: Prisma.$OrganizationJoinRequestPayload<ExtArgs>
+      fields: Prisma.OrganizationJoinRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrganizationJoinRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrganizationJoinRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.OrganizationJoinRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrganizationJoinRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>
+        }
+        findMany: {
+          args: Prisma.OrganizationJoinRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>[]
+        }
+        create: {
+          args: Prisma.OrganizationJoinRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>
+        }
+        createMany: {
+          args: Prisma.OrganizationJoinRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrganizationJoinRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.OrganizationJoinRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>
+        }
+        update: {
+          args: Prisma.OrganizationJoinRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrganizationJoinRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrganizationJoinRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrganizationJoinRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrganizationJoinRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationJoinRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.OrganizationJoinRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrganizationJoinRequest>
+        }
+        groupBy: {
+          args: Prisma.OrganizationJoinRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrganizationJoinRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrganizationJoinRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrganizationJoinRequestCountAggregateOutputType> | number
         }
       }
     }
@@ -2799,6 +2874,20 @@ export const OrganizationInviteScalarFieldEnum = {
 export type OrganizationInviteScalarFieldEnum = (typeof OrganizationInviteScalarFieldEnum)[keyof typeof OrganizationInviteScalarFieldEnum]
 
 
+export const OrganizationJoinRequestScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  message: 'message',
+  status: 'status',
+  decidedBy: 'decidedBy',
+  decidedAt: 'decidedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type OrganizationJoinRequestScalarFieldEnum = (typeof OrganizationJoinRequestScalarFieldEnum)[keyof typeof OrganizationJoinRequestScalarFieldEnum]
+
+
 export const UserPreferenceScalarFieldEnum = {
   userId: 'userId',
   language: 'language',
@@ -3274,6 +3363,20 @@ export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'JoinRequestStatus'
+ */
+export type EnumJoinRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JoinRequestStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'JoinRequestStatus[]'
+ */
+export type ListEnumJoinRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JoinRequestStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'ResourceAvailability'
  */
 export type EnumResourceAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceAvailability'>
@@ -3500,6 +3603,7 @@ export type GlobalOmitConfig = {
   organization?: Prisma.OrganizationOmit
   organizationMember?: Prisma.OrganizationMemberOmit
   organizationInvite?: Prisma.OrganizationInviteOmit
+  organizationJoinRequest?: Prisma.OrganizationJoinRequestOmit
   userPreference?: Prisma.UserPreferenceOmit
   doctor?: Prisma.DoctorOmit
   interpreter?: Prisma.InterpreterOmit

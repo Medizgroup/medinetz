@@ -251,6 +251,8 @@ export type UserWhereInput = {
   organizationMembers?: Prisma.OrganizationMemberListRelationFilter
   organizationInvites?: Prisma.OrganizationInviteListRelationFilter
   preferences?: Prisma.XOR<Prisma.UserPreferenceNullableScalarRelationFilter, Prisma.UserPreferenceWhereInput> | null
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestListRelationFilter
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestListRelationFilter
   createdCases?: Prisma.CaseListRelationFilter
   assignedCases?: Prisma.CaseListRelationFilter
   closedCases?: Prisma.CaseListRelationFilter
@@ -292,6 +294,8 @@ export type UserOrderByWithRelationInput = {
   organizationMembers?: Prisma.OrganizationMemberOrderByRelationAggregateInput
   organizationInvites?: Prisma.OrganizationInviteOrderByRelationAggregateInput
   preferences?: Prisma.UserPreferenceOrderByWithRelationInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestOrderByRelationAggregateInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestOrderByRelationAggregateInput
   createdCases?: Prisma.CaseOrderByRelationAggregateInput
   assignedCases?: Prisma.CaseOrderByRelationAggregateInput
   closedCases?: Prisma.CaseOrderByRelationAggregateInput
@@ -336,6 +340,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   organizationMembers?: Prisma.OrganizationMemberListRelationFilter
   organizationInvites?: Prisma.OrganizationInviteListRelationFilter
   preferences?: Prisma.XOR<Prisma.UserPreferenceNullableScalarRelationFilter, Prisma.UserPreferenceWhereInput> | null
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestListRelationFilter
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestListRelationFilter
   createdCases?: Prisma.CaseListRelationFilter
   assignedCases?: Prisma.CaseListRelationFilter
   closedCases?: Prisma.CaseListRelationFilter
@@ -415,6 +421,8 @@ export type UserCreateInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -456,6 +464,8 @@ export type UserUncheckedCreateInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -497,6 +507,8 @@ export type UserUpdateInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -538,6 +550,8 @@ export type UserUncheckedUpdateInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -740,6 +754,36 @@ export type UserUpdateOneRequiredWithoutOrganizationInvitesNestedInput = {
   upsert?: Prisma.UserUpsertWithoutOrganizationInvitesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrganizationInvitesInput, Prisma.UserUpdateWithoutOrganizationInvitesInput>, Prisma.UserUncheckedUpdateWithoutOrganizationInvitesInput>
+}
+
+export type UserCreateNestedOneWithoutOrganizationJoinRequestsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationJoinRequestsInput, Prisma.UserUncheckedCreateWithoutOrganizationJoinRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationJoinRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutDecidedJoinRequestsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDecidedJoinRequestsInput, Prisma.UserUncheckedCreateWithoutDecidedJoinRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDecidedJoinRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOrganizationJoinRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationJoinRequestsInput, Prisma.UserUncheckedCreateWithoutOrganizationJoinRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationJoinRequestsInput
+  upsert?: Prisma.UserUpsertWithoutOrganizationJoinRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrganizationJoinRequestsInput, Prisma.UserUpdateWithoutOrganizationJoinRequestsInput>, Prisma.UserUncheckedUpdateWithoutOrganizationJoinRequestsInput>
+}
+
+export type UserUpdateOneWithoutDecidedJoinRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDecidedJoinRequestsInput, Prisma.UserUncheckedCreateWithoutDecidedJoinRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDecidedJoinRequestsInput
+  upsert?: Prisma.UserUpsertWithoutDecidedJoinRequestsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDecidedJoinRequestsInput, Prisma.UserUpdateWithoutDecidedJoinRequestsInput>, Prisma.UserUncheckedUpdateWithoutDecidedJoinRequestsInput>
 }
 
 export type UserCreateNestedOneWithoutPreferencesInput = {
@@ -1058,6 +1102,8 @@ export type UserCreateWithoutSessionsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -1098,6 +1144,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -1154,6 +1202,8 @@ export type UserUpdateWithoutSessionsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -1194,6 +1244,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -1234,6 +1286,8 @@ export type UserCreateWithoutAccountsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -1274,6 +1328,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -1330,6 +1386,8 @@ export type UserUpdateWithoutAccountsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -1370,6 +1428,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -1410,6 +1470,8 @@ export type UserCreateWithoutOrganizationMembersInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -1450,6 +1512,8 @@ export type UserUncheckedCreateWithoutOrganizationMembersInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -1506,6 +1570,8 @@ export type UserUpdateWithoutOrganizationMembersInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -1546,6 +1612,8 @@ export type UserUncheckedUpdateWithoutOrganizationMembersInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -1586,6 +1654,8 @@ export type UserCreateWithoutOrganizationInvitesInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -1626,6 +1696,8 @@ export type UserUncheckedCreateWithoutOrganizationInvitesInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -1682,6 +1754,8 @@ export type UserUpdateWithoutOrganizationInvitesInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -1722,6 +1796,376 @@ export type UserUncheckedUpdateWithoutOrganizationInvitesInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserCreateWithoutOrganizationJoinRequestsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
+  createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
+}
+
+export type UserUncheckedCreateWithoutOrganizationJoinRequestsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
+  createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
+}
+
+export type UserCreateOrConnectWithoutOrganizationJoinRequestsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationJoinRequestsInput, Prisma.UserUncheckedCreateWithoutOrganizationJoinRequestsInput>
+}
+
+export type UserCreateWithoutDecidedJoinRequestsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
+}
+
+export type UserUncheckedCreateWithoutDecidedJoinRequestsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
+}
+
+export type UserCreateOrConnectWithoutDecidedJoinRequestsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDecidedJoinRequestsInput, Prisma.UserUncheckedCreateWithoutDecidedJoinRequestsInput>
+}
+
+export type UserUpsertWithoutOrganizationJoinRequestsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationJoinRequestsInput, Prisma.UserUncheckedUpdateWithoutOrganizationJoinRequestsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationJoinRequestsInput, Prisma.UserUncheckedCreateWithoutOrganizationJoinRequestsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOrganizationJoinRequestsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationJoinRequestsInput, Prisma.UserUncheckedUpdateWithoutOrganizationJoinRequestsInput>
+}
+
+export type UserUpdateWithoutOrganizationJoinRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOrganizationJoinRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserUpsertWithoutDecidedJoinRequestsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDecidedJoinRequestsInput, Prisma.UserUncheckedUpdateWithoutDecidedJoinRequestsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDecidedJoinRequestsInput, Prisma.UserUncheckedCreateWithoutDecidedJoinRequestsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDecidedJoinRequestsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDecidedJoinRequestsInput, Prisma.UserUncheckedUpdateWithoutDecidedJoinRequestsInput>
+}
+
+export type UserUpdateWithoutDecidedJoinRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDecidedJoinRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -1762,6 +2206,8 @@ export type UserCreateWithoutPreferencesInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -1802,6 +2248,8 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -1858,6 +2306,8 @@ export type UserUpdateWithoutPreferencesInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -1898,6 +2348,8 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -1939,6 +2391,8 @@ export type UserCreateWithoutCreatedDoctorsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -1979,6 +2433,8 @@ export type UserUncheckedCreateWithoutCreatedDoctorsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -2035,6 +2491,8 @@ export type UserUpdateWithoutCreatedDoctorsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -2075,6 +2533,8 @@ export type UserUncheckedUpdateWithoutCreatedDoctorsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -2115,6 +2575,8 @@ export type UserCreateWithoutCreatedInterpretersInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -2155,6 +2617,8 @@ export type UserUncheckedCreateWithoutCreatedInterpretersInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -2211,6 +2675,8 @@ export type UserUpdateWithoutCreatedInterpretersInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -2251,6 +2717,8 @@ export type UserUncheckedUpdateWithoutCreatedInterpretersInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -2291,6 +2759,8 @@ export type UserCreateWithoutCreatedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
   caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
@@ -2331,6 +2801,8 @@ export type UserUncheckedCreateWithoutCreatedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
   caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
@@ -2376,6 +2848,8 @@ export type UserCreateWithoutAssignedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
   caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
@@ -2416,6 +2890,8 @@ export type UserUncheckedCreateWithoutAssignedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
   caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
@@ -2461,6 +2937,8 @@ export type UserCreateWithoutClosedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
@@ -2501,6 +2979,8 @@ export type UserUncheckedCreateWithoutClosedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
@@ -2557,6 +3037,8 @@ export type UserUpdateWithoutCreatedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
   caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
@@ -2597,6 +3079,8 @@ export type UserUncheckedUpdateWithoutCreatedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
   caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
@@ -2648,6 +3132,8 @@ export type UserUpdateWithoutAssignedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
   caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
@@ -2688,6 +3174,8 @@ export type UserUncheckedUpdateWithoutAssignedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
   caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
@@ -2739,6 +3227,8 @@ export type UserUpdateWithoutClosedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
@@ -2779,6 +3269,8 @@ export type UserUncheckedUpdateWithoutClosedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
@@ -2819,6 +3311,8 @@ export type UserCreateWithoutCaseCommentsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -2859,6 +3353,8 @@ export type UserUncheckedCreateWithoutCaseCommentsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -2915,6 +3411,8 @@ export type UserUpdateWithoutCaseCommentsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -2955,6 +3453,8 @@ export type UserUncheckedUpdateWithoutCaseCommentsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -2995,6 +3495,8 @@ export type UserCreateWithoutCaseDoctorsCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -3035,6 +3537,8 @@ export type UserUncheckedCreateWithoutCaseDoctorsCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -3091,6 +3595,8 @@ export type UserUpdateWithoutCaseDoctorsCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -3131,6 +3637,8 @@ export type UserUncheckedUpdateWithoutCaseDoctorsCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -3171,6 +3679,8 @@ export type UserCreateWithoutCaseInterpretersCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -3211,6 +3721,8 @@ export type UserUncheckedCreateWithoutCaseInterpretersCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -3267,6 +3779,8 @@ export type UserUpdateWithoutCaseInterpretersCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -3307,6 +3821,8 @@ export type UserUncheckedUpdateWithoutCaseInterpretersCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -3347,6 +3863,8 @@ export type UserCreateWithoutCaseCostsCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -3387,6 +3905,8 @@ export type UserUncheckedCreateWithoutCaseCostsCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -3443,6 +3963,8 @@ export type UserUpdateWithoutCaseCostsCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -3483,6 +4005,8 @@ export type UserUncheckedUpdateWithoutCaseCostsCreatedInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -3523,6 +4047,8 @@ export type UserCreateWithoutWatchedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -3563,6 +4089,8 @@ export type UserUncheckedCreateWithoutWatchedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -3619,6 +4147,8 @@ export type UserUpdateWithoutWatchedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -3659,6 +4189,8 @@ export type UserUncheckedUpdateWithoutWatchedCasesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -3699,6 +4231,8 @@ export type UserCreateWithoutAttachmentUploadsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -3739,6 +4273,8 @@ export type UserUncheckedCreateWithoutAttachmentUploadsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -3795,6 +4331,8 @@ export type UserUpdateWithoutAttachmentUploadsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -3835,6 +4373,8 @@ export type UserUncheckedUpdateWithoutAttachmentUploadsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -3875,6 +4415,8 @@ export type UserCreateWithoutCreatedProtocolsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -3915,6 +4457,8 @@ export type UserUncheckedCreateWithoutCreatedProtocolsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -3971,6 +4515,8 @@ export type UserUpdateWithoutCreatedProtocolsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -4011,6 +4557,8 @@ export type UserUncheckedUpdateWithoutCreatedProtocolsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -4051,6 +4599,8 @@ export type UserCreateWithoutProtocolCommentsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -4091,6 +4641,8 @@ export type UserUncheckedCreateWithoutProtocolCommentsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -4147,6 +4699,8 @@ export type UserUpdateWithoutProtocolCommentsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -4187,6 +4741,8 @@ export type UserUncheckedUpdateWithoutProtocolCommentsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -4227,6 +4783,8 @@ export type UserCreateWithoutCreatedDonationsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -4267,6 +4825,8 @@ export type UserUncheckedCreateWithoutCreatedDonationsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -4323,6 +4883,8 @@ export type UserUpdateWithoutCreatedDonationsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -4363,6 +4925,8 @@ export type UserUncheckedUpdateWithoutCreatedDonationsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -4403,6 +4967,8 @@ export type UserCreateWithoutGeneratedReportsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -4443,6 +5009,8 @@ export type UserUncheckedCreateWithoutGeneratedReportsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -4499,6 +5067,8 @@ export type UserUpdateWithoutGeneratedReportsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -4539,6 +5109,8 @@ export type UserUncheckedUpdateWithoutGeneratedReportsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -4579,6 +5151,8 @@ export type UserCreateWithoutActivitiesInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -4619,6 +5193,8 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -4675,6 +5251,8 @@ export type UserUpdateWithoutActivitiesInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -4715,6 +5293,8 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -4755,6 +5335,8 @@ export type UserCreateWithoutNotificationsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -4795,6 +5377,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -4851,6 +5435,8 @@ export type UserUpdateWithoutNotificationsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -4891,6 +5477,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -4931,6 +5519,8 @@ export type UserCreateWithoutMentionsInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -4971,6 +5561,8 @@ export type UserUncheckedCreateWithoutMentionsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -5016,6 +5608,8 @@ export type UserCreateWithoutMentioningInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -5056,6 +5650,8 @@ export type UserUncheckedCreateWithoutMentioningInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -5112,6 +5708,8 @@ export type UserUpdateWithoutMentionsInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -5152,6 +5750,8 @@ export type UserUncheckedUpdateWithoutMentionsInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -5203,6 +5803,8 @@ export type UserUpdateWithoutMentioningInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -5243,6 +5845,8 @@ export type UserUncheckedUpdateWithoutMentioningInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -5283,6 +5887,8 @@ export type UserCreateWithoutTodosInput = {
   organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
@@ -5323,6 +5929,8 @@ export type UserUncheckedCreateWithoutTodosInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
   createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
   assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
   closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
@@ -5379,6 +5987,8 @@ export type UserUpdateWithoutTodosInput = {
   organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
@@ -5419,6 +6029,8 @@ export type UserUncheckedUpdateWithoutTodosInput = {
   organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
   createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
   assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
@@ -5450,6 +6062,8 @@ export type UserCountOutputType = {
   accounts: number
   organizationMembers: number
   organizationInvites: number
+  organizationJoinRequests: number
+  decidedJoinRequests: number
   createdCases: number
   assignedCases: number
   closedCases: number
@@ -5477,6 +6091,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   organizationMembers?: boolean | UserCountOutputTypeCountOrganizationMembersArgs
   organizationInvites?: boolean | UserCountOutputTypeCountOrganizationInvitesArgs
+  organizationJoinRequests?: boolean | UserCountOutputTypeCountOrganizationJoinRequestsArgs
+  decidedJoinRequests?: boolean | UserCountOutputTypeCountDecidedJoinRequestsArgs
   createdCases?: boolean | UserCountOutputTypeCountCreatedCasesArgs
   assignedCases?: boolean | UserCountOutputTypeCountAssignedCasesArgs
   closedCases?: boolean | UserCountOutputTypeCountClosedCasesArgs
@@ -5535,6 +6151,20 @@ export type UserCountOutputTypeCountOrganizationMembersArgs<ExtArgs extends runt
  */
 export type UserCountOutputTypeCountOrganizationInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrganizationInviteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOrganizationJoinRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationJoinRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDecidedJoinRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationJoinRequestWhereInput
 }
 
 /**
@@ -5697,6 +6327,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   organizationMembers?: boolean | Prisma.User$organizationMembersArgs<ExtArgs>
   organizationInvites?: boolean | Prisma.User$organizationInvitesArgs<ExtArgs>
   preferences?: boolean | Prisma.User$preferencesArgs<ExtArgs>
+  organizationJoinRequests?: boolean | Prisma.User$organizationJoinRequestsArgs<ExtArgs>
+  decidedJoinRequests?: boolean | Prisma.User$decidedJoinRequestsArgs<ExtArgs>
   createdCases?: boolean | Prisma.User$createdCasesArgs<ExtArgs>
   assignedCases?: boolean | Prisma.User$assignedCasesArgs<ExtArgs>
   closedCases?: boolean | Prisma.User$closedCasesArgs<ExtArgs>
@@ -5775,6 +6407,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   organizationMembers?: boolean | Prisma.User$organizationMembersArgs<ExtArgs>
   organizationInvites?: boolean | Prisma.User$organizationInvitesArgs<ExtArgs>
   preferences?: boolean | Prisma.User$preferencesArgs<ExtArgs>
+  organizationJoinRequests?: boolean | Prisma.User$organizationJoinRequestsArgs<ExtArgs>
+  decidedJoinRequests?: boolean | Prisma.User$decidedJoinRequestsArgs<ExtArgs>
   createdCases?: boolean | Prisma.User$createdCasesArgs<ExtArgs>
   assignedCases?: boolean | Prisma.User$assignedCasesArgs<ExtArgs>
   closedCases?: boolean | Prisma.User$closedCasesArgs<ExtArgs>
@@ -5808,6 +6442,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     organizationMembers: Prisma.$OrganizationMemberPayload<ExtArgs>[]
     organizationInvites: Prisma.$OrganizationInvitePayload<ExtArgs>[]
     preferences: Prisma.$UserPreferencePayload<ExtArgs> | null
+    organizationJoinRequests: Prisma.$OrganizationJoinRequestPayload<ExtArgs>[]
+    decidedJoinRequests: Prisma.$OrganizationJoinRequestPayload<ExtArgs>[]
     createdCases: Prisma.$CasePayload<ExtArgs>[]
     assignedCases: Prisma.$CasePayload<ExtArgs>[]
     closedCases: Prisma.$CasePayload<ExtArgs>[]
@@ -6242,6 +6878,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   organizationMembers<T extends Prisma.User$organizationMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organizationInvites<T extends Prisma.User$organizationInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   preferences<T extends Prisma.User$preferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$preferencesArgs<ExtArgs>>): Prisma.Prisma__UserPreferenceClient<runtime.Types.Result.GetResult<Prisma.$UserPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  organizationJoinRequests<T extends Prisma.User$organizationJoinRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationJoinRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationJoinRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  decidedJoinRequests<T extends Prisma.User$decidedJoinRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$decidedJoinRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationJoinRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdCases<T extends Prisma.User$createdCasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdCasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignedCases<T extends Prisma.User$assignedCasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedCasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   closedCases<T extends Prisma.User$closedCasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$closedCasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6804,6 +7442,54 @@ export type User$preferencesArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.UserPreferenceInclude<ExtArgs> | null
   where?: Prisma.UserPreferenceWhereInput
+}
+
+/**
+ * User.organizationJoinRequests
+ */
+export type User$organizationJoinRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationJoinRequest
+   */
+  select?: Prisma.OrganizationJoinRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrganizationJoinRequest
+   */
+  omit?: Prisma.OrganizationJoinRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationJoinRequestInclude<ExtArgs> | null
+  where?: Prisma.OrganizationJoinRequestWhereInput
+  orderBy?: Prisma.OrganizationJoinRequestOrderByWithRelationInput | Prisma.OrganizationJoinRequestOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationJoinRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationJoinRequestScalarFieldEnum | Prisma.OrganizationJoinRequestScalarFieldEnum[]
+}
+
+/**
+ * User.decidedJoinRequests
+ */
+export type User$decidedJoinRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationJoinRequest
+   */
+  select?: Prisma.OrganizationJoinRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrganizationJoinRequest
+   */
+  omit?: Prisma.OrganizationJoinRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationJoinRequestInclude<ExtArgs> | null
+  where?: Prisma.OrganizationJoinRequestWhereInput
+  orderBy?: Prisma.OrganizationJoinRequestOrderByWithRelationInput | Prisma.OrganizationJoinRequestOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationJoinRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationJoinRequestScalarFieldEnum | Prisma.OrganizationJoinRequestScalarFieldEnum[]
 }
 
 /**

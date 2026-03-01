@@ -1,3 +1,4 @@
+import { z } from "zod";
 export interface Options {
   hair?: (
     | "variant48"
@@ -155,3 +156,19 @@ export interface Options {
   noseColor?: string[];
   hairAccessoriesColor?: string[];
 }
+
+export const loreleiConfigSchema = z.object({
+  bg: z.string(),
+  head: z.string(),
+  hair: z.string(),
+  hairAccessories: z.string(), // "none" oder "flowers"
+  eyes: z.string(),
+  nose: z.string(),
+  mouth: z.string(),
+  freckles: z.string(),
+  glasses: z.string(),
+  beard: z.string(),
+  earrings: z.string(),
+});
+
+export type LoreleiConfig = z.infer<typeof loreleiConfigSchema>;
