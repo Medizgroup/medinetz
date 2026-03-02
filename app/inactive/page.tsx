@@ -1,16 +1,9 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { RouteIcon } from "lucide-react";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
-import RefreshComponent from "./refresh-component";
+
 import prisma from "@/lib/prisma";
+import InactiveComponent from "./inactive-component";
 
 export default async function InactivePage() {
   const h = await headers();
@@ -28,19 +21,5 @@ export default async function InactivePage() {
     redirect("/home");
   }
 
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <RouteIcon />
-        </EmptyMedia>
-        <EmptyTitle>Dein Konto wartet auf Freischaltung</EmptyTitle>
-        <EmptyDescription>
-          Dein Konto wurde erstellt, ist aber noch nicht aktiv. Ein Admin muss
-          dich erst freischalten.
-        </EmptyDescription>
-      </EmptyHeader>
-      <RefreshComponent />
-    </Empty>
-  );
+  return <InactiveComponent />;
 }

@@ -1,0 +1,316 @@
+import prisma from "@/lib/prisma";
+import { notFound } from "next/navigation";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
+import InactiveComponent from "@/app/inactive/inactive-component";
+import UserActivityCalendar from "@/components/user/user-activity-calendar";
+import {
+  Timeline,
+  TimelineContent,
+  TimelineDate,
+  TimelineHeader,
+  TimelineIndicator,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineTitle,
+} from "@/components/ui/timeline";
+import { actionMeta, activityDescription } from "@/lib/utils/index";
+import { formatDistance } from "date-fns";
+import { de } from "date-fns/locale";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { CircleCheck, FolderOpen, Loader, PauseCircle } from "lucide-react";
+
+// --- helpers ---
+function toISODate(d: Date) {
+  return d.toISOString().slice(0, 10);
+}
+
+function buildCalendarData(dates: Date[]) {
+  const today = new Date();
+  const start = new Date(today);
+  start.setDate(start.getDate() - 365);
+
+  const counts = new Map<string, number>();
+  for (const dt of dates) {
+    const key = toISODate(dt);
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+
+  const allDays: { date: string; count: number }[] = [];
+  const cur = new Date(start);
+  while (cur <= today) {
+    const key = toISODate(cur);
+    allDays.push({ date: key, count: counts.get(key) ?? 0 });
+    cur.setDate(cur.getDate() + 1);
+  }
+
+  const max = Math.max(0, ...allDays.map((d) => d.count));
+  const levelOf = (count: number): 0 | 1 | 2 | 3 | 4 => {
+    if (count <= 0 || max === 0) return 0;
+    const r = count / max;
+    if (r <= 0.25) return 1;
+    if (r <= 0.5) return 2;
+    if (r <= 0.75) return 3;
+    return 4;
+  };
+
+  return allDays.map((d) => ({ ...d, level: levelOf(d.count) }));
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  if (!id) {
+    notFound();
+  }
+
+  // Optional session: Profil ist öffentlich
+  const session = await auth.api.getSession({ headers: await headers() });
+  const isOwner = session?.user?.id === id;
+
+  // User laden (öffentlich sichtbare Felder)
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      isActive: true,
+      displayName: true,
+      name: true,
+      avatarUrl: true,
+      createdAt: true,
+
+      // Calendar: nur createdAt genügt
+      activities: {
+        where: {
+          createdAt: {
+            // Use a stable "one year ago" date for the query
+            gte: (() => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const oneYearAgo = new Date(today);
+              oneYearAgo.setDate(oneYearAgo.getDate() - 365);
+              return oneYearAgo;
+            })(),
+          },
+        },
+        select: { createdAt: true },
+      },
+    },
+  });
+
+  if (!user) {
+    notFound();
+  }
+
+  // Inaktiv: Owner darf es sehen, andere nicht
+  if (!user.isActive) {
+    if (isOwner) {
+      return <InactiveComponent />;
+    }
+    notFound();
+  }
+
+  const latestActivities = await prisma.activity.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+    take: 5,
+    select: {
+      id: true,
+      action: true,
+      targetType: true,
+      targetId: true,
+      createdAt: true,
+      organization: { select: { id: true, name: true } },
+    },
+  });
+
+  const assignedCases = await prisma.case.findMany({
+    where: {
+      assigneeId: user.id,
+      status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] },
+    },
+    orderBy: { updatedAt: "desc" },
+    take: 6,
+    select: {
+      id: true,
+      title: true,
+      status: true,
+      priority: true,
+      updatedAt: true,
+      organization: { select: { id: true, name: true } },
+    },
+  });
+
+  const calendarData = buildCalendarData(
+    user.activities.map((a) => a.createdAt),
+  );
+  const display =
+    user.displayName || user.name || `User ${user.id.slice(0, 6)}`;
+
+  return (
+    <div className="mx-auto w-full max-w-6xl px-6 py-8 space-y-10">
+      {/* Header */}
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-4">
+          <div className="size-44 overflow-hidden rounded-full">
+            {user.avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={user.avatarUrl}
+                alt="Avatar"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="h-full w-full" />
+            )}
+          </div>
+
+          <div>
+            <h1 className="text-2xl font-semibold leading-tight">{display}</h1>
+            <p className="text-sm text-muted-foreground">
+              Mitglied seit {user.createdAt.toLocaleDateString("de-DE")}
+            </p>
+          </div>
+        </div>
+
+        {isOwner ? (
+          <div className="flex gap-2">
+            <Button variant="outline" className="rounded-full">
+              <Link href="/settings/profile">Profil bearbeiten</Link>
+            </Button>
+          </div>
+        ) : null}
+      </div>
+
+      {/* Activity Calendar */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold">Aktivität</h2>
+
+          {/* “Mehr anzeigen” kann öffentlich sein */}
+          <Button
+            variant="outline"
+            size="xs"
+            className="rounded-full"
+            render={<Link href={`/m/${user.id}/activity`} />}>
+            Mehr anzeigen
+          </Button>
+        </div>
+
+        <div className="rounded-2xl border p-4">
+          <UserActivityCalendar data={calendarData} />
+        </div>
+      </section>
+
+      {/* Latest Activity List */}
+
+      <section className="space-y-3">
+        <h2 className="text-lg font-semibold">Letzte Aktivitäten</h2>
+
+        <div className="p-4">
+          {latestActivities.length === 0 ? (
+            <div className="text-sm text-muted-foreground">
+              Noch keine Aktivitäten.
+            </div>
+          ) : (
+            <Timeline defaultValue={latestActivities.length}>
+              {latestActivities.map((a, idx) => {
+                const step = latestActivities.length - idx;
+                const { title, Icon } = actionMeta(a.action);
+
+                return (
+                  <TimelineItem
+                    key={a.id}
+                    step={step}
+                    className="group-data-[orientation=vertical]/timeline:ms-10 ">
+                    <TimelineHeader>
+                      <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+
+                      <TimelineTitle className="mt-0.5">{title}</TimelineTitle>
+
+                      <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-primary/10 group-data-completed/timeline-item:bg-primary/10 group-data-completed/timeline-item:text-foreground ">
+                        <Icon size={12} />
+                      </TimelineIndicator>
+                    </TimelineHeader>
+
+                    <TimelineContent>
+                      <div className="text-sm text-muted-foreground">
+                        {activityDescription(a)}
+                      </div>
+
+                      <TimelineDate className="mt-2 mb-0">
+                        {formatDistance(new Date(a.createdAt), new Date(), {
+                          addSuffix: true,
+                          locale: de,
+                        })}
+                      </TimelineDate>
+                    </TimelineContent>
+                  </TimelineItem>
+                );
+              })}
+            </Timeline>
+          )}
+        </div>
+      </section>
+      {/* Assigned cases */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold">Zugewiesene Cases</h2>
+          <Button variant="outline" size="sm" className="rounded-full">
+            <Link href="/cases">Alle Cases</Link>
+          </Button>
+        </div>
+
+        <div className="gap-4 flex flex-col">
+          {assignedCases.length === 0 ? (
+            <div className="p-4 text-sm text-muted-foreground">
+              Aktuell keine offenen Cases zugewiesen.
+            </div>
+          ) : (
+            assignedCases.map((c) => (
+              <Alert key={c.id}>
+                {c.status === "OPEN" ? (
+                  <FolderOpen />
+                ) : c.status === "IN_PROGRESS" ? (
+                  <Loader />
+                ) : c.status === "WAITING" ? (
+                  <PauseCircle />
+                ) : c.status === "CLOSED" ? (
+                  <CircleCheck />
+                ) : null}
+                <AlertTitle>{c.title}</AlertTitle>
+                <AlertDescription className="flex items-center flex-row gap-2">
+                  In {c.organization.name}
+                  <Badge
+                    variant={
+                      c.priority === "HIGH"
+                        ? "error"
+                        : c.priority === "LOW"
+                          ? "warning"
+                          : c.priority === "MEDIUM"
+                            ? "info"
+                            : "success"
+                    }
+                    className="capitalize!">
+                    {c.priority}
+                  </Badge>
+                </AlertDescription>
+                <span className="px-6 text-xs text-muted-foreground flex ">
+                  {c.updatedAt.toLocaleDateString("de-DE")}
+                </span>
+              </Alert>
+            ))
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
