@@ -1,3 +1,4 @@
+// components/home/home-card.tsx
 "use client";
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -5,30 +6,46 @@ import { cn } from "@/lib/utils";
 import { GalleryVerticalEnd, LayersPlus, ListTodo } from "lucide-react";
 import HomeTodo from "./home-todos";
 
-const data = [
-  {
-    name: "Todos",
-    value: "04",
-    icon: ListTodo,
-    href: "#",
-  },
-  {
-    name: "Fälle",
-    value: "03",
-    icon: GalleryVerticalEnd,
-    href: "#",
-  },
-  {
-    name: "Erstellt",
-    value: "27",
-    icon: LayersPlus,
-    href: "#",
-  },
-];
+type Props = {
+  userId: string;
+  stats: {
+    todosOpen: number;
+    casesAssignedOpen: number;
+    casesCreated: number;
+  };
+  todos: {
+    id: string;
+    title: string;
+    dueDate: Date | null;
+    priority: number;
+    createdAt: Date;
+  }[];
+};
 
-export default function HomeCard() {
+export default function HomeCard({ stats, todos }: Props) {
+  const data = [
+    {
+      name: "Todos",
+      value: String(stats.todosOpen).padStart(2, "0"),
+      icon: ListTodo,
+      href: "/todos",
+    },
+    {
+      name: "Fälle",
+      value: String(stats.casesAssignedOpen).padStart(2, "0"),
+      icon: GalleryVerticalEnd,
+      href: "/cases",
+    },
+    {
+      name: "Erstellt",
+      value: String(stats.casesCreated).padStart(2, "0"),
+      icon: LayersPlus,
+      href: "/cases?filter=created",
+    },
+  ];
+
   return (
-    <div className="flex justify-center p-4 sm:p-10 w-full sm:col-span-4 flex-col gap-8 items-start">
+    <div className="flex justify-center p-4 sm:p-10 w-full sm:col-span-6 flex-col gap-8 items-start">
       <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full">
         {data.map((item) => (
           <Card key={item.name} className="p-0 gap-0">
@@ -45,6 +62,7 @@ export default function HomeCard() {
                 {item.value}
               </dd>
             </CardContent>
+
             <CardFooter className="flex justify-end border-t border-border p-0!">
               <a
                 href={item.href}
@@ -55,7 +73,8 @@ export default function HomeCard() {
           </Card>
         ))}
       </dl>
-      <HomeTodo />
+
+      <HomeTodo todos={todos} />
     </div>
   );
 }

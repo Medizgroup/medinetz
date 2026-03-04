@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   BookOpen,
+  CalendarDays,
   CircleQuestionMark,
   CreditCard,
   Folder,
@@ -50,6 +51,11 @@ const data = {
       title: "Home",
       url: "/home",
       icon: Home,
+    },
+    {
+      title: "Veranstaltungen",
+      url: "/events",
+      icon: CalendarDays,
     },
     {
       title: "Protokolle",

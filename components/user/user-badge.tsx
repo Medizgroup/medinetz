@@ -63,7 +63,7 @@ export default function UserBadge({
         <MenuSeparator />
         <MenuGroup>
           <MenuGroupLabel>Konto</MenuGroupLabel>
-          <MenuItem>Status</MenuItem>
+          <MenuItem render={<Link href={`/m/${user.id}`} />}>Profil</MenuItem>
           <MenuItem render={<Link href="/settings/profile" />}>
             Profil bearbeiten
           </MenuItem>

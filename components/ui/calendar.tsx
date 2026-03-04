@@ -1,58 +1,47 @@
 "use client";
 
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsUpDownIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import type * as React from "react";
 import { DayPicker } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
-
-const buttonClassNames =
-  "relative flex size-(--cell-size) text-base sm:text-sm items-center justify-center rounded-lg text-foreground not-in-data-selected:hover:bg-accent disabled:pointer-events-none disabled:opacity-64 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0";
+import { buttonVariants } from "@/components/ui/button";
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
   components: userComponents,
-  mode = "single",
   ...props
 }: React.ComponentProps<typeof DayPicker>) {
   const defaultClassNames = {
-    button_next: buttonClassNames,
-    button_previous: buttonClassNames,
-    caption_label:
-      "text-base sm:text-sm font-medium flex items-center gap-2 h-full",
-    day: "size-(--cell-size) text-sm py-px",
-    day_button: cn(
-      buttonClassNames,
-      "in-[[data-selected]:not(.range-middle)]:transition-[color,background-color,border-radius,box-shadow] in-data-disabled:pointer-events-none focus-visible:z-1 in-data-selected:bg-primary in-data-selected:text-primary-foreground in-data-disabled:text-muted-foreground/70 in-data-disabled:line-through in-data-outside:text-muted-foreground/70 in-data-selected:in-data-outside:text-primary-foreground outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] in-[.range-start:not(.range-end)]:rounded-e-none in-[.range-end:not(.range-start)]:rounded-s-none in-[.range-middle]:rounded-none in-[.range-middle]:in-data-selected:bg-accent in-[.range-middle]:in-data-selected:text-foreground",
+    button_next: cn(
+      buttonVariants({ variant: "ghost" }),
+      "size-9 p-0 text-muted-foreground/80 hover:text-foreground",
     ),
-    dropdown: "absolute bg-popover inset-0 opacity-0",
-    dropdown_root:
-      "relative has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-[3px] border border-input shadow-xs/5 rounded-lg px-[calc(--spacing(3)-1px)] h-9 sm:h-8 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:-me-1",
-    dropdowns:
-      "w-full flex items-center text-base sm:text-sm justify-center h-(--cell-size) gap-1.5 *:[span]:font-medium",
+    button_previous: cn(
+      buttonVariants({ variant: "ghost" }),
+      "size-9 p-0 text-muted-foreground/80 hover:text-foreground",
+    ),
+    caption_label: "text-sm font-medium",
+    day: "group size-9 px-0 py-px text-sm",
+    day_button:
+      "relative flex size-9 items-center justify-center whitespace-nowrap rounded-md p-0 text-foreground group-[[data-selected]:not(.range-middle)]:[transition-property:color,background-color,border-radius,box-shadow] group-[[data-selected]:not(.range-middle)]:duration-150 group-data-disabled:pointer-events-none focus-visible:z-10 hover:not-in-data-selected:bg-accent group-data-selected:bg-primary hover:not-in-data-selected:text-foreground group-data-selected:text-primary-foreground group-data-disabled:text-foreground/30 group-data-disabled:line-through group-data-outside:text-foreground/30 group-data-selected:group-data-outside:text-primary-foreground outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] group-[.range-start:not(.range-end)]:rounded-e-none group-[.range-end:not(.range-start)]:rounded-s-none group-[.range-middle]:rounded-none group-[.range-middle]:group-data-selected:bg-accent group-[.range-middle]:group-data-selected:text-foreground",
     hidden: "invisible",
     month: "w-full",
     month_caption:
-      "relative mx-(--cell-size) px-1 mb-1 flex h-(--cell-size) items-center justify-center z-2",
-    months: "relative flex flex-col sm:flex-row gap-2",
-    nav: "absolute top-0 flex w-full justify-between z-1",
+      "relative mx-10 mb-1 flex h-9 items-center justify-center z-20",
+    months: "relative flex flex-col sm:flex-row gap-4",
+    nav: "absolute top-0 flex w-full justify-between z-10",
     outside:
       "text-muted-foreground data-selected:bg-accent/50 data-selected:text-muted-foreground",
     range_end: "range-end",
     range_middle: "range-middle",
     range_start: "range-start",
     today:
-      "*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-1 *:after:size-[3px] *:after:-translate-x-1/2 *:after:rounded-full *:after:bg-primary [&[data-selected]:not(.range-middle)>*]:after:bg-background [&[data-disabled]>*]:after:bg-foreground/30 *:after:transition-colors",
-    week_number:
-      "size-(--cell-size) p-0 text-xs font-medium text-muted-foreground/70",
-    weekday:
-      "size-(--cell-size) p-0 text-xs font-medium text-muted-foreground/70",
+      "*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-10 *:after:size-[3px] *:after:-translate-x-1/2 *:after:rounded-full *:after:bg-primary [&[data-selected]:not(.range-middle)>*]:after:bg-background [&[data-disabled]>*]:after:bg-foreground/30 *:after:transition-colors",
+    week_number: "size-9 p-0 text-xs font-medium text-muted-foreground/80",
+    weekday: "size-9 p-0 text-xs font-medium text-muted-foreground/80",
   };
   const mergedClassNames: typeof defaultClassNames = Object.keys(
     defaultClassNames,
@@ -72,41 +61,16 @@ function Calendar({
   );
 
   const defaultComponents = {
-    Chevron: ({
-      className,
-      orientation,
-      ...props
-    }: {
+    Chevron: (props: {
       className?: string;
+      size?: number;
+      disabled?: boolean;
       orientation?: "left" | "right" | "up" | "down";
     }) => {
-      if (orientation === "left") {
-        return (
-          <ChevronLeftIcon
-            className={cn(className, "rtl:rotate-180")}
-            {...props}
-            aria-hidden="true"
-          />
-        );
+      if (props.orientation === "left") {
+        return <ChevronLeftIcon size={16} {...props} aria-hidden="true" />;
       }
-
-      if (orientation === "right") {
-        return (
-          <ChevronRightIcon
-            className={cn(className, "rtl:rotate-180")}
-            {...props}
-            aria-hidden="true"
-          />
-        );
-      }
-
-      return (
-        <ChevronsUpDownIcon
-          className={className}
-          {...props}
-          aria-hidden="true"
-        />
-      );
+      return <ChevronRightIcon size={16} {...props} aria-hidden="true" />;
     },
   };
 
@@ -115,26 +79,13 @@ function Calendar({
     ...userComponents,
   };
 
-  const dayPickerProps = {
-    className: cn(
-      "w-fit [--cell-size:--spacing(10)] sm:[--cell-size:--spacing(9)]",
-      className,
-    ),
-    classNames: mergedClassNames,
-    components: mergedComponents,
-    "data-slot": "calendar",
-    formatters: {
-      formatMonthDropdown: (date: Date) =>
-        date.toLocaleString("default", { month: "short" }),
-    } as React.ComponentProps<typeof DayPicker>["formatters"],
-    mode,
-    showOutsideDays,
-    ...props,
-  };
-
   return (
     <DayPicker
-      {...(dayPickerProps as React.ComponentProps<typeof DayPicker>)}
+      className={cn("w-fit", className)}
+      classNames={mergedClassNames}
+      components={mergedComponents}
+      showOutsideDays={showOutsideDays}
+      {...props}
     />
   );
 }
