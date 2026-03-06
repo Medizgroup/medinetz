@@ -1,4 +1,6 @@
 @import "tailwindcss";
+
+@plugin "tailwind-scrollbar-hide";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -53,6 +55,7 @@
   --color-info-foreground: var(--info-foreground);
   --color-info: var(--info);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-highlight: var(--highlight);
   @keyframes skeleton {
     to {
       background-position: -200% 0;
@@ -104,6 +107,7 @@
   --success-foreground: var(--color-emerald-700);
   --warning: var(--color-amber-500);
   --warning-foreground: var(--color-amber-700);
+  --highlight: oklch(0.852 0.199 91.936);
 }
 
 .dark {
@@ -157,6 +161,7 @@
   --success-foreground: var(--color-emerald-400);
   --warning: var(--color-amber-500);
   --warning-foreground: var(--color-amber-400);
+  --highlight: oklch(0.852 0.199 91.936);
 }
 
 @layer base {
@@ -193,4 +198,13 @@
       fill: hsl(0 0% 94%);
     }
   }
+}
+
+:root {
+  /* Base brand color for Plate UI components */
+  --brand: oklch(0.623 0.214 259.815);
+}
+
+.dark {
+  --brand: oklch(0.707 0.165 254.624);
 }
