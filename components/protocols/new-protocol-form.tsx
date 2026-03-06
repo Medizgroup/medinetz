@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import ProtocolEditor from "@/components/protocols/protocol-editor";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -132,15 +132,11 @@ export default function NewProtocolForm({
           <ProtocolEditor
             value={value}
             onChange={setValue}
-            placeholder="Schreibe dein Protokoll… Benutze @ für Personen und / für Befehle."
+            placeholder="Hier schreiben..."
           />
-          <FieldDescription>
-            Minimaler Editor mit Heading, Fett, Kursiv, Listen, Mention und
-            Slash Command.
-          </FieldDescription>
         </Field>
 
-        {error ? <p className="text-sm text-red-500">{error}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
         <div className="flex justify-end gap-3">
           <Button
