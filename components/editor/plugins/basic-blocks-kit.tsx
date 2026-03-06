@@ -23,7 +23,12 @@ import {
 } from "@/components/ui/heading-node";
 import { HrElement } from "@/components/ui/hr-node";
 import { ParagraphElement } from "@/components/ui/paragraph-node";
-import { FontSizePlugin } from "@platejs/basic-styles/react";
+import {
+  FontBackgroundColorPlugin,
+  FontColorPlugin,
+  FontFamilyPlugin,
+  FontSizePlugin,
+} from "@platejs/basic-styles/react";
 
 export const BasicBlocksKit = [
   ParagraphPlugin.withComponent(ParagraphElement),
@@ -87,4 +92,7 @@ export const BasicBlocksKit = [
   }),
   HorizontalRulePlugin.withComponent(HrElement),
   FontSizePlugin,
+  FontFamilyPlugin,
+  FontBackgroundColorPlugin,
+  FontColorPlugin,
 ];

@@ -16,6 +16,7 @@ import {
   BoldIcon,
   HighlighterIcon,
   ItalicIcon,
+  PaintBucketIcon,
   QuoteIcon,
   StrikethroughIcon,
   UnderlineIcon,
@@ -30,6 +31,11 @@ import { BlockSelectionKit } from "../editor/plugins/block-selection-kit";
 import { InsertToolbarButton } from "../ui/insert-toolbar-button";
 import { TurnIntoToolbarButton } from "../ui/turn-into-toolbar-button";
 import { FontSizeToolbarButton } from "../ui/font-size-toolbar-button";
+import { AlignKit } from "../editor/plugins/align-kit";
+import { FontKit } from "../editor/plugins/font-kit";
+import { FontColorToolbarButton } from "../ui/font-color-toolbar-button";
+import { DndKit } from "../editor/plugins/dnd-kit";
+import { CalloutKit } from "../editor/plugins/callout-kit";
 
 const emptyValue: Value = [
   {
@@ -54,6 +60,10 @@ export default function ProtocolEditor({
       ...SlashKit,
       ...ListKit,
       ...BlockSelectionKit,
+      ...AlignKit,
+      ...FontKit,
+      ...DndKit,
+      ...CalloutKit,
     ],
     value: value && value.length > 0 ? value : emptyValue,
   });
@@ -80,6 +90,9 @@ export default function ProtocolEditor({
           <ToolbarButton onClick={() => editor.tf.h3.toggle()}>
             H3
           </ToolbarButton>
+          <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>
+            <QuoteIcon size={16} />
+          </ToolbarButton>
         </ToolbarGroup>
         <ToolbarGroup>
           <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘+B)">
@@ -101,9 +114,9 @@ export default function ProtocolEditor({
             tooltip="Highlight (⌘+Shift+H)">
             <HighlighterIcon />
           </MarkToolbarButton>
-          <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>
-            <QuoteIcon />
-          </ToolbarButton>
+          <FontColorToolbarButton nodeType="color">
+            <PaintBucketIcon />
+          </FontColorToolbarButton>
         </ToolbarGroup>
 
         <ToolbarGroup>
@@ -114,7 +127,7 @@ export default function ProtocolEditor({
       </FixedToolbar>
 
       <EditorContainer className="min-h-[280px] rounded-xl border">
-        <Editor placeholder={placeholder} />
+        <Editor placeholder={placeholder} className="px-10!" />
       </EditorContainer>
     </Plate>
   );

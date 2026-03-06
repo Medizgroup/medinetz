@@ -95,7 +95,8 @@ export default function NewProtocolForm({
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="z. B. Routine Plenum KW 14"
+              placeholder=""
+              size="lg"
               required
             />
           </Field>
@@ -106,6 +107,7 @@ export default function NewProtocolForm({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+              size="lg"
               required
             />
           </Field>
@@ -113,7 +115,9 @@ export default function NewProtocolForm({
 
         <Field className="gap-2">
           <FieldLabel>Organisation</FieldLabel>
-          <Select value={organizationId} onValueChange={setOrganizationId}>
+          <Select
+            value={organizationId}
+            onValueChange={(value) => setOrganizationId(value ?? "")}>
             <SelectTrigger>
               <SelectValue placeholder="Organisation wählen" />
             </SelectTrigger>
