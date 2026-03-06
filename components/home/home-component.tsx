@@ -66,6 +66,7 @@ export default async function HomeComponent() {
       dueDate: true,
       priority: true,
       createdAt: true,
+      description: true,
     },
   });
 

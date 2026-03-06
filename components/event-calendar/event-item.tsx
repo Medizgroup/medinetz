@@ -72,8 +72,7 @@ function EventWrapper({
       onTouchStart={onTouchStart}
       type="button"
       {...dndListeners}
-      {...dndAttributes}
-    >
+      {...dndAttributes}>
       {children}
     </button>
   );
@@ -149,7 +148,7 @@ export function EventItem({
     return (
       <EventWrapper
         className={cn(
-          "mt-[var(--event-gap)] h-[var(--event-height)] items-center text-[10px] sm:text-xs",
+          "mt-(--event-gap) h-(--event-height) items-center text-[10px] sm:text-xs",
           className,
         )}
         currentTime={currentTime}
@@ -161,8 +160,7 @@ export function EventItem({
         isLastDay={isLastDay}
         onClick={onClick}
         onMouseDown={onMouseDown}
-        onTouchStart={onTouchStart}
-      >
+        onTouchStart={onTouchStart}>
         {children || (
           <span className="truncate">
             {!event.allDay && (
@@ -195,8 +193,7 @@ export function EventItem({
         isLastDay={isLastDay}
         onClick={onClick}
         onMouseDown={onMouseDown}
-        onTouchStart={onTouchStart}
-      >
+        onTouchStart={onTouchStart}>
         {durationMinutes < 45 ? (
           <div className="truncate">
             {event.title}{" "}
@@ -234,8 +231,7 @@ export function EventItem({
       onTouchStart={onTouchStart}
       type="button"
       {...dndListeners}
-      {...dndAttributes}
-    >
+      {...dndAttributes}>
       <div className="font-medium text-sm">{event.title}</div>
       <div className="text-xs opacity-70">
         {event.allDay ? (

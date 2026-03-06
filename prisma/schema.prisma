@@ -570,7 +570,7 @@ model CaseAttachment {
 }
 
 // ============================================================
-// 4. PROTOCOLS (PROJEKT-SPEZIFISCH)
+//? 4. PROTOCOLS (PROJEKT-SPEZIFISCH)
 // ============================================================
 
 model Protocol {
@@ -580,7 +580,8 @@ model Protocol {
   
   date           DateTime @db.Date // Plenum date
   title          String
-  description    String?  @db.Text
+  description    Json?    @map("description") @db.Json
+  descriptionText String? @map("description_text") @db.Text
   
   creatorId      String   @map("creator_id")
   
@@ -603,7 +604,8 @@ model ProtocolComment {
   id         String   @id @default(uuid())
   protocolId String   @map("protocol_id")
   userId     String   @map("user_id")
-  content    String   @db.Text
+  content     Json?    @map("content") @db.Json
+  contentText String?  @map("content_text") @db.Text
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 

@@ -40,7 +40,7 @@ export type ProtocolMinAggregateOutputType = {
   protocolNumber: number | null
   date: Date | null
   title: string | null
-  description: string | null
+  descriptionText: string | null
   creatorId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -52,7 +52,7 @@ export type ProtocolMaxAggregateOutputType = {
   protocolNumber: number | null
   date: Date | null
   title: string | null
-  description: string | null
+  descriptionText: string | null
   creatorId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +65,7 @@ export type ProtocolCountAggregateOutputType = {
   date: number
   title: number
   description: number
+  descriptionText: number
   creatorId: number
   createdAt: number
   updatedAt: number
@@ -86,7 +87,7 @@ export type ProtocolMinAggregateInputType = {
   protocolNumber?: true
   date?: true
   title?: true
-  description?: true
+  descriptionText?: true
   creatorId?: true
   createdAt?: true
   updatedAt?: true
@@ -98,7 +99,7 @@ export type ProtocolMaxAggregateInputType = {
   protocolNumber?: true
   date?: true
   title?: true
-  description?: true
+  descriptionText?: true
   creatorId?: true
   createdAt?: true
   updatedAt?: true
@@ -111,6 +112,7 @@ export type ProtocolCountAggregateInputType = {
   date?: true
   title?: true
   description?: true
+  descriptionText?: true
   creatorId?: true
   createdAt?: true
   updatedAt?: true
@@ -209,7 +211,8 @@ export type ProtocolGroupByOutputType = {
   protocolNumber: number
   date: Date
   title: string
-  description: string | null
+  description: runtime.JsonValue | null
+  descriptionText: string | null
   creatorId: string
   createdAt: Date
   updatedAt: Date
@@ -244,7 +247,8 @@ export type ProtocolWhereInput = {
   protocolNumber?: Prisma.IntFilter<"Protocol"> | number
   date?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   title?: Prisma.StringFilter<"Protocol"> | string
-  description?: Prisma.StringNullableFilter<"Protocol"> | string | null
+  description?: Prisma.JsonNullableFilter<"Protocol">
+  descriptionText?: Prisma.StringNullableFilter<"Protocol"> | string | null
   creatorId?: Prisma.StringFilter<"Protocol"> | string
   createdAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
@@ -261,6 +265,7 @@ export type ProtocolOrderByWithRelationInput = {
   date?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  descriptionText?: Prisma.SortOrderInput | Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -280,7 +285,8 @@ export type ProtocolWhereUniqueInput = Prisma.AtLeast<{
   protocolNumber?: Prisma.IntFilter<"Protocol"> | number
   date?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   title?: Prisma.StringFilter<"Protocol"> | string
-  description?: Prisma.StringNullableFilter<"Protocol"> | string | null
+  description?: Prisma.JsonNullableFilter<"Protocol">
+  descriptionText?: Prisma.StringNullableFilter<"Protocol"> | string | null
   creatorId?: Prisma.StringFilter<"Protocol"> | string
   createdAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
@@ -297,6 +303,7 @@ export type ProtocolOrderByWithAggregationInput = {
   date?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  descriptionText?: Prisma.SortOrderInput | Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -316,7 +323,8 @@ export type ProtocolScalarWhereWithAggregatesInput = {
   protocolNumber?: Prisma.IntWithAggregatesFilter<"Protocol"> | number
   date?: Prisma.DateTimeWithAggregatesFilter<"Protocol"> | Date | string
   title?: Prisma.StringWithAggregatesFilter<"Protocol"> | string
-  description?: Prisma.StringNullableWithAggregatesFilter<"Protocol"> | string | null
+  description?: Prisma.JsonNullableWithAggregatesFilter<"Protocol">
+  descriptionText?: Prisma.StringNullableWithAggregatesFilter<"Protocol"> | string | null
   creatorId?: Prisma.StringWithAggregatesFilter<"Protocol"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Protocol"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Protocol"> | Date | string
@@ -327,7 +335,8 @@ export type ProtocolCreateInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
@@ -342,7 +351,8 @@ export type ProtocolUncheckedCreateInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -355,7 +365,8 @@ export type ProtocolUpdateInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
@@ -370,7 +381,8 @@ export type ProtocolUncheckedUpdateInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -384,7 +396,8 @@ export type ProtocolCreateManyInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -395,7 +408,8 @@ export type ProtocolUpdateManyMutationInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -406,7 +420,8 @@ export type ProtocolUncheckedUpdateManyInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -434,6 +449,7 @@ export type ProtocolCountOrderByAggregateInput = {
   date?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  descriptionText?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -449,7 +465,7 @@ export type ProtocolMaxOrderByAggregateInput = {
   protocolNumber?: Prisma.SortOrder
   date?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  descriptionText?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -461,7 +477,7 @@ export type ProtocolMinOrderByAggregateInput = {
   protocolNumber?: Prisma.SortOrder
   date?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  descriptionText?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -593,7 +609,8 @@ export type ProtocolCreateWithoutCreatorInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
@@ -607,7 +624,8 @@ export type ProtocolUncheckedCreateWithoutCreatorInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutProtocolInput
@@ -649,7 +667,8 @@ export type ProtocolScalarWhereInput = {
   protocolNumber?: Prisma.IntFilter<"Protocol"> | number
   date?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   title?: Prisma.StringFilter<"Protocol"> | string
-  description?: Prisma.StringNullableFilter<"Protocol"> | string | null
+  description?: Prisma.JsonNullableFilter<"Protocol">
+  descriptionText?: Prisma.StringNullableFilter<"Protocol"> | string | null
   creatorId?: Prisma.StringFilter<"Protocol"> | string
   createdAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
@@ -660,7 +679,8 @@ export type ProtocolCreateWithoutOrganizationInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   creator: Prisma.UserCreateNestedOneWithoutCreatedProtocolsInput
@@ -673,7 +693,8 @@ export type ProtocolUncheckedCreateWithoutOrganizationInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -712,7 +733,8 @@ export type ProtocolCreateWithoutCommentsInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
@@ -726,7 +748,8 @@ export type ProtocolUncheckedCreateWithoutCommentsInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -754,7 +777,8 @@ export type ProtocolUpdateWithoutCommentsInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
@@ -768,7 +792,8 @@ export type ProtocolUncheckedUpdateWithoutCommentsInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -780,7 +805,8 @@ export type ProtocolCreateWithoutProtocolCasesInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
@@ -794,7 +820,8 @@ export type ProtocolUncheckedCreateWithoutProtocolCasesInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -822,7 +849,8 @@ export type ProtocolUpdateWithoutProtocolCasesInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
@@ -836,7 +864,8 @@ export type ProtocolUncheckedUpdateWithoutProtocolCasesInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -849,7 +878,8 @@ export type ProtocolCreateManyCreatorInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -859,7 +889,8 @@ export type ProtocolUpdateWithoutCreatorInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
@@ -873,7 +904,8 @@ export type ProtocolUncheckedUpdateWithoutCreatorInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutProtocolNestedInput
@@ -886,7 +918,8 @@ export type ProtocolUncheckedUpdateManyWithoutCreatorInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -896,7 +929,8 @@ export type ProtocolCreateManyOrganizationInput = {
   protocolNumber: number
   date: Date | string
   title: string
-  description?: string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -907,7 +941,8 @@ export type ProtocolUpdateWithoutOrganizationInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedProtocolsNestedInput
@@ -920,7 +955,8 @@ export type ProtocolUncheckedUpdateWithoutOrganizationInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -933,7 +969,8 @@ export type ProtocolUncheckedUpdateManyWithoutOrganizationInput = {
   protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -986,6 +1023,7 @@ export type ProtocolSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   date?: boolean
   title?: boolean
   description?: boolean
+  descriptionText?: boolean
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1003,6 +1041,7 @@ export type ProtocolSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   date?: boolean
   title?: boolean
   description?: boolean
+  descriptionText?: boolean
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1017,6 +1056,7 @@ export type ProtocolSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   date?: boolean
   title?: boolean
   description?: boolean
+  descriptionText?: boolean
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1031,12 +1071,13 @@ export type ProtocolSelectScalar = {
   date?: boolean
   title?: boolean
   description?: boolean
+  descriptionText?: boolean
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProtocolOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "protocolNumber" | "date" | "title" | "description" | "creatorId" | "createdAt" | "updatedAt", ExtArgs["result"]["protocol"]>
+export type ProtocolOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "protocolNumber" | "date" | "title" | "description" | "descriptionText" | "creatorId" | "createdAt" | "updatedAt", ExtArgs["result"]["protocol"]>
 export type ProtocolInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1067,7 +1108,8 @@ export type $ProtocolPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     protocolNumber: number
     date: Date
     title: string
-    description: string | null
+    description: runtime.JsonValue | null
+    descriptionText: string | null
     creatorId: string
     createdAt: Date
     updatedAt: Date
@@ -1503,7 +1545,8 @@ export interface ProtocolFieldRefs {
   readonly protocolNumber: Prisma.FieldRef<"Protocol", 'Int'>
   readonly date: Prisma.FieldRef<"Protocol", 'DateTime'>
   readonly title: Prisma.FieldRef<"Protocol", 'String'>
-  readonly description: Prisma.FieldRef<"Protocol", 'String'>
+  readonly description: Prisma.FieldRef<"Protocol", 'Json'>
+  readonly descriptionText: Prisma.FieldRef<"Protocol", 'String'>
   readonly creatorId: Prisma.FieldRef<"Protocol", 'String'>
   readonly createdAt: Prisma.FieldRef<"Protocol", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Protocol", 'DateTime'>

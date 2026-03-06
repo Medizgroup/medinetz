@@ -3089,6 +3089,7 @@ export const ProtocolScalarFieldEnum = {
   date: 'date',
   title: 'title',
   description: 'description',
+  descriptionText: 'descriptionText',
   creatorId: 'creatorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -3102,6 +3103,7 @@ export const ProtocolCommentScalarFieldEnum = {
   protocolId: 'protocolId',
   userId: 'userId',
   content: 'content',
+  contentText: 'contentText',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

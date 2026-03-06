@@ -25,11 +25,7 @@ import { DroppableCell } from "./droppable-cell";
 import { EventItem } from "./event-item";
 import { isMultiDayEvent } from "./utils";
 import { useCurrentTimeIndicator } from "./hooks/use-current-time-indicator";
-import {
-  EndHour,
-  StartHour,
-  WeekCellsHeight,
-} from "./constants";
+import { EndHour, StartHour, WeekCellsHeight } from "./constants";
 import { cn } from "@/lib/utils";
 
 interface WeekViewProps {
@@ -230,8 +226,7 @@ export function WeekView({
           <div
             className="py-2 text-center text-muted-foreground/70 text-sm data-today:font-medium data-today:text-foreground"
             data-today={isToday(day) || undefined}
-            key={day.toString()}
-          >
+            key={day.toString()}>
             <span aria-hidden="true" className="sm:hidden">
               {format(day, "E")[0]} {format(day, "d")}
             </span>
@@ -263,8 +258,7 @@ export function WeekView({
                 <div
                   className="relative border-border/70 border-r p-1 last:border-r-0"
                   data-today={isToday(day) || undefined}
-                  key={day.toString()}
-                >
+                  key={day.toString()}>
                   {dayAllDayEvents.map((event) => {
                     const eventStart = new Date(event.start);
                     const eventEnd = new Date(event.end);
@@ -283,16 +277,14 @@ export function WeekView({
                         isLastDay={isLastDay}
                         key={`spanning-${event.id}`}
                         onClick={(e) => handleEventClick(event, e)}
-                        view="month"
-                      >
+                        view="month">
                         {/* Show title if it's the first day of the event or the first visible day in the week */}
                         <div
                           aria-hidden={!shouldShowTitle}
                           className={cn(
                             "truncate",
                             !shouldShowTitle && "invisible",
-                          )}
-                        >
+                          )}>
                           {event.title}
                         </div>
                       </EventItem>
@@ -309,9 +301,8 @@ export function WeekView({
         <div className="grid auto-cols-fr border-border/70 border-r">
           {hours.map((hour, index) => (
             <div
-              className="relative min-h-[var(--week-cells-height)] border-border/70 border-b last:border-b-0"
-              key={hour.toString()}
-            >
+              className="relative min-h-(--week-cells-height) border-border/70 border-b last:border-b-0"
+              key={hour.toString()}>
               {index > 0 && (
                 <span className="-top-3 absolute left-0 flex h-6 w-16 max-w-full items-center justify-end bg-background pe-2 text-[10px] text-muted-foreground/70 sm:pe-4 sm:text-xs">
                   {format(hour, "h a")}
@@ -325,8 +316,7 @@ export function WeekView({
           <div
             className="relative grid auto-cols-fr border-border/70 border-r last:border-r-0"
             data-today={isToday(day) || undefined}
-            key={day.toString()}
-          >
+            key={day.toString()}>
             {/* Positioned events */}
             {(processedDayEvents[dayIndex] ?? []).map((positionedEvent) => (
               <div
@@ -339,8 +329,7 @@ export function WeekView({
                   top: `${positionedEvent.top}px`,
                   width: `${positionedEvent.width * 100}%`,
                   zIndex: positionedEvent.zIndex,
-                }}
-              >
+                }}>
                 <div className="size-full">
                   <DraggableEvent
                     event={positionedEvent.event}
@@ -357,8 +346,7 @@ export function WeekView({
             {currentTimeVisible && isToday(day) && (
               <div
                 className="pointer-events-none absolute right-0 left-0 z-20"
-                style={{ top: `${currentTimePosition}%` }}
-              >
+                style={{ top: `${currentTimePosition}%` }}>
                 <div className="relative flex items-center">
                   <div className="-left-1 absolute h-2 w-2 rounded-full bg-primary" />
                   <div className="h-[2px] w-full bg-primary" />
@@ -369,9 +357,8 @@ export function WeekView({
               const hourValue = getHours(hour);
               return (
                 <div
-                  className="relative min-h-[var(--week-cells-height)] border-border/70 border-b last:border-b-0"
-                  key={hour.toString()}
-                >
+                  className="relative min-h-(--week-cells-height) border-border/70 border-b last:border-b-0"
+                  key={hour.toString()}>
                   {/* Quarter-hour intervals */}
                   {[0, 1, 2, 3].map((quarter) => {
                     const quarterHourTime = hourValue + quarter * 0.25;

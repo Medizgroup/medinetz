@@ -28,7 +28,7 @@ export type ProtocolCommentMinAggregateOutputType = {
   id: string | null
   protocolId: string | null
   userId: string | null
-  content: string | null
+  contentText: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -37,7 +37,7 @@ export type ProtocolCommentMaxAggregateOutputType = {
   id: string | null
   protocolId: string | null
   userId: string | null
-  content: string | null
+  contentText: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +47,7 @@ export type ProtocolCommentCountAggregateOutputType = {
   protocolId: number
   userId: number
   content: number
+  contentText: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -57,7 +58,7 @@ export type ProtocolCommentMinAggregateInputType = {
   id?: true
   protocolId?: true
   userId?: true
-  content?: true
+  contentText?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -66,7 +67,7 @@ export type ProtocolCommentMaxAggregateInputType = {
   id?: true
   protocolId?: true
   userId?: true
-  content?: true
+  contentText?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +77,7 @@ export type ProtocolCommentCountAggregateInputType = {
   protocolId?: true
   userId?: true
   content?: true
+  contentText?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -157,7 +159,8 @@ export type ProtocolCommentGroupByOutputType = {
   id: string
   protocolId: string
   userId: string
-  content: string
+  content: runtime.JsonValue | null
+  contentText: string | null
   createdAt: Date
   updatedAt: Date
   _count: ProtocolCommentCountAggregateOutputType | null
@@ -187,7 +190,8 @@ export type ProtocolCommentWhereInput = {
   id?: Prisma.StringFilter<"ProtocolComment"> | string
   protocolId?: Prisma.StringFilter<"ProtocolComment"> | string
   userId?: Prisma.StringFilter<"ProtocolComment"> | string
-  content?: Prisma.StringFilter<"ProtocolComment"> | string
+  content?: Prisma.JsonNullableFilter<"ProtocolComment">
+  contentText?: Prisma.StringNullableFilter<"ProtocolComment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProtocolComment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProtocolComment"> | Date | string
   protocol?: Prisma.XOR<Prisma.ProtocolScalarRelationFilter, Prisma.ProtocolWhereInput>
@@ -199,7 +203,8 @@ export type ProtocolCommentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   protocolId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  content?: Prisma.SortOrder
+  content?: Prisma.SortOrderInput | Prisma.SortOrder
+  contentText?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   protocol?: Prisma.ProtocolOrderByWithRelationInput
@@ -214,7 +219,8 @@ export type ProtocolCommentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProtocolCommentWhereInput | Prisma.ProtocolCommentWhereInput[]
   protocolId?: Prisma.StringFilter<"ProtocolComment"> | string
   userId?: Prisma.StringFilter<"ProtocolComment"> | string
-  content?: Prisma.StringFilter<"ProtocolComment"> | string
+  content?: Prisma.JsonNullableFilter<"ProtocolComment">
+  contentText?: Prisma.StringNullableFilter<"ProtocolComment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProtocolComment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProtocolComment"> | Date | string
   protocol?: Prisma.XOR<Prisma.ProtocolScalarRelationFilter, Prisma.ProtocolWhereInput>
@@ -226,7 +232,8 @@ export type ProtocolCommentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   protocolId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  content?: Prisma.SortOrder
+  content?: Prisma.SortOrderInput | Prisma.SortOrder
+  contentText?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProtocolCommentCountOrderByAggregateInput
@@ -241,14 +248,16 @@ export type ProtocolCommentScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ProtocolComment"> | string
   protocolId?: Prisma.StringWithAggregatesFilter<"ProtocolComment"> | string
   userId?: Prisma.StringWithAggregatesFilter<"ProtocolComment"> | string
-  content?: Prisma.StringWithAggregatesFilter<"ProtocolComment"> | string
+  content?: Prisma.JsonNullableWithAggregatesFilter<"ProtocolComment">
+  contentText?: Prisma.StringNullableWithAggregatesFilter<"ProtocolComment"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProtocolComment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProtocolComment"> | Date | string
 }
 
 export type ProtocolCommentCreateInput = {
   id?: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   protocol: Prisma.ProtocolCreateNestedOneWithoutCommentsInput
@@ -260,7 +269,8 @@ export type ProtocolCommentUncheckedCreateInput = {
   id?: string
   protocolId: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolCommentInput
@@ -268,7 +278,8 @@ export type ProtocolCommentUncheckedCreateInput = {
 
 export type ProtocolCommentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   protocol?: Prisma.ProtocolUpdateOneRequiredWithoutCommentsNestedInput
@@ -280,7 +291,8 @@ export type ProtocolCommentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   protocolId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolCommentNestedInput
@@ -290,14 +302,16 @@ export type ProtocolCommentCreateManyInput = {
   id?: string
   protocolId: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ProtocolCommentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -306,7 +320,8 @@ export type ProtocolCommentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   protocolId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -326,6 +341,7 @@ export type ProtocolCommentCountOrderByAggregateInput = {
   protocolId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -334,7 +350,7 @@ export type ProtocolCommentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   protocolId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  content?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -343,7 +359,7 @@ export type ProtocolCommentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   protocolId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  content?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -455,7 +471,8 @@ export type ProtocolCommentUpdateOneWithoutMentionsNestedInput = {
 
 export type ProtocolCommentCreateWithoutUserInput = {
   id?: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   protocol: Prisma.ProtocolCreateNestedOneWithoutCommentsInput
@@ -465,7 +482,8 @@ export type ProtocolCommentCreateWithoutUserInput = {
 export type ProtocolCommentUncheckedCreateWithoutUserInput = {
   id?: string
   protocolId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolCommentInput
@@ -504,14 +522,16 @@ export type ProtocolCommentScalarWhereInput = {
   id?: Prisma.StringFilter<"ProtocolComment"> | string
   protocolId?: Prisma.StringFilter<"ProtocolComment"> | string
   userId?: Prisma.StringFilter<"ProtocolComment"> | string
-  content?: Prisma.StringFilter<"ProtocolComment"> | string
+  content?: Prisma.JsonNullableFilter<"ProtocolComment">
+  contentText?: Prisma.StringNullableFilter<"ProtocolComment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProtocolComment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProtocolComment"> | Date | string
 }
 
 export type ProtocolCommentCreateWithoutProtocolInput = {
   id?: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProtocolCommentsInput
@@ -521,7 +541,8 @@ export type ProtocolCommentCreateWithoutProtocolInput = {
 export type ProtocolCommentUncheckedCreateWithoutProtocolInput = {
   id?: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolCommentInput
@@ -555,7 +576,8 @@ export type ProtocolCommentUpdateManyWithWhereWithoutProtocolInput = {
 
 export type ProtocolCommentCreateWithoutMentionsInput = {
   id?: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   protocol: Prisma.ProtocolCreateNestedOneWithoutCommentsInput
@@ -566,7 +588,8 @@ export type ProtocolCommentUncheckedCreateWithoutMentionsInput = {
   id?: string
   protocolId: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -589,7 +612,8 @@ export type ProtocolCommentUpdateToOneWithWhereWithoutMentionsInput = {
 
 export type ProtocolCommentUpdateWithoutMentionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   protocol?: Prisma.ProtocolUpdateOneRequiredWithoutCommentsNestedInput
@@ -600,7 +624,8 @@ export type ProtocolCommentUncheckedUpdateWithoutMentionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   protocolId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -608,14 +633,16 @@ export type ProtocolCommentUncheckedUpdateWithoutMentionsInput = {
 export type ProtocolCommentCreateManyUserInput = {
   id?: string
   protocolId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ProtocolCommentUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   protocol?: Prisma.ProtocolUpdateOneRequiredWithoutCommentsNestedInput
@@ -625,7 +652,8 @@ export type ProtocolCommentUpdateWithoutUserInput = {
 export type ProtocolCommentUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   protocolId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolCommentNestedInput
@@ -634,7 +662,8 @@ export type ProtocolCommentUncheckedUpdateWithoutUserInput = {
 export type ProtocolCommentUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   protocolId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -642,14 +671,16 @@ export type ProtocolCommentUncheckedUpdateManyWithoutUserInput = {
 export type ProtocolCommentCreateManyProtocolInput = {
   id?: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ProtocolCommentUpdateWithoutProtocolInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProtocolCommentsNestedInput
@@ -659,7 +690,8 @@ export type ProtocolCommentUpdateWithoutProtocolInput = {
 export type ProtocolCommentUncheckedUpdateWithoutProtocolInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolCommentNestedInput
@@ -668,7 +700,8 @@ export type ProtocolCommentUncheckedUpdateWithoutProtocolInput = {
 export type ProtocolCommentUncheckedUpdateManyWithoutProtocolInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -709,6 +742,7 @@ export type ProtocolCommentSelect<ExtArgs extends runtime.Types.Extensions.Inter
   protocolId?: boolean
   userId?: boolean
   content?: boolean
+  contentText?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   protocol?: boolean | Prisma.ProtocolDefaultArgs<ExtArgs>
@@ -722,6 +756,7 @@ export type ProtocolCommentSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   protocolId?: boolean
   userId?: boolean
   content?: boolean
+  contentText?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   protocol?: boolean | Prisma.ProtocolDefaultArgs<ExtArgs>
@@ -733,6 +768,7 @@ export type ProtocolCommentSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   protocolId?: boolean
   userId?: boolean
   content?: boolean
+  contentText?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   protocol?: boolean | Prisma.ProtocolDefaultArgs<ExtArgs>
@@ -744,11 +780,12 @@ export type ProtocolCommentSelectScalar = {
   protocolId?: boolean
   userId?: boolean
   content?: boolean
+  contentText?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProtocolCommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "protocolId" | "userId" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["protocolComment"]>
+export type ProtocolCommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "protocolId" | "userId" | "content" | "contentText" | "createdAt" | "updatedAt", ExtArgs["result"]["protocolComment"]>
 export type ProtocolCommentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   protocol?: boolean | Prisma.ProtocolDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -775,7 +812,8 @@ export type $ProtocolCommentPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     protocolId: string
     userId: string
-    content: string
+    content: runtime.JsonValue | null
+    contentText: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["protocolComment"]>
@@ -1207,7 +1245,8 @@ export interface ProtocolCommentFieldRefs {
   readonly id: Prisma.FieldRef<"ProtocolComment", 'String'>
   readonly protocolId: Prisma.FieldRef<"ProtocolComment", 'String'>
   readonly userId: Prisma.FieldRef<"ProtocolComment", 'String'>
-  readonly content: Prisma.FieldRef<"ProtocolComment", 'String'>
+  readonly content: Prisma.FieldRef<"ProtocolComment", 'Json'>
+  readonly contentText: Prisma.FieldRef<"ProtocolComment", 'String'>
   readonly createdAt: Prisma.FieldRef<"ProtocolComment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ProtocolComment", 'DateTime'>
 }

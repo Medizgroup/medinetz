@@ -271,21 +271,19 @@ export function EventDialog({
             <div className="flex-1 *:not-first:mt-1.5">
               <Label htmlFor="start-date">Start Date</Label>
               <Popover onOpenChange={setStartDateOpen} open={startDateOpen}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger>
                   <Button
                     className={cn(
                       "group w-full justify-between border-input bg-background px-3 font-normal outline-none outline-offset-0 hover:bg-background focus-visible:outline-[3px]",
                       !startDate && "text-muted-foreground",
                     )}
                     id="start-date"
-                    variant={"outline"}
-                  >
+                    variant={"outline"}>
                     <span
                       className={cn(
                         "truncate",
                         !startDate && "text-muted-foreground",
-                      )}
-                    >
+                      )}>
                       {startDate ? format(startDate, "PPP") : "Pick a date"}
                     </span>
                     <RiCalendarLine
@@ -319,7 +317,9 @@ export function EventDialog({
             {!allDay && (
               <div className="min-w-28 *:not-first:mt-1.5">
                 <Label htmlFor="start-time">Start Time</Label>
-                <Select onValueChange={setStartTime} value={startTime}>
+                <Select
+                  onValueChange={(value) => setStartTime(value || "")}
+                  value={startTime}>
                   <SelectTrigger id="start-time">
                     <SelectValue placeholder="Select time" />
                   </SelectTrigger>
@@ -339,21 +339,19 @@ export function EventDialog({
             <div className="flex-1 *:not-first:mt-1.5">
               <Label htmlFor="end-date">End Date</Label>
               <Popover onOpenChange={setEndDateOpen} open={endDateOpen}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger>
                   <Button
                     className={cn(
                       "group w-full justify-between border-input bg-background px-3 font-normal outline-none outline-offset-0 hover:bg-background focus-visible:outline-[3px]",
                       !endDate && "text-muted-foreground",
                     )}
                     id="end-date"
-                    variant={"outline"}
-                  >
+                    variant={"outline"}>
                     <span
                       className={cn(
                         "truncate",
                         !endDate && "text-muted-foreground",
-                      )}
-                    >
+                      )}>
                       {endDate ? format(endDate, "PPP") : "Pick a date"}
                     </span>
                     <RiCalendarLine
@@ -384,7 +382,9 @@ export function EventDialog({
             {!allDay && (
               <div className="min-w-28 *:not-first:mt-1.5">
                 <Label htmlFor="end-time">End Time</Label>
-                <Select onValueChange={setEndTime} value={endTime}>
+                <Select
+                  onValueChange={(value) => setEndTime(value || "")}
+                  value={endTime}>
                   <SelectTrigger id="end-time">
                     <SelectValue placeholder="Select time" />
                   </SelectTrigger>
@@ -425,8 +425,7 @@ export function EventDialog({
               className="flex gap-1.5"
               defaultValue={colorOptions[0]?.value}
               onValueChange={(value: EventColor) => setColor(value)}
-              value={color}
-            >
+              value={color}>
               {colorOptions.map((colorOption) => (
                 <RadioGroupItem
                   aria-label={colorOption.label}
@@ -449,8 +448,7 @@ export function EventDialog({
               aria-label="Delete event"
               onClick={handleDelete}
               size="icon"
-              variant="outline"
-            >
+              variant="outline">
               <RiDeleteBinLine aria-hidden="true" size={16} />
             </Button>
           )}

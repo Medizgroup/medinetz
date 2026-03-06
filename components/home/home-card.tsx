@@ -19,6 +19,7 @@ type Props = {
     dueDate: Date | null;
     priority: number;
     createdAt: Date;
+    description: string | null;
   }[];
 };
 
