@@ -3,19 +3,14 @@ import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { richTextToPlainText } from "@/lib/utils/protocols/rich-text";
-import {
-  addProtocolCommentAction,
-  updateProtocolAction,
-} from "@/app/(app)/actions/protocols";
 
 import RichTextRenderer from "@/components/protocols/rich-text-renderer";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { TElement } from "platejs";
+import ProtocolCommentForm from "@/components/protocols/protocol-comment-form";
+import EditProtocolForm from "@/components/protocols/edit-protocol-form";
 
 function orgBadge(type: string) {
   if (type === "ROUTINE") return "R";
@@ -194,56 +189,14 @@ export default async function ProtocolDetailPage({
           <div className="space-y-4">
             <h2 className="text-lg font-semibold">Bearbeiten</h2>
 
-            <form
-              action={updateProtocolAction}
-              className="space-y-4 rounded-2xl border p-5">
-              <input type="hidden" name="protocolId" value={protocol.id} />
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="title">Titel</FieldLabel>
-                  <Input
-                    id="title"
-                    name="title"
-                    defaultValue={protocol.title}
-                    required
-                  />
-                </Field>
-
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="date">Datum</FieldLabel>
-                  <Input
-                    id="date"
-                    name="date"
-                    type="date"
-                    defaultValue={protocol.date.toISOString().slice(0, 10)}
-                    required
-                  />
-                </Field>
-              </div>
-
-              <Field className="gap-2">
-                <FieldLabel htmlFor="description">Beschreibung</FieldLabel>
-                <Textarea
-                  id="description"
-                  name="description"
-                  rows={14}
-                  defaultValue={
-                    protocol.descriptionText ??
-                    richTextToPlainText(protocol.description)
-                  }
-                />
-                <FieldDescription>
-                  Später ersetzen wir dieses Feld durch Plate.
-                </FieldDescription>
-              </Field>
-
-              <div className="flex justify-end">
-                <Button type="submit" className="rounded-full">
-                  Änderungen speichern
-                </Button>
-              </div>
-            </form>
+            <EditProtocolForm
+              protocol={{
+                id: protocol.id,
+                title: protocol.title,
+                date: protocol.date.toISOString().slice(0, 10),
+                description: (protocol.description as TElement[]) ?? [],
+              }}
+            />
           </div>
 
           <Separator />
@@ -291,30 +244,7 @@ export default async function ProtocolDetailPage({
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">Kommentare</h2>
 
-        {commentable ? (
-          <form
-            action={addProtocolCommentAction}
-            className="rounded-2xl border p-5 space-y-4">
-            <input type="hidden" name="protocolId" value={protocol.id} />
-
-            <Field className="gap-2">
-              <FieldLabel htmlFor="content">Neuer Kommentar</FieldLabel>
-              <Textarea
-                id="content"
-                name="content"
-                rows={6}
-                placeholder="Schreibe einen Kommentar…"
-                required
-              />
-            </Field>
-
-            <div className="flex justify-end">
-              <Button type="submit" className="rounded-full">
-                Kommentar speichern
-              </Button>
-            </div>
-          </form>
-        ) : null}
+        {commentable ? <ProtocolCommentForm protocolId={protocol.id} /> : null}
 
         <div className="rounded-2xl border divide-y">
           {protocol.comments.length === 0 ? (

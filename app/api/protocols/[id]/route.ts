@@ -13,7 +13,12 @@ import {
   syncProtocolMentions,
 } from "@/lib/utils/protocols/sync";
 
-export async function POST(req: Request) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user?.id) {
@@ -23,21 +28,26 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
 
   const title = String(body?.title ?? "").trim();
-  const organizationId = String(body?.organizationId ?? "").trim();
   const date = String(body?.date ?? "").trim();
   const description = body?.description;
 
-  if (!title || !organizationId || !date) {
-    return NextResponse.json(
-      { error: "Titel, Organisation und Datum sind erforderlich." },
-      { status: 400 },
-    );
+  const protocol = await prisma.protocol.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      organizationId: true,
+      title: true,
+    },
+  });
+
+  if (!protocol) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
   const membership = await prisma.organizationMember.findUnique({
     where: {
       organizationId_userId: {
-        organizationId,
+        organizationId: protocol.organizationId,
         userId: session.user.id,
       },
     },
@@ -48,26 +58,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Keine Berechtigung." }, { status: 403 });
   }
 
-  const latest = await prisma.protocol.findFirst({
-    where: { organizationId },
-    orderBy: { protocolNumber: "desc" },
-    select: { protocolNumber: true },
-  });
-
-  const protocol = await prisma.protocol.create({
+  await prisma.protocol.update({
+    where: { id },
     data: {
       title,
-      organizationId,
       date: new Date(date),
-      protocolNumber: (latest?.protocolNumber ?? 0) + 1,
-      creatorId: session.user.id,
       description,
       descriptionText: extractPlainTextFromNodes(description) || null,
-    },
-    select: {
-      id: true,
-      title: true,
-      organizationId: true,
     },
   });
 
@@ -75,23 +72,23 @@ export async function POST(req: Request) {
   const caseIds = extractReferencedCaseIds(description);
 
   await syncProtocolMentions({
-    protocolId: protocol.id,
+    protocolId: id,
     mentionedUserIds,
     mentioningUserId: session.user.id,
   });
 
   await syncProtocolCases({
-    protocolId: protocol.id,
+    protocolId: id,
     caseIds,
   });
 
   await prisma.activity.create({
     data: {
-      organizationId,
+      organizationId: protocol.organizationId,
       userId: session.user.id,
-      action: "CREATED",
+      action: "UPDATED",
       targetType: "protocol",
-      targetId: protocol.id,
+      targetId: id,
       metadata: {
         title,
         mentionedUserIds,
@@ -100,5 +97,5 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ protocol });
+  return NextResponse.json({ ok: true });
 }
