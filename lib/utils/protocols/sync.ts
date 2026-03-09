@@ -7,6 +7,7 @@ export async function syncProtocolMentions(params: {
 }) {
   const { protocolId, mentionedUserIds, mentioningUserId } = params;
 
+  //   update existing mentions for this protocol comments? no
   // delete old mentions for this protocol comments? no
   // for description mentions we store targetType = protocol
   await prisma.mention.deleteMany({
