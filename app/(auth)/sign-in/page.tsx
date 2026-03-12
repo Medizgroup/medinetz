@@ -147,7 +147,7 @@ export default function SignInPage() {
         return;
       }
 
-      router.replace("/dashboard");
+      router.replace("/home");
     } catch (e) {
       setServerError(e instanceof Error ? e.message : "Unbekannter Fehler.");
     } finally {

@@ -34,7 +34,7 @@ export default function UserBadge({
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/signin"); // redirect to login page
+          router.push("/sign-in"); // redirect to login page
         },
       },
     });
