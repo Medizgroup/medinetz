@@ -273,6 +273,7 @@ export default async function ProtocolDetailPage({
                     <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
                       <RichTextRenderer value={comment.content} />
                       <TimelineDate className="mt-1 mb-0">
+                        vor{" "}
                         {formatDistance(
                           new Date(comment.createdAt),
                           new Date(),
