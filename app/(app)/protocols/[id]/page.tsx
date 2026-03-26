@@ -27,6 +27,7 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
+import { actionMeta, activityDescription } from "@/lib/utils/index";
 
 function orgBadge(type: string) {
   if (type === "ROUTINE") return "R";
@@ -292,37 +293,48 @@ export default async function ProtocolDetailPage({
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Aktivität</h2>
 
-          <div className="rounded-2xl border divide-y">
-            {activity.length === 0 ? (
-              <div className="p-4 text-sm text-muted-foreground">
-                Noch keine Aktivität.
-              </div>
-            ) : (
-              activity.map((item) => {
-                const actor =
-                  item.user.displayName ||
-                  item.user.name ||
-                  `User ${item.user.id.slice(0, 6)}`;
+          <Timeline defaultValue={activity.length}>
+            {activity.map((a, idx) => {
+              const step = activity.length - idx;
+              const { title, Icon } = actionMeta(a.action);
+              const actor =
+                a.user.displayName ||
+                a.user.name ||
+                `User ${a.user.id.slice(0, 6)}`;
 
-                return (
-                  <div
-                    key={item.id}
-                    className="p-4 flex items-start justify-between gap-4">
-                    <div>
-                      <div className="font-medium">{actor}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {item.action} · {item.targetType}
-                      </div>
+              return (
+                <TimelineItem
+                  key={a.id}
+                  step={step}
+                  className="group-data-[orientation=vertical]/timeline:ms-10 ">
+                  <TimelineHeader>
+                    <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+
+                    <TimelineTitle className="mt-0.5">
+                      {actor} {title}
+                    </TimelineTitle>
+
+                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-primary/10">
+                      <Icon size={12} />
+                    </TimelineIndicator>
+                  </TimelineHeader>
+
+                  <TimelineContent>
+                    <div className="text-sm text-muted-foreground">
+                      {activityDescription(a)}
                     </div>
 
-                    <div className="text-xs text-muted-foreground whitespace-nowrap">
-                      {item.createdAt.toLocaleString("de-DE")}
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
+                    <TimelineDate className="mt-2 mb-0">
+                      {formatDistance(new Date(a.createdAt), new Date(), {
+                        addSuffix: true,
+                        locale: de,
+                      })}
+                    </TimelineDate>
+                  </TimelineContent>
+                </TimelineItem>
+              );
+            })}
+          </Timeline>
         </section>
       </div>
       {/* Aktion */}
