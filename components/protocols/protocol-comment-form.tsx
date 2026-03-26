@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "../ui/spinner";
 
 export default function ProtocolCommentForm({
   protocolId,
@@ -44,19 +45,20 @@ export default function ProtocolCommentForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-2xl border p-5 space-y-4">
+    <form onSubmit={onSubmit} className="space-y-4">
       <Field className="gap-2">
-        <FieldLabel>Neuer Kommentar</FieldLabel>
+        {/* <FieldLabel>Neuer Kommentar</FieldLabel> */}
         <Textarea
-          rows={6}
+          rows={12}
           value={content}
+          className="min-h-[130px]"
+          size="lg"
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Schreibe einen Kommentar… Nutze @USER_ID oder /case:CASE_ID"
+          placeholder="Schreibe einen Kommentar… "
           required
         />
         <FieldDescription>
-          Erwähne Personen mit <code>@USER_ID</code> und Fälle mit{" "}
-          <code>/case:CASE_ID</code>.
+          Einen User erwähnen: @benutzername, einen Fall erwähnen: #Fall
         </FieldDescription>
       </Field>
 
@@ -64,7 +66,7 @@ export default function ProtocolCommentForm({
 
       <div className="flex justify-end">
         <Button type="submit" className="rounded-full" disabled={saving}>
-          {saving ? "Speichere…" : "Kommentar speichern"}
+          {saving ? <Spinner /> : "Senden"}
         </Button>
       </div>
     </form>

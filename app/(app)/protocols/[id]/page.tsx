@@ -222,7 +222,8 @@ export default async function ProtocolDetailPage({
             <ProtocolCommentForm protocolId={protocol.id} />
           ) : null}
 
-          <div className="rounded-2xl border divide-y">
+          {/* Diskussion */}
+          <div className=" divide-y">
             {protocol.comments.length === 0 ? (
               <div className="p-4 text-sm text-muted-foreground">
                 Noch keine Kommentare vorhanden.
