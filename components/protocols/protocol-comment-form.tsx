@@ -58,7 +58,7 @@ export default function ProtocolCommentForm({
           required
         />
         <FieldDescription>
-          Einen User erwähnen: @benutzername, einen Fall erwähnen: #Fall
+          Nutze @ um andere Teilnehmer zu erwähnen.
         </FieldDescription>
       </Field>
 

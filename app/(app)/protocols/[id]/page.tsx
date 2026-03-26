@@ -13,6 +13,20 @@ import ProtocolCommentForm from "@/components/protocols/protocol-comment-form";
 import EditProtocolForm from "@/components/protocols/edit-protocol-form";
 import { Badge } from "@/components/ui/badge";
 import { Circle, CircleCheck, Clock, Loader } from "lucide-react";
+import {
+  Timeline,
+  TimelineContent,
+  TimelineDate,
+  TimelineHeader,
+  TimelineIndicator,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineTitle,
+} from "@/components/ui/timeline";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatDistance } from "date-fns";
+import { de } from "date-fns/locale";
 
 function orgBadge(type: string) {
   if (type === "ROUTINE") return "R";
@@ -223,33 +237,54 @@ export default async function ProtocolDetailPage({
           ) : null}
 
           {/* Diskussion */}
-          <div className=" divide-y">
+          <Timeline>
             {protocol.comments.length === 0 ? (
               <div className="p-4 text-sm text-muted-foreground">
                 Noch keine Kommentare vorhanden.
               </div>
             ) : (
-              protocol.comments.map((comment) => {
+              protocol.comments.map((comment, k) => {
                 const userName =
                   comment.user.displayName ||
                   comment.user.name ||
                   `User ${comment.user.id.slice(0, 6)}`;
 
                 return (
-                  <div key={comment.id} className="p-5 space-y-3">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="text-sm font-medium">{userName}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {comment.createdAt.toLocaleString("de-DE")}
-                      </div>
-                    </div>
-
-                    <RichTextRenderer value={comment.content} />
-                  </div>
+                  <TimelineItem
+                    className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-8"
+                    key={comment.id}
+                    step={k}>
+                    <TimelineHeader>
+                      <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                      <TimelineTitle className="mt-0.5">
+                        {userName}
+                      </TimelineTitle>
+                      <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
+                        <Avatar>
+                          <AvatarImage
+                            alt={comment.user.avatarUrl ?? ""}
+                            className="size-6 rounded-full"
+                            src={comment.user.avatarUrl ?? undefined}
+                          />
+                          <AvatarFallback>UU </AvatarFallback>
+                        </Avatar>
+                      </TimelineIndicator>
+                    </TimelineHeader>
+                    <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
+                      <RichTextRenderer value={comment.content} />
+                      <TimelineDate className="mt-1 mb-0">
+                        {formatDistance(
+                          new Date(comment.createdAt),
+                          new Date(),
+                          { locale: de },
+                        )}
+                      </TimelineDate>
+                    </TimelineContent>
+                  </TimelineItem>
                 );
               })
             )}
-          </div>
+          </Timeline>
         </section>
 
         {/* Aktivitäten */}
@@ -319,7 +354,7 @@ export default async function ProtocolDetailPage({
                       ) : entry.case.status === "IN_PROGRESS" ? (
                         <Loader className="size-4  text-amber-500" />
                       ) : entry.case.status === "OPEN" ? (
-                        <CircleCheck className="size-4 text-green-500" />
+                        <Circle className="size-4 text-green-500" />
                       ) : null}
                       <Badge
                         variant={
@@ -335,8 +370,6 @@ export default async function ProtocolDetailPage({
                         }>
                         {entry.case.priority}
                       </Badge>
-
-                      {/* {entry.case.status} · {entry.case.priority} */}
                     </div>
                   </div>
 
