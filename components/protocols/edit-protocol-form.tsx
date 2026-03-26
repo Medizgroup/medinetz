@@ -83,7 +83,7 @@ export default function EditProtocolForm({
 
       <div className="flex justify-end">
         <Button type="submit" className="rounded-full" disabled={saving}>
-          {saving ? "Speichere…" : "Änderungen speichern"}
+          {saving ? "Lädt..." : "Änderungen speichern"}
         </Button>
       </div>
     </form>

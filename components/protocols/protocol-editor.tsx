@@ -126,8 +126,8 @@ export default function ProtocolEditor({
         </ToolbarGroup>
       </FixedToolbar>
 
-      <EditorContainer className="min-h-[280px] rounded-xl border">
-        <Editor placeholder={placeholder} className="px-10!" />
+      <EditorContainer className="min-h-[280px] rounded-xl">
+        <Editor placeholder={placeholder} className="px-4!" />
       </EditorContainer>
     </Plate>
   );
