@@ -239,53 +239,43 @@ export default async function ProtocolDetailPage({
 
           {/* Diskussion */}
           <Timeline>
-            {protocol.comments.length === 0 ? (
-              <div className="p-4 text-sm text-muted-foreground">
-                Noch keine Kommentare vorhanden.
-              </div>
-            ) : (
-              protocol.comments.map((comment, k) => {
-                const userName =
-                  comment.user.displayName ||
-                  comment.user.name ||
-                  `User ${comment.user.id.slice(0, 6)}`;
+            {protocol.comments.map((comment, k) => {
+              const userName =
+                comment.user.displayName ||
+                comment.user.name ||
+                `User ${comment.user.id.slice(0, 6)}`;
 
-                return (
-                  <TimelineItem
-                    className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-8"
-                    key={comment.id}
-                    step={k}>
-                    <TimelineHeader>
-                      <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                      <TimelineTitle className="mt-0.5">
-                        {userName}
-                      </TimelineTitle>
-                      <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
-                        <Avatar>
-                          <AvatarImage
-                            alt={comment.user.avatarUrl ?? ""}
-                            className="size-6 rounded-full"
-                            src={comment.user.avatarUrl ?? undefined}
-                          />
-                          <AvatarFallback>UU </AvatarFallback>
-                        </Avatar>
-                      </TimelineIndicator>
-                    </TimelineHeader>
-                    <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
-                      <RichTextRenderer value={comment.content} />
-                      <TimelineDate className="mt-1 mb-0">
-                        vor{" "}
-                        {formatDistance(
-                          new Date(comment.createdAt),
-                          new Date(),
-                          { locale: de },
-                        )}
-                      </TimelineDate>
-                    </TimelineContent>
-                  </TimelineItem>
-                );
-              })
-            )}
+              return (
+                <TimelineItem
+                  className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-8"
+                  key={comment.id}
+                  step={k}>
+                  <TimelineHeader>
+                    <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                    <TimelineTitle className="mt-0.5">{userName}</TimelineTitle>
+                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
+                      <Avatar>
+                        <AvatarImage
+                          alt={comment.user.avatarUrl ?? ""}
+                          className="size-6 rounded-full"
+                          src={comment.user.avatarUrl ?? undefined}
+                        />
+                        <AvatarFallback>UU </AvatarFallback>
+                      </Avatar>
+                    </TimelineIndicator>
+                  </TimelineHeader>
+                  <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
+                    <RichTextRenderer value={comment.content} />
+                    <TimelineDate className="mt-1 mb-0">
+                      vor{" "}
+                      {formatDistance(new Date(comment.createdAt), new Date(), {
+                        locale: de,
+                      })}
+                    </TimelineDate>
+                  </TimelineContent>
+                </TimelineItem>
+              );
+            })}
           </Timeline>
         </section>
 
