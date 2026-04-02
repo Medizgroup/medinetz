@@ -23,7 +23,6 @@ import {
   TimelineSeparator,
   TimelineTitle,
 } from "@/components/ui/timeline";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
@@ -36,9 +35,9 @@ function orgBadge(type: string) {
   return "C";
 }
 
-function canEdit(role?: string) {
-  return role === "COORDINATOR" || role === "ADMIN";
-}
+// function canEdit(role?: string) {
+//   return role === "COORDINATOR" || role === "ADMIN";
+// }
 
 function canComment(role?: string) {
   return role === "VIEWER" || role === "COORDINATOR" || role === "ADMIN";
@@ -136,7 +135,7 @@ export default async function ProtocolDetailPage({
 
   if (!membership) notFound();
 
-  const editable = canEdit(membership.role);
+  // const editable = canEdit(membership.role);
   const commentable = canComment(membership.role);
 
   const activity = await prisma.activity.findMany({
