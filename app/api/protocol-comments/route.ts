@@ -9,6 +9,15 @@ function extractCommentMentions(text: string): string[] {
   return Array.from(new Set(matches.map((m) => m.slice(1))));
 }
 
+function extractMentions(text: string): { id: string; label: string }[] {
+  const matches = text.match(/\@\[(.*?)\]\((.*?)\)/g) ?? [];
+
+  return matches.map((m) => {
+    const [, label, id] = m.match(/\@\[(.*?)\]\((.*?)\)/)!;
+    return { id, label };
+  });
+}
+
 function extractCommentCaseRefs(text: string): string[] {
   const matches = text.match(/\/case:([A-Za-z0-9_-]+)/g) ?? [];
   return Array.from(new Set(matches.map((m) => m.replace("/case:", ""))));
@@ -82,19 +91,31 @@ export async function POST(req: Request) {
   });
 
   const mentionedUserIds = extractCommentMentions(contentText);
+
   const caseIds = extractCommentCaseRefs(contentText);
 
-  if (mentionedUserIds.length) {
-    await prisma.mention.createMany({
-      data: mentionedUserIds.map((mentionedUserId) => ({
-        mentionedUserId,
-        mentioningUserId: session.user.id,
-        targetType: "protocol_comment",
-        targetId: comment.id,
-      })),
-      skipDuplicates: true,
-    });
-  }
+  const mentions = extractMentions(contentText);
+
+  await prisma.mention.createMany({
+    data: mentions.map((m) => ({
+      mentionedUserId: m.id,
+      mentioningUserId: session.user.id,
+      targetType: "protocol_comment",
+      targetId: comment.id,
+    })),
+  });
+
+  // if (mentionedUserIds.length) {
+  //   await prisma.mention.createMany({
+  //     data: mentionedUserIds.map((mentionedUserId) => ({
+  //       mentionedUserId,
+  //       mentioningUserId: session.user.id,
+  //       targetType: "protocol_comment",
+  //       targetId: comment.id,
+  //     })),
+  //     skipDuplicates: true,
+  //   });
+  // }
 
   if (caseIds.length) {
     await prisma.protocolCase.createMany({

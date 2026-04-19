@@ -208,7 +208,9 @@ export default function ProtocolsTable({
               <div className="relative">
                 <Input
                   value={(titleColumn.getFilterValue() as string) ?? ""}
-                  onChange={(e) => titleColumn.setFilterValue(e.target.value)}
+                  onChange={(e) => {
+                    titleColumn.setFilterValue(e.target.value);
+                  }}
                   placeholder="Nach Titel suchen"
                   className="ps-9"
                 />

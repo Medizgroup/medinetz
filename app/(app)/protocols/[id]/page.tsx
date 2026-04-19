@@ -168,6 +168,21 @@ export default async function ProtocolDetailPage({
     protocol.creator.name ||
     `User ${protocol.creator.id.slice(0, 6)}`;
 
+  function renderText(text: string) {
+    return text.split(/(\@\[[^\]]+\]\([^)]+\))/g).map((part, i) => {
+      const match = part.match(/\@\[(.*?)\]\((.*?)\)/);
+
+      if (match) {
+        return (
+          <span key={i} className="text-blue-500 font-medium">
+            @{match[1]}
+          </span>
+        );
+      }
+
+      return part;
+    });
+  }
   return (
     <div className="w-full grid grid-cols-4 gap-4">
       <div className="mx-auto w-full max-w-6xl px-6 py-8 space-y-10 col-span-3">
@@ -259,12 +274,14 @@ export default async function ProtocolDetailPage({
                           className="size-6 rounded-full"
                           src={comment.user.avatarUrl ?? undefined}
                         />
-                        <AvatarFallback>UU </AvatarFallback>
+                        <AvatarFallback>UU</AvatarFallback>
                       </Avatar>
                     </TimelineIndicator>
                   </TimelineHeader>
                   <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
-                    <RichTextRenderer value={comment.content} />
+                    {/* <RichTextRenderer value={comment.content} />
+                     */}
+                    {renderText(comment.contentText)}
                     <TimelineDate className="mt-1 mb-0">
                       vor{" "}
                       {formatDistance(new Date(comment.createdAt), new Date(), {
