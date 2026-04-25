@@ -28,8 +28,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -224,21 +224,29 @@ export default function ProtocolsTable({
           {orgColumn && (
             <div className="w-full sm:w-56">
               <Select
+                aria-label="Organisation filtern"
                 value={(orgColumn.getFilterValue() as string) ?? "all"}
+                items={[
+                  { label: "Alle Organisationen", value: "all" },
+                  ...orgOptions.map((org) => ({
+                    label: org.name,
+                    value: org.id,
+                  })),
+                ]}
                 onValueChange={(value) =>
                   orgColumn.setFilterValue(value === "all" ? undefined : value)
                 }>
                 <SelectTrigger>
-                  <SelectValue placeholder="Organisation filtern" />
+                  <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectPopup>
                   <SelectItem value="all">Alle Organisationen</SelectItem>
                   {orgOptions.map((org) => (
                     <SelectItem key={org.id} value={org.id}>
                       {org.name}
                     </SelectItem>
                   ))}
-                </SelectContent>
+                </SelectPopup>
               </Select>
             </div>
           )}

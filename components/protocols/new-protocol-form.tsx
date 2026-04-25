@@ -14,8 +14,8 @@ import {
   Select,
   SelectTrigger,
   SelectValue,
-  SelectContent,
   SelectItem,
+  SelectPopup,
 } from "@/components/ui/select";
 import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
 import { CalendarIcon } from "lucide-react";
@@ -131,18 +131,22 @@ export default function NewProtocolForm({
         <Field className="gap-2">
           <FieldLabel>Organisation</FieldLabel>
           <Select
+            aria-label="Organisation auswählen"
             value={organizationId}
-            onValueChange={(value) => setOrganizationId(value ?? "")}>
+            items={memberships.map((m) => ({
+              label: m.organization.name,
+              value: m.organization.id,
+            }))}>
             <SelectTrigger>
-              <SelectValue placeholder="Organisation wählen" />
+              <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectPopup>
               {memberships.map((m) => (
                 <SelectItem key={m.organization.id} value={m.organization.id}>
                   {m.organization.name}
                 </SelectItem>
               ))}
-            </SelectContent>
+            </SelectPopup>
           </Select>
         </Field>
 
