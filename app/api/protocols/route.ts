@@ -12,6 +12,7 @@ import {
   syncProtocolCases,
   syncProtocolMentions,
 } from "@/lib/utils/protocols/sync";
+import { createMentionNotifications } from "@/lib/utils/notifications";
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -74,17 +75,30 @@ export async function POST(req: Request) {
   const mentionedUserIds = extractMentionedUserIds(description);
   const caseIds = extractReferencedCaseIds(description);
 
-  await syncProtocolMentions({
+  // 1) Mentions in DB sync (alle "neu" beim Erstellen)
+  const { newlyMentionedUserIds } = await syncProtocolMentions({
     protocolId: protocol.id,
     mentionedUserIds,
     mentioningUserId: session.user.id,
   });
 
+  // 2) Cases verlinken (Phase B)
   await syncProtocolCases({
     protocolId: protocol.id,
     caseIds,
   });
 
+  // 3) Notifications nur für NEUE Mentions
+  await createMentionNotifications({
+    mentionedUserIds,
+    mentioningUserId: session.user.id,
+    targetType: "protocol",
+    targetId: protocol.id,
+    title: `Du wurdest in Protokoll „${protocol.title}“ erwähnt`,
+    notifyOnlyUserIds: newlyMentionedUserIds,
+  });
+
+  // 4) Activity (wie gehabt)
   await prisma.activity.create({
     data: {
       organizationId,

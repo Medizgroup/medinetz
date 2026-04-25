@@ -12,6 +12,7 @@ import {
   syncProtocolCases,
   syncProtocolMentions,
 } from "@/lib/utils/protocols/sync";
+import { createMentionNotifications } from "@/lib/utils/notifications";
 
 export async function PATCH(
   req: Request,
@@ -71,7 +72,7 @@ export async function PATCH(
   const mentionedUserIds = extractMentionedUserIds(description);
   const caseIds = extractReferencedCaseIds(description);
 
-  await syncProtocolMentions({
+  const { newlyMentionedUserIds } = await syncProtocolMentions({
     protocolId: id,
     mentionedUserIds,
     mentioningUserId: session.user.id,
@@ -80,6 +81,16 @@ export async function PATCH(
   await syncProtocolCases({
     protocolId: id,
     caseIds,
+  });
+
+  // Nur User benachrichtigen, die VORHER nicht erwähnt waren
+  await createMentionNotifications({
+    mentionedUserIds,
+    mentioningUserId: session.user.id,
+    targetType: "protocol",
+    targetId: id,
+    title: `Du wurdest in Protokoll „${title}“ erwähnt`,
+    notifyOnlyUserIds: newlyMentionedUserIds,
   });
 
   await prisma.activity.create({

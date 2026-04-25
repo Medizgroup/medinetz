@@ -3,33 +3,24 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { syncProtocolCommentMentions } from "@/lib/utils/protocols/sync";
+import { createMentionNotifications } from "@/lib/utils/notifications";
 
-function extractCommentMentions(text: string): string[] {
-  const matches = text.match(/@([A-Za-z0-9_-]+)/g) ?? [];
-  return Array.from(new Set(matches.map((m) => m.slice(1))));
+/**
+ * Liest Mentions im Format @[Name](userId) aus Plain-Text.
+ */
+function extractMentionsFromText(text: string): string[] {
+  const ids = new Set<string>();
+  const re = /@\[[^\]]+\]\(([^)]+)\)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    if (m[1]) ids.add(m[1]);
+  }
+  return Array.from(ids);
 }
 
-function extractMentions(text: string): { id: string; label: string }[] {
-  const matches = text.match(/\@\[(.*?)\]\((.*?)\)/g) ?? [];
-
-  return matches.map((m) => {
-    const [, label, id] = m.match(/\@\[(.*?)\]\((.*?)\)/)!;
-    return { id, label };
-  });
-}
-
-function extractCommentCaseRefs(text: string): string[] {
-  const matches = text.match(/\/case:([A-Za-z0-9_-]+)/g) ?? [];
-  return Array.from(new Set(matches.map((m) => m.replace("/case:", ""))));
-}
-
-function commentTextToNodes(text: string) {
-  return [
-    {
-      type: "p",
-      children: [{ text }],
-    },
-  ];
+function plainTextToNodes(text: string) {
+  return [{ type: "p", children: [{ text }] }];
 }
 
 export async function POST(req: Request) {
@@ -82,65 +73,49 @@ export async function POST(req: Request) {
 
   const comment = await prisma.protocolComment.create({
     data: {
-      protocolId,
+      protocolId: protocol.id,
       userId: session.user.id,
-      content: commentTextToNodes(contentText),
+      content: plainTextToNodes(contentText),
       contentText,
     },
     select: { id: true },
   });
 
-  const mentionedUserIds = extractCommentMentions(contentText);
+  const mentionedUserIds = extractMentionsFromText(contentText);
 
-  const caseIds = extractCommentCaseRefs(contentText);
-
-  const mentions = extractMentions(contentText);
-
-  await prisma.mention.createMany({
-    data: mentions.map((m) => ({
-      mentionedUserId: m.id,
-      mentioningUserId: session.user.id,
-      targetType: "protocol_comment",
-      targetId: comment.id,
-    })),
+  // Mentions in DB
+  const { newlyMentionedUserIds } = await syncProtocolCommentMentions({
+    protocolCommentId: comment.id,
+    mentionedUserIds,
+    mentioningUserId: session.user.id,
   });
 
-  // if (mentionedUserIds.length) {
-  //   await prisma.mention.createMany({
-  //     data: mentionedUserIds.map((mentionedUserId) => ({
-  //       mentionedUserId,
-  //       mentioningUserId: session.user.id,
-  //       targetType: "protocol_comment",
-  //       targetId: comment.id,
-  //     })),
-  //     skipDuplicates: true,
-  //   });
-  // }
+  // Notifications
+  await createMentionNotifications({
+    mentionedUserIds,
+    mentioningUserId: session.user.id,
+    targetType: "protocol_comment",
+    targetId: comment.id,
+    title: `Neuer Kommentar in „${protocol.title}“`,
+    message: contentText.slice(0, 200),
+    notifyOnlyUserIds: newlyMentionedUserIds,
+  });
 
-  if (caseIds.length) {
-    await prisma.protocolCase.createMany({
-      data: caseIds.map((caseId) => ({
-        protocolId,
-        caseId,
-      })),
-      skipDuplicates: true,
-    });
-  }
-
+  // Activity
   await prisma.activity.create({
     data: {
       organizationId: protocol.organizationId,
       userId: session.user.id,
       action: "COMMENTED",
       targetType: "protocol_comment",
-      targetId: protocol.id,
+      targetId: comment.id,
       metadata: {
+        protocolId: protocol.id,
         protocolTitle: protocol.title,
         mentionedUserIds,
-        caseIds,
       },
     },
   });
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, commentId: comment.id });
 }

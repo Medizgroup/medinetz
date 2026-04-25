@@ -136,6 +136,7 @@ export default function NewProtocolForm({
           <ProtocolEditor
             value={value}
             onChange={setValue}
+            organizationId={organizationId} // ← NEU
             placeholder="Hier schreiben..."
           />
         </Field>

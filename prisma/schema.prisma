@@ -592,6 +592,7 @@ model Protocol {
   creator        User              @relation("ProtocolCreator", fields: [creatorId], references: [id])
   comments       ProtocolComment[]
   protocolCases  ProtocolCase[]
+  mentions       Mention[]  
 
   @@unique([organizationId, protocolNumber])
   @@index([organizationId])
@@ -769,18 +770,30 @@ model Mention {
   id                String   @id @default(uuid())
   mentionedUserId   String   @map("mentioned_user_id")
   mentioningUserId  String   @map("mentioning_user_id")
-  targetType        String   @map("target_type") // 'case_comment', 'protocol_comment'
-  targetId          String   @map("target_id")
+
+  // Discriminator (für Queries / App-Logik)
+  targetType        String   @map("target_type") // 'protocol' | 'case_comment' | 'protocol_comment'
+  targetId          String   @map("target_id")   // = ID des Target-Objekts (frei, kein FK)
+
+  // Typisierte FKs für sauberen Cascade-Delete
+  protocolId        String?  @map("protocol_id")
+  caseCommentId     String?  @map("case_comment_id")
+  protocolCommentId String?  @map("protocol_comment_id")
+
   createdAt         DateTime @default(now()) @map("created_at")
 
-  mentionedUser  User             @relation("MentionedUser", fields: [mentionedUserId], references: [id], onDelete: Cascade)
-  mentioningUser User             @relation("MentioningUser", fields: [mentioningUserId], references: [id])
-
-  caseComment    CaseComment?     @relation(fields: [targetId], references: [id], onDelete: Cascade, map: "mentions_case_comment_target_id_fkey")
-  protocolComment ProtocolComment? @relation(fields: [targetId], references: [id], onDelete: Cascade, map: "mentions_protocol_comment_target_id_fkey")
+  mentionedUser   User             @relation("MentionedUser", fields: [mentionedUserId], references: [id], onDelete: Cascade)
+  mentioningUser  User             @relation("MentioningUser", fields: [mentioningUserId], references: [id])
+  protocol        Protocol?        @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  caseComment     CaseComment?     @relation(fields: [caseCommentId], references: [id], onDelete: Cascade)
+  protocolComment ProtocolComment? @relation(fields: [protocolCommentId], references: [id], onDelete: Cascade)
 
   @@index([mentionedUserId])
+  @@index([mentionedUserId, createdAt(sort: Desc)])
   @@index([targetType, targetId])
+  @@index([protocolId])
+  @@index([caseCommentId])
+  @@index([protocolCommentId])
   @@map("mentions")
 }
 

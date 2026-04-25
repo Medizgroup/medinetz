@@ -3217,6 +3217,9 @@ export const MentionScalarFieldEnum = {
   mentioningUserId: 'mentioningUserId',
   targetType: 'targetType',
   targetId: 'targetId',
+  protocolId: 'protocolId',
+  caseCommentId: 'caseCommentId',
+  protocolCommentId: 'protocolCommentId',
   createdAt: 'createdAt'
 } as const
 

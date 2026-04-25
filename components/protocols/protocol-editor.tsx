@@ -37,6 +37,8 @@ import { FontColorToolbarButton } from "../ui/font-color-toolbar-button";
 import { DndKit } from "../editor/plugins/dnd-kit";
 import { CalloutKit } from "../editor/plugins/callout-kit";
 
+import { ProtocolEditorProvider } from "./protocol-editor-context";
+
 const emptyValue: Value = [
   {
     type: "p",
@@ -47,10 +49,12 @@ const emptyValue: Value = [
 export default function ProtocolEditor({
   value,
   onChange,
+  organizationId,
   placeholder = "Schreibe dein Protokoll…",
 }: {
   value?: Value;
   onChange: (value: Value) => void;
+  organizationId: string; // ← NEU, pflicht
   placeholder?: string;
 }) {
   const editor = usePlateEditor({
@@ -69,66 +73,67 @@ export default function ProtocolEditor({
   });
 
   return (
-    <Plate
-      editor={editor}
-      onChange={({ value }) => {
-        onChange(value);
-      }}>
-      <FixedToolbar className="flex justify-start p-1 rounded-xl gap-1 overflow-x-auto">
-        <ToolbarGroup>
-          <InsertToolbarButton />
-          <TurnIntoToolbarButton />
-          <FontSizeToolbarButton />
-        </ToolbarGroup>
-        <ToolbarGroup>
-          <ToolbarButton onClick={() => editor.tf.h1.toggle()}>
-            H1
-          </ToolbarButton>
-          <ToolbarButton onClick={() => editor.tf.h2.toggle()}>
-            H2
-          </ToolbarButton>
-          <ToolbarButton onClick={() => editor.tf.h3.toggle()}>
-            H3
-          </ToolbarButton>
-          <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>
-            <QuoteIcon size={16} />
-          </ToolbarButton>
-        </ToolbarGroup>
-        <ToolbarGroup>
-          <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘+B)">
-            <BoldIcon />
-          </MarkToolbarButton>
-          <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘+I)">
-            <ItalicIcon />
-          </MarkToolbarButton>
-          <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">
-            <UnderlineIcon />
-          </MarkToolbarButton>
-          <MarkToolbarButton
-            nodeType="strikethrough"
-            tooltip="Strikethrough (⌘+Shift+X)">
-            <StrikethroughIcon />
-          </MarkToolbarButton>
-          <MarkToolbarButton
-            nodeType="highlight"
-            tooltip="Highlight (⌘+Shift+H)">
-            <HighlighterIcon />
-          </MarkToolbarButton>
-          <FontColorToolbarButton nodeType="color">
-            <PaintBucketIcon />
-          </FontColorToolbarButton>
-        </ToolbarGroup>
+    <ProtocolEditorProvider organizationId={organizationId}>
+      <Plate
+        editor={editor}
+        onChange={({ value }) => {
+          onChange(value);
+        }}>
+        <FixedToolbar className="flex justify-start p-1 rounded-xl gap-1 overflow-x-auto">
+          <ToolbarGroup>
+            <InsertToolbarButton />
+            <TurnIntoToolbarButton />
+            <FontSizeToolbarButton />
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <ToolbarButton onClick={() => editor.tf.h1.toggle()}>
+              H1
+            </ToolbarButton>
+            <ToolbarButton onClick={() => editor.tf.h2.toggle()}>
+              H2
+            </ToolbarButton>
+            <ToolbarButton onClick={() => editor.tf.h3.toggle()}>
+              H3
+            </ToolbarButton>
+            <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>
+              <QuoteIcon size={16} />
+            </ToolbarButton>
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘+B)">
+              <BoldIcon />
+            </MarkToolbarButton>
+            <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘+I)">
+              <ItalicIcon />
+            </MarkToolbarButton>
+            <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">
+              <UnderlineIcon />
+            </MarkToolbarButton>
+            <MarkToolbarButton
+              nodeType="strikethrough"
+              tooltip="Strikethrough (⌘+Shift+X)">
+              <StrikethroughIcon />
+            </MarkToolbarButton>
+            <MarkToolbarButton
+              nodeType="highlight"
+              tooltip="Highlight (⌘+Shift+H)">
+              <HighlighterIcon />
+            </MarkToolbarButton>
+            <FontColorToolbarButton nodeType="color">
+              <PaintBucketIcon />
+            </FontColorToolbarButton>
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <TodoListToolbarButton />
+            <BulletedListToolbarButton />
+            <NumberedListToolbarButton />
+          </ToolbarGroup>
+        </FixedToolbar>
 
-        <ToolbarGroup>
-          <TodoListToolbarButton></TodoListToolbarButton>
-          <BulletedListToolbarButton></BulletedListToolbarButton>
-          <NumberedListToolbarButton></NumberedListToolbarButton>
-        </ToolbarGroup>
-      </FixedToolbar>
-
-      <EditorContainer className="min-h-[280px] rounded-xl">
-        <Editor placeholder={placeholder} className="px-4!" />
-      </EditorContainer>
-    </Plate>
+        <EditorContainer className="min-h-[280px] rounded-xl">
+          <Editor placeholder={placeholder} className="px-4!" />
+        </EditorContainer>
+      </Plate>
+    </ProtocolEditorProvider>
   );
 }

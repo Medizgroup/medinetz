@@ -14,6 +14,7 @@ export default function EditProtocolForm({
 }: {
   protocol: {
     id: string;
+    organizationId: string;
     title: string;
     date: string;
     description: Value;
@@ -76,7 +77,11 @@ export default function EditProtocolForm({
 
       <Field className="gap-2">
         <FieldLabel>Beschreibung</FieldLabel>
-        <ProtocolEditor value={value} onChange={setValue} />
+        <ProtocolEditor
+          value={value}
+          onChange={setValue}
+          organizationId={protocol.organizationId}
+        />
       </Field>
 
       {error ? <p className="text-sm text-red-500">{error}</p> : null}

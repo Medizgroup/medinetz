@@ -28,6 +28,10 @@ export function extractPlainTextFromNodes(nodes: unknown): string {
     if (typeof node.text === "string") {
       parts.push(node.text);
     }
+    // Mention-Anzeige (Display-Name) auch in den Plain-Text übernehmen, damit Suche funktioniert
+    if (node.type === "mention" && typeof node.value === "string") {
+      parts.push(`@${node.value}`);
+    }
   });
 
   return parts.join(" ").replace(/\s+/g, " ").trim();
@@ -37,12 +41,11 @@ export function extractMentionedUserIds(nodes: unknown): string[] {
   const ids = new Set<string>();
 
   walkNodes(nodes, (node) => {
-    // mention-kit stores usually type=mention and value=<id>
-    if (node.type === "mention" && typeof node.value === "string") {
-      ids.add(node.value);
-    }
-
-    if (node.type === "mention" && typeof node.userId === "string") {
+    if (
+      node.type === "mention" &&
+      typeof node.userId === "string" &&
+      node.userId.length > 0
+    ) {
       ids.add(node.userId);
     }
   });
@@ -51,16 +54,11 @@ export function extractMentionedUserIds(nodes: unknown): string[] {
 }
 
 export function extractReferencedCaseIds(nodes: unknown): string[] {
+  // Für Phase B (Case-Reference Plugin) — vorläufig schon mal vorbereitet
   const ids = new Set<string>();
 
   walkNodes(nodes, (node) => {
-    // custom case reference node
     if (node.type === "case_reference" && typeof node.caseId === "string") {
-      ids.add(node.caseId);
-    }
-
-    // fallback if slash inserts link-like node with metadata
-    if (node.type === "a" && typeof node.caseId === "string") {
       ids.add(node.caseId);
     }
   });

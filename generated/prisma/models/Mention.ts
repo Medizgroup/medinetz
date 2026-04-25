@@ -30,6 +30,9 @@ export type MentionMinAggregateOutputType = {
   mentioningUserId: string | null
   targetType: string | null
   targetId: string | null
+  protocolId: string | null
+  caseCommentId: string | null
+  protocolCommentId: string | null
   createdAt: Date | null
 }
 
@@ -39,6 +42,9 @@ export type MentionMaxAggregateOutputType = {
   mentioningUserId: string | null
   targetType: string | null
   targetId: string | null
+  protocolId: string | null
+  caseCommentId: string | null
+  protocolCommentId: string | null
   createdAt: Date | null
 }
 
@@ -48,6 +54,9 @@ export type MentionCountAggregateOutputType = {
   mentioningUserId: number
   targetType: number
   targetId: number
+  protocolId: number
+  caseCommentId: number
+  protocolCommentId: number
   createdAt: number
   _all: number
 }
@@ -59,6 +68,9 @@ export type MentionMinAggregateInputType = {
   mentioningUserId?: true
   targetType?: true
   targetId?: true
+  protocolId?: true
+  caseCommentId?: true
+  protocolCommentId?: true
   createdAt?: true
 }
 
@@ -68,6 +80,9 @@ export type MentionMaxAggregateInputType = {
   mentioningUserId?: true
   targetType?: true
   targetId?: true
+  protocolId?: true
+  caseCommentId?: true
+  protocolCommentId?: true
   createdAt?: true
 }
 
@@ -77,6 +92,9 @@ export type MentionCountAggregateInputType = {
   mentioningUserId?: true
   targetType?: true
   targetId?: true
+  protocolId?: true
+  caseCommentId?: true
+  protocolCommentId?: true
   createdAt?: true
   _all?: true
 }
@@ -159,6 +177,9 @@ export type MentionGroupByOutputType = {
   mentioningUserId: string
   targetType: string
   targetId: string
+  protocolId: string | null
+  caseCommentId: string | null
+  protocolCommentId: string | null
   createdAt: Date
   _count: MentionCountAggregateOutputType | null
   _min: MentionMinAggregateOutputType | null
@@ -189,9 +210,13 @@ export type MentionWhereInput = {
   mentioningUserId?: Prisma.StringFilter<"Mention"> | string
   targetType?: Prisma.StringFilter<"Mention"> | string
   targetId?: Prisma.StringFilter<"Mention"> | string
+  protocolId?: Prisma.StringNullableFilter<"Mention"> | string | null
+  caseCommentId?: Prisma.StringNullableFilter<"Mention"> | string | null
+  protocolCommentId?: Prisma.StringNullableFilter<"Mention"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Mention"> | Date | string
   mentionedUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   mentioningUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  protocol?: Prisma.XOR<Prisma.ProtocolNullableScalarRelationFilter, Prisma.ProtocolWhereInput> | null
   caseComment?: Prisma.XOR<Prisma.CaseCommentNullableScalarRelationFilter, Prisma.CaseCommentWhereInput> | null
   protocolComment?: Prisma.XOR<Prisma.ProtocolCommentNullableScalarRelationFilter, Prisma.ProtocolCommentWhereInput> | null
 }
@@ -202,9 +227,13 @@ export type MentionOrderByWithRelationInput = {
   mentioningUserId?: Prisma.SortOrder
   targetType?: Prisma.SortOrder
   targetId?: Prisma.SortOrder
+  protocolId?: Prisma.SortOrderInput | Prisma.SortOrder
+  caseCommentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  protocolCommentId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   mentionedUser?: Prisma.UserOrderByWithRelationInput
   mentioningUser?: Prisma.UserOrderByWithRelationInput
+  protocol?: Prisma.ProtocolOrderByWithRelationInput
   caseComment?: Prisma.CaseCommentOrderByWithRelationInput
   protocolComment?: Prisma.ProtocolCommentOrderByWithRelationInput
 }
@@ -218,9 +247,13 @@ export type MentionWhereUniqueInput = Prisma.AtLeast<{
   mentioningUserId?: Prisma.StringFilter<"Mention"> | string
   targetType?: Prisma.StringFilter<"Mention"> | string
   targetId?: Prisma.StringFilter<"Mention"> | string
+  protocolId?: Prisma.StringNullableFilter<"Mention"> | string | null
+  caseCommentId?: Prisma.StringNullableFilter<"Mention"> | string | null
+  protocolCommentId?: Prisma.StringNullableFilter<"Mention"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Mention"> | Date | string
   mentionedUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   mentioningUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  protocol?: Prisma.XOR<Prisma.ProtocolNullableScalarRelationFilter, Prisma.ProtocolWhereInput> | null
   caseComment?: Prisma.XOR<Prisma.CaseCommentNullableScalarRelationFilter, Prisma.CaseCommentWhereInput> | null
   protocolComment?: Prisma.XOR<Prisma.ProtocolCommentNullableScalarRelationFilter, Prisma.ProtocolCommentWhereInput> | null
 }, "id">
@@ -231,6 +264,9 @@ export type MentionOrderByWithAggregationInput = {
   mentioningUserId?: Prisma.SortOrder
   targetType?: Prisma.SortOrder
   targetId?: Prisma.SortOrder
+  protocolId?: Prisma.SortOrderInput | Prisma.SortOrder
+  caseCommentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  protocolCommentId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.MentionCountOrderByAggregateInput
   _max?: Prisma.MentionMaxOrderByAggregateInput
@@ -246,15 +282,20 @@ export type MentionScalarWhereWithAggregatesInput = {
   mentioningUserId?: Prisma.StringWithAggregatesFilter<"Mention"> | string
   targetType?: Prisma.StringWithAggregatesFilter<"Mention"> | string
   targetId?: Prisma.StringWithAggregatesFilter<"Mention"> | string
+  protocolId?: Prisma.StringNullableWithAggregatesFilter<"Mention"> | string | null
+  caseCommentId?: Prisma.StringNullableWithAggregatesFilter<"Mention"> | string | null
+  protocolCommentId?: Prisma.StringNullableWithAggregatesFilter<"Mention"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Mention"> | Date | string
 }
 
 export type MentionCreateInput = {
   id?: string
   targetType: string
+  targetId: string
   createdAt?: Date | string
   mentionedUser: Prisma.UserCreateNestedOneWithoutMentionsInput
   mentioningUser: Prisma.UserCreateNestedOneWithoutMentioningInput
+  protocol?: Prisma.ProtocolCreateNestedOneWithoutMentionsInput
   caseComment?: Prisma.CaseCommentCreateNestedOneWithoutMentionsInput
   protocolComment?: Prisma.ProtocolCommentCreateNestedOneWithoutMentionsInput
 }
@@ -265,15 +306,20 @@ export type MentionUncheckedCreateInput = {
   mentioningUserId: string
   targetType: string
   targetId: string
+  protocolId?: string | null
+  caseCommentId?: string | null
+  protocolCommentId?: string | null
   createdAt?: Date | string
 }
 
 export type MentionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentionedUser?: Prisma.UserUpdateOneRequiredWithoutMentionsNestedInput
   mentioningUser?: Prisma.UserUpdateOneRequiredWithoutMentioningNestedInput
+  protocol?: Prisma.ProtocolUpdateOneWithoutMentionsNestedInput
   caseComment?: Prisma.CaseCommentUpdateOneWithoutMentionsNestedInput
   protocolComment?: Prisma.ProtocolCommentUpdateOneWithoutMentionsNestedInput
 }
@@ -284,6 +330,9 @@ export type MentionUncheckedUpdateInput = {
   mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
   targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -293,12 +342,16 @@ export type MentionCreateManyInput = {
   mentioningUserId: string
   targetType: string
   targetId: string
+  protocolId?: string | null
+  caseCommentId?: string | null
+  protocolCommentId?: string | null
   createdAt?: Date | string
 }
 
 export type MentionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -308,6 +361,9 @@ export type MentionUncheckedUpdateManyInput = {
   mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
   targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -327,6 +383,9 @@ export type MentionCountOrderByAggregateInput = {
   mentioningUserId?: Prisma.SortOrder
   targetType?: Prisma.SortOrder
   targetId?: Prisma.SortOrder
+  protocolId?: Prisma.SortOrder
+  caseCommentId?: Prisma.SortOrder
+  protocolCommentId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -336,6 +395,9 @@ export type MentionMaxOrderByAggregateInput = {
   mentioningUserId?: Prisma.SortOrder
   targetType?: Prisma.SortOrder
   targetId?: Prisma.SortOrder
+  protocolId?: Prisma.SortOrder
+  caseCommentId?: Prisma.SortOrder
+  protocolCommentId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -345,6 +407,9 @@ export type MentionMinOrderByAggregateInput = {
   mentioningUserId?: Prisma.SortOrder
   targetType?: Prisma.SortOrder
   targetId?: Prisma.SortOrder
+  protocolId?: Prisma.SortOrder
+  caseCommentId?: Prisma.SortOrder
+  protocolCommentId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -474,6 +539,48 @@ export type MentionUncheckedUpdateManyWithoutCaseCommentNestedInput = {
   deleteMany?: Prisma.MentionScalarWhereInput | Prisma.MentionScalarWhereInput[]
 }
 
+export type MentionCreateNestedManyWithoutProtocolInput = {
+  create?: Prisma.XOR<Prisma.MentionCreateWithoutProtocolInput, Prisma.MentionUncheckedCreateWithoutProtocolInput> | Prisma.MentionCreateWithoutProtocolInput[] | Prisma.MentionUncheckedCreateWithoutProtocolInput[]
+  connectOrCreate?: Prisma.MentionCreateOrConnectWithoutProtocolInput | Prisma.MentionCreateOrConnectWithoutProtocolInput[]
+  createMany?: Prisma.MentionCreateManyProtocolInputEnvelope
+  connect?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+}
+
+export type MentionUncheckedCreateNestedManyWithoutProtocolInput = {
+  create?: Prisma.XOR<Prisma.MentionCreateWithoutProtocolInput, Prisma.MentionUncheckedCreateWithoutProtocolInput> | Prisma.MentionCreateWithoutProtocolInput[] | Prisma.MentionUncheckedCreateWithoutProtocolInput[]
+  connectOrCreate?: Prisma.MentionCreateOrConnectWithoutProtocolInput | Prisma.MentionCreateOrConnectWithoutProtocolInput[]
+  createMany?: Prisma.MentionCreateManyProtocolInputEnvelope
+  connect?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+}
+
+export type MentionUpdateManyWithoutProtocolNestedInput = {
+  create?: Prisma.XOR<Prisma.MentionCreateWithoutProtocolInput, Prisma.MentionUncheckedCreateWithoutProtocolInput> | Prisma.MentionCreateWithoutProtocolInput[] | Prisma.MentionUncheckedCreateWithoutProtocolInput[]
+  connectOrCreate?: Prisma.MentionCreateOrConnectWithoutProtocolInput | Prisma.MentionCreateOrConnectWithoutProtocolInput[]
+  upsert?: Prisma.MentionUpsertWithWhereUniqueWithoutProtocolInput | Prisma.MentionUpsertWithWhereUniqueWithoutProtocolInput[]
+  createMany?: Prisma.MentionCreateManyProtocolInputEnvelope
+  set?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+  disconnect?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+  delete?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+  connect?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+  update?: Prisma.MentionUpdateWithWhereUniqueWithoutProtocolInput | Prisma.MentionUpdateWithWhereUniqueWithoutProtocolInput[]
+  updateMany?: Prisma.MentionUpdateManyWithWhereWithoutProtocolInput | Prisma.MentionUpdateManyWithWhereWithoutProtocolInput[]
+  deleteMany?: Prisma.MentionScalarWhereInput | Prisma.MentionScalarWhereInput[]
+}
+
+export type MentionUncheckedUpdateManyWithoutProtocolNestedInput = {
+  create?: Prisma.XOR<Prisma.MentionCreateWithoutProtocolInput, Prisma.MentionUncheckedCreateWithoutProtocolInput> | Prisma.MentionCreateWithoutProtocolInput[] | Prisma.MentionUncheckedCreateWithoutProtocolInput[]
+  connectOrCreate?: Prisma.MentionCreateOrConnectWithoutProtocolInput | Prisma.MentionCreateOrConnectWithoutProtocolInput[]
+  upsert?: Prisma.MentionUpsertWithWhereUniqueWithoutProtocolInput | Prisma.MentionUpsertWithWhereUniqueWithoutProtocolInput[]
+  createMany?: Prisma.MentionCreateManyProtocolInputEnvelope
+  set?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+  disconnect?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+  delete?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+  connect?: Prisma.MentionWhereUniqueInput | Prisma.MentionWhereUniqueInput[]
+  update?: Prisma.MentionUpdateWithWhereUniqueWithoutProtocolInput | Prisma.MentionUpdateWithWhereUniqueWithoutProtocolInput[]
+  updateMany?: Prisma.MentionUpdateManyWithWhereWithoutProtocolInput | Prisma.MentionUpdateManyWithWhereWithoutProtocolInput[]
+  deleteMany?: Prisma.MentionScalarWhereInput | Prisma.MentionScalarWhereInput[]
+}
+
 export type MentionCreateNestedManyWithoutProtocolCommentInput = {
   create?: Prisma.XOR<Prisma.MentionCreateWithoutProtocolCommentInput, Prisma.MentionUncheckedCreateWithoutProtocolCommentInput> | Prisma.MentionCreateWithoutProtocolCommentInput[] | Prisma.MentionUncheckedCreateWithoutProtocolCommentInput[]
   connectOrCreate?: Prisma.MentionCreateOrConnectWithoutProtocolCommentInput | Prisma.MentionCreateOrConnectWithoutProtocolCommentInput[]
@@ -519,8 +626,10 @@ export type MentionUncheckedUpdateManyWithoutProtocolCommentNestedInput = {
 export type MentionCreateWithoutMentionedUserInput = {
   id?: string
   targetType: string
+  targetId: string
   createdAt?: Date | string
   mentioningUser: Prisma.UserCreateNestedOneWithoutMentioningInput
+  protocol?: Prisma.ProtocolCreateNestedOneWithoutMentionsInput
   caseComment?: Prisma.CaseCommentCreateNestedOneWithoutMentionsInput
   protocolComment?: Prisma.ProtocolCommentCreateNestedOneWithoutMentionsInput
 }
@@ -530,6 +639,9 @@ export type MentionUncheckedCreateWithoutMentionedUserInput = {
   mentioningUserId: string
   targetType: string
   targetId: string
+  protocolId?: string | null
+  caseCommentId?: string | null
+  protocolCommentId?: string | null
   createdAt?: Date | string
 }
 
@@ -546,8 +658,10 @@ export type MentionCreateManyMentionedUserInputEnvelope = {
 export type MentionCreateWithoutMentioningUserInput = {
   id?: string
   targetType: string
+  targetId: string
   createdAt?: Date | string
   mentionedUser: Prisma.UserCreateNestedOneWithoutMentionsInput
+  protocol?: Prisma.ProtocolCreateNestedOneWithoutMentionsInput
   caseComment?: Prisma.CaseCommentCreateNestedOneWithoutMentionsInput
   protocolComment?: Prisma.ProtocolCommentCreateNestedOneWithoutMentionsInput
 }
@@ -557,6 +671,9 @@ export type MentionUncheckedCreateWithoutMentioningUserInput = {
   mentionedUserId: string
   targetType: string
   targetId: string
+  protocolId?: string | null
+  caseCommentId?: string | null
+  protocolCommentId?: string | null
   createdAt?: Date | string
 }
 
@@ -595,6 +712,9 @@ export type MentionScalarWhereInput = {
   mentioningUserId?: Prisma.StringFilter<"Mention"> | string
   targetType?: Prisma.StringFilter<"Mention"> | string
   targetId?: Prisma.StringFilter<"Mention"> | string
+  protocolId?: Prisma.StringNullableFilter<"Mention"> | string | null
+  caseCommentId?: Prisma.StringNullableFilter<"Mention"> | string | null
+  protocolCommentId?: Prisma.StringNullableFilter<"Mention"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Mention"> | Date | string
 }
 
@@ -617,9 +737,11 @@ export type MentionUpdateManyWithWhereWithoutMentioningUserInput = {
 export type MentionCreateWithoutCaseCommentInput = {
   id?: string
   targetType: string
+  targetId: string
   createdAt?: Date | string
   mentionedUser: Prisma.UserCreateNestedOneWithoutMentionsInput
   mentioningUser: Prisma.UserCreateNestedOneWithoutMentioningInput
+  protocol?: Prisma.ProtocolCreateNestedOneWithoutMentionsInput
   protocolComment?: Prisma.ProtocolCommentCreateNestedOneWithoutMentionsInput
 }
 
@@ -628,6 +750,9 @@ export type MentionUncheckedCreateWithoutCaseCommentInput = {
   mentionedUserId: string
   mentioningUserId: string
   targetType: string
+  targetId: string
+  protocolId?: string | null
+  protocolCommentId?: string | null
   createdAt?: Date | string
 }
 
@@ -657,12 +782,62 @@ export type MentionUpdateManyWithWhereWithoutCaseCommentInput = {
   data: Prisma.XOR<Prisma.MentionUpdateManyMutationInput, Prisma.MentionUncheckedUpdateManyWithoutCaseCommentInput>
 }
 
-export type MentionCreateWithoutProtocolCommentInput = {
+export type MentionCreateWithoutProtocolInput = {
   id?: string
   targetType: string
+  targetId: string
   createdAt?: Date | string
   mentionedUser: Prisma.UserCreateNestedOneWithoutMentionsInput
   mentioningUser: Prisma.UserCreateNestedOneWithoutMentioningInput
+  caseComment?: Prisma.CaseCommentCreateNestedOneWithoutMentionsInput
+  protocolComment?: Prisma.ProtocolCommentCreateNestedOneWithoutMentionsInput
+}
+
+export type MentionUncheckedCreateWithoutProtocolInput = {
+  id?: string
+  mentionedUserId: string
+  mentioningUserId: string
+  targetType: string
+  targetId: string
+  caseCommentId?: string | null
+  protocolCommentId?: string | null
+  createdAt?: Date | string
+}
+
+export type MentionCreateOrConnectWithoutProtocolInput = {
+  where: Prisma.MentionWhereUniqueInput
+  create: Prisma.XOR<Prisma.MentionCreateWithoutProtocolInput, Prisma.MentionUncheckedCreateWithoutProtocolInput>
+}
+
+export type MentionCreateManyProtocolInputEnvelope = {
+  data: Prisma.MentionCreateManyProtocolInput | Prisma.MentionCreateManyProtocolInput[]
+  skipDuplicates?: boolean
+}
+
+export type MentionUpsertWithWhereUniqueWithoutProtocolInput = {
+  where: Prisma.MentionWhereUniqueInput
+  update: Prisma.XOR<Prisma.MentionUpdateWithoutProtocolInput, Prisma.MentionUncheckedUpdateWithoutProtocolInput>
+  create: Prisma.XOR<Prisma.MentionCreateWithoutProtocolInput, Prisma.MentionUncheckedCreateWithoutProtocolInput>
+}
+
+export type MentionUpdateWithWhereUniqueWithoutProtocolInput = {
+  where: Prisma.MentionWhereUniqueInput
+  data: Prisma.XOR<Prisma.MentionUpdateWithoutProtocolInput, Prisma.MentionUncheckedUpdateWithoutProtocolInput>
+}
+
+export type MentionUpdateManyWithWhereWithoutProtocolInput = {
+  where: Prisma.MentionScalarWhereInput
+  data: Prisma.XOR<Prisma.MentionUpdateManyMutationInput, Prisma.MentionUncheckedUpdateManyWithoutProtocolInput>
+}
+
+export type MentionCreateWithoutProtocolCommentInput = {
+  id?: string
+  targetType: string
+  targetId: string
+  createdAt?: Date | string
+  mentionedUser: Prisma.UserCreateNestedOneWithoutMentionsInput
+  mentioningUser: Prisma.UserCreateNestedOneWithoutMentioningInput
+  protocol?: Prisma.ProtocolCreateNestedOneWithoutMentionsInput
   caseComment?: Prisma.CaseCommentCreateNestedOneWithoutMentionsInput
 }
 
@@ -671,6 +846,9 @@ export type MentionUncheckedCreateWithoutProtocolCommentInput = {
   mentionedUserId: string
   mentioningUserId: string
   targetType: string
+  targetId: string
+  protocolId?: string | null
+  caseCommentId?: string | null
   createdAt?: Date | string
 }
 
@@ -705,6 +883,9 @@ export type MentionCreateManyMentionedUserInput = {
   mentioningUserId: string
   targetType: string
   targetId: string
+  protocolId?: string | null
+  caseCommentId?: string | null
+  protocolCommentId?: string | null
   createdAt?: Date | string
 }
 
@@ -713,14 +894,19 @@ export type MentionCreateManyMentioningUserInput = {
   mentionedUserId: string
   targetType: string
   targetId: string
+  protocolId?: string | null
+  caseCommentId?: string | null
+  protocolCommentId?: string | null
   createdAt?: Date | string
 }
 
 export type MentionUpdateWithoutMentionedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentioningUser?: Prisma.UserUpdateOneRequiredWithoutMentioningNestedInput
+  protocol?: Prisma.ProtocolUpdateOneWithoutMentionsNestedInput
   caseComment?: Prisma.CaseCommentUpdateOneWithoutMentionsNestedInput
   protocolComment?: Prisma.ProtocolCommentUpdateOneWithoutMentionsNestedInput
 }
@@ -730,6 +916,9 @@ export type MentionUncheckedUpdateWithoutMentionedUserInput = {
   mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
   targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -738,14 +927,19 @@ export type MentionUncheckedUpdateManyWithoutMentionedUserInput = {
   mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
   targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MentionUpdateWithoutMentioningUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentionedUser?: Prisma.UserUpdateOneRequiredWithoutMentionsNestedInput
+  protocol?: Prisma.ProtocolUpdateOneWithoutMentionsNestedInput
   caseComment?: Prisma.CaseCommentUpdateOneWithoutMentionsNestedInput
   protocolComment?: Prisma.ProtocolCommentUpdateOneWithoutMentionsNestedInput
 }
@@ -755,6 +949,9 @@ export type MentionUncheckedUpdateWithoutMentioningUserInput = {
   mentionedUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
   targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -763,6 +960,9 @@ export type MentionUncheckedUpdateManyWithoutMentioningUserInput = {
   mentionedUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
   targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -771,15 +971,20 @@ export type MentionCreateManyCaseCommentInput = {
   mentionedUserId: string
   mentioningUserId: string
   targetType: string
+  targetId: string
+  protocolId?: string | null
+  protocolCommentId?: string | null
   createdAt?: Date | string
 }
 
 export type MentionUpdateWithoutCaseCommentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentionedUser?: Prisma.UserUpdateOneRequiredWithoutMentionsNestedInput
   mentioningUser?: Prisma.UserUpdateOneRequiredWithoutMentioningNestedInput
+  protocol?: Prisma.ProtocolUpdateOneWithoutMentionsNestedInput
   protocolComment?: Prisma.ProtocolCommentUpdateOneWithoutMentionsNestedInput
 }
 
@@ -788,6 +993,9 @@ export type MentionUncheckedUpdateWithoutCaseCommentInput = {
   mentionedUserId?: Prisma.StringFieldUpdateOperationsInput | string
   mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -796,6 +1004,53 @@ export type MentionUncheckedUpdateManyWithoutCaseCommentInput = {
   mentionedUserId?: Prisma.StringFieldUpdateOperationsInput | string
   mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MentionCreateManyProtocolInput = {
+  id?: string
+  mentionedUserId: string
+  mentioningUserId: string
+  targetType: string
+  targetId: string
+  caseCommentId?: string | null
+  protocolCommentId?: string | null
+  createdAt?: Date | string
+}
+
+export type MentionUpdateWithoutProtocolInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mentionedUser?: Prisma.UserUpdateOneRequiredWithoutMentionsNestedInput
+  mentioningUser?: Prisma.UserUpdateOneRequiredWithoutMentioningNestedInput
+  caseComment?: Prisma.CaseCommentUpdateOneWithoutMentionsNestedInput
+  protocolComment?: Prisma.ProtocolCommentUpdateOneWithoutMentionsNestedInput
+}
+
+export type MentionUncheckedUpdateWithoutProtocolInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mentionedUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MentionUncheckedUpdateManyWithoutProtocolInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mentionedUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  protocolCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -804,15 +1059,20 @@ export type MentionCreateManyProtocolCommentInput = {
   mentionedUserId: string
   mentioningUserId: string
   targetType: string
+  targetId: string
+  protocolId?: string | null
+  caseCommentId?: string | null
   createdAt?: Date | string
 }
 
 export type MentionUpdateWithoutProtocolCommentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentionedUser?: Prisma.UserUpdateOneRequiredWithoutMentionsNestedInput
   mentioningUser?: Prisma.UserUpdateOneRequiredWithoutMentioningNestedInput
+  protocol?: Prisma.ProtocolUpdateOneWithoutMentionsNestedInput
   caseComment?: Prisma.CaseCommentUpdateOneWithoutMentionsNestedInput
 }
 
@@ -821,6 +1081,9 @@ export type MentionUncheckedUpdateWithoutProtocolCommentInput = {
   mentionedUserId?: Prisma.StringFieldUpdateOperationsInput | string
   mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -829,6 +1092,9 @@ export type MentionUncheckedUpdateManyWithoutProtocolCommentInput = {
   mentionedUserId?: Prisma.StringFieldUpdateOperationsInput | string
   mentioningUserId?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.StringFieldUpdateOperationsInput | string
+  targetId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseCommentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -840,9 +1106,13 @@ export type MentionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   mentioningUserId?: boolean
   targetType?: boolean
   targetId?: boolean
+  protocolId?: boolean
+  caseCommentId?: boolean
+  protocolCommentId?: boolean
   createdAt?: boolean
   mentionedUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   mentioningUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  protocol?: boolean | Prisma.Mention$protocolArgs<ExtArgs>
   caseComment?: boolean | Prisma.Mention$caseCommentArgs<ExtArgs>
   protocolComment?: boolean | Prisma.Mention$protocolCommentArgs<ExtArgs>
 }, ExtArgs["result"]["mention"]>
@@ -853,9 +1123,13 @@ export type MentionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   mentioningUserId?: boolean
   targetType?: boolean
   targetId?: boolean
+  protocolId?: boolean
+  caseCommentId?: boolean
+  protocolCommentId?: boolean
   createdAt?: boolean
   mentionedUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   mentioningUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  protocol?: boolean | Prisma.Mention$protocolArgs<ExtArgs>
   caseComment?: boolean | Prisma.Mention$caseCommentArgs<ExtArgs>
   protocolComment?: boolean | Prisma.Mention$protocolCommentArgs<ExtArgs>
 }, ExtArgs["result"]["mention"]>
@@ -866,9 +1140,13 @@ export type MentionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   mentioningUserId?: boolean
   targetType?: boolean
   targetId?: boolean
+  protocolId?: boolean
+  caseCommentId?: boolean
+  protocolCommentId?: boolean
   createdAt?: boolean
   mentionedUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   mentioningUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  protocol?: boolean | Prisma.Mention$protocolArgs<ExtArgs>
   caseComment?: boolean | Prisma.Mention$caseCommentArgs<ExtArgs>
   protocolComment?: boolean | Prisma.Mention$protocolCommentArgs<ExtArgs>
 }, ExtArgs["result"]["mention"]>
@@ -879,25 +1157,31 @@ export type MentionSelectScalar = {
   mentioningUserId?: boolean
   targetType?: boolean
   targetId?: boolean
+  protocolId?: boolean
+  caseCommentId?: boolean
+  protocolCommentId?: boolean
   createdAt?: boolean
 }
 
-export type MentionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mentionedUserId" | "mentioningUserId" | "targetType" | "targetId" | "createdAt", ExtArgs["result"]["mention"]>
+export type MentionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mentionedUserId" | "mentioningUserId" | "targetType" | "targetId" | "protocolId" | "caseCommentId" | "protocolCommentId" | "createdAt", ExtArgs["result"]["mention"]>
 export type MentionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   mentionedUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   mentioningUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  protocol?: boolean | Prisma.Mention$protocolArgs<ExtArgs>
   caseComment?: boolean | Prisma.Mention$caseCommentArgs<ExtArgs>
   protocolComment?: boolean | Prisma.Mention$protocolCommentArgs<ExtArgs>
 }
 export type MentionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   mentionedUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   mentioningUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  protocol?: boolean | Prisma.Mention$protocolArgs<ExtArgs>
   caseComment?: boolean | Prisma.Mention$caseCommentArgs<ExtArgs>
   protocolComment?: boolean | Prisma.Mention$protocolCommentArgs<ExtArgs>
 }
 export type MentionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   mentionedUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   mentioningUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  protocol?: boolean | Prisma.Mention$protocolArgs<ExtArgs>
   caseComment?: boolean | Prisma.Mention$caseCommentArgs<ExtArgs>
   protocolComment?: boolean | Prisma.Mention$protocolCommentArgs<ExtArgs>
 }
@@ -907,6 +1191,7 @@ export type $MentionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     mentionedUser: Prisma.$UserPayload<ExtArgs>
     mentioningUser: Prisma.$UserPayload<ExtArgs>
+    protocol: Prisma.$ProtocolPayload<ExtArgs> | null
     caseComment: Prisma.$CaseCommentPayload<ExtArgs> | null
     protocolComment: Prisma.$ProtocolCommentPayload<ExtArgs> | null
   }
@@ -916,6 +1201,9 @@ export type $MentionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     mentioningUserId: string
     targetType: string
     targetId: string
+    protocolId: string | null
+    caseCommentId: string | null
+    protocolCommentId: string | null
     createdAt: Date
   }, ExtArgs["result"]["mention"]>
   composites: {}
@@ -1313,6 +1601,7 @@ export interface Prisma__MentionClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   mentionedUser<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   mentioningUser<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  protocol<T extends Prisma.Mention$protocolArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mention$protocolArgs<ExtArgs>>): Prisma.Prisma__ProtocolClient<runtime.Types.Result.GetResult<Prisma.$ProtocolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   caseComment<T extends Prisma.Mention$caseCommentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mention$caseCommentArgs<ExtArgs>>): Prisma.Prisma__CaseCommentClient<runtime.Types.Result.GetResult<Prisma.$CaseCommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   protocolComment<T extends Prisma.Mention$protocolCommentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mention$protocolCommentArgs<ExtArgs>>): Prisma.Prisma__ProtocolCommentClient<runtime.Types.Result.GetResult<Prisma.$ProtocolCommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1349,6 +1638,9 @@ export interface MentionFieldRefs {
   readonly mentioningUserId: Prisma.FieldRef<"Mention", 'String'>
   readonly targetType: Prisma.FieldRef<"Mention", 'String'>
   readonly targetId: Prisma.FieldRef<"Mention", 'String'>
+  readonly protocolId: Prisma.FieldRef<"Mention", 'String'>
+  readonly caseCommentId: Prisma.FieldRef<"Mention", 'String'>
+  readonly protocolCommentId: Prisma.FieldRef<"Mention", 'String'>
   readonly createdAt: Prisma.FieldRef<"Mention", 'DateTime'>
 }
     
@@ -1743,6 +2035,25 @@ export type MentionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Mentions to delete.
    */
   limit?: number
+}
+
+/**
+ * Mention.protocol
+ */
+export type Mention$protocolArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Protocol
+   */
+  select?: Prisma.ProtocolSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Protocol
+   */
+  omit?: Prisma.ProtocolOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProtocolInclude<ExtArgs> | null
+  where?: Prisma.ProtocolWhereInput
 }
 
 /**

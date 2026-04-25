@@ -12,6 +12,8 @@ async function HeadUser() {
 
   const userId = session?.user?.id;
 
+  if (!userId) return null;
+
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { displayName: true, avatarUrl: true, email: true, id: true },
