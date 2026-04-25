@@ -27,6 +27,9 @@ import {
   InlineComboboxInput,
   InlineComboboxItem,
 } from "./inline-combobox";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { getInitials } from "@/lib/helper/user";
+import Link from "next/link";
 
 type MentionUser = {
   id: string;
@@ -63,15 +66,15 @@ export function MentionElement(
         draggable: true,
       }}>
       {mounted && IS_APPLE ? (
-        <>
+        <Link href={`/m/${(element as unknown as { userId?: string }).userId}`}>
           {props.children}
           {props.prefix}@{element.value}
-        </>
+        </Link>
       ) : (
-        <>
+        <Link href={`/m/${(element as unknown as { userId?: string }).userId}`}>
           {props.prefix}@{element.value}
           {props.children}
-        </>
+        </Link>
       )}
     </PlateElement>
   );
@@ -159,20 +162,27 @@ export function MentionInputElement(
 
         <InlineComboboxContent className="my-1.5">
           <InlineComboboxEmpty>
-            {loading ? "Suche…" : "Keine Mitglieder gefunden"}
+            {loading ? "Loading..." : "Keine Mitglieder gefunden"}
           </InlineComboboxEmpty>
 
-          <InlineComboboxGroup>
+          <InlineComboboxGroup className="space-y-2">
             {users.map((user) => (
               <InlineComboboxItem
                 key={user.id}
                 value={user.displayName}
                 onClick={() => insertMention(user)}>
-                <div className="flex flex-col">
+                <div className="flex items-center gap-2 ">
+                  <Avatar className="size-6">
+                    <AvatarImage src={user.avatarUrl ?? ""} />
+                    <AvatarFallback>
+                      {" "}
+                      {getInitials(user.displayName ?? user.email)}
+                    </AvatarFallback>
+                  </Avatar>
                   <span className="font-medium">{user.displayName}</span>
-                  <span className="text-xs text-muted-foreground">
+                  {/* <span className="text-xs text-muted-foreground">
                     {user.email}
-                  </span>
+                  </span> */}
                 </div>
               </InlineComboboxItem>
             ))}
