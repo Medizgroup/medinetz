@@ -27,6 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
 import { actionMeta, activityDescription } from "@/lib/utils/index";
+import { getInitials } from "@/lib/helper/user";
 
 function orgBadge(type: string) {
   if (type === "ROUTINE") return "R";
@@ -227,6 +228,7 @@ export default async function ProtocolDetailPage({
               title: protocol.title,
               date: protocol.date.toISOString().slice(0, 10),
               description: (protocol.description as TElement[]) ?? [],
+              organizationId: protocol.organizationId,
             }}
           />
         </div>
@@ -248,7 +250,10 @@ export default async function ProtocolDetailPage({
           <h2 className="text-lg font-semibold">Kommentare</h2>
 
           {commentable ? (
-            <ProtocolCommentForm protocolId={protocol.id} />
+            <ProtocolCommentForm
+              protocolId={protocol.id}
+              organizationId={protocol.organizationId}
+            />
           ) : null}
 
           {/* Diskussion */}
@@ -274,14 +279,18 @@ export default async function ProtocolDetailPage({
                           className="size-6 rounded-full"
                           src={comment.user.avatarUrl ?? undefined}
                         />
-                        <AvatarFallback>UU</AvatarFallback>
+                        <AvatarFallback>
+                          {getInitials(
+                            comment.user.displayName ??
+                              comment.user.name ??
+                              "User",
+                          )}
+                        </AvatarFallback>
                       </Avatar>
                     </TimelineIndicator>
                   </TimelineHeader>
                   <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
-                    {/* <RichTextRenderer value={comment.content} />
-                     */}
-                    {renderText(comment.contentText)}
+                    <RichTextRenderer value={comment.content} />
                     <TimelineDate className="mt-1 mb-0">
                       vor{" "}
                       {formatDistance(new Date(comment.createdAt), new Date(), {

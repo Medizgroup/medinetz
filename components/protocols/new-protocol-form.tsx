@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import ProtocolEditor from "@/components/protocols/protocol-editor";
 
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,10 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "../ui/calendar";
+import { de } from "date-fns/locale";
 
 type Membership = {
   organization: {
@@ -40,7 +45,7 @@ export default function NewProtocolForm({
   const router = useRouter();
 
   const [title, setTitle] = React.useState("");
-  const [date, setDate] = React.useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [organizationId, setOrganizationId] = React.useState(
     memberships[0]?.organization.id ?? "",
   );
@@ -89,7 +94,7 @@ export default function NewProtocolForm({
       </div>
 
       <form onSubmit={onSubmit} className="space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 justify- items-end">
           <Field className="gap-2">
             <FieldLabel>Titel</FieldLabel>
             <Input
@@ -100,17 +105,27 @@ export default function NewProtocolForm({
               required
             />
           </Field>
-
-          <Field className="gap-2">
-            <FieldLabel>Datum</FieldLabel>
-            <Input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              size="lg"
-              required
-            />
-          </Field>
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button
+                  size="lg"
+                  className=" justify-start"
+                  variant="outline"
+                />
+              }>
+              <CalendarIcon aria-hidden="true" />
+              {date ? format(date, "PPP", { locale: de }) : "Datum auswählen"}
+            </PopoverTrigger>
+            <PopoverPopup>
+              <Calendar
+                defaultMonth={date}
+                mode="single"
+                onSelect={setDate}
+                selected={date}
+              />
+            </PopoverPopup>
+          </Popover>
         </div>
 
         <Field className="gap-2">
@@ -136,7 +151,7 @@ export default function NewProtocolForm({
           <ProtocolEditor
             value={value}
             onChange={setValue}
-            organizationId={organizationId} // ← NEU
+            organizationId={organizationId}
             placeholder="Hier schreiben..."
           />
         </Field>

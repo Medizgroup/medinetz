@@ -2,43 +2,58 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import type { Value } from "platejs";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
-import { Textarea } from "@/components/ui/textarea";
+import { Field, FieldDescription } from "@/components/ui/field";
 import { Spinner } from "../ui/spinner";
-import { getMentionQuery } from "@/lib/helper/search";
+
+import ProtocolCommentEditor from "./protocol-comment-editor";
+
+const emptyValue: Value = [{ type: "p", children: [{ text: "" }] }];
+
+function isEmpty(v: Value) {
+  if (!Array.isArray(v) || v.length === 0) return true;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return v.every((n: any) => {
+    if (!Array.isArray(n.children)) return true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return n.children.every((c: any) => {
+      if (typeof c.text === "string") return c.text.trim() === "";
+      // Mention-Node oder anderes Element → nicht leer
+      return false;
+    });
+  });
+}
 
 export default function ProtocolCommentForm({
   protocolId,
+  organizationId,
 }: {
   protocolId: string;
+  organizationId: string;
 }) {
   const router = useRouter();
-  const [content, setContent] = React.useState("");
+  const [value, setValue] = React.useState<Value>(emptyValue);
+  // editorKey zwingt den Editor nach Submit auf einen frischen Mount
+  const [editorKey, setEditorKey] = React.useState(0);
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [suggestions, setSuggestions] = React.useState<
-    { id: string; name: string; email?: string }[]
-  >([]);
-
-  const [showSuggestions, setShowSuggestions] = React.useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (isEmpty(value) || saving) return;
+
     setSaving(true);
     setError(null);
 
     const res = await fetch("/api/protocol-comments", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ protocolId, content }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ protocolId, content: value }),
     });
 
     const data = await res.json().catch(() => null);
-
     setSaving(false);
 
     if (!res.ok) {
@@ -46,77 +61,35 @@ export default function ProtocolCommentForm({
       return;
     }
 
-    setContent("");
+    setValue(emptyValue);
+    setEditorKey((k) => k + 1); // Editor leeren
     router.refresh();
   }
 
-  function insertMention(user: { id: string; name: string }) {
-    const textarea = document.activeElement as HTMLTextAreaElement;
-    const cursor = textarea.selectionStart;
-
-    const before = content.slice(0, cursor);
-    const after = content.slice(cursor);
-
-    const newText =
-      before.replace(/@([A-Za-z0-9_-]*)$/, `@[${user.name}](${user.id}) `) +
-      after;
-
-    setContent(newText);
-    setShowSuggestions(false);
-  }
-
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-3">
       <Field className="gap-2">
-        {/* <FieldLabel>Neuer Kommentar</FieldLabel> */}
-        <Textarea
-          rows={12}
-          value={content}
-          className="min-h-[130px]"
-          size="lg"
-          onChange={async (e) => {
-            const value = e.target.value;
-            setContent(value);
-
-            const cursor = e.target.selectionStart;
-            const query = getMentionQuery(value, cursor);
-
-            if (query !== null) {
-              const res = await fetch(`/api/users/search?q=${query}`);
-              const users = await res.json();
-
-              setSuggestions(users);
-              setShowSuggestions(true);
-            } else {
-              setShowSuggestions(false);
-            }
-          }}
-          placeholder="Schreibe einen Kommentar… "
-          required
+        <ProtocolCommentEditor
+          key={editorKey}
+          value={value}
+          onChange={setValue}
+          organizationId={organizationId}
         />
         <FieldDescription>
-          Nutze @ um andere Teilnehmer zu erwähnen.
+          Nutze <span className="font-medium">@</span>, um andere Mitglieder zu
+          erwähnen.
         </FieldDescription>
-        {showSuggestions && suggestions.length > 0 && (
-          <div className="border rounded-md bg-white shadow p-2 space-y-1">
-            {suggestions.map((user: any) => (
-              <button
-                key={user.id}
-                type="button"
-                onClick={() => insertMention(user)}
-                className="block w-full text-left px-2 py-1 hover:bg-gray-100 rounded">
-                {user.name ?? user.email}
-              </button>
-            ))}
-          </div>
-        )}
       </Field>
 
-      {error ? <p className="text-sm text-red-500">{error}</p> : null}
+      {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
       <div className="flex justify-end">
-        <Button type="submit" className="rounded-full" disabled={saving}>
-          {saving ? <Spinner /> : "Senden"}
+        <Button
+          type="submit"
+          className="rounded-full"
+          disabled={saving || isEmpty(value)}>
+          {saving ? <Spinner /> : null}
+          Kommentar speichern
         </Button>
       </div>
     </form>

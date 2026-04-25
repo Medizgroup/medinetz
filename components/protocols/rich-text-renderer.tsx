@@ -5,16 +5,66 @@ type RichTextNode = {
   type?: string;
   text?: string;
   url?: string;
+  value?: string;
+  userId?: string;
   children?: RichTextNode[];
   bold?: boolean;
   italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
 };
 
+const LEGACY_MENTION_RE = /@\[([^\]]+)\]\(([^)]+)\)/g;
+
+/**
+ * Rendert Plain-Text und parst dabei das alte `@[name](id)` Format,
+ * damit alte Kommentare schön aussehen.
+ */
+function renderTextWithLegacyMentions(text: string, baseKey: string) {
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let i = 0;
+
+  LEGACY_MENTION_RE.lastIndex = 0;
+
+  while ((match = LEGACY_MENTION_RE.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(
+        <Fragment key={`${baseKey}-t-${i++}`}>
+          {text.slice(lastIndex, match.index)}
+        </Fragment>,
+      );
+    }
+    parts.push(
+      <span
+        key={`${baseKey}-m-${i++}`}
+        className="rounded bg-primary/10 px-1.5 py-0.5 text-sm font-medium text-primary">
+        @{match[1]}
+      </span>,
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(
+      <Fragment key={`${baseKey}-t-${i++}`}>{text.slice(lastIndex)}</Fragment>,
+    );
+  }
+
+  return parts.length > 0 ? <>{parts}</> : <>{text}</>;
+}
+
 function renderLeaf(node: RichTextNode, key: string) {
-  let content = <>{node.text ?? ""}</>;
+  let content: React.ReactNode = renderTextWithLegacyMentions(
+    node.text ?? "",
+    key,
+  );
 
   if (node.bold) content = <strong>{content}</strong>;
   if (node.italic) content = <em>{content}</em>;
+  if (node.underline) content = <u>{content}</u>;
+  if (node.strikethrough) content = <s>{content}</s>;
 
   return <Fragment key={key}>{content}</Fragment>;
 }
@@ -42,11 +92,14 @@ function renderChildren(children?: RichTextNode[]) {
     }
 
     if (child.type === "mention") {
+      // Neue Mentions: Display-Name in `value`, User-ID in `userId`
+      const label = child.value ?? child.children?.[0]?.text ?? "mention";
       return (
         <span
           key={key}
-          className="rounded bg-muted px-1.5 py-0.5 text-sm font-medium">
-          @{child.children?.[0]?.text ?? "mention"}
+          data-user-id={child.userId}
+          className="rounded bg-primary/10 px-1.5 py-0.5 text-sm font-medium text-primary">
+          @{label}
         </span>
       );
     }
@@ -61,7 +114,7 @@ export default function RichTextRenderer({ value }: { value: unknown }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {value.map((node: RichTextNode, index: number) => {
         const key = `${node.type ?? "node"}-${index}`;
 
@@ -72,14 +125,12 @@ export default function RichTextRenderer({ value }: { value: unknown }) {
                 {renderChildren(node.children)}
               </h1>
             );
-
           case "h2":
             return (
               <h2 key={key} className="text-xl font-semibold">
                 {renderChildren(node.children)}
               </h2>
             );
-
           case "ul":
             return (
               <ul key={key} className="list-disc space-y-1 pl-5">
@@ -90,7 +141,6 @@ export default function RichTextRenderer({ value }: { value: unknown }) {
                 ))}
               </ul>
             );
-
           case "p":
           default:
             return (
