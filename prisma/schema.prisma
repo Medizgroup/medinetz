@@ -435,14 +435,15 @@ model Case {
 }
 
 model CaseComment {
-  id         String    @id @default(uuid())
-  caseId     String    @map("case_id")
-  userId     String    @map("user_id")
-  content    String    @db.Text
-  isInternal Boolean   @default(false) @map("is_internal")
-  editedAt   DateTime? @map("edited_at")
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime  @updatedAt @map("updated_at")
+  id          String    @id @default(uuid())
+  caseId      String    @map("case_id")
+  userId      String    @map("user_id")
+  content     Json?     @map("content") @db.Json
+  contentText String?   @map("content_text") @db.Text
+  isInternal  Boolean   @default(false) @map("is_internal")
+  editedAt    DateTime? @map("edited_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   case     Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
   user     User      @relation(fields: [userId], references: [id])

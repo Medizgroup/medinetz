@@ -28,7 +28,7 @@ export type CaseCommentMinAggregateOutputType = {
   id: string | null
   caseId: string | null
   userId: string | null
-  content: string | null
+  contentText: string | null
   isInternal: boolean | null
   editedAt: Date | null
   createdAt: Date | null
@@ -39,7 +39,7 @@ export type CaseCommentMaxAggregateOutputType = {
   id: string | null
   caseId: string | null
   userId: string | null
-  content: string | null
+  contentText: string | null
   isInternal: boolean | null
   editedAt: Date | null
   createdAt: Date | null
@@ -51,6 +51,7 @@ export type CaseCommentCountAggregateOutputType = {
   caseId: number
   userId: number
   content: number
+  contentText: number
   isInternal: number
   editedAt: number
   createdAt: number
@@ -63,7 +64,7 @@ export type CaseCommentMinAggregateInputType = {
   id?: true
   caseId?: true
   userId?: true
-  content?: true
+  contentText?: true
   isInternal?: true
   editedAt?: true
   createdAt?: true
@@ -74,7 +75,7 @@ export type CaseCommentMaxAggregateInputType = {
   id?: true
   caseId?: true
   userId?: true
-  content?: true
+  contentText?: true
   isInternal?: true
   editedAt?: true
   createdAt?: true
@@ -86,6 +87,7 @@ export type CaseCommentCountAggregateInputType = {
   caseId?: true
   userId?: true
   content?: true
+  contentText?: true
   isInternal?: true
   editedAt?: true
   createdAt?: true
@@ -169,7 +171,8 @@ export type CaseCommentGroupByOutputType = {
   id: string
   caseId: string
   userId: string
-  content: string
+  content: runtime.JsonValue | null
+  contentText: string | null
   isInternal: boolean
   editedAt: Date | null
   createdAt: Date
@@ -201,7 +204,8 @@ export type CaseCommentWhereInput = {
   id?: Prisma.StringFilter<"CaseComment"> | string
   caseId?: Prisma.StringFilter<"CaseComment"> | string
   userId?: Prisma.StringFilter<"CaseComment"> | string
-  content?: Prisma.StringFilter<"CaseComment"> | string
+  content?: Prisma.JsonNullableFilter<"CaseComment">
+  contentText?: Prisma.StringNullableFilter<"CaseComment"> | string | null
   isInternal?: Prisma.BoolFilter<"CaseComment"> | boolean
   editedAt?: Prisma.DateTimeNullableFilter<"CaseComment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CaseComment"> | Date | string
@@ -215,7 +219,8 @@ export type CaseCommentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   caseId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  content?: Prisma.SortOrder
+  content?: Prisma.SortOrderInput | Prisma.SortOrder
+  contentText?: Prisma.SortOrderInput | Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -232,7 +237,8 @@ export type CaseCommentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CaseCommentWhereInput | Prisma.CaseCommentWhereInput[]
   caseId?: Prisma.StringFilter<"CaseComment"> | string
   userId?: Prisma.StringFilter<"CaseComment"> | string
-  content?: Prisma.StringFilter<"CaseComment"> | string
+  content?: Prisma.JsonNullableFilter<"CaseComment">
+  contentText?: Prisma.StringNullableFilter<"CaseComment"> | string | null
   isInternal?: Prisma.BoolFilter<"CaseComment"> | boolean
   editedAt?: Prisma.DateTimeNullableFilter<"CaseComment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CaseComment"> | Date | string
@@ -246,7 +252,8 @@ export type CaseCommentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   caseId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  content?: Prisma.SortOrder
+  content?: Prisma.SortOrderInput | Prisma.SortOrder
+  contentText?: Prisma.SortOrderInput | Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -263,7 +270,8 @@ export type CaseCommentScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"CaseComment"> | string
   caseId?: Prisma.StringWithAggregatesFilter<"CaseComment"> | string
   userId?: Prisma.StringWithAggregatesFilter<"CaseComment"> | string
-  content?: Prisma.StringWithAggregatesFilter<"CaseComment"> | string
+  content?: Prisma.JsonNullableWithAggregatesFilter<"CaseComment">
+  contentText?: Prisma.StringNullableWithAggregatesFilter<"CaseComment"> | string | null
   isInternal?: Prisma.BoolWithAggregatesFilter<"CaseComment"> | boolean
   editedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CaseComment"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CaseComment"> | Date | string
@@ -272,7 +280,8 @@ export type CaseCommentScalarWhereWithAggregatesInput = {
 
 export type CaseCommentCreateInput = {
   id?: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -286,7 +295,8 @@ export type CaseCommentUncheckedCreateInput = {
   id?: string
   caseId: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -296,7 +306,8 @@ export type CaseCommentUncheckedCreateInput = {
 
 export type CaseCommentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -310,7 +321,8 @@ export type CaseCommentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caseId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -322,7 +334,8 @@ export type CaseCommentCreateManyInput = {
   id?: string
   caseId: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -331,7 +344,8 @@ export type CaseCommentCreateManyInput = {
 
 export type CaseCommentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -342,7 +356,8 @@ export type CaseCommentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caseId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -364,6 +379,7 @@ export type CaseCommentCountOrderByAggregateInput = {
   caseId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -374,7 +390,7 @@ export type CaseCommentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   caseId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  content?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -385,7 +401,7 @@ export type CaseCommentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   caseId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  content?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   isInternal?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -499,7 +515,8 @@ export type CaseCommentUpdateOneWithoutMentionsNestedInput = {
 
 export type CaseCommentCreateWithoutUserInput = {
   id?: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -511,7 +528,8 @@ export type CaseCommentCreateWithoutUserInput = {
 export type CaseCommentUncheckedCreateWithoutUserInput = {
   id?: string
   caseId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -552,7 +570,8 @@ export type CaseCommentScalarWhereInput = {
   id?: Prisma.StringFilter<"CaseComment"> | string
   caseId?: Prisma.StringFilter<"CaseComment"> | string
   userId?: Prisma.StringFilter<"CaseComment"> | string
-  content?: Prisma.StringFilter<"CaseComment"> | string
+  content?: Prisma.JsonNullableFilter<"CaseComment">
+  contentText?: Prisma.StringNullableFilter<"CaseComment"> | string | null
   isInternal?: Prisma.BoolFilter<"CaseComment"> | boolean
   editedAt?: Prisma.DateTimeNullableFilter<"CaseComment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CaseComment"> | Date | string
@@ -561,7 +580,8 @@ export type CaseCommentScalarWhereInput = {
 
 export type CaseCommentCreateWithoutCaseInput = {
   id?: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -573,7 +593,8 @@ export type CaseCommentCreateWithoutCaseInput = {
 export type CaseCommentUncheckedCreateWithoutCaseInput = {
   id?: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -609,7 +630,8 @@ export type CaseCommentUpdateManyWithWhereWithoutCaseInput = {
 
 export type CaseCommentCreateWithoutMentionsInput = {
   id?: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -622,7 +644,8 @@ export type CaseCommentUncheckedCreateWithoutMentionsInput = {
   id?: string
   caseId: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -647,7 +670,8 @@ export type CaseCommentUpdateToOneWithWhereWithoutMentionsInput = {
 
 export type CaseCommentUpdateWithoutMentionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -660,7 +684,8 @@ export type CaseCommentUncheckedUpdateWithoutMentionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caseId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -670,7 +695,8 @@ export type CaseCommentUncheckedUpdateWithoutMentionsInput = {
 export type CaseCommentCreateManyUserInput = {
   id?: string
   caseId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -679,7 +705,8 @@ export type CaseCommentCreateManyUserInput = {
 
 export type CaseCommentUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -691,7 +718,8 @@ export type CaseCommentUpdateWithoutUserInput = {
 export type CaseCommentUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caseId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -702,7 +730,8 @@ export type CaseCommentUncheckedUpdateWithoutUserInput = {
 export type CaseCommentUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caseId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -712,7 +741,8 @@ export type CaseCommentUncheckedUpdateManyWithoutUserInput = {
 export type CaseCommentCreateManyCaseInput = {
   id?: string
   userId: string
-  content: string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: string | null
   isInternal?: boolean
   editedAt?: Date | string | null
   createdAt?: Date | string
@@ -721,7 +751,8 @@ export type CaseCommentCreateManyCaseInput = {
 
 export type CaseCommentUpdateWithoutCaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -733,7 +764,8 @@ export type CaseCommentUpdateWithoutCaseInput = {
 export type CaseCommentUncheckedUpdateWithoutCaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -744,7 +776,8 @@ export type CaseCommentUncheckedUpdateWithoutCaseInput = {
 export type CaseCommentUncheckedUpdateManyWithoutCaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contentText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -787,6 +820,7 @@ export type CaseCommentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   caseId?: boolean
   userId?: boolean
   content?: boolean
+  contentText?: boolean
   isInternal?: boolean
   editedAt?: boolean
   createdAt?: boolean
@@ -802,6 +836,7 @@ export type CaseCommentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   caseId?: boolean
   userId?: boolean
   content?: boolean
+  contentText?: boolean
   isInternal?: boolean
   editedAt?: boolean
   createdAt?: boolean
@@ -815,6 +850,7 @@ export type CaseCommentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   caseId?: boolean
   userId?: boolean
   content?: boolean
+  contentText?: boolean
   isInternal?: boolean
   editedAt?: boolean
   createdAt?: boolean
@@ -828,13 +864,14 @@ export type CaseCommentSelectScalar = {
   caseId?: boolean
   userId?: boolean
   content?: boolean
+  contentText?: boolean
   isInternal?: boolean
   editedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CaseCommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "caseId" | "userId" | "content" | "isInternal" | "editedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["caseComment"]>
+export type CaseCommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "caseId" | "userId" | "content" | "contentText" | "isInternal" | "editedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["caseComment"]>
 export type CaseCommentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   case?: boolean | Prisma.CaseDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -861,7 +898,8 @@ export type $CaseCommentPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     caseId: string
     userId: string
-    content: string
+    content: runtime.JsonValue | null
+    contentText: string | null
     isInternal: boolean
     editedAt: Date | null
     createdAt: Date
@@ -1295,7 +1333,8 @@ export interface CaseCommentFieldRefs {
   readonly id: Prisma.FieldRef<"CaseComment", 'String'>
   readonly caseId: Prisma.FieldRef<"CaseComment", 'String'>
   readonly userId: Prisma.FieldRef<"CaseComment", 'String'>
-  readonly content: Prisma.FieldRef<"CaseComment", 'String'>
+  readonly content: Prisma.FieldRef<"CaseComment", 'Json'>
+  readonly contentText: Prisma.FieldRef<"CaseComment", 'String'>
   readonly isInternal: Prisma.FieldRef<"CaseComment", 'Boolean'>
   readonly editedAt: Prisma.FieldRef<"CaseComment", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"CaseComment", 'DateTime'>

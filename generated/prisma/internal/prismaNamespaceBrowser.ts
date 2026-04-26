@@ -319,6 +319,7 @@ export const CaseCommentScalarFieldEnum = {
   caseId: 'caseId',
   userId: 'userId',
   content: 'content',
+  contentText: 'contentText',
   isInternal: 'isInternal',
   editedAt: 'editedAt',
   createdAt: 'createdAt',
