@@ -222,15 +222,10 @@ export default function NewCaseForm({
                 />
               </PopoverPopup>
             </Popover>
-            {/* <Input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            /> */}
           </Field>
 
           <Field className="gap-2">
-            <FieldLabel>Geschätzte Kosten (€)</FieldLabel>
+            <FieldLabel>Geschätzte Kosten</FieldLabel>
             <NumberField
               value={estimatedCosts}
               onValueChange={(value) => setEstimatedCosts(value)}

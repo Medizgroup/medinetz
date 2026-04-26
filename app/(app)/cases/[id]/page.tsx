@@ -17,7 +17,6 @@ import {
   TimelineIndicator,
   TimelineItem,
   TimelineSeparator,
-  TimelineTitle,
 } from "@/components/ui/timeline";
 import { format, formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
@@ -25,19 +24,15 @@ import { de } from "date-fns/locale";
 import {
   STATUS_LABEL,
   PRIORITY_LABEL,
-  SENSITIVITY_LABEL,
+  //   SENSITIVITY_LABEL,
   priorityVariant,
   statusColorClass,
   statusIcon,
-  sensitivityIcon,
+  //   sensitivityIcon,
   canEditCase,
   canViewCase,
 } from "@/lib/utils/cases";
-import {
-  actionMeta,
-  activityDescription,
-  detailedIcon,
-} from "@/lib/utils/index";
+import { detailedIcon } from "@/lib/utils/index";
 import EditCaseForm from "@/components/case/edit-case-form";
 import CaseStatusControls from "@/components/case/case-status-controls";
 import ActivityLine from "@/components/activity/activity-line";
@@ -140,7 +135,7 @@ export default async function CaseDetailPage({
     select: {
       id: true,
       action: true,
-      targetType: true, // ← NEU
+      targetType: true,
       targetId: true,
       createdAt: true,
       metadata: true,
@@ -151,7 +146,7 @@ export default async function CaseDetailPage({
   });
 
   const StatusIcon = statusIcon(c.status);
-  const SensitivityIcon = sensitivityIcon(c.sensitivityLevel);
+  //   const SensitivityIcon = sensitivityIcon(c.sensitivityLevel);
 
   const creatorName =
     c.creator.displayName || c.creator.name || c.creator.id.slice(0, 6);
@@ -176,26 +171,21 @@ export default async function CaseDetailPage({
             </p>
 
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <div className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-sm">
+              <Badge variant="outline" size="lg" className={`rounded-full`}>
                 <StatusIcon
                   className={`size-3.5 ${statusColorClass(c.status)}`}
                 />
                 {STATUS_LABEL[c.status]}
-              </div>
-              <Badge variant={priorityVariant(c.priority)}>
+              </Badge>
+              <Badge variant={priorityVariant(c.priority)} size="lg">
                 {PRIORITY_LABEL[c.priority]}
               </Badge>
-              <div className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-sm">
-                <SensitivityIcon className="size-3.5" />
-                Sensibilität {c.sensitivityLevel} ·{" "}
-                {SENSITIVITY_LABEL[c.sensitivityLevel]}
-              </div>
 
-              {c.dueDate ? (
+              {/* {c.dueDate ? (
                 <Badge variant="secondary">
                   Frist: {format(c.dueDate, "dd.MM.yyyy", { locale: de })}
                 </Badge>
-              ) : null}
+              ) : null} */}
             </div>
           </div>
 
@@ -264,8 +254,8 @@ export default async function CaseDetailPage({
                   className="group-data-[orientation=vertical]/timeline:ms-10">
                   <TimelineHeader>
                     <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-primary/10">
-                      <Icon size={12} />
+                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-accent">
+                      <Icon size={14} className="text-muted-foreground" />
                     </TimelineIndicator>
                   </TimelineHeader>
                   <TimelineContent>

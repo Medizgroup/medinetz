@@ -14,6 +14,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { Calendar } from "../ui/calendar";
+import { de } from "date-fns/locale";
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from "../ui/number-field";
 
 type CaseInput = {
   id: string;
@@ -48,9 +60,11 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
   const [sensitivityLevel, setSensitivityLevel] = React.useState(
     String(caseData.sensitivityLevel),
   );
-  const [dueDate, setDueDate] = React.useState(caseData.dueDate ?? "");
-  const [estimatedCosts, setEstimatedCosts] = React.useState(
-    caseData.estimatedCosts ?? "",
+  const [dueDate, setDueDate] = React.useState<Date | undefined>(
+    caseData.dueDate ? new Date(caseData.dueDate) : undefined,
+  );
+  const [estimatedCosts, setEstimatedCosts] = React.useState<number | null>(
+    caseData.estimatedCosts ? Number(caseData.estimatedCosts) : null,
   );
 
   const [saving, setSaving] = React.useState(false);
@@ -73,7 +87,7 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
         priority,
         sensitivityLevel: Number(sensitivityLevel),
         dueDate: dueDate || null,
-        estimatedCosts: estimatedCosts === "" ? null : estimatedCosts,
+        estimatedCosts: estimatedCosts ?? null,
       }),
     });
 
@@ -100,7 +114,7 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
         </Field>
 
         <Field className="gap-2">
-          <FieldLabel>Patient (Pseudonym)</FieldLabel>
+          <FieldLabel>Patient Referenz</FieldLabel>
           <Input
             value={patientPseudonym}
             onChange={(e) => setPatientPseudonym(e.target.value)}
@@ -122,15 +136,17 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
         <Textarea
           rows={5}
           value={description}
+          className="h-32"
           onChange={(e) => setDescription(e.target.value)}
         />
       </Field>
 
       <Field className="gap-2">
-        <FieldLabel>Patient-Notizen (intern)</FieldLabel>
+        <FieldLabel>Patient-Notizen</FieldLabel>
         <Textarea
           rows={4}
           value={patientNotes}
+          className="h-28"
           onChange={(e) => setPatientNotes(e.target.value)}
         />
       </Field>
@@ -138,7 +154,17 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
       <div className="grid gap-4 sm:grid-cols-4">
         <Field className="gap-2">
           <FieldLabel>Priorität</FieldLabel>
-          <Select value={priority} onValueChange={setPriority}>
+          <Select
+            items={[
+              { label: "Niedrig", value: "LOW" },
+              { label: "Mittel", value: "MEDIUM" },
+              { label: "Hoch", value: "HIGH" },
+              { label: "Dringend", value: "URGENT" },
+            ]}
+            value={priority}
+            onValueChange={(value) => {
+              if (value !== null) setPriority(value);
+            }}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -153,7 +179,16 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
 
         <Field className="gap-2">
           <FieldLabel>Sensibilität</FieldLabel>
-          <Select value={sensitivityLevel} onValueChange={setSensitivityLevel}>
+          <Select
+            items={[
+              { label: "1 – Standard", value: "1" },
+              { label: "2 – Erhöht", value: "2" },
+              { label: "3 – Sehr hoch", value: "3" },
+            ]}
+            value={sensitivityLevel}
+            onValueChange={(value) => {
+              if (value !== null) setSensitivityLevel(value);
+            }}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -167,28 +202,47 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
 
         <Field className="gap-2">
           <FieldLabel>Frist</FieldLabel>
-          <Input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-          />
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button className="w-full justify-start" variant="outline" />
+              }>
+              <CalendarIcon aria-hidden="true" />
+              {dueDate
+                ? format(dueDate, "PPP", { locale: de })
+                : "Datum auswählen"}
+            </PopoverTrigger>
+            <PopoverPopup>
+              <Calendar
+                defaultMonth={dueDate}
+                mode="single"
+                onSelect={setDueDate}
+                selected={dueDate}
+              />
+            </PopoverPopup>
+          </Popover>
         </Field>
 
         <Field className="gap-2">
-          <FieldLabel>Geschätzte Kosten (€)</FieldLabel>
-          <Input
-            type="number"
-            step="0.01"
-            min="0"
+          <FieldLabel>Geschätzte Kosten</FieldLabel>
+          <NumberField
             value={estimatedCosts}
-            onChange={(e) => setEstimatedCosts(e.target.value)}
-          />
+            onValueChange={(value) => setEstimatedCosts(value)}
+            min={0}
+            step={10}
+            format={{ currency: "EUR", style: "currency" }}>
+            <NumberFieldGroup>
+              <NumberFieldDecrement />
+              <NumberFieldInput />
+              <NumberFieldIncrement />
+            </NumberFieldGroup>
+          </NumberField>
         </Field>
       </div>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-4">
         <Button type="submit" className="rounded-full" disabled={saving}>
           {saving ? "Speichere…" : "Änderungen speichern"}
         </Button>

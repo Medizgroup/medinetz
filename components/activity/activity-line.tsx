@@ -15,7 +15,7 @@ export default function ActivityLine({
     <div className="text-sm leading-relaxed">
       <Link
         href={`/m/${activity.user.id}`}
-        className="font-medium hover:underline">
+        className="font-medium hover:underline text-foreground">
         {actor}
       </Link>{" "}
       {pieces.map((p, i) => {
@@ -28,7 +28,7 @@ export default function ActivityLine({
         }
         if (p.type === "strong") {
           return (
-            <span key={i} className="font-medium">
+            <span key={i} className="font-medium text-foreground">
               {p.value}
             </span>
           );
@@ -39,7 +39,7 @@ export default function ActivityLine({
               <Link
                 key={i}
                 href={p.href}
-                className="font-medium tabular-nums hover:underline">
+                className="font-medium text-foreground tabular-nums hover:underline">
                 {p.value}
               </Link>
             );
