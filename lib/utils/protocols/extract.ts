@@ -28,9 +28,11 @@ export function extractPlainTextFromNodes(nodes: unknown): string {
     if (typeof node.text === "string") {
       parts.push(node.text);
     }
-    // Mention-Anzeige (Display-Name) auch in den Plain-Text übernehmen, damit Suche funktioniert
     if (node.type === "mention" && typeof node.value === "string") {
       parts.push(`@${node.value}`);
+    }
+    if (node.type === "case_reference" && typeof node.value === "string") {
+      parts.push(node.value); // bereits "#42"
     }
   });
 

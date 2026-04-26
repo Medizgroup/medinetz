@@ -1,3 +1,4 @@
+import { FolderOpen } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 
@@ -102,6 +103,27 @@ function renderChildren(children?: RichTextNode[]) {
           @{label}
         </span>
       );
+    }
+
+    if (child.type === "case_reference") {
+      const label = child.value ?? "";
+      const caseId = (child as any).caseId as string | undefined;
+
+      const inner = (
+        <span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+          <FolderOpen className="size-3.5" />
+          {label}
+        </span>
+      );
+
+      if (caseId) {
+        return (
+          <Link key={key} href={`/cases/${caseId}`}>
+            {inner}
+          </Link>
+        );
+      }
+      return <Fragment key={key}>{inner}</Fragment>;
     }
 
     return <Fragment key={key}>{renderChildren(child.children)}</Fragment>;

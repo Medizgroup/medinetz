@@ -10,6 +10,7 @@ import {
 export const MentionKit = [
   MentionPlugin.configure({
     options: {
+      trigger: "@",
       triggerPreviousCharPattern: /^$|^[\s"']$/,
     },
   }).withComponent(MentionElement),

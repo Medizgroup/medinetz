@@ -6,7 +6,6 @@ import prisma from "@/lib/prisma";
 
 export async function GET(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
-
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -16,9 +15,10 @@ export async function GET(req: Request) {
   const organizationId = searchParams.get("organizationId")?.trim() ?? "";
 
   if (!organizationId) {
-    return NextResponse.json({ cases: [] });
+    return NextResponse.json([]);
   }
 
+  // Mitgliedschaft prüfen
   const membership = await prisma.organizationMember.findUnique({
     where: {
       organizationId_userId: {
@@ -28,29 +28,54 @@ export async function GET(req: Request) {
     },
     select: { id: true },
   });
-
   if (!membership) {
-    return NextResponse.json({ cases: [] });
+    return NextResponse.json([]);
   }
+
+  // Query in Tokens splitten
+  const tokens = q.split(/\s+/).filter(Boolean);
+
+  // "#42" oder "42" → caseNumber
+  const numericQuery = q.replace(/^#/, "");
+  const isNumeric = /^\d+$/.test(numericQuery);
+
+  const tokenFilter =
+    tokens.length === 0
+      ? {}
+      : {
+          AND: tokens.map((t) => ({
+            OR: [
+              { title: { contains: t, mode: "insensitive" as const } },
+              {
+                patientPseudonym: {
+                  contains: t,
+                  mode: "insensitive" as const,
+                },
+              },
+            ],
+          })),
+        };
 
   const cases = await prisma.case.findMany({
     where: {
       organizationId,
-      OR: [
-        { title: { contains: q, mode: "insensitive" } },
-        { patientPseudonym: { contains: q, mode: "insensitive" } },
-      ],
+      ...(isNumeric
+        ? {
+            OR: [{ caseNumber: Number(numericQuery) }, tokenFilter],
+          }
+        : tokenFilter),
     },
     take: 8,
+    orderBy: [{ caseNumber: "desc" }],
     select: {
       id: true,
       caseNumber: true,
       title: true,
       status: true,
       priority: true,
+      patientPseudonym: true,
     },
-    orderBy: { updatedAt: "desc" },
   });
 
-  return NextResponse.json({ cases });
+  return NextResponse.json(cases);
 }

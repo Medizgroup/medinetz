@@ -38,6 +38,7 @@ import { DndKit } from "../editor/plugins/dnd-kit";
 import { CalloutKit } from "../editor/plugins/callout-kit";
 
 import { ProtocolEditorProvider } from "./protocol-editor-context";
+import { CaseReferenceKit } from "../editor/plugins/case-reference-kit";
 
 const emptyValue: Value = [
   {
@@ -61,6 +62,7 @@ export default function ProtocolEditor({
     plugins: [
       ...BasicNodesKit,
       ...MentionKit,
+      ...CaseReferenceKit,
       ...SlashKit,
       ...ListKit,
       ...BlockSelectionKit,
