@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { getInitials } from "@/lib/helper/user";
 export default function UserBadge({
   user,
 }: {
@@ -34,7 +35,7 @@ export default function UserBadge({
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/sign-in"); // redirect to login page
+          router.push("/sign-in");
         },
       },
     });
@@ -51,7 +52,9 @@ export default function UserBadge({
         }>
         <Avatar className="size-8 ">
           <AvatarImage src={user.avatarUrl ?? ""} />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>
+            {getInitials(user.displayName ?? user.email ?? "User")}
+          </AvatarFallback>
         </Avatar>
       </MenuTrigger>
       <MenuPopup className="w-56">
