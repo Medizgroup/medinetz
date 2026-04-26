@@ -41,6 +41,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { orgTypeBadge } from "@/lib/utils/cases";
 
 type ProtocolRow = {
   id: string;
@@ -59,36 +60,11 @@ type ProtocolRow = {
   };
 };
 
-type OrgOption = {
+export type OrgOption = {
   id: string;
   name: string;
   type: "ROUTINE" | "PREGNANCY" | "MANAGEMENT" | "CUSTOM";
 };
-
-function orgTypeBadge(type: OrgOption["type"]) {
-  switch (type) {
-    case "ROUTINE":
-      return {
-        label: "R",
-        className: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-      };
-    case "PREGNANCY":
-      return {
-        label: "S",
-        className: "bg-pink-500/10 text-pink-600 border-pink-500/20",
-      };
-    case "MANAGEMENT":
-      return {
-        label: "M",
-        className: "bg-amber-500/10 text-amber-600 border-amber-500/20",
-      };
-    case "CUSTOM":
-      return {
-        label: "C",
-        className: "bg-muted text-muted-foreground border-border",
-      };
-  }
-}
 
 export default function ProtocolsTable({
   data,

@@ -78,8 +78,7 @@ function CommandDialogPopup({
             className,
           )}
           data-slot="command-dialog-popup"
-          {...props}
-        >
+          {...props}>
           {children}
         </CommandDialogPrimitive.Popup>
       </CommandDialogViewport>

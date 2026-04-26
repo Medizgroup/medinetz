@@ -15,6 +15,7 @@ import {
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from "lucide-react";
+import AssigneeFilter, { type AssigneeOption } from "./assignee-filter";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -80,13 +82,34 @@ export default function CasesTable({
   );
   const [search, setSearch] = React.useState("");
 
+  const assigneeOptions = React.useMemo<AssigneeOption[]>(() => {
+    const map = new Map<string, AssigneeOption>();
+    for (const c of data) {
+      if (c.assignee?.id) {
+        const name =
+          c.assignee.displayName ??
+          c.assignee.name ??
+          `User ${c.assignee.id.slice(0, 6)}`;
+        if (!map.has(c.assignee.id)) {
+          map.set(c.assignee.id, { id: c.assignee.id, name });
+        }
+      }
+    }
+    return Array.from(map.values()).sort((a, b) =>
+      a.name.localeCompare(b.name, "de"),
+    );
+  }, [data]);
+
+  const [assigneeFilter, setAssigneeFilter] = React.useState<string>("all");
+
   const columns = React.useMemo<ColumnDef<CaseRow>[]>(
     () => [
       {
         accessorKey: "caseNumber",
         header: "Nr.",
         cell: ({ row }) => (
-          <div className="font-medium tabular-nums">
+          <div
+            className={`tabular-nums ${row.original.status === "CLOSED" ? "line-through" : ""}`}>
             #{row.original.caseNumber}
           </div>
         ),
@@ -104,7 +127,7 @@ export default function CasesTable({
         cell: ({ row }) => (
           <Link
             href={`/cases/${row.original.id}`}
-            className="font-medium hover:underline">
+            className={`hover:text-muted-foreground ${row.original.status === "CLOSED" ? "line-through" : ""}`}>
             {row.original.title}
           </Link>
         ),
@@ -133,7 +156,7 @@ export default function CasesTable({
               <Icon
                 className={cn("size-4", statusColorClass(row.original.status))}
               />
-              <span className="text-sm">
+              <span className="text-sm text-muted-foreground">
                 {STATUS_LABEL[row.original.status]}
               </span>
             </div>
@@ -162,23 +185,33 @@ export default function CasesTable({
           return row.original.organization.id === value;
         },
         cell: ({ row }) => (
-          <span className="truncate text-sm">
+          <span className="truncate text-sm text-muted-foreground">
             {row.original.organization.name}
           </span>
         ),
       },
       {
         id: "assignee",
-        accessorFn: (row) =>
-          row.assignee?.displayName ?? row.assignee?.name ?? "—",
+        accessorFn: (row) => row.assignee?.id ?? "__none__",
         header: "Zugewiesen",
-        cell: ({ row }) => (
-          <span className="text-sm text-muted-foreground">
-            {row.original.assignee?.displayName ??
-              row.original.assignee?.name ??
-              "—"}
-          </span>
-        ),
+        filterFn: (row, _id, value) => {
+          if (!value || value === "all") return true;
+          if (value === "unassigned") return !row.original.assignee;
+          return row.original.assignee?.id === value;
+        },
+        cell: ({ row }) =>
+          row.original.assignee ? (
+            <Link
+              href={`/m/${row.original.assignee.id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="text-sm text-muted-foreground hover:text-primary hover:underline">
+              {row.original.assignee.displayName ??
+                row.original.assignee.name ??
+                "—"}
+            </Link>
+          ) : (
+            <span className="text-sm text-muted-foreground">—</span>
+          ),
       },
       {
         accessorKey: "updatedAt",
@@ -208,11 +241,15 @@ export default function CasesTable({
     table.getColumn("title")?.setFilterValue(search);
   }, [search, table]);
 
+  React.useEffect(() => {
+    table.getColumn("assignee")?.setFilterValue(assigneeFilter);
+  }, [assigneeFilter, table]);
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative max-w-sm flex-1">
-          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 opacity-60" />
+        <div className="relative max-w-sm flex-1 w-full">
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 opacity-60 z-10" />
           <Input
             placeholder="Suche nach Titel oder Patient…"
             value={search}
@@ -222,20 +259,34 @@ export default function CasesTable({
         </div>
 
         <Select
+          items={[
+            { label: "Alle Status", value: "all" },
+            { label: "Offen", value: "OPEN" },
+            { label: "In Bearbeitung", value: "IN_PROGRESS" },
+            { label: "Wartend", value: "WAITING" },
+            { label: "Abgeschlossen", value: "CLOSED" },
+          ]}
           onValueChange={(v) => table.getColumn("status")?.setFilterValue(v)}>
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectPopup>
             <SelectItem value="all">Alle Status</SelectItem>
             <SelectItem value="OPEN">Offen</SelectItem>
             <SelectItem value="IN_PROGRESS">In Bearbeitung</SelectItem>
             <SelectItem value="WAITING">Wartend</SelectItem>
             <SelectItem value="CLOSED">Abgeschlossen</SelectItem>
-          </SelectContent>
+          </SelectPopup>
         </Select>
 
         <Select
+          items={[
+            { label: "Alle Prioritäten", value: "all" },
+            { label: "Dringend", value: "URGENT" },
+            { label: "Hoch", value: "HIGH" },
+            { label: "Mittel", value: "MEDIUM" },
+            { label: "Niedrig", value: "LOW" },
+          ]}
           onValueChange={(v) => table.getColumn("priority")?.setFilterValue(v)}>
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Priorität" />
@@ -251,6 +302,10 @@ export default function CasesTable({
 
         {orgOptions.length > 1 ? (
           <Select
+            items={[
+              { label: "Alle Organisationen", value: "all" },
+              ...orgOptions.map((o) => ({ label: o.name, value: o.id })),
+            ]}
             onValueChange={(v) =>
               table.getColumn("organization")?.setFilterValue(v)
             }>
@@ -267,6 +322,13 @@ export default function CasesTable({
             </SelectContent>
           </Select>
         ) : null}
+
+        {/* Select für zugewiesene Person */}
+        <AssigneeFilter
+          options={assigneeOptions}
+          value={assigneeFilter}
+          onChange={setAssigneeFilter}
+        />
       </div>
 
       <div className="rounded-2xl border">
@@ -311,7 +373,7 @@ export default function CasesTable({
                     (window.location.href = `/cases/${row.original.id}`)
                   }>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="h-12">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

@@ -8,6 +8,7 @@ import {
   Shield,
 } from "lucide-react";
 import type { CasePriority, CaseStatus } from "@/generated/prisma/client";
+import { OrgOption } from "@/components/protocols/protocols-table";
 
 export const STATUS_LABEL: Record<CaseStatus, string> = {
   OPEN: "Offen",
@@ -49,7 +50,7 @@ export function statusColorClass(status: CaseStatus) {
     case "IN_PROGRESS":
       return "text-amber-500";
     case "WAITING":
-      return "text-muted-foreground";
+      return "text-muted-foreground/40";
     case "CLOSED":
       return "text-blue-500";
   }
@@ -87,4 +88,29 @@ export function canEditCase(role?: string, isCreator?: boolean) {
 
 export function canViewCase(role?: string) {
   return role === "VIEWER" || role === "COORDINATOR" || role === "ADMIN";
+}
+
+export function orgTypeBadge(type: OrgOption["type"]) {
+  switch (type) {
+    case "ROUTINE":
+      return {
+        label: "R",
+        className: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+      };
+    case "PREGNANCY":
+      return {
+        label: "S",
+        className: "bg-pink-500/10 text-pink-600 border-pink-500/20",
+      };
+    case "MANAGEMENT":
+      return {
+        label: "M",
+        className: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+      };
+    case "CUSTOM":
+      return {
+        label: "C",
+        className: "bg-muted text-muted-foreground border-border",
+      };
+  }
 }
