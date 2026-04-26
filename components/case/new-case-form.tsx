@@ -14,6 +14,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { Calendar } from "../ui/calendar";
+import { de } from "date-fns/locale";
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from "../ui/number-field";
 
 type Membership = {
   organization: { id: string; name: string };
@@ -36,8 +48,8 @@ export default function NewCaseForm({
   const [patientNotes, setPatientNotes] = React.useState("");
   const [priority, setPriority] = React.useState("MEDIUM");
   const [sensitivityLevel, setSensitivityLevel] = React.useState("1");
-  const [dueDate, setDueDate] = React.useState("");
-  const [estimatedCosts, setEstimatedCosts] = React.useState("");
+  const [dueDate, setDueDate] = React.useState<Date | undefined>();
+  const [estimatedCosts, setEstimatedCosts] = React.useState<number | null>(0);
 
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -59,8 +71,8 @@ export default function NewCaseForm({
         patientNotes: patientNotes || null,
         priority,
         sensitivityLevel: Number(sensitivityLevel),
-        dueDate: dueDate || null,
-        estimatedCosts: estimatedCosts || null,
+        dueDate: dueDate ? dueDate.toISOString().slice(0, 10) : null,
+        estimatedCosts: estimatedCosts ?? null,
       }),
     });
 
@@ -101,6 +113,10 @@ export default function NewCaseForm({
             <FieldLabel>Organisation</FieldLabel>
             <Select
               value={organizationId}
+              items={memberships.map((m) => ({
+                value: m.organization.id,
+                label: m.organization.name,
+              }))}
               onValueChange={(v) => setOrganizationId(v ?? "")}>
               <SelectTrigger>
                 <SelectValue placeholder="Organisation wählen" />
@@ -117,7 +133,15 @@ export default function NewCaseForm({
 
           <Field className="gap-2">
             <FieldLabel>Priorität</FieldLabel>
-            <Select value={priority} onValueChange={setPriority}>
+            <Select
+              value={priority}
+              items={[
+                { value: "LOW", label: "Niedrig" },
+                { value: "MEDIUM", label: "Mittel" },
+                { value: "HIGH", label: "Hoch" },
+                { value: "URGENT", label: "Dringend" },
+              ]}
+              onValueChange={(v) => v && setPriority(v)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -133,15 +157,14 @@ export default function NewCaseForm({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Field className="gap-2">
-            <FieldLabel>Patient (Pseudonym)</FieldLabel>
+            <FieldLabel>Patient Referenz</FieldLabel>
             <Input
               value={patientPseudonym}
               onChange={(e) => setPatientPseudonym(e.target.value)}
-              placeholder="z.B. P-2026-0042"
               required
             />
             <FieldDescription>
-              Keine Klarnamen — bitte anonymisierten Code verwenden.
+              Pseudonymisierten Code verwenden.
             </FieldDescription>
           </Field>
 
@@ -150,37 +173,23 @@ export default function NewCaseForm({
             <Input
               value={patientLanguage}
               onChange={(e) => setPatientLanguage(e.target.value)}
-              placeholder="z.B. Arabisch, Farsi, Englisch"
             />
+            <FieldDescription>
+              Welche Sprache spricht der Patient
+            </FieldDescription>
           </Field>
         </div>
-
-        <Field className="gap-2">
-          <FieldLabel>Beschreibung</FieldLabel>
-          <Textarea
-            rows={6}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Worum geht es in diesem Fall?"
-          />
-        </Field>
-
-        <Field className="gap-2">
-          <FieldLabel>Patient-Notizen (intern)</FieldLabel>
-          <Textarea
-            rows={4}
-            value={patientNotes}
-            onChange={(e) => setPatientNotes(e.target.value)}
-            placeholder="Zusätzliche Informationen zum Patienten — sensibel behandeln."
-          />
-        </Field>
-
         <div className="grid gap-4 sm:grid-cols-3">
           <Field className="gap-2">
             <FieldLabel>Sensibilität</FieldLabel>
             <Select
               value={sensitivityLevel}
-              onValueChange={setSensitivityLevel}>
+              items={[
+                { value: "1", label: "1 – Standard" },
+                { value: "2", label: "2 – Erhöht" },
+                { value: "3", label: "3 – Sehr hoch" },
+              ]}
+              onValueChange={(value) => setSensitivityLevel(value ?? "")}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -194,25 +203,70 @@ export default function NewCaseForm({
 
           <Field className="gap-2">
             <FieldLabel>Frist</FieldLabel>
-            <Input
+            <Popover>
+              <PopoverTrigger
+                render={
+                  <Button className="w-full justify-start" variant="outline" />
+                }>
+                <CalendarIcon aria-hidden="true" />
+                {dueDate
+                  ? format(dueDate, "PPP", { locale: de })
+                  : "Datum auswählen"}
+              </PopoverTrigger>
+              <PopoverPopup>
+                <Calendar
+                  defaultMonth={dueDate}
+                  mode="single"
+                  onSelect={setDueDate}
+                  selected={dueDate}
+                />
+              </PopoverPopup>
+            </Popover>
+            {/* <Input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-            />
+            /> */}
           </Field>
 
           <Field className="gap-2">
             <FieldLabel>Geschätzte Kosten (€)</FieldLabel>
-            <Input
-              type="number"
-              step="0.01"
-              min="0"
+            <NumberField
               value={estimatedCosts}
-              onChange={(e) => setEstimatedCosts(e.target.value)}
-              placeholder="0.00"
-            />
+              onValueChange={(value) => setEstimatedCosts(value)}
+              min={0}
+              step={10}
+              format={{ currency: "EUR", style: "currency" }}>
+              <NumberFieldGroup>
+                <NumberFieldDecrement />
+                <NumberFieldInput />
+                <NumberFieldIncrement />
+              </NumberFieldGroup>
+            </NumberField>
           </Field>
         </div>
+
+        <Field className="gap-2">
+          <FieldLabel>Beschreibung</FieldLabel>
+          <Textarea
+            rows={6}
+            value={description}
+            className="h-32"
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Worum geht es in diesem Fall?"
+          />
+        </Field>
+
+        <Field className="gap-2">
+          <FieldLabel>Patient-Notizen (intern)</FieldLabel>
+          <Textarea
+            rows={4}
+            className="h-32"
+            value={patientNotes}
+            onChange={(e) => setPatientNotes(e.target.value)}
+            placeholder="Zusätzliche Informationen zum Patienten — sensibel behandeln."
+          />
+        </Field>
 
         {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
