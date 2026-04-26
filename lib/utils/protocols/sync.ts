@@ -101,3 +101,28 @@ export async function syncProtocolCases(params: {
     skipDuplicates: true,
   });
 }
+
+export async function syncCaseCommentMentions(params: {
+  caseCommentId: string;
+  mentionedUserIds: string[];
+  mentioningUserId: string;
+}): Promise<{ newlyMentionedUserIds: string[] }> {
+  const { caseCommentId, mentionedUserIds, mentioningUserId } = params;
+
+  if (mentionedUserIds.length === 0) {
+    return { newlyMentionedUserIds: [] };
+  }
+
+  await prisma.mention.createMany({
+    data: mentionedUserIds.map((mentionedUserId) => ({
+      mentionedUserId,
+      mentioningUserId,
+      targetType: "case_comment",
+      targetId: caseCommentId,
+      caseCommentId,
+    })),
+    skipDuplicates: true,
+  });
+
+  return { newlyMentionedUserIds: mentionedUserIds };
+}

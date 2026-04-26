@@ -17,9 +17,14 @@ import {
   TimelineIndicator,
   TimelineItem,
   TimelineSeparator,
+  TimelineTitle,
 } from "@/components/ui/timeline";
 import { format, formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
+
+import RichTextRenderer from "@/components/protocols/rich-text-renderer";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   STATUS_LABEL,
@@ -31,11 +36,13 @@ import {
   //   sensitivityIcon,
   canEditCase,
   canViewCase,
+  canComment,
 } from "@/lib/utils/cases";
 import { detailedIcon } from "@/lib/utils/index";
 import EditCaseForm from "@/components/case/edit-case-form";
 import CaseStatusControls from "@/components/case/case-status-controls";
 import ActivityLine from "@/components/activity/activity-line";
+import CaseCommentForm from "@/components/case/case-comment-form";
 
 export default async function CaseDetailPage({
   params,
@@ -78,6 +85,23 @@ export default async function CaseDetailPage({
       },
       closedByUser: {
         select: { id: true, displayName: true, name: true },
+      },
+      comments: {
+        orderBy: { createdAt: "asc" },
+        select: {
+          id: true,
+          content: true,
+          contentText: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              displayName: true,
+              name: true,
+              avatarUrl: true,
+            },
+          },
+        },
       },
     },
   });
@@ -127,8 +151,13 @@ export default async function CaseDetailPage({
   const activities = await prisma.activity.findMany({
     where: {
       organizationId: c.organizationId,
-      targetType: "case",
-      targetId: c.id,
+      OR: [
+        { targetType: "case", targetId: c.id },
+        {
+          targetType: "case_comment",
+          metadata: { path: ["caseId"], equals: c.id },
+        },
+      ],
     },
     orderBy: { createdAt: "desc" },
     take: 30,
@@ -233,6 +262,68 @@ export default async function CaseDetailPage({
             </div>
           </section>
         )}
+
+        <section className="space-y-4">
+          <h2 className="text-lg font-semibold">Kommentare</h2>
+
+          {canComment(membership.role) ? (
+            <CaseCommentForm caseId={c.id} organizationId={c.organizationId} />
+          ) : null}
+
+          {c.comments.length === 0 ? (
+            <div className="rounded-2xl border p-5 text-sm text-muted-foreground">
+              Noch keine Kommentare.
+            </div>
+          ) : (
+            <Timeline>
+              {c.comments.map((comment, k) => {
+                const userName =
+                  comment.user.displayName ||
+                  comment.user.name ||
+                  `User ${comment.user.id.slice(0, 6)}`;
+
+                return (
+                  <TimelineItem
+                    className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-8"
+                    key={comment.id}
+                    step={k}>
+                    <TimelineHeader>
+                      <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                      <TimelineTitle className="mt-0.5">
+                        {userName}
+                      </TimelineTitle>
+                      <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
+                        <Avatar>
+                          <AvatarImage
+                            alt={userName}
+                            className="size-6 rounded-full"
+                            src={comment.user.avatarUrl ?? undefined}
+                          />
+                          <AvatarFallback>
+                            {userName.slice(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                      </TimelineIndicator>
+                    </TimelineHeader>
+                    <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
+                      <RichTextRenderer value={comment.content} />
+                      <TimelineDate className="mt-1 mb-0">
+                        vor{" "}
+                        {formatDistance(
+                          new Date(comment.createdAt),
+                          new Date(),
+                          {
+                            locale: de,
+                          },
+                        )}
+                      </TimelineDate>
+                    </TimelineContent>
+                  </TimelineItem>
+                );
+              })}
+            </Timeline>
+          )}
+        </section>
 
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Aktivität</h2>

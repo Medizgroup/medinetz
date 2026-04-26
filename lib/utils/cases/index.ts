@@ -114,3 +114,7 @@ export function orgTypeBadge(type: OrgOption["type"]) {
       };
   }
 }
+
+export function canComment(role?: string) {
+  return role === "VIEWER" || role === "COORDINATOR" || role === "ADMIN";
+}
