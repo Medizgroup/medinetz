@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // components/home/home-activity.tsx
 "use client";
 
@@ -23,11 +24,14 @@ import {
   TimelineContent,
   TimelineItem,
 } from "@/components/ui/timeline";
+import ActivityLine from "../activity/activity-line";
 
 type Item = {
   id: string;
   action: ActivityAction;
   targetType: string;
+  targetId: string;
+  metadata: any;
   createdAt: Date;
   organization: { id: string; name: string } | null;
   user: {
@@ -37,7 +41,6 @@ type Item = {
     avatarUrl: string | null;
   };
 };
-
 type Props = { items: Item[] };
 
 function getActionIcon(action: ActivityAction): LucideIcon {
@@ -60,38 +63,6 @@ function getActionIcon(action: ActivityAction): LucideIcon {
       return Paperclip;
     default:
       return BookOpenIcon;
-  }
-}
-
-function getActionText(action: ActivityAction, targetType: string): string {
-  const t = targetType.toLowerCase();
-  const entity = t.includes("case")
-    ? "einen Fall"
-    : t.includes("protocol")
-      ? "ein Protokoll"
-      : t.includes("comment")
-        ? "einen Kommentar"
-        : "einen Eintrag";
-
-  switch (action) {
-    case "CREATED":
-      return `hat ${entity} erstellt`;
-    case "UPDATED":
-      return `hat ${entity} aktualisiert`;
-    case "COMMENTED":
-      return `hat ${entity} kommentiert`;
-    case "ASSIGNED":
-      return `hat ${entity} zugewiesen`;
-    case "CLOSED":
-      return `hat ${entity} geschlossen`;
-    case "REOPENED":
-      return `hat ${entity} wieder geöffnet`;
-    case "MENTIONED":
-      return `hat dich erwähnt (${entity})`;
-    case "ATTACHED":
-      return `hat einen Anhang hinzugefügt (${entity})`;
-    default:
-      return `hat eine Aktivität ausgeführt`;
   }
 }
 
@@ -134,28 +105,32 @@ export default function HomeActivity({ items }: Props) {
                 />
 
                 <TimelineContent className="text-foreground">
-                  <Link
-                    className="font-medium hover:underline"
-                    href={`/m/${item.user.id}`}>
-                    {userLabel}
-                  </Link>
-
-                  <span className="font-normal">
-                    {" "}
-                    {getActionText(item.action, item.targetType)}{" "}
-                    {item.organization?.name ? (
-                      <span className="text-muted-foreground">
-                        · {item.organization.name}
-                      </span>
-                    ) : null}{" "}
-                    <span className="text-muted-foreground">
+                  <ActivityLine
+                    activity={{
+                      action: item.action,
+                      targetType: item.targetType,
+                      targetId: (item as any).targetId ?? "",
+                      metadata: ((item as any).metadata ?? {}) as any,
+                      user: item.user,
+                    }}
+                  />
+                  {item.organization?.name ? (
+                    <span className="text-muted-foreground text-xs">
+                      · {item.organization.name} ·{" "}
+                      {formatDistanceToNow(new Date(item.createdAt), {
+                        addSuffix: true,
+                        locale: de,
+                      })}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground text-xs">
                       ·{" "}
                       {formatDistanceToNow(new Date(item.createdAt), {
                         addSuffix: true,
                         locale: de,
                       })}
                     </span>
-                  </span>
+                  )}
                 </TimelineContent>
               </TimelineItem>
             );

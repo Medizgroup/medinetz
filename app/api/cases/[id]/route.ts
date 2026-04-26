@@ -39,6 +39,7 @@ export async function PATCH(
       status: true,
       assigneeId: true,
       title: true,
+      caseNumber: true,
     },
   });
 
@@ -141,31 +142,45 @@ export async function PATCH(
         data.closedBy = session.user.id;
         activities.push({
           action: "CLOSED",
-          metadata: { from: existing.status, to: newStatus },
+          metadata: {
+            caseNumber: existing.caseNumber,
+            title: existing.title,
+            from: existing.status,
+            to: newStatus,
+          },
         });
       } else if (existing.status === "CLOSED") {
         data.closedAt = null;
         data.closedBy = null;
         activities.push({
           action: "REOPENED",
-          metadata: { from: existing.status, to: newStatus },
+          metadata: {
+            caseNumber: existing.caseNumber,
+            title: existing.title,
+            from: existing.status,
+            to: newStatus,
+          },
         });
       } else {
         activities.push({
           action: "UPDATED",
-          metadata: { field: "status", from: existing.status, to: newStatus },
+          metadata: {
+            caseNumber: existing.caseNumber,
+            field: "status",
+            from: existing.status,
+            to: newStatus,
+          },
         });
       }
     }
   }
 
-  // Assignee-Änderung
+  // Assignee-Änderung (ERSETZEN)
   let notifyAssigneeId: string | null = null;
   if ("assigneeId" in body) {
     const newAssigneeId = body.assigneeId ? String(body.assigneeId) : null;
 
     if (newAssigneeId !== existing.assigneeId) {
-      // Wenn gesetzt: prüfen, dass der User Mitglied der Org ist
       if (newAssigneeId) {
         const m = await prisma.organizationMember.findUnique({
           where: {
@@ -185,16 +200,43 @@ export async function PATCH(
         }
       }
 
+      // Namen für die Activity-Anzeige holen
+      const userIds = [existing.assigneeId, newAssigneeId].filter(
+        (x): x is string => Boolean(x),
+      );
+      const users =
+        userIds.length > 0
+          ? await prisma.user.findMany({
+              where: { id: { in: userIds } },
+              select: {
+                id: true,
+                displayName: true,
+                name: true,
+                email: true,
+              },
+            })
+          : [];
+
+      const nameOf = (uid: string | null) => {
+        if (!uid) return null;
+        const u = users.find((x) => x.id === uid);
+        if (!u) return null;
+        return u.displayName || u.name || u.email;
+      };
+
       data.assigneeId = newAssigneeId;
       activities.push({
         action: "ASSIGNED",
         metadata: {
+          caseNumber: existing.caseNumber,
+          title: existing.title,
           from: existing.assigneeId,
           to: newAssigneeId,
+          fromUserName: nameOf(existing.assigneeId),
+          toUserName: nameOf(newAssigneeId),
         },
       });
 
-      // Nur den NEUEN Assignee benachrichtigen (nicht sich selbst)
       if (newAssigneeId && newAssigneeId !== session.user.id) {
         notifyAssigneeId = newAssigneeId;
       }
@@ -214,9 +256,14 @@ export async function PATCH(
   if (activities.length === 0) {
     activities.push({
       action: "UPDATED",
-      metadata: { fields: Object.keys(data) },
+      metadata: {
+        caseNumber: existing.caseNumber,
+        title: existing.title,
+        fields: Object.keys(data),
+      },
     });
   }
+
   await prisma.activity.createMany({
     data: activities.map((a) => ({
       organizationId: existing.organizationId,

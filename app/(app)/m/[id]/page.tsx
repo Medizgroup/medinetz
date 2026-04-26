@@ -16,14 +16,15 @@ import {
   TimelineIndicator,
   TimelineItem,
   TimelineSeparator,
-  TimelineTitle,
+  // TimelineTitle,
 } from "@/components/ui/timeline";
-import { actionMeta, activityDescription } from "@/lib/utils/index";
+import { detailedIcon } from "@/lib/utils/index";
 import { formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { CircleCheck, FolderOpen, Loader, PauseCircle } from "lucide-react";
+import ActivityLine from "@/components/activity/activity-line";
 
 // --- helpers ---
 function toISODate(d: Date) {
@@ -127,6 +128,8 @@ export default async function Page({
       action: true,
       targetType: true,
       targetId: true,
+      metadata: true,
+      user: true,
       createdAt: true,
       organization: { select: { id: true, name: true } },
     },
@@ -224,7 +227,13 @@ export default async function Page({
             <Timeline defaultValue={latestActivities.length}>
               {latestActivities.map((a, idx) => {
                 const step = latestActivities.length - idx;
-                const { title, Icon } = actionMeta(a.action);
+                const Icon = detailedIcon({
+                  action: a.action,
+                  targetType: a.targetType,
+                  targetId: a.targetId,
+                  metadata: (a.metadata ?? {}) as any,
+                  user: a.user,
+                });
 
                 return (
                   <TimelineItem
@@ -234,7 +243,7 @@ export default async function Page({
                     <TimelineHeader>
                       <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
 
-                      <TimelineTitle className="mt-0.5">{title}</TimelineTitle>
+                      {/* <TimelineTitle className="mt-0.5">{title}</TimelineTitle> */}
 
                       <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-primary/10 group-data-completed/timeline-item:bg-primary/10 group-data-completed/timeline-item:text-foreground ">
                         <Icon size={12} />
@@ -242,9 +251,15 @@ export default async function Page({
                     </TimelineHeader>
 
                     <TimelineContent>
-                      <div className="text-sm text-muted-foreground">
-                        {activityDescription(a)}
-                      </div>
+                      <ActivityLine
+                        activity={{
+                          action: a.action,
+                          targetType: a.targetType,
+                          targetId: a.targetId,
+                          metadata: (a.metadata ?? {}) as any,
+                          user: a.user,
+                        }}
+                      />
 
                       <TimelineDate className="mt-2 mb-0">
                         {formatDistance(new Date(a.createdAt), new Date(), {

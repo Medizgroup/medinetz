@@ -26,8 +26,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
-import { actionMeta, activityDescription } from "@/lib/utils/index";
+import { detailedIcon } from "@/lib/utils/index";
 import { getInitials } from "@/lib/helper/user";
+import ActivityLine from "@/components/activity/activity-line";
 
 function orgBadge(type: string) {
   if (type === "ROUTINE") return "R";
@@ -144,7 +145,7 @@ export default async function ProtocolDetailPage({
       organizationId: protocol.organizationId,
       OR: [
         { targetType: "protocol", targetId: protocol.id },
-        { targetType: "protocol_comment", targetId: protocol.id },
+        { targetType: "protocol_comment" },
       ],
     },
     orderBy: { createdAt: "desc" },
@@ -153,14 +154,10 @@ export default async function ProtocolDetailPage({
       id: true,
       action: true,
       targetType: true,
+      targetId: true,
       createdAt: true,
-      user: {
-        select: {
-          id: true,
-          displayName: true,
-          name: true,
-        },
-      },
+      metadata: true,
+      user: { select: { id: true, displayName: true, name: true } },
     },
   });
 
@@ -169,21 +166,6 @@ export default async function ProtocolDetailPage({
     protocol.creator.name ||
     `User ${protocol.creator.id.slice(0, 6)}`;
 
-  function renderText(text: string) {
-    return text.split(/(\@\[[^\]]+\]\([^)]+\))/g).map((part, i) => {
-      const match = part.match(/\@\[(.*?)\]\((.*?)\)/);
-
-      if (match) {
-        return (
-          <span key={i} className="text-blue-500 font-medium">
-            @{match[1]}
-          </span>
-        );
-      }
-
-      return part;
-    });
-  }
   return (
     <div className="w-full grid grid-cols-4 gap-4">
       <div className="mx-auto w-full max-w-6xl px-6 py-8 space-y-10 col-span-3">
@@ -311,35 +293,36 @@ export default async function ProtocolDetailPage({
           <Timeline defaultValue={activity.length}>
             {activity.map((a, idx) => {
               const step = activity.length - idx;
-              const { title, Icon } = actionMeta(a.action);
-              const actor =
-                a.user.displayName ||
-                a.user.name ||
-                `User ${a.user.id.slice(0, 6)}`;
+              const Icon = detailedIcon({
+                action: a.action,
+                targetType: a.targetType,
+                targetId: a.targetId,
+                metadata: (a.metadata ?? {}) as any,
+                user: a.user,
+              });
 
               return (
                 <TimelineItem
                   key={a.id}
                   step={step}
-                  className="group-data-[orientation=vertical]/timeline:ms-10 ">
+                  className="group-data-[orientation=vertical]/timeline:ms-10">
                   <TimelineHeader>
-                    <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-
-                    <TimelineTitle className="mt-0.5">
-                      {actor} {title}
-                    </TimelineTitle>
-
+                    <TimelineSeparator className="..." />
                     <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-primary/10">
                       <Icon size={12} />
                     </TimelineIndicator>
                   </TimelineHeader>
-
                   <TimelineContent>
-                    <div className="text-sm text-muted-foreground">
-                      {activityDescription(a)}
-                    </div>
-
-                    <TimelineDate className="mt-2 mb-0">
+                    <ActivityLine
+                      activity={{
+                        action: a.action,
+                        targetType: a.targetType,
+                        targetId: a.targetId,
+                        metadata: (a.metadata ?? {}) as any,
+                        user: a.user,
+                      }}
+                    />
+                    <TimelineDate className="mb-0 mt-1">
                       {formatDistance(new Date(a.createdAt), new Date(), {
                         addSuffix: true,
                         locale: de,

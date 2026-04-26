@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
@@ -32,9 +33,14 @@ import {
   canEditCase,
   canViewCase,
 } from "@/lib/utils/cases";
-import { actionMeta, activityDescription } from "@/lib/utils/index";
+import {
+  actionMeta,
+  activityDescription,
+  detailedIcon,
+} from "@/lib/utils/index";
 import EditCaseForm from "@/components/case/edit-case-form";
 import CaseStatusControls from "@/components/case/case-status-controls";
+import ActivityLine from "@/components/activity/activity-line";
 
 export default async function CaseDetailPage({
   params,
@@ -134,7 +140,8 @@ export default async function CaseDetailPage({
     select: {
       id: true,
       action: true,
-      targetType: true,
+      targetType: true, // ← NEU
+      targetId: true,
       createdAt: true,
       metadata: true,
       user: {
@@ -242,9 +249,14 @@ export default async function CaseDetailPage({
           <Timeline defaultValue={activities.length}>
             {activities.map((a, idx) => {
               const step = activities.length - idx;
-              const { title, Icon } = actionMeta(a.action);
-              const actor =
-                a.user.displayName || a.user.name || a.user.id.slice(0, 6);
+              const Icon = detailedIcon({
+                action: a.action,
+                targetType: a.targetType,
+                targetId: a.targetId,
+                metadata: (a.metadata ?? {}) as any,
+                user: a.user,
+              });
+
               return (
                 <TimelineItem
                   key={a.id}
@@ -252,18 +264,21 @@ export default async function CaseDetailPage({
                   className="group-data-[orientation=vertical]/timeline:ms-10">
                   <TimelineHeader>
                     <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                    <TimelineTitle className="mt-0.5">
-                      {actor} {title}
-                    </TimelineTitle>
                     <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-primary/10">
                       <Icon size={12} />
                     </TimelineIndicator>
                   </TimelineHeader>
                   <TimelineContent>
-                    <div className="text-sm text-muted-foreground">
-                      {activityDescription(a)}
-                    </div>
-                    <TimelineDate className="mb-0 mt-2">
+                    <ActivityLine
+                      activity={{
+                        action: a.action,
+                        targetType: "case",
+                        targetId: c.id,
+                        metadata: (a.metadata ?? {}) as any,
+                        user: a.user,
+                      }}
+                    />
+                    <TimelineDate className="mb-0 mt-1">
                       {formatDistance(new Date(a.createdAt), new Date(), {
                         addSuffix: true,
                         locale: de,
