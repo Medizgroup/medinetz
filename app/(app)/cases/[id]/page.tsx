@@ -160,7 +160,7 @@ export default async function CaseDetailPage({
       ],
     },
     orderBy: { createdAt: "desc" },
-    take: 30,
+    take: 10,
     select: {
       id: true,
       action: true,
@@ -188,27 +188,33 @@ export default async function CaseDetailPage({
             <span className="text-sm text-muted-foreground">
               {c.organization.name}
             </span>
-            <h1 className="text-2xl font-semibold">
+            <h1 className="text-2xl font-semibold flex items-center">
               #{c.caseNumber} · {c.title}
+              <Badge
+                variant={priorityVariant(c.priority)}
+                size="lg"
+                className="mx-2 mt-1">
+                {PRIORITY_LABEL[c.priority]}
+              </Badge>
             </h1>
             <p className="text-sm text-muted-foreground">
               Erstellt von {creatorName} ·{" "}
               {format(c.createdAt, "dd. MMM yyyy", { locale: de })}
-              {c.closedAt
+              {/* {c.closedAt
                 ? ` · Geschlossen ${format(c.closedAt, "dd. MMM yyyy", { locale: de })}`
-                : ""}
+                : ""} */}
             </p>
 
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <Badge variant="outline" size="lg" className={`rounded-full`}>
-                <StatusIcon
-                  className={`size-3.5 ${statusColorClass(c.status)}`}
-                />
+              {/* <Badge variant="outline" size="lg" className={`rounded-full`}> */}
+              <StatusIcon
+                className={`size-4.5 ${statusColorClass(c.status)}`}
+              />
+              <span
+                className={`text-sm opacity-80 ${statusColorClass(c.status)}`}>
                 {STATUS_LABEL[c.status]}
-              </Badge>
-              <Badge variant={priorityVariant(c.priority)} size="lg">
-                {PRIORITY_LABEL[c.priority]}
-              </Badge>
+              </span>
+              {/* </Badge> */}
 
               {/* {c.dueDate ? (
                 <Badge variant="secondary">
