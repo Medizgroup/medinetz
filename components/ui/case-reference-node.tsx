@@ -72,7 +72,7 @@ export function CaseReferenceElement(
         "data-case-id": caseId,
         draggable: true,
       }}>
-      {readOnly && caseId ? (
+      {caseId ? (
         <Link href={`/cases/${caseId}`} target="_blank" rel="noopener">
           {inner}
         </Link>

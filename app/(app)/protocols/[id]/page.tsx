@@ -13,6 +13,7 @@ import ProtocolCommentForm from "@/components/protocols/protocol-comment-form";
 import EditProtocolForm from "@/components/protocols/edit-protocol-form";
 import { Badge } from "@/components/ui/badge";
 import { Circle, CircleCheck, Clock, Loader } from "lucide-react";
+
 import {
   Timeline,
   TimelineContent,
@@ -29,6 +30,8 @@ import { de } from "date-fns/locale";
 import { detailedIcon } from "@/lib/utils/index";
 import { getInitials } from "@/lib/helper/user";
 import ActivityLine from "@/components/activity/activity-line";
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
+import { TooltipContent } from "@radix-ui/react-tooltip";
 
 function orgBadge(type: string) {
   if (type === "ROUTINE") return "R";
@@ -98,6 +101,7 @@ export default async function ProtocolDetailPage({
           },
         },
       },
+
       comments: {
         orderBy: {
           createdAt: "asc",
@@ -109,6 +113,19 @@ export default async function ProtocolDetailPage({
           createdAt: true,
           updatedAt: true,
           user: {
+            select: {
+              id: true,
+              displayName: true,
+              name: true,
+              avatarUrl: true,
+            },
+          },
+        },
+      },
+      mentions: {
+        distinct: ["mentionedUserId"],
+        select: {
+          mentionedUser: {
             select: {
               id: true,
               displayName: true,
@@ -220,12 +237,12 @@ export default async function ProtocolDetailPage({
       ) : null} */}
 
         {/* Vielleicht mal Später */}
-        <section className="space-y-4">
+        {/* <section className="space-y-4">
           <h2 className="text-lg font-semibold">Beschreibung</h2>
           <div className="rounded-2xl border p-5">
             <RichTextRenderer value={protocol.description} />
           </div>
-        </section>
+        </section> */}
 
         {/* Kommentar Block */}
         <section className="space-y-4">
@@ -340,16 +357,17 @@ export default async function ProtocolDetailPage({
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Verknüpfte Fälle</h2>
 
-          <div className=" divide-y">
+          <div className="divide-y space-y-2">
             {protocol.protocolCases.length === 0 ? (
               <div className="p-4 text-sm text-muted-foreground">
                 Noch keine Fälle verknüpft.
               </div>
             ) : (
               protocol.protocolCases.map((entry) => (
-                <div
+                <Link
+                  href={`/cases/${entry.case.id}`}
                   key={entry.id}
-                  className="flex items-start justify-between gap-4 text-sm">
+                  className="flex items-start justify-between gap-4 text-sm pb-2">
                   <div className="min-w-0">
                     <div className="truncate">
                       <span className="font-medium">
@@ -383,14 +401,53 @@ export default async function ProtocolDetailPage({
                       </Badge>
                     </div>
                   </div>
-
-                  <Button variant="outline" size="xs" className="rounded-full">
-                    <Link href={`/cases/${entry.case.id}`}>Fall öffnen</Link>
-                  </Button>
-                </div>
+                </Link>
               ))
             )}
           </div>
+        </section>
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold">Erwähnt</h2>
+
+          {protocol.mentions.length === 0 ? (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Noch niemand erwähnt.
+            </p>
+          ) : (
+            <div className="-space-x-3 flex mt-5">
+              {protocol.mentions.slice(0, 6).map((m) => {
+                const u = m.mentionedUser;
+                const name =
+                  u.displayName ?? u.name ?? `User ${u.id.slice(0, 6)}`;
+
+                return (
+                  <Tooltip key={u.id}>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href={`/m/${u.id}`}
+                        className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105">
+                        <Avatar className="size-10">
+                          <AvatarImage
+                            src={u.avatarUrl ?? undefined}
+                            alt={name}
+                          />
+                          <AvatarFallback>{getInitials(name)}</AvatarFallback>
+                        </Avatar>
+                      </Link>
+                    </TooltipTrigger>
+
+                    <TooltipContent>{name}</TooltipContent>
+                  </Tooltip>
+                );
+              })}
+
+              {protocol.mentions.length > 6 ? (
+                <span className="flex size-10 items-center justify-center rounded-full bg-secondary text-muted-foreground text-xs ring-2 ring-background">
+                  +{protocol.mentions.length - 6}
+                </span>
+              ) : null}
+            </div>
+          )}
         </section>
       </div>
     </div>
