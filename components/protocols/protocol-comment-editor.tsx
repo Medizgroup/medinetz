@@ -3,7 +3,7 @@
 import * as React from "react";
 import type { Value } from "platejs";
 import { Plate, usePlateEditor } from "platejs/react";
-
+import { CaseReferenceKit } from "@/components/editor/plugins/case-reference-kit";
 import { Editor, EditorContainer } from "@/components/ui/editor";
 import { BasicNodesKit } from "@/components/editor/plugins/basic-nodes-kit";
 import { MentionKit } from "@/components/editor/plugins/mention-kit";
@@ -24,7 +24,7 @@ export default function ProtocolCommentEditor({
   placeholder?: string;
 }) {
   const editor = usePlateEditor({
-    plugins: [...BasicNodesKit, ...MentionKit],
+    plugins: [...BasicNodesKit, ...MentionKit, ...CaseReferenceKit],
     value: value && value.length > 0 ? value : emptyValue,
   });
 

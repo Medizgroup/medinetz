@@ -6,6 +6,7 @@ import prisma from "@/lib/prisma";
 import {
   extractMentionedUserIds,
   extractPlainTextFromNodes,
+  extractReferencedCaseIds,
 } from "@/lib/utils/protocols/extract";
 import { syncCaseCommentMentions } from "@/lib/utils/protocols/sync";
 import { createMentionNotifications } from "@/lib/utils/notifications";
@@ -76,6 +77,7 @@ export async function POST(req: Request) {
   });
 
   const mentionedUserIds = extractMentionedUserIds(content);
+  const referencedCaseIds = extractReferencedCaseIds(content);
 
   // Mentions
   const { newlyMentionedUserIds } = await syncCaseCommentMentions({
@@ -127,6 +129,7 @@ export async function POST(req: Request) {
         caseNumber: targetCase.caseNumber,
         title: targetCase.title,
         mentionedUserIds,
+        referencedCaseIds,
       },
     },
   });

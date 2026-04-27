@@ -7,6 +7,7 @@ import { Plate, usePlateEditor } from "platejs/react";
 import { Editor, EditorContainer } from "@/components/ui/editor";
 import { BasicNodesKit } from "@/components/editor/plugins/basic-nodes-kit";
 import { MentionKit } from "@/components/editor/plugins/mention-kit";
+import { CaseReferenceKit } from "@/components/editor/plugins/case-reference-kit";
 
 import { ProtocolEditorProvider } from "@/components/protocols/protocol-editor-context";
 
@@ -24,7 +25,7 @@ export default function CaseCommentEditor({
   placeholder?: string;
 }) {
   const editor = usePlateEditor({
-    plugins: [...BasicNodesKit, ...MentionKit],
+    plugins: [...BasicNodesKit, ...MentionKit, ...CaseReferenceKit],
     value: value && value.length > 0 ? value : emptyValue,
   });
 

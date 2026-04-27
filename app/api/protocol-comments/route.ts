@@ -6,6 +6,7 @@ import prisma from "@/lib/prisma";
 import {
   extractMentionedUserIds,
   extractPlainTextFromNodes,
+  extractReferencedCaseIds,
 } from "@/lib/utils/protocols/extract";
 import { syncProtocolCommentMentions } from "@/lib/utils/protocols/sync";
 import { createMentionNotifications } from "@/lib/utils/notifications";
@@ -70,6 +71,7 @@ export async function POST(req: Request) {
   });
 
   const mentionedUserIds = extractMentionedUserIds(content);
+  const referencedCaseIds = extractReferencedCaseIds(content);
 
   const { newlyMentionedUserIds } = await syncProtocolCommentMentions({
     protocolCommentId: comment.id,
@@ -98,6 +100,7 @@ export async function POST(req: Request) {
         protocolId: protocol.id,
         protocolTitle: protocol.title,
         mentionedUserIds,
+        referencedCaseIds,
       },
     },
   });
