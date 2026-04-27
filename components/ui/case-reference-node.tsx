@@ -25,6 +25,8 @@ import {
   InlineComboboxItem,
 } from "./inline-combobox";
 import { getMentionOnSelectItem } from "@platejs/mention";
+import { Spinner } from "./spinner";
+import { Circle, CircleCheck, Clock, Loader } from "lucide-react";
 
 type CaseSearchResult = {
   id: string;
@@ -171,7 +173,11 @@ export function CaseReferenceInputElement(
 
         <InlineComboboxContent className="my-1.5 w-[360px]">
           <InlineComboboxEmpty>
-            {loading ? "Suche…" : "Keine Fälle gefunden"}
+            {loading ? (
+              <Spinner className="size-4 text-muted-foreground" />
+            ) : (
+              "Keine Fälle gefunden"
+            )}
           </InlineComboboxEmpty>
 
           <InlineComboboxGroup>
@@ -179,17 +185,24 @@ export function CaseReferenceInputElement(
               <InlineComboboxItem
                 key={c.id}
                 value={`${c.caseNumber} ${c.title} ${c.patientPseudonym}`}
-                onClick={() => insertCase(c)}>
-                <div className="flex w-full items-start gap-2">
-                  <span className="font-mono text-xs text-muted-foreground tabular-nums pt-0.5">
-                    #{c.caseNumber}
+                onClick={() => insertCase(c)}
+                className="my-2 h-10">
+                <div className="flex w-full items-center  gap-2 py-4 truncate min-w-0">
+                  <span>
+                    {c.status === "WAITING" ? (
+                      <Clock className="size-4 text-muted-foreground/80" />
+                    ) : c.status === "CLOSED" ? (
+                      <CircleCheck className="size-4 text-blue-500" />
+                    ) : c.status === "IN_PROGRESS" ? (
+                      <Loader className="size-4  text-amber-500" />
+                    ) : c.status === "OPEN" ? (
+                      <Circle className="size-4 text-green-500" />
+                    ) : null}
                   </span>
-                  <div className="flex flex-col">
-                    <span className="font-medium">{c.title}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {c.patientPseudonym} · {c.status}
-                    </span>
-                  </div>
+                  <span className="text-foreground tabular-nums pt-0.5">
+                    #{c.caseNumber}{" "}
+                    <span className="text-muted-foreground ">{c.title}</span>
+                  </span>
                 </div>
               </InlineComboboxItem>
             ))}
