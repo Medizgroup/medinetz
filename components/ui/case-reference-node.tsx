@@ -2,13 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { FolderOpen } from "lucide-react";
 
 import type { TComboboxInputElement, TElement } from "platejs";
 import type { PlateElementProps } from "platejs/react";
 import {
   PlateElement,
-  useEditorRef,
   useFocused,
   useReadOnly,
   useSelected,
@@ -59,13 +57,13 @@ export function CaseReferenceElement(
         !readOnly && "cursor-pointer",
         selected && focused && "ring-2 ring-ring",
       )}>
-      <FolderOpen className="size-3.5" />
       {label}
     </span>
   );
 
   return (
     <PlateElement
+      as="span"
       {...props}
       attributes={{
         ...props.attributes,

@@ -220,12 +220,12 @@ export default async function ProtocolDetailPage({
       ) : null} */}
 
         {/* Vielleicht mal Später */}
-        {/* <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Beschreibung</h2>
-        <div className="rounded-2xl border p-5">
-          <RichTextRenderer value={protocol.description} />
-        </div>
-      </section> */}
+        <section className="space-y-4">
+          <h2 className="text-lg font-semibold">Beschreibung</h2>
+          <div className="rounded-2xl border p-5">
+            <RichTextRenderer value={protocol.description} />
+          </div>
+        </section>
 
         {/* Kommentar Block */}
         <section className="space-y-4">
@@ -287,9 +287,9 @@ export default async function ProtocolDetailPage({
         </section>
 
         {/* Aktivitäten */}
+
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Aktivität</h2>
-
           <Timeline defaultValue={activity.length}>
             {activity.map((a, idx) => {
               const step = activity.length - idx;
@@ -307,17 +307,17 @@ export default async function ProtocolDetailPage({
                   step={step}
                   className="group-data-[orientation=vertical]/timeline:ms-10">
                   <TimelineHeader>
-                    <TimelineSeparator className="..." />
-                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-primary/10">
-                      <Icon size={12} />
+                    <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-accent">
+                      <Icon size={14} className="text-muted-foreground" />
                     </TimelineIndicator>
                   </TimelineHeader>
                   <TimelineContent>
                     <ActivityLine
                       activity={{
                         action: a.action,
-                        targetType: a.targetType,
-                        targetId: a.targetId,
+                        targetType: "case",
+                        targetId: a.id,
                         metadata: (a.metadata ?? {}) as any,
                         user: a.user,
                       }}

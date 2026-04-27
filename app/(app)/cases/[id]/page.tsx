@@ -185,6 +185,23 @@ export default async function CaseDetailPage({
       <div className="col-span-3 mx-auto w-full max-w-6xl space-y-10 px-6 py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2 pt-2">
+              {/* <Badge variant="outline" size="lg" className={`rounded-full`}> */}
+              <StatusIcon
+                className={`size-4.5 ${statusColorClass(c.status)}`}
+              />
+              <span
+                className={`text-sm opacity-80 ${statusColorClass(c.status)}`}>
+                {STATUS_LABEL[c.status]}
+              </span>
+              {/* </Badge> */}
+
+              {/* {c.dueDate ? (
+                <Badge variant="secondary">
+                  Frist: {format(c.dueDate, "dd.MM.yyyy", { locale: de })}
+                </Badge>
+              ) : null} */}
+            </div>
             <span className="text-sm text-muted-foreground">
               {c.organization.name}
             </span>
@@ -204,24 +221,6 @@ export default async function CaseDetailPage({
                 ? ` · Geschlossen ${format(c.closedAt, "dd. MMM yyyy", { locale: de })}`
                 : ""} */}
             </p>
-
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              {/* <Badge variant="outline" size="lg" className={`rounded-full`}> */}
-              <StatusIcon
-                className={`size-4.5 ${statusColorClass(c.status)}`}
-              />
-              <span
-                className={`text-sm opacity-80 ${statusColorClass(c.status)}`}>
-                {STATUS_LABEL[c.status]}
-              </span>
-              {/* </Badge> */}
-
-              {/* {c.dueDate ? (
-                <Badge variant="secondary">
-                  Frist: {format(c.dueDate, "dd.MM.yyyy", { locale: de })}
-                </Badge>
-              ) : null} */}
-            </div>
           </div>
 
           <Button
