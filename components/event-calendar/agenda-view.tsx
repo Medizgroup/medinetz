@@ -1,12 +1,11 @@
+//components/event-calendar/agenda-view.tsx
 "use client";
 
 import { RiCalendarEventLine } from "@remixicon/react";
 import { addDays, format, isToday } from "date-fns";
 import { useMemo } from "react";
 
-import {
-  AgendaDaysToShow,
-} from "./constants";
+import { AgendaDaysToShow } from "./constants";
 import type { CalendarEvent } from "./types";
 import { EventItem } from "./event-item";
 import { getAgendaEventsForDay } from "./utils";
@@ -63,12 +62,10 @@ export function AgendaView({
           return (
             <div
               className="relative my-12 border-border/70 border-t"
-              key={day.toString()}
-            >
+              key={day.toString()}>
               <span
                 className="-top-3 absolute left-0 flex h-6 items-center bg-background pe-4 text-[10px] uppercase data-today:font-medium sm:pe-4 sm:text-xs"
-                data-today={isToday(day) || undefined}
-              >
+                data-today={isToday(day) || undefined}>
                 {format(day, "d MMM, EEEE")}
               </span>
               <div className="mt-6 space-y-2">

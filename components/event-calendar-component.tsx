@@ -1,3 +1,4 @@
+//components/event-calendar-component.tsx
 "use client";
 
 import { addDays, setHours, setMinutes, subDays } from "date-fns";

@@ -98,8 +98,7 @@ export function MonthView({
         {weekdays.map((day) => (
           <div
             className="py-2 text-center text-muted-foreground/70 text-sm"
-            key={day}
-          >
+            key={day}>
             {day}
           </div>
         ))}
@@ -108,8 +107,7 @@ export function MonthView({
         {weeks.map((week, weekIndex) => (
           <div
             className="grid grid-cols-7 [&:last-child>*]:border-b-0"
-            key={`week-${week}`}
-          >
+            key={`week-${week}`}>
             {week.map((day, dayIndex) => {
               if (!day) return null; // Skip if day is undefined
 
@@ -136,8 +134,7 @@ export function MonthView({
                   className="group border-border/70 border-r border-b last:border-r-0 data-outside-cell:bg-muted/25 data-outside-cell:text-muted-foreground/70"
                   data-outside-cell={!isCurrentMonth || undefined}
                   data-today={isToday(day) || undefined}
-                  key={day.toString()}
-                >
+                  key={day.toString()}>
                   <DroppableCell
                     date={day}
                     id={cellId}
@@ -145,15 +142,13 @@ export function MonthView({
                       const startTime = new Date(day);
                       startTime.setHours(DefaultStartHour, 0, 0);
                       onEventCreate(startTime);
-                    }}
-                  >
+                    }}>
                     <div className="mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm group-data-today:bg-primary group-data-today:text-primary-foreground">
                       {format(day, "d")}
                     </div>
                     <div
                       className="min-h-[calc((var(--event-height)+var(--event-gap))*2)] sm:min-h-[calc((var(--event-height)+var(--event-gap))*3)] lg:min-h-[calc((var(--event-height)+var(--event-gap))*4)]"
-                      ref={isReferenceCell ? contentRef : null}
-                    >
+                      ref={isReferenceCell ? contentRef : null}>
                       {sortEvents(allDayEvents).map((event, index) => {
                         const eventStart = new Date(event.start);
                         const eventEnd = new Date(event.end);
@@ -170,15 +165,13 @@ export function MonthView({
                             <div
                               aria-hidden={isHidden ? "true" : undefined}
                               className="aria-hidden:hidden"
-                              key={`spanning-${event.id}-${day.toISOString().slice(0, 10)}`}
-                            >
+                              key={`spanning-${event.id}-${day.toISOString().slice(0, 10)}`}>
                               <EventItem
                                 event={event}
                                 isFirstDay={isFirstDay}
                                 isLastDay={isLastDay}
                                 onClick={(e) => handleEventClick(event, e)}
-                                view="month"
-                              >
+                                view="month">
                                 <div aria-hidden={true} className="invisible">
                                   {!event.allDay && (
                                     <span>
@@ -199,8 +192,7 @@ export function MonthView({
                           <div
                             aria-hidden={isHidden ? "true" : undefined}
                             className="aria-hidden:hidden"
-                            key={event.id}
-                          >
+                            key={event.id}>
                             <DraggableEvent
                               event={event}
                               isFirstDay={isFirstDay}
@@ -214,17 +206,18 @@ export function MonthView({
 
                       {hasMore && (
                         <Popover modal>
-                          <PopoverTrigger asChild>
-                            <button
-                              className="mt-(--event-gap) flex h-(--event-height) w-full select-none items-center overflow-hidden px-1 text-left text-[10px] text-muted-foreground outline-none backdrop-blur-md transition hover:bg-muted/50 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:px-2 sm:text-xs"
-                              onClick={(e) => e.stopPropagation()}
-                              type="button"
-                            >
-                              <span>
-                                + {remainingCount}{" "}
-                                <span className="max-sm:sr-only">more</span>
-                              </span>
-                            </button>
+                          <PopoverTrigger
+                            render={
+                              <button
+                                className="mt-(--event-gap) flex h-(--event-height) w-full select-none items-center overflow-hidden px-1 text-left text-[10px] text-muted-foreground outline-none backdrop-blur-md transition hover:bg-muted/50 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:px-2 sm:text-xs"
+                                onClick={(e) => e.stopPropagation()}
+                                type="button"
+                              />
+                            }>
+                            <span>
+                              + {remainingCount}{" "}
+                              <span className="max-sm:sr-only">more</span>
+                            </span>
                           </PopoverTrigger>
                           <PopoverContent
                             align="center"
@@ -233,8 +226,7 @@ export function MonthView({
                               {
                                 "--event-height": `${EventHeight}px`,
                               } as Record<string, string>
-                            }
-                          >
+                            }>
                             <div className="space-y-2">
                               <div className="font-medium text-sm">
                                 {format(day, "EEE d")}
