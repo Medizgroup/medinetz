@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { buildOccurrenceId, expandOccurrences } from "@/lib/event/recurrence";
 import { colorToDb, colorToUI } from "@/lib/event/colors";
+import { formatEventDate, recurrenceText } from "@/lib/helper/event";
 
 export async function GET(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -198,7 +199,14 @@ export async function POST(req: Request) {
       creatorId: session.user.id,
       organizationId: visibility === "PRIVATE" ? null : organizationId,
     },
-    select: { id: true, title: true, organizationId: true },
+    select: {
+      id: true,
+      title: true,
+      organizationId: true,
+      startsAt: true,
+      recurrence: true,
+      visibility: true,
+    },
   });
 
   if (created.organizationId) {
@@ -212,6 +220,37 @@ export async function POST(req: Request) {
         metadata: { title: created.title },
       },
     });
+  }
+
+  if (created.visibility === "ORGANIZATION" && created.organizationId) {
+    const members = await prisma.organizationMember.findMany({
+      where: {
+        organizationId: created.organizationId,
+        userId: { not: session.user.id },
+        user: { isActive: true },
+      },
+      select: { userId: true },
+    });
+
+    if (members.length > 0) {
+      const recurrenceLabel = recurrenceText(created.recurrence);
+      const dateLabel = formatEventDate(created.startsAt, created.recurrence);
+
+      const title = recurrenceLabel
+        ? `Neuer ${recurrenceLabel} Termin: „${created.title}"`
+        : `Neuer Termin: „${created.title}"`;
+
+      await prisma.notification.createMany({
+        data: members.map((m) => ({
+          userId: m.userId,
+          type: "EVENT_INVITE",
+          title,
+          message: dateLabel,
+          targetType: "event",
+          targetId: created.id,
+        })),
+      });
+    }
   }
 
   return NextResponse.json({ id: created.id });

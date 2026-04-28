@@ -62,6 +62,7 @@ enum NotificationType {
   COMMENT
   CASE_UPDATE
   PROTOCOL_UPDATE
+  EVENT_INVITE  
 }
 
 enum ExpenseCategory {
