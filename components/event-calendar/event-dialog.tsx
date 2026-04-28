@@ -1,10 +1,16 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+// components/event-calendar/event-dialog.tsx
 "use client";
 
-import { RiCalendarLine, RiDeleteBinLine } from "@remixicon/react";
 import { format, isBefore } from "date-fns";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { CalendarEvent, EventColor } from "./types";
+import type {
+  CalendarEvent,
+  EventColor,
+  EventRecurrence,
+  EventVisibility,
+} from "./types";
 import {
   DefaultEndHour,
   DefaultStartHour,
@@ -29,6 +35,7 @@ import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
+  PopoverPopup,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -40,6 +47,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { CalendarIcon, Trash2 } from "lucide-react";
 
 interface EventDialogProps {
   event: CalendarEvent | null;
@@ -47,6 +55,7 @@ interface EventDialogProps {
   onClose: () => void;
   onSave: (event: CalendarEvent) => void;
   onDelete: (eventId: string) => void;
+  availableOrgs: { id: string; name: string }[];
 }
 
 export function EventDialog({
@@ -55,6 +64,7 @@ export function EventDialog({
   onClose,
   onSave,
   onDelete,
+  availableOrgs,
 }: EventDialogProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -68,11 +78,20 @@ export function EventDialog({
   const [error, setError] = useState<string | null>(null);
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
+  const [recurrenceEndOpen, setRecurrenceEndOpen] = useState(false);
 
-  // Debug log to check what event is being passed
-  useEffect(() => {
-    console.log("EventDialog received event:", event);
-  }, [event]);
+  const [recurrence, setRecurrence] = useState<EventRecurrence>("NONE");
+  const [recurrenceEndDate, setRecurrenceEndDate] = useState<Date | undefined>(
+    undefined,
+  );
+  const [organizationId, setOrganizationId] = useState<string>("");
+  const [visibility, setVisibility] = useState<EventVisibility>("ORGANIZATION");
+
+  const formatTimeForInput = useCallback((date: Date) => {
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = Math.floor(date.getMinutes() / 15) * 15;
+    return `${hours}:${minutes.toString().padStart(2, "0")}`;
+  }, []);
 
   const resetForm = useCallback(() => {
     setTitle("");
@@ -84,23 +103,23 @@ export function EventDialog({
     setAllDay(false);
     setLocation("");
     setColor("sky");
+    setRecurrence("NONE");
+    setRecurrenceEndDate(undefined);
+    // Default-Org: erste verfügbare wählen, falls vorhanden
+    setOrganizationId(availableOrgs[0]?.id ?? "");
+    setVisibility(availableOrgs.length > 0 ? "ORGANIZATION" : "PRIVATE");
     setError(null);
-  }, []);
+  }, [availableOrgs]);
 
-  const formatTimeForInput = useCallback((date: Date) => {
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = Math.floor(date.getMinutes() / 15) * 15;
-    return `${hours}:${minutes.toString().padStart(2, "0")}`;
-  }, []);
-
+  // Reset / Hydrate beim Öffnen
   useEffect(() => {
+    if (!isOpen) return;
+
     if (event) {
       setTitle(event.title || "");
       setDescription(event.description || "");
-
       const start = new Date(event.start);
       const end = new Date(event.end);
-
       setStartDate(start);
       setEndDate(end);
       setStartTime(formatTimeForInput(start));
@@ -108,13 +127,18 @@ export function EventDialog({
       setAllDay(event.allDay || false);
       setLocation(event.location || "");
       setColor((event.color as EventColor) || "sky");
-      setError(null); // Reset error when opening dialog
+      setRecurrence((event.recurrence as EventRecurrence) ?? "NONE");
+      setRecurrenceEndDate(
+        event.recurrenceEndDate ? new Date(event.recurrenceEndDate) : undefined,
+      );
+      setOrganizationId(event.organizationId ?? availableOrgs[0]?.id ?? "");
+      setVisibility((event.visibility as EventVisibility) ?? "ORGANIZATION");
+      setError(null);
     } else {
       resetForm();
     }
-  }, [event, formatTimeForInput, resetForm]);
+  }, [event, isOpen, formatTimeForInput, resetForm, availableOrgs]);
 
-  // Memoize time options so they're only calculated once
   const timeOptions = useMemo(() => {
     const options = [];
     for (let hour = StartHour; hour <= EndHour; hour++) {
@@ -122,14 +146,13 @@ export function EventDialog({
         const formattedHour = hour.toString().padStart(2, "0");
         const formattedMinute = minute.toString().padStart(2, "0");
         const value = `${formattedHour}:${formattedMinute}`;
-        // Use a fixed date to avoid unnecessary date object creations
         const date = new Date(2000, 0, 1, hour, minute);
         const label = format(date, "h:mm a");
         options.push({ label, value });
       }
     }
     return options;
-  }, []); // Empty dependency array ensures this only runs once
+  }, []);
 
   const handleSave = () => {
     const start = new Date(startDate);
@@ -160,16 +183,21 @@ export function EventDialog({
       end.setHours(23, 59, 59, 999);
     }
 
-    // Validate that end date is not before start date
     if (isBefore(end, start)) {
       setError("End date cannot be before start date");
       return;
     }
 
-    // Use generic title if empty
+    // Org-Validation
+    if (visibility === "ORGANIZATION" && !organizationId) {
+      setError("Bei Sichtbarkeit Organisation bitte eine Organisation wählen.");
+      return;
+    }
+
     const eventTitle = title.trim() ? title : "(no title)";
 
     onSave({
+      ...event,
       allDay,
       color,
       description,
@@ -178,16 +206,18 @@ export function EventDialog({
       location,
       start,
       title: eventTitle,
+      recurrence,
+      recurrenceEndDate:
+        recurrence !== "NONE" && recurrenceEndDate ? recurrenceEndDate : null,
+      organizationId: visibility === "ORGANIZATION" ? organizationId : null,
+      visibility,
     });
   };
 
   const handleDelete = () => {
-    if (event?.id) {
-      onDelete(event.id);
-    }
+    if (event?.id) onDelete(event.id);
   };
 
-  // Updated color options to match types.ts
   const colorOptions: Array<{
     value: EventColor;
     label: string;
@@ -195,72 +225,80 @@ export function EventDialog({
     borderClass: string;
   }> = [
     {
+      value: "sky",
+      label: "Sky",
       bgClass: "bg-sky-400 data-[state=checked]:bg-sky-400",
       borderClass: "border-sky-400 data-[state=checked]:border-sky-400",
-      label: "Sky",
-      value: "sky",
     },
     {
+      value: "amber",
+      label: "Amber",
       bgClass: "bg-amber-400 data-[state=checked]:bg-amber-400",
       borderClass: "border-amber-400 data-[state=checked]:border-amber-400",
-      label: "Amber",
-      value: "amber",
     },
     {
+      value: "violet",
+      label: "Violet",
       bgClass: "bg-violet-400 data-[state=checked]:bg-violet-400",
       borderClass: "border-violet-400 data-[state=checked]:border-violet-400",
-      label: "Violet",
-      value: "violet",
     },
     {
+      value: "rose",
+      label: "Rose",
       bgClass: "bg-rose-400 data-[state=checked]:bg-rose-400",
       borderClass: "border-rose-400 data-[state=checked]:border-rose-400",
-      label: "Rose",
-      value: "rose",
     },
     {
+      value: "emerald",
+      label: "Emerald",
       bgClass: "bg-emerald-400 data-[state=checked]:bg-emerald-400",
       borderClass: "border-emerald-400 data-[state=checked]:border-emerald-400",
-      label: "Emerald",
-      value: "emerald",
     },
     {
+      value: "orange",
+      label: "Orange",
       bgClass: "bg-orange-400 data-[state=checked]:bg-orange-400",
       borderClass: "border-orange-400 data-[state=checked]:border-orange-400",
-      label: "Orange",
-      value: "orange",
     },
   ];
 
+  const isRecurring = recurrence !== "NONE";
+
   return (
     <Dialog onOpenChange={(open) => !open && onClose()} open={isOpen}>
-      <DialogPopup className="sm:max-w-[425px]">
+      <DialogPopup className="sm:max-w-[530px]">
         <DialogHeader>
-          <DialogTitle>{event?.id ? "Edit Event" : "Create Event"}</DialogTitle>
+          <DialogTitle>
+            {event?.id ? "Event bearbeiten" : "Neues Event"}
+          </DialogTitle>
           <DialogDescription className="sr-only">
             {event?.id
-              ? "Edit the details of this event"
-              : "Add a new event to your calendar"}
+              ? "Bearbeite die Details dieses Events"
+              : "Neues Event zum Kalender hinzufügen"}
           </DialogDescription>
         </DialogHeader>
+
         <DialogPanel>
           {error && (
             <div className="rounded-md bg-destructive/15 px-3 py-2 text-destructive text-sm">
               {error}
             </div>
           )}
+
           <div className="grid gap-4 py-4">
+            {/* === Titel & Beschreibung === */}
             <div className="*:not-first:mt-1.5">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">Titel</Label>
               <Input
                 id="title"
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
+                placeholder=""
               />
             </div>
 
             <div className="*:not-first:mt-1.5">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Beschreibung</Label>
               <Textarea
                 id="description"
                 onChange={(e) => setDescription(e.target.value)}
@@ -269,27 +307,165 @@ export function EventDialog({
               />
             </div>
 
+            {/* === Sichtbarkeit (zuerst — bestimmt was du brauchst) === */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="*:not-first:mt-1.5">
+                <Label>Sichtbarkeit</Label>
+                <Select
+                  value={visibility}
+                  onValueChange={(v) => setVisibility(v as EventVisibility)}
+                  items={[
+                    { label: "Organisation", value: "ORGANIZATION" },
+                    { label: "Alle Mitglieder", value: "PUBLIC" },
+                    { label: "Nur ich", value: "PRIVATE" },
+                  ]}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ORGANIZATION">Organisation</SelectItem>
+                    <SelectItem value="PUBLIC">Alle Mitglieder</SelectItem>
+                    <SelectItem value="PRIVATE">Nur ich</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {visibility === "ORGANIZATION" ? (
+                <div className="*:not-first:mt-1.5">
+                  <Label>Organisation</Label>
+                  {availableOrgs.length === 0 ? (
+                    <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+                      Du bist keiner Organisation zugeordnet.
+                    </div>
+                  ) : (
+                    <Select
+                      items={availableOrgs.map((o) => ({
+                        label: o.name,
+                        value: o.id,
+                      }))}
+                      value={organizationId}
+                      onValueChange={(v) => setOrganizationId(v ?? "")}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="wählen…" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableOrgs.map((o) => (
+                          <SelectItem key={o.id} value={o.id}>
+                            {o.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+              ) : null}
+            </div>
+
+            {/* === Wiederholung === */}
+            <div className="grid gap-4 sm:grid-cols-2 border-t pt-4">
+              <div className="*:not-first:mt-1.5 ">
+                <Label>Wiederholung</Label>
+                <Select
+                  items={[
+                    { label: "Einmalig", value: "NONE" },
+                    { label: "Wöchentlich", value: "WEEKLY" },
+                    { label: "Alle 2 Wochen", value: "BIWEEKLY" },
+                    { label: "Monatlich", value: "MONTHLY" },
+                  ]}
+                  value={recurrence}
+                  onValueChange={(v) => setRecurrence(v as EventRecurrence)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="NONE">Einmalig</SelectItem>
+                    <SelectItem value="WEEKLY">Wöchentlich</SelectItem>
+                    <SelectItem value="BIWEEKLY">Alle 2 Wochen</SelectItem>
+                    <SelectItem value="MONTHLY">Monatlich</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {isRecurring ? (
+                <div className="*:not-first:mt-1.5 flex flex-col ">
+                  <Label className="mt-1.5 mb-0.5">Wiederholt sich bis</Label>
+                  <Popover
+                    onOpenChange={setRecurrenceEndOpen}
+                    open={recurrenceEndOpen}>
+                    <PopoverTrigger
+                      render={
+                        <Button
+                          className={cn(
+                            "group w-full justify-between border-input bg-background px-3 font-normal hover:bg-background",
+                          )}
+                          variant="outline"
+                        />
+                      }>
+                      <span className="truncate">
+                        {recurrenceEndDate
+                          ? format(recurrenceEndDate, "PPP")
+                          : "Endlos"}
+                      </span>
+                      <CalendarIcon
+                        className="shrink-0 text-muted-foreground/80"
+                        size={16}
+                      />
+                    </PopoverTrigger>
+                    <PopoverPopup align="start" className="w-auto p-2">
+                      <Calendar
+                        defaultMonth={recurrenceEndDate ?? startDate}
+                        disabled={{ before: startDate }}
+                        mode="single"
+                        onSelect={(date) => {
+                          setRecurrenceEndDate(date ?? undefined);
+                          setRecurrenceEndOpen(false);
+                        }}
+                        selected={recurrenceEndDate}
+                      />
+                      {recurrenceEndDate ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full mt-1"
+                          onClick={() => {
+                            setRecurrenceEndDate(undefined);
+                            setRecurrenceEndOpen(false);
+                          }}>
+                          Endlos (Datum entfernen)
+                        </Button>
+                      ) : null}
+                    </PopoverPopup>
+                  </Popover>
+                </div>
+              ) : null}
+            </div>
+            {/*! === All-day Toggle === */}
+            <div className="flex items-center gap-2 sm:grid-cols-2 pt-2">
+              <Checkbox
+                checked={allDay}
+                id="all-day"
+                onCheckedChange={(checked) => setAllDay(checked === true)}
+              />
+              <Label htmlFor="all-day">Ganztägig</Label>
+            </div>
+
+            {/* === Start === */}
             <div className="flex gap-4">
-              <div className="flex-1 *:not-first:mt-1.5">
-                <Label htmlFor="start-date">Start Date</Label>
+              <div className="flex-1 *:not-first:mt-1.5 flex-col flex">
+                <Label htmlFor="start-date">Start</Label>
                 <Popover onOpenChange={setStartDateOpen} open={startDateOpen}>
                   <PopoverTrigger>
                     <Button
                       className={cn(
-                        "group w-full justify-between border-input bg-background px-3 font-normal outline-none outline-offset-0 hover:bg-background focus-visible:outline-[3px]",
+                        "group w-full justify-between border-input bg-background px-3 font-normal hover:bg-background",
                         !startDate && "text-muted-foreground",
                       )}
                       id="start-date"
-                      variant={"outline"}>
-                      <span
-                        className={cn(
-                          "truncate",
-                          !startDate && "text-muted-foreground",
-                        )}>
-                        {startDate ? format(startDate, "PPP") : "Pick a date"}
+                      variant="outline">
+                      <span className="truncate">
+                        {startDate ? format(startDate, "PPP") : "Datum wählen"}
                       </span>
-                      <RiCalendarLine
-                        aria-hidden="true"
+                      <CalendarIcon
                         className="shrink-0 text-muted-foreground/80"
                         size={16}
                       />
@@ -302,10 +478,7 @@ export function EventDialog({
                       onSelect={(date) => {
                         if (date) {
                           setStartDate(date);
-                          // If end date is before the new start date, update it to match the start date
-                          if (isBefore(endDate, date)) {
-                            setEndDate(date);
-                          }
+                          if (isBefore(endDate, date)) setEndDate(date);
                           setError(null);
                           setStartDateOpen(false);
                         }
@@ -317,13 +490,13 @@ export function EventDialog({
               </div>
 
               {!allDay && (
-                <div className="min-w-28 *:not-first:mt-1.5">
-                  <Label htmlFor="start-time">Start Time</Label>
+                <div className="min-w-28 *:not-first:mt-1.5 flex flex-col">
+                  <Label htmlFor="start-time">Uhrzeit</Label>
                   <Select
                     onValueChange={(value) => setStartTime(value || "")}
                     value={startTime}>
                     <SelectTrigger id="start-time">
-                      <SelectValue placeholder="Select time" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {timeOptions.map((option) => (
@@ -337,58 +510,81 @@ export function EventDialog({
               )}
             </div>
 
-            <div className="flex gap-4">
-              <div className="flex-1 *:not-first:mt-1.5">
-                <Label htmlFor="end-date">End Date</Label>
-                <Popover onOpenChange={setEndDateOpen} open={endDateOpen}>
-                  <PopoverTrigger>
-                    <Button
-                      className={cn(
-                        "group w-full justify-between border-input bg-background px-3 font-normal outline-none outline-offset-0 hover:bg-background focus-visible:outline-[3px]",
-                        !endDate && "text-muted-foreground",
-                      )}
-                      id="end-date"
-                      variant={"outline"}>
-                      <span
+            {/* === Ende === Nur bei einmaligen Events sichtbar */}
+            {!isRecurring ? (
+              <div className="flex gap-4">
+                <div className="flex-1 *:not-first:mt-1.5 flex-col flex">
+                  <Label htmlFor="end-date">Ende</Label>
+                  <Popover onOpenChange={setEndDateOpen} open={endDateOpen}>
+                    <PopoverTrigger>
+                      <Button
                         className={cn(
-                          "truncate",
+                          "group w-full justify-between border-input bg-background px-3 font-normal hover:bg-background",
                           !endDate && "text-muted-foreground",
-                        )}>
-                        {endDate ? format(endDate, "PPP") : "Pick a date"}
-                      </span>
-                      <RiCalendarLine
-                        aria-hidden="true"
-                        className="shrink-0 text-muted-foreground/80"
-                        size={16}
+                        )}
+                        id="end-date"
+                        variant="outline">
+                        <span className="truncate">
+                          {endDate ? format(endDate, "PPP") : "Datum wählen"}
+                        </span>
+                        <CalendarIcon
+                          className="shrink-0 text-muted-foreground/80"
+                          size={16}
+                        />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="w-auto p-2">
+                      <Calendar
+                        defaultMonth={endDate}
+                        disabled={{ before: startDate }}
+                        mode="single"
+                        onSelect={(date) => {
+                          if (date) {
+                            setEndDate(date);
+                            setError(null);
+                            setEndDateOpen(false);
+                          }
+                        }}
+                        selected={endDate}
                       />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="start" className="w-auto p-2">
-                    <Calendar
-                      defaultMonth={endDate}
-                      disabled={{ before: startDate }}
-                      mode="single"
-                      onSelect={(date) => {
-                        if (date) {
-                          setEndDate(date);
-                          setError(null);
-                          setEndDateOpen(false);
-                        }
-                      }}
-                      selected={endDate}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
 
-              {!allDay && (
-                <div className="min-w-28 *:not-first:mt-1.5">
-                  <Label htmlFor="end-time">End Time</Label>
+                {!allDay && (
+                  <div className="min-w-28 *:not-first:mt-1.5">
+                    <Label htmlFor="end-time">Uhrzeit</Label>
+                    <Select
+                      onValueChange={(value) => setEndTime(value || "")}
+                      value={endTime}>
+                      <SelectTrigger id="end-time">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {timeOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // Bei Recurrence: nur Uhrzeit-Ende für die einzelne Instanz
+              !allDay && (
+                <div className="*:not-first:mt-1.5 max-w-48 flex flex-col">
+                  <Label htmlFor="end-time-rec">Endet um</Label>
                   <Select
-                    onValueChange={(value) => setEndTime(value || "")}
+                    onValueChange={(value) => {
+                      setEndTime(value || "");
+                      // Bei Recurrence: end date = start date
+                      setEndDate(startDate);
+                    }}
                     value={endTime}>
-                    <SelectTrigger id="end-time">
-                      <SelectValue placeholder="Select time" />
+                    <SelectTrigger id="end-time-rec">
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {timeOptions.map((option) => (
@@ -399,67 +595,65 @@ export function EventDialog({
                     </SelectContent>
                   </Select>
                 </div>
-              )}
-            </div>
+              )
+            )}
 
-            <div className="flex items-center gap-2">
-              <Checkbox
-                checked={allDay}
-                id="all-day"
-                onCheckedChange={(checked) => setAllDay(checked === true)}
-              />
-              <Label htmlFor="all-day">All day</Label>
-            </div>
-
+            {/* === Ort === */}
             <div className="*:not-first:mt-1.5">
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location">Ort</Label>
               <Input
                 id="location"
                 onChange={(e) => setLocation(e.target.value)}
                 value={location}
               />
             </div>
-            <fieldset className="space-y-4">
-              <legend className="font-medium text-foreground text-sm leading-none">
-                Etiquette
+
+            {/* === Farbe === */}
+            <fieldset className="space-y-2">
+              <legend className="font-medium text-foreground text-sm">
+                Farbe ({" "}
+                <span className="text-muted-foreground text-sm">
+                  {colorOptions.find((c) => c.value === color)?.label}
+                </span>
+                )
               </legend>
               <RadioGroup
                 className="flex gap-1.5 flex-row"
-                defaultValue={colorOptions[0]?.value}
                 onValueChange={(value: EventColor) => setColor(value)}
                 value={color}>
-                {colorOptions.map((colorOption) => (
+                {colorOptions.map((c) => (
                   <RadioGroupItem
-                    aria-label={colorOption.label}
+                    aria-label={c.label}
                     className={cn(
                       "size-6 shadow-none",
-                      colorOption.bgClass,
-                      colorOption.borderClass,
+                      c.bgClass,
+                      c.borderClass,
                     )}
-                    id={`color-${colorOption.value}`}
-                    key={colorOption.value}
-                    value={colorOption.value}
+                    id={`color-${c.value}`}
+                    key={c.value}
+                    value={c.value}
                   />
                 ))}
               </RadioGroup>
             </fieldset>
           </div>
         </DialogPanel>
+
         <DialogFooter className="flex-row sm:justify-between">
           {event?.id && (
             <Button
-              aria-label="Delete event"
+              aria-label="Event löschen"
               onClick={handleDelete}
               size="icon"
               variant="outline">
-              <RiDeleteBinLine aria-hidden="true" size={16} />
+              <Trash2 size={16} />
             </Button>
           )}
           <div className="flex flex-1 justify-end gap-2">
             <Button onClick={onClose} variant="outline">
-              Cancel
+              Abbrechen
             </Button>
-            <Button onClick={handleSave}>Save</Button>
+            <Button onClick={handleSave}>Speichern</Button>
           </div>
         </DialogFooter>
       </DialogPopup>

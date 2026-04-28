@@ -84,6 +84,28 @@ enum JoinRequestStatus {
   REJECTED
 }
 
+enum EventRecurrence {
+  NONE
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+}
+
+enum EventVisibility {
+  PUBLIC          // alle in der Instanz
+  ORGANIZATION    // nur Org-Mitglieder
+  PRIVATE         // nur Creator (Phase 2)
+}
+
+enum EventColor {
+  SKY
+  AMBER
+  VIOLET
+  ROSE
+  EMERALD
+  ORANGE
+}
+
 // ============================================================
 //! 1. AUTH & USERS
 // ============================================================
@@ -139,6 +161,9 @@ model User {
   // Financials
   createdDonations      Donation[]           @relation("DonationCreator")
   generatedReports      FinancialReport[]    @relation("ReportGenerator")
+
+  // Event 
+  createdEvents  Event[]  @relation("EventCreator")
 
   // System
   activities            Activity[]
@@ -220,6 +245,7 @@ model Organization {
   donations   Donation[]
   expenses    Expense[]
   activities  Activity[]
+  events  Event[]
   joinRequests OrganizationJoinRequest[]
 
   @@index([slug])
@@ -818,4 +844,39 @@ model Todo {
   @@index([dueDate])
   @@index([userId, done])
   @@map("todos")
+}
+
+
+// Event 
+model Event {
+  id             String    @id @default(uuid())
+  organizationId String?   @map("organization_id")
+  
+  title          String
+  description    String?   @db.Text
+  location       String?
+  
+  startsAt       DateTime  @map("starts_at")
+  endsAt         DateTime  @map("ends_at")
+  allDay         Boolean   @default(false) @map("all_day")
+  
+  color          EventColor       @default(SKY)
+  visibility     EventVisibility  @default(ORGANIZATION)
+  
+  recurrence        EventRecurrence @default(NONE)
+  recurrenceEndDate DateTime?       @map("recurrence_end_date") @db.Date
+  
+  creatorId      String    @map("creator_id")
+  
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator        User          @relation("EventCreator", fields: [creatorId], references: [id])
+  
+  @@index([organizationId, startsAt])
+  @@index([startsAt])
+  @@index([recurrence])
+  @@index([creatorId])
+  @@map("events")
 }

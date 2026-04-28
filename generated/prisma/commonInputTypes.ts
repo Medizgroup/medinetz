@@ -460,6 +460,57 @@ export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
 }
 
+export type EnumEventColorFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventColor | Prisma.EnumEventColorFieldRefInput<$PrismaModel>
+  in?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventColorFilter<$PrismaModel> | $Enums.EventColor
+}
+
+export type EnumEventVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventVisibility | Prisma.EnumEventVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.EventVisibility[] | Prisma.ListEnumEventVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventVisibility[] | Prisma.ListEnumEventVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventVisibilityFilter<$PrismaModel> | $Enums.EventVisibility
+}
+
+export type EnumEventRecurrenceFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventRecurrence | Prisma.EnumEventRecurrenceFieldRefInput<$PrismaModel>
+  in?: $Enums.EventRecurrence[] | Prisma.ListEnumEventRecurrenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventRecurrence[] | Prisma.ListEnumEventRecurrenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel> | $Enums.EventRecurrence
+}
+
+export type EnumEventColorWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventColor | Prisma.EnumEventColorFieldRefInput<$PrismaModel>
+  in?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventColorWithAggregatesFilter<$PrismaModel> | $Enums.EventColor
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventColorFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventColorFilter<$PrismaModel>
+}
+
+export type EnumEventVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventVisibility | Prisma.EnumEventVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.EventVisibility[] | Prisma.ListEnumEventVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventVisibility[] | Prisma.ListEnumEventVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.EventVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventVisibilityFilter<$PrismaModel>
+}
+
+export type EnumEventRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventRecurrence | Prisma.EnumEventRecurrenceFieldRefInput<$PrismaModel>
+  in?: $Enums.EventRecurrence[] | Prisma.ListEnumEventRecurrenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventRecurrence[] | Prisma.ListEnumEventRecurrenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventRecurrenceWithAggregatesFilter<$PrismaModel> | $Enums.EventRecurrence
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -890,6 +941,57 @@ export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumEventColorFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventColor | Prisma.EnumEventColorFieldRefInput<$PrismaModel>
+  in?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventColorFilter<$PrismaModel> | $Enums.EventColor
+}
+
+export type NestedEnumEventVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventVisibility | Prisma.EnumEventVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.EventVisibility[] | Prisma.ListEnumEventVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventVisibility[] | Prisma.ListEnumEventVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventVisibilityFilter<$PrismaModel> | $Enums.EventVisibility
+}
+
+export type NestedEnumEventRecurrenceFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventRecurrence | Prisma.EnumEventRecurrenceFieldRefInput<$PrismaModel>
+  in?: $Enums.EventRecurrence[] | Prisma.ListEnumEventRecurrenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventRecurrence[] | Prisma.ListEnumEventRecurrenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel> | $Enums.EventRecurrence
+}
+
+export type NestedEnumEventColorWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventColor | Prisma.EnumEventColorFieldRefInput<$PrismaModel>
+  in?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventColorWithAggregatesFilter<$PrismaModel> | $Enums.EventColor
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventColorFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventColorFilter<$PrismaModel>
+}
+
+export type NestedEnumEventVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventVisibility | Prisma.EnumEventVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.EventVisibility[] | Prisma.ListEnumEventVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventVisibility[] | Prisma.ListEnumEventVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.EventVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventVisibilityFilter<$PrismaModel>
+}
+
+export type NestedEnumEventRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventRecurrence | Prisma.EnumEventRecurrenceFieldRefInput<$PrismaModel>
+  in?: $Enums.EventRecurrence[] | Prisma.ListEnumEventRecurrenceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EventRecurrence[] | Prisma.ListEnumEventRecurrenceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEventRecurrenceWithAggregatesFilter<$PrismaModel> | $Enums.EventRecurrence
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
 }
 
 

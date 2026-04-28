@@ -414,7 +414,8 @@ export const ModelName = {
   Activity: 'Activity',
   Notification: 'Notification',
   Mention: 'Mention',
-  Todo: 'Todo'
+  Todo: 'Todo',
+  Event: 'Event'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -430,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo"
+    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo" | "event"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2728,6 +2729,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Event: {
+      payload: Prisma.$EventPayload<ExtArgs>
+      fields: Prisma.EventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        findFirst: {
+          args: Prisma.EventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        findMany: {
+          args: Prisma.EventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
+        }
+        create: {
+          args: Prisma.EventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        createMany: {
+          args: Prisma.EventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
+        }
+        delete: {
+          args: Prisma.EventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        update: {
+          args: Prisma.EventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        deleteMany: {
+          args: Prisma.EventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
+        }
+        upsert: {
+          args: Prisma.EventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
+        }
+        aggregate: {
+          args: Prisma.EventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvent>
+        }
+        groupBy: {
+          args: Prisma.EventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3244,6 +3319,27 @@ export const TodoScalarFieldEnum = {
 export type TodoScalarFieldEnum = (typeof TodoScalarFieldEnum)[keyof typeof TodoScalarFieldEnum]
 
 
+export const EventScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  allDay: 'allDay',
+  color: 'color',
+  visibility: 'visibility',
+  recurrence: 'recurrence',
+  recurrenceEndDate: 'recurrenceEndDate',
+  creatorId: 'creatorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3495,6 +3591,48 @@ export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'EventColor'
+ */
+export type EnumEventColorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventColor'>
+    
+
+
+/**
+ * Reference to a field of type 'EventColor[]'
+ */
+export type ListEnumEventColorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventColor[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EventVisibility'
+ */
+export type EnumEventVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventVisibility'>
+    
+
+
+/**
+ * Reference to a field of type 'EventVisibility[]'
+ */
+export type ListEnumEventVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventVisibility[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EventRecurrence'
+ */
+export type EnumEventRecurrenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventRecurrence'>
+    
+
+
+/**
+ * Reference to a field of type 'EventRecurrence[]'
+ */
+export type ListEnumEventRecurrenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventRecurrence[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3633,6 +3771,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   mention?: Prisma.MentionOmit
   todo?: Prisma.TodoOmit
+  event?: Prisma.EventOmit
 }
 
 /* Types for Logging */

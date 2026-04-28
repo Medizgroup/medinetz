@@ -1,163 +1,121 @@
-//components/event-calendar-component.tsx
 "use client";
 
-import { addDays, setHours, setMinutes, subDays } from "date-fns";
-import { useState } from "react";
+import * as React from "react";
+import { toast } from "sonner";
 
-import {
-  type CalendarEvent,
-  EventCalendar,
-} from "@/components/event-calendar/event-calendar";
+import { EventCalendar } from "@/components/event-calendar/event-calendar";
+import type { CalendarEvent } from "@/components/event-calendar/types";
+import { parseEventId } from "@/lib/event/recurrence";
 
-// Sample events data with hardcoded times
-const sampleEvents: CalendarEvent[] = [
-  {
-    allDay: true,
-    color: "sky",
-    description: "Strategische Planung für das nächste Jahr",
-    end: subDays(new Date(), 23), // vor 23 Tagen
-    id: "1",
-    location: "Hauptkonferenzraum",
-    start: subDays(new Date(), 24), // vor 24 Tagen
-    title: "Jahresplanung",
-  },
-  {
-    color: "amber",
-    description: "Abgabe der finalen Ergebnisse",
-    end: setMinutes(setHours(subDays(new Date(), 9), 15), 30), // 15:30 Uhr, vor 9 Tagen
-    id: "2",
-    location: "Büro",
-    start: setMinutes(setHours(subDays(new Date(), 9), 13), 0), // 13:00 Uhr, vor 9 Tagen
-    title: "Projekt-Abgabefrist",
-  },
-  {
-    allDay: true,
-    color: "orange",
-    description: "Strategische Planung für das nächste Jahr",
-    end: subDays(new Date(), 13), // vor 13 Tagen
-    id: "3",
-    location: "Hauptkonferenzraum",
-    start: subDays(new Date(), 13), // vor 13 Tagen
-    title: "Quartalsbudgetbesprechung",
-  },
-  {
-    color: "sky",
-    description: "Wöchentliches Team-Meeting",
-    end: setMinutes(setHours(new Date(), 11), 0), // 11:00 Uhr heute
-    id: "4",
-    location: "Konferenzraum A",
-    start: setMinutes(setHours(new Date(), 10), 0), // 10:00 Uhr heute
-    title: "Team-Meeting",
-  },
-  {
-    color: "emerald",
-    description: "Besprechung neuer Projektanforderungen",
-    end: setMinutes(setHours(addDays(new Date(), 1), 13), 15), // 13:15 Uhr, in 1 Tag
-    id: "5",
-    location: "Innenstadt Café",
-    start: setMinutes(setHours(addDays(new Date(), 1), 12), 0), // 12:00 Uhr, in 1 Tag
-    title: "Mittagessen mit Kunde",
-  },
-  {
-    allDay: true,
-    color: "violet",
-    description: "Produktneuheit Veröffentlichung",
-    end: addDays(new Date(), 6), // in 6 Tagen
-    id: "6",
-    start: addDays(new Date(), 3), // in 3 Tagen
-    title: "Produkt-Launch",
-  },
-  {
-    color: "rose",
-    description: "Besprechung über neue Kunden",
-    end: setMinutes(setHours(addDays(new Date(), 5), 14), 45), // 14:45 Uhr, in 5 Tagen
-    id: "7",
-    location: "Innenstadt Café",
-    start: setMinutes(setHours(addDays(new Date(), 4), 14), 30), // 14:30 Uhr, in 4 Tagen
-    title: "Vertriebskonferenz",
-  },
-  {
-    color: "orange",
-    description: "Wöchentliches Team-Meeting",
-    end: setMinutes(setHours(addDays(new Date(), 5), 10), 30), // 10:30 Uhr, in 5 Tagen
-    id: "8",
-    location: "Konferenzraum A",
-    start: setMinutes(setHours(addDays(new Date(), 5), 9), 0), // 9:00 Uhr, in 5 Tagen
-    title: "Team-Meeting",
-  },
-  {
-    color: "sky",
-    description: "Wöchentliches Team-Meeting",
-    end: setMinutes(setHours(addDays(new Date(), 5), 15), 30), // 15:30 Uhr, in 5 Tagen
-    id: "9",
-    location: "Konferenzraum A",
-    start: setMinutes(setHours(addDays(new Date(), 5), 14), 0), // 14:00 Uhr, in 5 Tagen
-    title: "Vertragsprüfung",
-  },
-  {
-    color: "amber",
-    description: "Wöchentliches Team-Meeting",
-    end: setMinutes(setHours(addDays(new Date(), 5), 11), 0), // 11:00 Uhr, in 5 Tagen
-    id: "10",
-    location: "Konferenzraum A",
-    start: setMinutes(setHours(addDays(new Date(), 5), 9), 45), // 9:45 Uhr, in 5 Tagen
-    title: "Team-Meeting",
-  },
-  {
-    color: "emerald",
-    description: "Quartalsweise Marketing-Planung",
-    end: setMinutes(setHours(addDays(new Date(), 9), 15), 30), // 15:30 Uhr, in 9 Tagen
-    id: "11",
-    location: "Marketing Abteilung",
-    start: setMinutes(setHours(addDays(new Date(), 9), 10), 0), // 10:00 Uhr, in 9 Tagen
-    title: "Marketing-Strategie-Sitzung",
-  },
-  {
-    allDay: true,
-    color: "sky",
-    description: "Präsentation der Jahresergebnisse",
-    end: addDays(new Date(), 17), // in 17 Tagen
-    id: "12",
-    location: "Grand Konferenzzentrum",
-    start: addDays(new Date(), 17), // in 17 Tagen
-    title: "Jährliche Hauptversammlung",
-  },
-  {
-    color: "rose",
-    description: "Ideenfindung für neue Funktionen",
-    end: setMinutes(setHours(addDays(new Date(), 27), 17), 0), // 17:00 Uhr, in 27 Tagen
-    id: "13",
-    location: "Innovationslabor",
-    start: setMinutes(setHours(addDays(new Date(), 26), 9), 0), // 9:00 Uhr, in 26 Tagen
-    title: "Produktentwicklungs-Workshop",
-  },
-];
+type Org = { id: string; name: string };
 
-export default function EventCalendarComponent() {
-  const [events, setEvents] = useState<CalendarEvent[]>(sampleEvents);
+export default function EventCalendarComponent({
+  initialOrgs = [],
+}: {
+  initialOrgs?: Org[];
+}) {
+  const [events, setEvents] = React.useState<CalendarEvent[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
-  const handleEventAdd = (event: CalendarEvent) => {
-    setEvents([...events, event]);
-  };
+  const reload = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const r = await fetch("/api/events");
+      if (!r.ok) throw new Error();
+      const data: CalendarEvent[] = await r.json();
+      // Server-Datums kommen als ISO-Strings → Date-Objekte
+      setEvents(
+        data.map((e) => ({
+          ...e,
+          start: new Date(e.start),
+          end: new Date(e.end),
+        })),
+      );
+    } catch {
+      toast.error("Termine konnten nicht geladen werden.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const handleEventUpdate = (updatedEvent: CalendarEvent) => {
-    setEvents(
-      events.map((event) =>
-        event.id === updatedEvent.id ? updatedEvent : event,
-      ),
-    );
-  };
+  React.useEffect(() => {
+    reload();
+  }, [reload]);
 
-  const handleEventDelete = (eventId: string) => {
-    setEvents(events.filter((event) => event.id !== eventId));
-  };
+  async function handleAdd(e: CalendarEvent) {
+    const r = await fetch("/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: e.title,
+        description: e.description,
+        location: e.location,
+        start: e.start,
+        end: e.end,
+        allDay: e.allDay,
+        color: e.color,
+        recurrence: e.recurrence ?? "NONE",
+        recurrenceEndDate: e.recurrenceEndDate ?? null,
+        visibility: e.visibility ?? "ORGANIZATION",
+        organizationId: e.organizationId ?? null,
+      }),
+    });
+    if (!r.ok) {
+      const err = await r.json().catch(() => null);
+      toast.error(err?.error ?? "Speichern fehlgeschlagen.");
+      return;
+    }
+    await reload();
+  }
+
+  async function handleUpdate(e: CalendarEvent) {
+    const { eventId } = parseEventId(e.id);
+    const r = await fetch(`/api/events/${eventId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: e.title,
+        description: e.description,
+        location: e.location,
+        start: e.start,
+        end: e.end,
+        allDay: e.allDay,
+        color: e.color,
+        recurrence: e.recurrence,
+        recurrenceEndDate: e.recurrenceEndDate ?? null,
+        visibility: e.visibility,
+      }),
+    });
+    if (!r.ok) {
+      const err = await r.json().catch(() => null);
+      toast.error(err?.error ?? "Aktualisierung fehlgeschlagen.");
+      return;
+    }
+    await reload();
+  }
+
+  async function handleDelete(id: string) {
+    const { eventId } = parseEventId(id);
+    const r = await fetch(`/api/events/${eventId}`, { method: "DELETE" });
+    if (!r.ok) {
+      toast.error("Löschen fehlgeschlagen.");
+      return;
+    }
+    await reload();
+  }
 
   return (
-    <EventCalendar
-      events={events}
-      onEventAdd={handleEventAdd}
-      onEventDelete={handleEventDelete}
-      onEventUpdate={handleEventUpdate}
-    />
+    <div className="px-2 py-4">
+      {loading && events.length === 0 ? (
+        <div className="text-sm text-muted-foreground p-4">Lade Termine…</div>
+      ) : null}
+      <EventCalendar
+        events={events}
+        onEventAdd={handleAdd}
+        onEventUpdate={handleUpdate}
+        onEventDelete={handleDelete}
+        availableOrgs={initialOrgs}
+      />
+    </div>
   );
 }

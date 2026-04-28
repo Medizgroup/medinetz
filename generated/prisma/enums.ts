@@ -101,3 +101,34 @@ export const JoinRequestStatus = {
 } as const
 
 export type JoinRequestStatus = (typeof JoinRequestStatus)[keyof typeof JoinRequestStatus]
+
+
+export const EventRecurrence = {
+  NONE: 'NONE',
+  WEEKLY: 'WEEKLY',
+  BIWEEKLY: 'BIWEEKLY',
+  MONTHLY: 'MONTHLY'
+} as const
+
+export type EventRecurrence = (typeof EventRecurrence)[keyof typeof EventRecurrence]
+
+
+export const EventVisibility = {
+  PUBLIC: 'PUBLIC',
+  ORGANIZATION: 'ORGANIZATION',
+  PRIVATE: 'PRIVATE'
+} as const
+
+export type EventVisibility = (typeof EventVisibility)[keyof typeof EventVisibility]
+
+
+export const EventColor = {
+  SKY: 'SKY',
+  AMBER: 'AMBER',
+  VIOLET: 'VIOLET',
+  ROSE: 'ROSE',
+  EMERALD: 'EMERALD',
+  ORANGE: 'ORANGE'
+} as const
+
+export type EventColor = (typeof EventColor)[keyof typeof EventColor]

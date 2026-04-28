@@ -53,6 +53,7 @@ export interface EventCalendarProps {
   onEventDelete?: (eventId: string) => void;
   className?: string;
   initialView?: CalendarView;
+  availableOrgs?: { id: string; name: string }[];
 }
 
 export function EventCalendar({
@@ -62,6 +63,7 @@ export function EventCalendar({
   onEventDelete,
   className,
   initialView = "month",
+  availableOrgs,
 }: EventCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<CalendarView>(initialView);
@@ -183,7 +185,7 @@ export function EventCalendar({
     } else {
       onEventAdd?.({
         ...event,
-        id: Math.random().toString(36).substring(2, 11),
+        // id: Math.random().toString(36).substring(2, 11),
       });
       // Show toast notification when an event is added
       toast(`Event "${event.title}" added`, {
@@ -402,6 +404,7 @@ export function EventCalendar({
           }}
           onDelete={handleEventDelete}
           onSave={handleEventSave}
+          availableOrgs={availableOrgs ?? []}
         />
       </CalendarDndProvider>
     </div>

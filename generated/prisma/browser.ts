@@ -172,3 +172,8 @@ export type Mention = Prisma.MentionModel
  * 
  */
 export type Todo = Prisma.TodoModel
+/**
+ * Model Event
+ * 
+ */
+export type Event = Prisma.EventModel

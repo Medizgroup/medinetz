@@ -267,6 +267,7 @@ export type UserWhereInput = {
   caseCostsCreated?: Prisma.CaseCostListRelationFilter
   createdDonations?: Prisma.DonationListRelationFilter
   generatedReports?: Prisma.FinancialReportListRelationFilter
+  createdEvents?: Prisma.EventListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   mentions?: Prisma.MentionListRelationFilter
@@ -310,6 +311,7 @@ export type UserOrderByWithRelationInput = {
   caseCostsCreated?: Prisma.CaseCostOrderByRelationAggregateInput
   createdDonations?: Prisma.DonationOrderByRelationAggregateInput
   generatedReports?: Prisma.FinancialReportOrderByRelationAggregateInput
+  createdEvents?: Prisma.EventOrderByRelationAggregateInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   mentions?: Prisma.MentionOrderByRelationAggregateInput
@@ -356,6 +358,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   caseCostsCreated?: Prisma.CaseCostListRelationFilter
   createdDonations?: Prisma.DonationListRelationFilter
   generatedReports?: Prisma.FinancialReportListRelationFilter
+  createdEvents?: Prisma.EventListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   mentions?: Prisma.MentionListRelationFilter
@@ -437,6 +440,7 @@ export type UserCreateInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -480,6 +484,7 @@ export type UserUncheckedCreateInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -523,6 +528,7 @@ export type UserUpdateInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -566,6 +572,7 @@ export type UserUncheckedUpdateInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -1084,6 +1091,20 @@ export type UserUpdateOneRequiredWithoutTodosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTodosInput, Prisma.UserUpdateWithoutTodosInput>, Prisma.UserUncheckedUpdateWithoutTodosInput>
 }
 
+export type UserCreateNestedOneWithoutCreatedEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedEventsInput, Prisma.UserUncheckedCreateWithoutCreatedEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedEventsInput, Prisma.UserUncheckedCreateWithoutCreatedEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedEventsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedEventsInput, Prisma.UserUpdateWithoutCreatedEventsInput>, Prisma.UserUncheckedUpdateWithoutCreatedEventsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   email: string
@@ -1118,6 +1139,7 @@ export type UserCreateWithoutSessionsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -1160,6 +1182,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -1218,6 +1241,7 @@ export type UserUpdateWithoutSessionsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -1260,6 +1284,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -1302,6 +1327,7 @@ export type UserCreateWithoutAccountsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -1344,6 +1370,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -1402,6 +1429,7 @@ export type UserUpdateWithoutAccountsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -1444,6 +1472,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -1486,6 +1515,7 @@ export type UserCreateWithoutOrganizationMembersInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -1528,6 +1558,7 @@ export type UserUncheckedCreateWithoutOrganizationMembersInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -1586,6 +1617,7 @@ export type UserUpdateWithoutOrganizationMembersInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -1628,6 +1660,7 @@ export type UserUncheckedUpdateWithoutOrganizationMembersInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -1670,6 +1703,7 @@ export type UserCreateWithoutOrganizationInvitesInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -1712,6 +1746,7 @@ export type UserUncheckedCreateWithoutOrganizationInvitesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -1770,6 +1805,7 @@ export type UserUpdateWithoutOrganizationInvitesInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -1812,6 +1848,7 @@ export type UserUncheckedUpdateWithoutOrganizationInvitesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -1854,6 +1891,7 @@ export type UserCreateWithoutOrganizationJoinRequestsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -1896,6 +1934,7 @@ export type UserUncheckedCreateWithoutOrganizationJoinRequestsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -1943,6 +1982,7 @@ export type UserCreateWithoutDecidedJoinRequestsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -1985,6 +2025,7 @@ export type UserUncheckedCreateWithoutDecidedJoinRequestsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -2043,6 +2084,7 @@ export type UserUpdateWithoutOrganizationJoinRequestsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -2085,6 +2127,7 @@ export type UserUncheckedUpdateWithoutOrganizationJoinRequestsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -2138,6 +2181,7 @@ export type UserUpdateWithoutDecidedJoinRequestsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -2180,6 +2224,7 @@ export type UserUncheckedUpdateWithoutDecidedJoinRequestsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -2222,6 +2267,7 @@ export type UserCreateWithoutPreferencesInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -2264,6 +2310,7 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -2322,6 +2369,7 @@ export type UserUpdateWithoutPreferencesInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -2364,6 +2412,7 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -2406,6 +2455,7 @@ export type UserCreateWithoutCreatedDoctorsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -2448,6 +2498,7 @@ export type UserUncheckedCreateWithoutCreatedDoctorsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -2506,6 +2557,7 @@ export type UserUpdateWithoutCreatedDoctorsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -2548,6 +2600,7 @@ export type UserUncheckedUpdateWithoutCreatedDoctorsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -2590,6 +2643,7 @@ export type UserCreateWithoutCreatedInterpretersInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -2632,6 +2686,7 @@ export type UserUncheckedCreateWithoutCreatedInterpretersInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -2690,6 +2745,7 @@ export type UserUpdateWithoutCreatedInterpretersInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -2732,6 +2788,7 @@ export type UserUncheckedUpdateWithoutCreatedInterpretersInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -2774,6 +2831,7 @@ export type UserCreateWithoutCreatedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -2816,6 +2874,7 @@ export type UserUncheckedCreateWithoutCreatedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -2863,6 +2922,7 @@ export type UserCreateWithoutAssignedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -2905,6 +2965,7 @@ export type UserUncheckedCreateWithoutAssignedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -2952,6 +3013,7 @@ export type UserCreateWithoutClosedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -2994,6 +3056,7 @@ export type UserUncheckedCreateWithoutClosedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -3052,6 +3115,7 @@ export type UserUpdateWithoutCreatedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -3094,6 +3158,7 @@ export type UserUncheckedUpdateWithoutCreatedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -3147,6 +3212,7 @@ export type UserUpdateWithoutAssignedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -3189,6 +3255,7 @@ export type UserUncheckedUpdateWithoutAssignedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -3242,6 +3309,7 @@ export type UserUpdateWithoutClosedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -3284,6 +3352,7 @@ export type UserUncheckedUpdateWithoutClosedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -3326,6 +3395,7 @@ export type UserCreateWithoutCaseCommentsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -3368,6 +3438,7 @@ export type UserUncheckedCreateWithoutCaseCommentsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -3426,6 +3497,7 @@ export type UserUpdateWithoutCaseCommentsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -3468,6 +3540,7 @@ export type UserUncheckedUpdateWithoutCaseCommentsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -3510,6 +3583,7 @@ export type UserCreateWithoutCaseDoctorsCreatedInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -3552,6 +3626,7 @@ export type UserUncheckedCreateWithoutCaseDoctorsCreatedInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -3610,6 +3685,7 @@ export type UserUpdateWithoutCaseDoctorsCreatedInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -3652,6 +3728,7 @@ export type UserUncheckedUpdateWithoutCaseDoctorsCreatedInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -3694,6 +3771,7 @@ export type UserCreateWithoutCaseInterpretersCreatedInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -3736,6 +3814,7 @@ export type UserUncheckedCreateWithoutCaseInterpretersCreatedInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -3794,6 +3873,7 @@ export type UserUpdateWithoutCaseInterpretersCreatedInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -3836,6 +3916,7 @@ export type UserUncheckedUpdateWithoutCaseInterpretersCreatedInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -3878,6 +3959,7 @@ export type UserCreateWithoutCaseCostsCreatedInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -3920,6 +4002,7 @@ export type UserUncheckedCreateWithoutCaseCostsCreatedInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -3978,6 +4061,7 @@ export type UserUpdateWithoutCaseCostsCreatedInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -4020,6 +4104,7 @@ export type UserUncheckedUpdateWithoutCaseCostsCreatedInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -4062,6 +4147,7 @@ export type UserCreateWithoutWatchedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -4104,6 +4190,7 @@ export type UserUncheckedCreateWithoutWatchedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -4162,6 +4249,7 @@ export type UserUpdateWithoutWatchedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -4204,6 +4292,7 @@ export type UserUncheckedUpdateWithoutWatchedCasesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -4247,6 +4336,7 @@ export type UserCreateWithoutAttachmentUploadsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -4289,6 +4379,7 @@ export type UserUncheckedCreateWithoutAttachmentUploadsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -4347,6 +4438,7 @@ export type UserUpdateWithoutAttachmentUploadsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -4389,6 +4481,7 @@ export type UserUncheckedUpdateWithoutAttachmentUploadsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -4430,6 +4523,7 @@ export type UserCreateWithoutCreatedProtocolsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -4472,6 +4566,7 @@ export type UserUncheckedCreateWithoutCreatedProtocolsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -4530,6 +4625,7 @@ export type UserUpdateWithoutCreatedProtocolsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -4572,6 +4668,7 @@ export type UserUncheckedUpdateWithoutCreatedProtocolsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -4614,6 +4711,7 @@ export type UserCreateWithoutProtocolCommentsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -4656,6 +4754,7 @@ export type UserUncheckedCreateWithoutProtocolCommentsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -4714,6 +4813,7 @@ export type UserUpdateWithoutProtocolCommentsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -4756,6 +4856,7 @@ export type UserUncheckedUpdateWithoutProtocolCommentsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -4798,6 +4899,7 @@ export type UserCreateWithoutCreatedDonationsInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -4840,6 +4942,7 @@ export type UserUncheckedCreateWithoutCreatedDonationsInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -4898,6 +5001,7 @@ export type UserUpdateWithoutCreatedDonationsInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -4940,6 +5044,7 @@ export type UserUncheckedUpdateWithoutCreatedDonationsInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -4982,6 +5087,7 @@ export type UserCreateWithoutGeneratedReportsInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -5024,6 +5130,7 @@ export type UserUncheckedCreateWithoutGeneratedReportsInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -5082,6 +5189,7 @@ export type UserUpdateWithoutGeneratedReportsInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -5124,6 +5232,7 @@ export type UserUncheckedUpdateWithoutGeneratedReportsInput = {
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -5167,6 +5276,7 @@ export type UserCreateWithoutActivitiesInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
@@ -5209,6 +5319,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
@@ -5267,6 +5378,7 @@ export type UserUpdateWithoutActivitiesInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
@@ -5309,6 +5421,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
@@ -5351,6 +5464,7 @@ export type UserCreateWithoutNotificationsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
@@ -5393,6 +5507,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
@@ -5451,6 +5566,7 @@ export type UserUpdateWithoutNotificationsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
@@ -5493,6 +5609,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
@@ -5535,6 +5652,7 @@ export type UserCreateWithoutMentionsInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
@@ -5577,6 +5695,7 @@ export type UserUncheckedCreateWithoutMentionsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
@@ -5624,6 +5743,7 @@ export type UserCreateWithoutMentioningInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -5666,6 +5786,7 @@ export type UserUncheckedCreateWithoutMentioningInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -5724,6 +5845,7 @@ export type UserUpdateWithoutMentionsInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
@@ -5766,6 +5888,7 @@ export type UserUncheckedUpdateWithoutMentionsInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
@@ -5819,6 +5942,7 @@ export type UserUpdateWithoutMentioningInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -5861,6 +5985,7 @@ export type UserUncheckedUpdateWithoutMentioningInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
@@ -5903,6 +6028,7 @@ export type UserCreateWithoutTodosInput = {
   caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
@@ -5945,6 +6071,7 @@ export type UserUncheckedCreateWithoutTodosInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
   createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
   generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
@@ -6003,6 +6130,7 @@ export type UserUpdateWithoutTodosInput = {
   caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
@@ -6045,10 +6173,199 @@ export type UserUncheckedUpdateWithoutTodosInput = {
   caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
   createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
   generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserCreateWithoutCreatedEventsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
+  createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
+}
+
+export type UserUncheckedCreateWithoutCreatedEventsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
+  createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
+}
+
+export type UserCreateOrConnectWithoutCreatedEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedEventsInput, Prisma.UserUncheckedCreateWithoutCreatedEventsInput>
+}
+
+export type UserUpsertWithoutCreatedEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedEventsInput, Prisma.UserUncheckedUpdateWithoutCreatedEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedEventsInput, Prisma.UserUncheckedCreateWithoutCreatedEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedEventsInput, Prisma.UserUncheckedUpdateWithoutCreatedEventsInput>
+}
+
+export type UserUpdateWithoutCreatedEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -6078,6 +6395,7 @@ export type UserCountOutputType = {
   caseCostsCreated: number
   createdDonations: number
   generatedReports: number
+  createdEvents: number
   activities: number
   notifications: number
   mentions: number
@@ -6107,6 +6425,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   caseCostsCreated?: boolean | UserCountOutputTypeCountCaseCostsCreatedArgs
   createdDonations?: boolean | UserCountOutputTypeCountCreatedDonationsArgs
   generatedReports?: boolean | UserCountOutputTypeCountGeneratedReportsArgs
+  createdEvents?: boolean | UserCountOutputTypeCountCreatedEventsArgs
   activities?: boolean | UserCountOutputTypeCountActivitiesArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   mentions?: boolean | UserCountOutputTypeCountMentionsArgs
@@ -6268,6 +6587,13 @@ export type UserCountOutputTypeCountGeneratedReportsArgs<ExtArgs extends runtime
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountCreatedEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ActivityWhereInput
 }
@@ -6343,6 +6669,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   caseCostsCreated?: boolean | Prisma.User$caseCostsCreatedArgs<ExtArgs>
   createdDonations?: boolean | Prisma.User$createdDonationsArgs<ExtArgs>
   generatedReports?: boolean | Prisma.User$generatedReportsArgs<ExtArgs>
+  createdEvents?: boolean | Prisma.User$createdEventsArgs<ExtArgs>
   activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   mentions?: boolean | Prisma.User$mentionsArgs<ExtArgs>
@@ -6423,6 +6750,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   caseCostsCreated?: boolean | Prisma.User$caseCostsCreatedArgs<ExtArgs>
   createdDonations?: boolean | Prisma.User$createdDonationsArgs<ExtArgs>
   generatedReports?: boolean | Prisma.User$generatedReportsArgs<ExtArgs>
+  createdEvents?: boolean | Prisma.User$createdEventsArgs<ExtArgs>
   activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   mentions?: boolean | Prisma.User$mentionsArgs<ExtArgs>
@@ -6458,6 +6786,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     caseCostsCreated: Prisma.$CaseCostPayload<ExtArgs>[]
     createdDonations: Prisma.$DonationPayload<ExtArgs>[]
     generatedReports: Prisma.$FinancialReportPayload<ExtArgs>[]
+    createdEvents: Prisma.$EventPayload<ExtArgs>[]
     activities: Prisma.$ActivityPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     mentions: Prisma.$MentionPayload<ExtArgs>[]
@@ -6894,6 +7223,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   caseCostsCreated<T extends Prisma.User$caseCostsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$caseCostsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CaseCostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdDonations<T extends Prisma.User$createdDonationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdDonationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DonationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   generatedReports<T extends Prisma.User$generatedReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$generatedReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinancialReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdEvents<T extends Prisma.User$createdEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activities<T extends Prisma.User$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mentions<T extends Prisma.User$mentionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MentionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7826,6 +8156,30 @@ export type User$generatedReportsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.FinancialReportScalarFieldEnum | Prisma.FinancialReportScalarFieldEnum[]
+}
+
+/**
+ * User.createdEvents
+ */
+export type User$createdEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Event
+   */
+  select?: Prisma.EventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Event
+   */
+  omit?: Prisma.EventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventInclude<ExtArgs> | null
+  where?: Prisma.EventWhereInput
+  orderBy?: Prisma.EventOrderByWithRelationInput | Prisma.EventOrderByWithRelationInput[]
+  cursor?: Prisma.EventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
 }
 
 /**
