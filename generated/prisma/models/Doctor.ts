@@ -20,8 +20,20 @@ export type DoctorModel = runtime.Types.Result.DefaultSelection<Prisma.$DoctorPa
 
 export type AggregateDoctor = {
   _count: DoctorCountAggregateOutputType | null
+  _avg: DoctorAvgAggregateOutputType | null
+  _sum: DoctorSumAggregateOutputType | null
   _min: DoctorMinAggregateOutputType | null
   _max: DoctorMaxAggregateOutputType | null
+}
+
+export type DoctorAvgAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
+}
+
+export type DoctorSumAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
 }
 
 export type DoctorMinAggregateOutputType = {
@@ -33,6 +45,8 @@ export type DoctorMinAggregateOutputType = {
   address: string | null
   practiceName: string | null
   notes: string | null
+  latitude: number | null
+  longitude: number | null
   isActive: boolean | null
   availability: $Enums.ResourceAvailability | null
   acceptsNewPatients: boolean | null
@@ -50,6 +64,8 @@ export type DoctorMaxAggregateOutputType = {
   address: string | null
   practiceName: string | null
   notes: string | null
+  latitude: number | null
+  longitude: number | null
   isActive: boolean | null
   availability: $Enums.ResourceAvailability | null
   acceptsNewPatients: boolean | null
@@ -68,6 +84,8 @@ export type DoctorCountAggregateOutputType = {
   address: number
   practiceName: number
   notes: number
+  latitude: number
+  longitude: number
   isActive: number
   availability: number
   acceptsNewPatients: number
@@ -79,6 +97,16 @@ export type DoctorCountAggregateOutputType = {
 }
 
 
+export type DoctorAvgAggregateInputType = {
+  latitude?: true
+  longitude?: true
+}
+
+export type DoctorSumAggregateInputType = {
+  latitude?: true
+  longitude?: true
+}
+
 export type DoctorMinAggregateInputType = {
   id?: true
   name?: true
@@ -88,6 +116,8 @@ export type DoctorMinAggregateInputType = {
   address?: true
   practiceName?: true
   notes?: true
+  latitude?: true
+  longitude?: true
   isActive?: true
   availability?: true
   acceptsNewPatients?: true
@@ -105,6 +135,8 @@ export type DoctorMaxAggregateInputType = {
   address?: true
   practiceName?: true
   notes?: true
+  latitude?: true
+  longitude?: true
   isActive?: true
   availability?: true
   acceptsNewPatients?: true
@@ -123,6 +155,8 @@ export type DoctorCountAggregateInputType = {
   address?: true
   practiceName?: true
   notes?: true
+  latitude?: true
+  longitude?: true
   isActive?: true
   availability?: true
   acceptsNewPatients?: true
@@ -171,6 +205,18 @@ export type DoctorAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: DoctorAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: DoctorSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: DoctorMinAggregateInputType
@@ -201,6 +247,8 @@ export type DoctorGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: DoctorCountAggregateInputType | true
+  _avg?: DoctorAvgAggregateInputType
+  _sum?: DoctorSumAggregateInputType
   _min?: DoctorMinAggregateInputType
   _max?: DoctorMaxAggregateInputType
 }
@@ -215,6 +263,8 @@ export type DoctorGroupByOutputType = {
   address: string | null
   practiceName: string | null
   notes: string | null
+  latitude: number | null
+  longitude: number | null
   isActive: boolean
   availability: $Enums.ResourceAvailability | null
   acceptsNewPatients: boolean
@@ -223,6 +273,8 @@ export type DoctorGroupByOutputType = {
   updatedAt: Date
   createdBy: string
   _count: DoctorCountAggregateOutputType | null
+  _avg: DoctorAvgAggregateOutputType | null
+  _sum: DoctorSumAggregateOutputType | null
   _min: DoctorMinAggregateOutputType | null
   _max: DoctorMaxAggregateOutputType | null
 }
@@ -255,6 +307,8 @@ export type DoctorWhereInput = {
   address?: Prisma.StringNullableFilter<"Doctor"> | string | null
   practiceName?: Prisma.StringNullableFilter<"Doctor"> | string | null
   notes?: Prisma.StringNullableFilter<"Doctor"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Doctor"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Doctor"> | number | null
   isActive?: Prisma.BoolFilter<"Doctor"> | boolean
   availability?: Prisma.EnumResourceAvailabilityNullableFilter<"Doctor"> | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFilter<"Doctor"> | boolean
@@ -276,6 +330,8 @@ export type DoctorOrderByWithRelationInput = {
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   practiceName?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrderInput | Prisma.SortOrder
   acceptsNewPatients?: Prisma.SortOrder
@@ -300,6 +356,8 @@ export type DoctorWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringNullableFilter<"Doctor"> | string | null
   practiceName?: Prisma.StringNullableFilter<"Doctor"> | string | null
   notes?: Prisma.StringNullableFilter<"Doctor"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Doctor"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Doctor"> | number | null
   isActive?: Prisma.BoolFilter<"Doctor"> | boolean
   availability?: Prisma.EnumResourceAvailabilityNullableFilter<"Doctor"> | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFilter<"Doctor"> | boolean
@@ -321,6 +379,8 @@ export type DoctorOrderByWithAggregationInput = {
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   practiceName?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrderInput | Prisma.SortOrder
   acceptsNewPatients?: Prisma.SortOrder
@@ -329,8 +389,10 @@ export type DoctorOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
   _count?: Prisma.DoctorCountOrderByAggregateInput
+  _avg?: Prisma.DoctorAvgOrderByAggregateInput
   _max?: Prisma.DoctorMaxOrderByAggregateInput
   _min?: Prisma.DoctorMinOrderByAggregateInput
+  _sum?: Prisma.DoctorSumOrderByAggregateInput
 }
 
 export type DoctorScalarWhereWithAggregatesInput = {
@@ -346,6 +408,8 @@ export type DoctorScalarWhereWithAggregatesInput = {
   address?: Prisma.StringNullableWithAggregatesFilter<"Doctor"> | string | null
   practiceName?: Prisma.StringNullableWithAggregatesFilter<"Doctor"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Doctor"> | string | null
+  latitude?: Prisma.FloatNullableWithAggregatesFilter<"Doctor"> | number | null
+  longitude?: Prisma.FloatNullableWithAggregatesFilter<"Doctor"> | number | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Doctor"> | boolean
   availability?: Prisma.EnumResourceAvailabilityNullableWithAggregatesFilter<"Doctor"> | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolWithAggregatesFilter<"Doctor"> | boolean
@@ -365,6 +429,8 @@ export type DoctorCreateInput = {
   address?: string | null
   practiceName?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   acceptsNewPatients?: boolean
@@ -385,6 +451,8 @@ export type DoctorUncheckedCreateInput = {
   address?: string | null
   practiceName?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   acceptsNewPatients?: boolean
@@ -405,6 +473,8 @@ export type DoctorUpdateInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -425,6 +495,8 @@ export type DoctorUncheckedUpdateInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -445,6 +517,8 @@ export type DoctorCreateManyInput = {
   address?: string | null
   practiceName?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   acceptsNewPatients?: boolean
@@ -464,6 +538,8 @@ export type DoctorUpdateManyMutationInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -482,6 +558,8 @@ export type DoctorUncheckedUpdateManyInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -519,6 +597,8 @@ export type DoctorCountOrderByAggregateInput = {
   address?: Prisma.SortOrder
   practiceName?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrder
   acceptsNewPatients?: Prisma.SortOrder
@@ -526,6 +606,11 @@ export type DoctorCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
+}
+
+export type DoctorAvgOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
 }
 
 export type DoctorMaxOrderByAggregateInput = {
@@ -537,6 +622,8 @@ export type DoctorMaxOrderByAggregateInput = {
   address?: Prisma.SortOrder
   practiceName?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrder
   acceptsNewPatients?: Prisma.SortOrder
@@ -554,12 +641,19 @@ export type DoctorMinOrderByAggregateInput = {
   address?: Prisma.SortOrder
   practiceName?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrder
   acceptsNewPatients?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
+}
+
+export type DoctorSumOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
 }
 
 export type DoctorScalarRelationFilter = {
@@ -622,6 +716,14 @@ export type DoctorUpdatelanguagesInput = {
   push?: string | string[]
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type NullableEnumResourceAvailabilityFieldUpdateOperationsInput = {
   set?: $Enums.ResourceAvailability | null
 }
@@ -655,6 +757,8 @@ export type DoctorCreateWithoutCreatorInput = {
   address?: string | null
   practiceName?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   acceptsNewPatients?: boolean
@@ -674,6 +778,8 @@ export type DoctorUncheckedCreateWithoutCreatorInput = {
   address?: string | null
   practiceName?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   acceptsNewPatients?: boolean
@@ -722,6 +828,8 @@ export type DoctorScalarWhereInput = {
   address?: Prisma.StringNullableFilter<"Doctor"> | string | null
   practiceName?: Prisma.StringNullableFilter<"Doctor"> | string | null
   notes?: Prisma.StringNullableFilter<"Doctor"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Doctor"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Doctor"> | number | null
   isActive?: Prisma.BoolFilter<"Doctor"> | boolean
   availability?: Prisma.EnumResourceAvailabilityNullableFilter<"Doctor"> | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFilter<"Doctor"> | boolean
@@ -741,6 +849,8 @@ export type DoctorCreateWithoutCaseDoctorsInput = {
   address?: string | null
   practiceName?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   acceptsNewPatients?: boolean
@@ -760,6 +870,8 @@ export type DoctorUncheckedCreateWithoutCaseDoctorsInput = {
   address?: string | null
   practiceName?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   acceptsNewPatients?: boolean
@@ -795,6 +907,8 @@ export type DoctorUpdateWithoutCaseDoctorsInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -814,6 +928,8 @@ export type DoctorUncheckedUpdateWithoutCaseDoctorsInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -833,6 +949,8 @@ export type DoctorCreateManyCreatorInput = {
   address?: string | null
   practiceName?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   acceptsNewPatients?: boolean
@@ -851,6 +969,8 @@ export type DoctorUpdateWithoutCreatorInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -870,6 +990,8 @@ export type DoctorUncheckedUpdateWithoutCreatorInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -889,6 +1011,8 @@ export type DoctorUncheckedUpdateManyWithoutCreatorInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   practiceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   acceptsNewPatients?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -938,6 +1062,8 @@ export type DoctorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   address?: boolean
   practiceName?: boolean
   notes?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isActive?: boolean
   availability?: boolean
   acceptsNewPatients?: boolean
@@ -960,6 +1086,8 @@ export type DoctorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   address?: boolean
   practiceName?: boolean
   notes?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isActive?: boolean
   availability?: boolean
   acceptsNewPatients?: boolean
@@ -980,6 +1108,8 @@ export type DoctorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   address?: boolean
   practiceName?: boolean
   notes?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isActive?: boolean
   availability?: boolean
   acceptsNewPatients?: boolean
@@ -1000,6 +1130,8 @@ export type DoctorSelectScalar = {
   address?: boolean
   practiceName?: boolean
   notes?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isActive?: boolean
   availability?: boolean
   acceptsNewPatients?: boolean
@@ -1009,7 +1141,7 @@ export type DoctorSelectScalar = {
   createdBy?: boolean
 }
 
-export type DoctorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "specialty" | "languages" | "phone" | "email" | "address" | "practiceName" | "notes" | "isActive" | "availability" | "acceptsNewPatients" | "tags" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["doctor"]>
+export type DoctorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "specialty" | "languages" | "phone" | "email" | "address" | "practiceName" | "notes" | "latitude" | "longitude" | "isActive" | "availability" | "acceptsNewPatients" | "tags" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["doctor"]>
 export type DoctorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   caseDoctors?: boolean | Prisma.Doctor$caseDoctorsArgs<ExtArgs>
@@ -1038,6 +1170,8 @@ export type $DoctorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     address: string | null
     practiceName: string | null
     notes: string | null
+    latitude: number | null
+    longitude: number | null
     isActive: boolean
     availability: $Enums.ResourceAvailability | null
     acceptsNewPatients: boolean
@@ -1479,6 +1613,8 @@ export interface DoctorFieldRefs {
   readonly address: Prisma.FieldRef<"Doctor", 'String'>
   readonly practiceName: Prisma.FieldRef<"Doctor", 'String'>
   readonly notes: Prisma.FieldRef<"Doctor", 'String'>
+  readonly latitude: Prisma.FieldRef<"Doctor", 'Float'>
+  readonly longitude: Prisma.FieldRef<"Doctor", 'Float'>
   readonly isActive: Prisma.FieldRef<"Doctor", 'Boolean'>
   readonly availability: Prisma.FieldRef<"Doctor", 'ResourceAvailability'>
   readonly acceptsNewPatients: Prisma.FieldRef<"Doctor", 'Boolean'>

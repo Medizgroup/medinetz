@@ -2986,6 +2986,8 @@ export const DoctorScalarFieldEnum = {
   address: 'address',
   practiceName: 'practiceName',
   notes: 'notes',
+  latitude: 'latitude',
+  longitude: 'longitude',
   isActive: 'isActive',
   availability: 'availability',
   acceptsNewPatients: 'acceptsNewPatients',
@@ -3006,6 +3008,8 @@ export const InterpreterScalarFieldEnum = {
   email: 'email',
   address: 'address',
   notes: 'notes',
+  latitude: 'latitude',
+  longitude: 'longitude',
   isActive: 'isActive',
   availability: 'availability',
   hourlyRate: 'hourlyRate',
@@ -3479,6 +3483,20 @@ export type ListEnumJoinRequestStatusFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
  * Reference to a field of type 'ResourceAvailability'
  */
 export type EnumResourceAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceAvailability'>
@@ -3629,20 +3647,6 @@ export type EnumEventRecurrenceFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'EventRecurrence[]'
  */
 export type ListEnumEventRecurrenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventRecurrence[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**

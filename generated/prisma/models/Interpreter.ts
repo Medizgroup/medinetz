@@ -27,10 +27,14 @@ export type AggregateInterpreter = {
 }
 
 export type InterpreterAvgAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
   hourlyRate: runtime.Decimal | null
 }
 
 export type InterpreterSumAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
   hourlyRate: runtime.Decimal | null
 }
 
@@ -41,6 +45,8 @@ export type InterpreterMinAggregateOutputType = {
   email: string | null
   address: string | null
   notes: string | null
+  latitude: number | null
+  longitude: number | null
   isActive: boolean | null
   availability: $Enums.ResourceAvailability | null
   hourlyRate: runtime.Decimal | null
@@ -56,6 +62,8 @@ export type InterpreterMaxAggregateOutputType = {
   email: string | null
   address: string | null
   notes: string | null
+  latitude: number | null
+  longitude: number | null
   isActive: boolean | null
   availability: $Enums.ResourceAvailability | null
   hourlyRate: runtime.Decimal | null
@@ -72,6 +80,8 @@ export type InterpreterCountAggregateOutputType = {
   email: number
   address: number
   notes: number
+  latitude: number
+  longitude: number
   isActive: number
   availability: number
   hourlyRate: number
@@ -84,10 +94,14 @@ export type InterpreterCountAggregateOutputType = {
 
 
 export type InterpreterAvgAggregateInputType = {
+  latitude?: true
+  longitude?: true
   hourlyRate?: true
 }
 
 export type InterpreterSumAggregateInputType = {
+  latitude?: true
+  longitude?: true
   hourlyRate?: true
 }
 
@@ -98,6 +112,8 @@ export type InterpreterMinAggregateInputType = {
   email?: true
   address?: true
   notes?: true
+  latitude?: true
+  longitude?: true
   isActive?: true
   availability?: true
   hourlyRate?: true
@@ -113,6 +129,8 @@ export type InterpreterMaxAggregateInputType = {
   email?: true
   address?: true
   notes?: true
+  latitude?: true
+  longitude?: true
   isActive?: true
   availability?: true
   hourlyRate?: true
@@ -129,6 +147,8 @@ export type InterpreterCountAggregateInputType = {
   email?: true
   address?: true
   notes?: true
+  latitude?: true
+  longitude?: true
   isActive?: true
   availability?: true
   hourlyRate?: true
@@ -233,6 +253,8 @@ export type InterpreterGroupByOutputType = {
   email: string | null
   address: string | null
   notes: string | null
+  latitude: number | null
+  longitude: number | null
   isActive: boolean
   availability: $Enums.ResourceAvailability | null
   hourlyRate: runtime.Decimal | null
@@ -273,6 +295,8 @@ export type InterpreterWhereInput = {
   email?: Prisma.StringNullableFilter<"Interpreter"> | string | null
   address?: Prisma.StringNullableFilter<"Interpreter"> | string | null
   notes?: Prisma.StringNullableFilter<"Interpreter"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Interpreter"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Interpreter"> | number | null
   isActive?: Prisma.BoolFilter<"Interpreter"> | boolean
   availability?: Prisma.EnumResourceAvailabilityNullableFilter<"Interpreter"> | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.DecimalNullableFilter<"Interpreter"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -292,6 +316,8 @@ export type InterpreterOrderByWithRelationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrderInput | Prisma.SortOrder
   hourlyRate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -314,6 +340,8 @@ export type InterpreterWhereUniqueInput = Prisma.AtLeast<{
   email?: Prisma.StringNullableFilter<"Interpreter"> | string | null
   address?: Prisma.StringNullableFilter<"Interpreter"> | string | null
   notes?: Prisma.StringNullableFilter<"Interpreter"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Interpreter"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Interpreter"> | number | null
   isActive?: Prisma.BoolFilter<"Interpreter"> | boolean
   availability?: Prisma.EnumResourceAvailabilityNullableFilter<"Interpreter"> | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.DecimalNullableFilter<"Interpreter"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -333,6 +361,8 @@ export type InterpreterOrderByWithAggregationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrderInput | Prisma.SortOrder
   hourlyRate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -358,6 +388,8 @@ export type InterpreterScalarWhereWithAggregatesInput = {
   email?: Prisma.StringNullableWithAggregatesFilter<"Interpreter"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Interpreter"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Interpreter"> | string | null
+  latitude?: Prisma.FloatNullableWithAggregatesFilter<"Interpreter"> | number | null
+  longitude?: Prisma.FloatNullableWithAggregatesFilter<"Interpreter"> | number | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Interpreter"> | boolean
   availability?: Prisma.EnumResourceAvailabilityNullableWithAggregatesFilter<"Interpreter"> | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.DecimalNullableWithAggregatesFilter<"Interpreter"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -375,6 +407,8 @@ export type InterpreterCreateInput = {
   email?: string | null
   address?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   hourlyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -393,6 +427,8 @@ export type InterpreterUncheckedCreateInput = {
   email?: string | null
   address?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   hourlyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -411,6 +447,8 @@ export type InterpreterUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -429,6 +467,8 @@ export type InterpreterUncheckedUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -447,6 +487,8 @@ export type InterpreterCreateManyInput = {
   email?: string | null
   address?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   hourlyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -464,6 +506,8 @@ export type InterpreterUpdateManyMutationInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -480,6 +524,8 @@ export type InterpreterUncheckedUpdateManyInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -507,6 +553,8 @@ export type InterpreterCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   address?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -517,6 +565,8 @@ export type InterpreterCountOrderByAggregateInput = {
 }
 
 export type InterpreterAvgOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
 }
 
@@ -527,6 +577,8 @@ export type InterpreterMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   address?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -542,6 +594,8 @@ export type InterpreterMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   address?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   availability?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -551,6 +605,8 @@ export type InterpreterMinOrderByAggregateInput = {
 }
 
 export type InterpreterSumOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
 }
 
@@ -649,6 +705,8 @@ export type InterpreterCreateWithoutCreatorInput = {
   email?: string | null
   address?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   hourlyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -666,6 +724,8 @@ export type InterpreterUncheckedCreateWithoutCreatorInput = {
   email?: string | null
   address?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   hourlyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -712,6 +772,8 @@ export type InterpreterScalarWhereInput = {
   email?: Prisma.StringNullableFilter<"Interpreter"> | string | null
   address?: Prisma.StringNullableFilter<"Interpreter"> | string | null
   notes?: Prisma.StringNullableFilter<"Interpreter"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Interpreter"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Interpreter"> | number | null
   isActive?: Prisma.BoolFilter<"Interpreter"> | boolean
   availability?: Prisma.EnumResourceAvailabilityNullableFilter<"Interpreter"> | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.DecimalNullableFilter<"Interpreter"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -729,6 +791,8 @@ export type InterpreterCreateWithoutCaseInterpretersInput = {
   email?: string | null
   address?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   hourlyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -746,6 +810,8 @@ export type InterpreterUncheckedCreateWithoutCaseInterpretersInput = {
   email?: string | null
   address?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   hourlyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -779,6 +845,8 @@ export type InterpreterUpdateWithoutCaseInterpretersInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -796,6 +864,8 @@ export type InterpreterUncheckedUpdateWithoutCaseInterpretersInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -813,6 +883,8 @@ export type InterpreterCreateManyCreatorInput = {
   email?: string | null
   address?: string | null
   notes?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isActive?: boolean
   availability?: $Enums.ResourceAvailability | null
   hourlyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -829,6 +901,8 @@ export type InterpreterUpdateWithoutCreatorInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -846,6 +920,8 @@ export type InterpreterUncheckedUpdateWithoutCreatorInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -863,6 +939,8 @@ export type InterpreterUncheckedUpdateManyWithoutCreatorInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   availability?: Prisma.NullableEnumResourceAvailabilityFieldUpdateOperationsInput | $Enums.ResourceAvailability | null
   hourlyRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -910,6 +988,8 @@ export type InterpreterSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   email?: boolean
   address?: boolean
   notes?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isActive?: boolean
   availability?: boolean
   hourlyRate?: boolean
@@ -930,6 +1010,8 @@ export type InterpreterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   email?: boolean
   address?: boolean
   notes?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isActive?: boolean
   availability?: boolean
   hourlyRate?: boolean
@@ -948,6 +1030,8 @@ export type InterpreterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   email?: boolean
   address?: boolean
   notes?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isActive?: boolean
   availability?: boolean
   hourlyRate?: boolean
@@ -966,6 +1050,8 @@ export type InterpreterSelectScalar = {
   email?: boolean
   address?: boolean
   notes?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isActive?: boolean
   availability?: boolean
   hourlyRate?: boolean
@@ -975,7 +1061,7 @@ export type InterpreterSelectScalar = {
   createdBy?: boolean
 }
 
-export type InterpreterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "languages" | "phone" | "email" | "address" | "notes" | "isActive" | "availability" | "hourlyRate" | "tags" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["interpreter"]>
+export type InterpreterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "languages" | "phone" | "email" | "address" | "notes" | "latitude" | "longitude" | "isActive" | "availability" | "hourlyRate" | "tags" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["interpreter"]>
 export type InterpreterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   caseInterpreters?: boolean | Prisma.Interpreter$caseInterpretersArgs<ExtArgs>
@@ -1002,6 +1088,8 @@ export type $InterpreterPayload<ExtArgs extends runtime.Types.Extensions.Interna
     email: string | null
     address: string | null
     notes: string | null
+    latitude: number | null
+    longitude: number | null
     isActive: boolean
     availability: $Enums.ResourceAvailability | null
     hourlyRate: runtime.Decimal | null
@@ -1441,6 +1529,8 @@ export interface InterpreterFieldRefs {
   readonly email: Prisma.FieldRef<"Interpreter", 'String'>
   readonly address: Prisma.FieldRef<"Interpreter", 'String'>
   readonly notes: Prisma.FieldRef<"Interpreter", 'String'>
+  readonly latitude: Prisma.FieldRef<"Interpreter", 'Float'>
+  readonly longitude: Prisma.FieldRef<"Interpreter", 'Float'>
   readonly isActive: Prisma.FieldRef<"Interpreter", 'Boolean'>
   readonly availability: Prisma.FieldRef<"Interpreter", 'ResourceAvailability'>
   readonly hourlyRate: Prisma.FieldRef<"Interpreter", 'Decimal'>
