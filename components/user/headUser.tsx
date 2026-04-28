@@ -6,36 +6,73 @@ import { Button } from "../ui/button";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
+import NotificationsPopover from "@/components/notifications/notifications-popover";
+import Link from "next/link";
 
 async function HeadUser() {
   const session = await auth.api.getSession({ headers: await headers() });
-
   const userId = session?.user?.id;
 
   if (!userId) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { displayName: true, avatarUrl: true, email: true, id: true },
-  });
+  // Parallel fetchen — schneller als sequenziell
+  const [user, openCasesCount, openTodosCount] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        displayName: true,
+        avatarUrl: true,
+        email: true,
+        id: true,
+      },
+    }),
+    prisma.case.count({
+      where: {
+        OR: [{ assigneeId: userId }, { creatorId: userId, assigneeId: null }],
+        status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] },
+      },
+    }),
+    prisma.todo.count({
+      where: {
+        userId,
+        done: false,
+      },
+    }),
+  ]);
 
-  if (!user) {
-    return null; // or some fallback UI
-  }
+  if (!user) return null;
+
   return (
     <div className="flex items-center gap-4 px-4 h-4">
+      {/* TODO: später für Quick-Create (Todos, Invites etc.) */}
       <Button size="icon-xs" variant="outline" className="rounded-full">
         <Plus className="size-4" />
       </Button>
+
+      <NotificationsPopover />
+
       <Separator orientation="vertical" />
-      <div className="flex items-center gap-1">
-        <GalleryVerticalEnd className="size-4" />
-        <span className="text-sm text-muted-foreground">3</span>
-      </div>
-      <div className="flex items-center gap-1">
-        <ListTodo className="size-4" />
-        <span className="text-sm text-muted-foreground">4</span>
-      </div>
+
+      <Link
+        href="/cases"
+        className="flex items-center gap-1 transition-colors hover:text-foreground"
+        title="Offene Fälle">
+        <GalleryVerticalEnd className="size-4.5" />
+        <span className="text-sm text-muted-foreground tabular-nums">
+          {openCasesCount}
+        </span>
+      </Link>
+
+      <Link
+        href="/todos"
+        className="flex items-center gap-1 transition-colors hover:text-foreground"
+        title="Offene Todos">
+        <ListTodo className="size-4.5" />
+        <span className="text-sm text-muted-foreground tabular-nums">
+          {openTodosCount}
+        </span>
+      </Link>
+
       <UserBadge user={user} />
     </div>
   );
