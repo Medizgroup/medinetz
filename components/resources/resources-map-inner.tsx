@@ -49,7 +49,7 @@ function computeInitialViewport(
     (Math.min(...lngs) + Math.max(...lngs)) / 2,
     (Math.min(...lats) + Math.max(...lats)) / 2,
   ];
-  return { center, zoom: 11 };
+  return { center, zoom: 15 };
 }
 
 /**
@@ -140,7 +140,7 @@ export default function MapInner({
     <Map
       viewport={initialViewport}
       onViewportChange={() => {}}
-      zoom={15}
+      zoom={initialViewport.zoom}
       minZoom={10}
       maxZoom={50}
       styles={
@@ -178,7 +178,7 @@ export default function MapInner({
           <MarkerContent>
             <button
               type="button"
-              className={`flex size-8 cursor-pointer items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-md transition-transform hover:scale-110 ${
+              className={`flex size-6 cursor-pointer items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-md transition-transform hover:scale-110 ${
                 r.type === "DOCTOR" ? "bg-sky-500" : "bg-emerald-500"
               } ${
                 selectedId === r.id ? "ring-2 ring-primary ring-offset-2" : ""

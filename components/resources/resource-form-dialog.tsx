@@ -220,6 +220,10 @@ export default function ResourceFormDialog({
                 <FieldLabel>Typ</FieldLabel>
                 <Select
                   value={type}
+                  items={[
+                    { value: "DOCTOR", label: "Arzt / Ärztin" },
+                    { value: "INTERPRETER", label: "Dolmetscher:in" },
+                  ]}
                   onValueChange={(v) => setType(v as ResourceType)}>
                   <SelectTrigger>
                     <SelectValue />
