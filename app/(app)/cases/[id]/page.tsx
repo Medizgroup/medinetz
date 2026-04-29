@@ -86,7 +86,6 @@ export default async function CaseDetailPage({
         select: { id: true, displayName: true, name: true },
       },
       patient: {
-        // ← NEU
         select: {
           id: true,
           pseudonym: true,
@@ -193,6 +192,40 @@ export default async function CaseDetailPage({
 
   const creatorName =
     c.creator.displayName || c.creator.name || c.creator.id.slice(0, 6);
+
+  const [doctors, interpreters] = await Promise.all([
+    prisma.doctor.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        name: true,
+        specialty: true,
+        practiceName: true,
+      },
+      orderBy: { name: "asc" },
+    }),
+    prisma.interpreter.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        name: true,
+        languages: true,
+      },
+      orderBy: { name: "asc" },
+    }),
+  ]);
+
+  const doctorOptions = doctors.map((d) => ({
+    id: d.id,
+    name: d.name,
+    subtitle: [d.specialty, d.practiceName].filter(Boolean).join(" · "),
+  }));
+
+  const interpreterOptions = interpreters.map((i) => ({
+    id: i.id,
+    name: i.name,
+    subtitle: i.languages.join(", "),
+  }));
 
   return (
     <div className="grid w-full grid-cols-4 gap-4">
@@ -404,6 +437,8 @@ export default async function CaseDetailPage({
           dueDate={c.dueDate}
           canEditCase={editable}
           canEditPatient={editable}
+          doctorOptions={doctorOptions}
+          interpreterOptions={interpreterOptions}
         />
       </aside>
     </div>

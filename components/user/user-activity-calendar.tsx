@@ -9,8 +9,8 @@ export type CalendarDay = {
 };
 
 const orangeTheme = {
-  light: ["#fafafa", "#d4d4d4", "#a3a3a3", "#737373", "#0a0a0a"],
-  dark: ["#161b22", "#7c2d12", "#9a3412", "#c2410c", "#f97316"],
+  light: ["#fff", "#f3f7e0", "#d9ef74", "#a6cf45", "#486c1c"],
+  dark: ["#18181b", "#27472f", "#5aa152", "#89e07c", "#e6ffea"],
 } satisfies ThemeInput;
 
 export default function UserActivityCalendar({

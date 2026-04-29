@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Edit2, Plus } from "lucide-react";
+import { Edit2, Languages, Plus, Stethoscope } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -18,6 +18,11 @@ import DiagnosisDialog, {
 import MedicationDialog, {
   type MedicationForEdit,
 } from "@/components/patients/medication-dialog";
+import { ResourceOption } from "./resource-picker";
+import CaseDoctorDialog, { CaseDoctorForEdit } from "./case-doctor-dialog";
+import CaseInterpreterDialog, {
+  CaseInterpreterForEdit,
+} from "./case-interpreter-dialog";
 
 type Member = { id: string; displayName: string; email: string };
 
@@ -60,6 +65,8 @@ type Props = {
   dueDate: Date | null;
   canEditCase: boolean;
   canEditPatient: boolean;
+  doctorOptions: ResourceOption[];
+  interpreterOptions: ResourceOption[];
 };
 
 export default function CaseSidebar({
@@ -73,6 +80,8 @@ export default function CaseSidebar({
   dueDate,
   canEditCase,
   canEditPatient,
+  doctorOptions,
+  interpreterOptions,
 }: Props) {
   const router = useRouter();
   const [patient, setPatient] = React.useState<PatientFull | null>(null);
@@ -86,6 +95,43 @@ export default function CaseSidebar({
   const [editingMed, setEditingMed] = React.useState<MedicationForEdit | null>(
     null,
   );
+  const [caseDoctors, setCaseDoctors] = React.useState<CaseDoctorForEdit[]>([]);
+  const [caseInterpreters, setCaseInterpreters] = React.useState<
+    CaseInterpreterForEdit[]
+  >([]);
+
+  const [doctorDialogOpen, setDoctorDialogOpen] = React.useState(false);
+  const [editingCaseDoctor, setEditingCaseDoctor] =
+    React.useState<CaseDoctorForEdit | null>(null);
+  const [interpreterDialogOpen, setInterpreterDialogOpen] =
+    React.useState(false);
+  const [editingCaseInterpreter, setEditingCaseInterpreter] =
+    React.useState<CaseInterpreterForEdit | null>(null);
+
+  const reloadDoctors = React.useCallback(async () => {
+    const r = await fetch(`/api/cases/${caseId}/doctors`);
+    if (!r.ok) return;
+    const data = await r.json();
+    setCaseDoctors(data.items);
+  }, [caseId]);
+
+  const reloadInterpreters = React.useCallback(async () => {
+    const r = await fetch(`/api/cases/${caseId}/interpreters`);
+    if (!r.ok) return;
+    const data = await r.json();
+    setCaseInterpreters(data.items);
+  }, [caseId]);
+
+  React.useEffect(() => {
+    reloadDoctors();
+    reloadInterpreters();
+  }, [reloadDoctors, reloadInterpreters]);
+
+  const onCaseResourceSaved = () => {
+    reloadDoctors();
+    reloadInterpreters();
+    router.refresh(); // damit totalCosts aktualisiert wird
+  };
 
   const reloadPatient = React.useCallback(async () => {
     setLoading(true);
@@ -286,6 +332,148 @@ export default function CaseSidebar({
 
       <Separator />
 
+      {/* ÄRZT:INNEN */}
+      <SectionHeader
+        title="Ärzt:innen"
+        action={
+          canEditCase ? (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 px-2"
+              onClick={() => {
+                setEditingCaseDoctor(null);
+                setDoctorDialogOpen(true);
+              }}>
+              <Plus className="size-3" />
+            </Button>
+          ) : null
+        }
+      />
+      {caseDoctors.length === 0 ? (
+        <div className="text-xs text-muted-foreground">Niemand zugewiesen.</div>
+      ) : (
+        <ul className="space-y-1.5 text-sm">
+          {caseDoctors.map((cd) => (
+            <li
+              key={cd.id}
+              className="group flex items-start justify-between gap-2 rounded px-1 py-0.5 hover:bg-muted/40">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <Stethoscope className="size-3 shrink-0 text-muted-foreground" />
+                  <span className="font-medium truncate">{cd.doctor.name}</span>
+                </div>
+                {cd.doctor.specialty ? (
+                  <div className="ml-4 text-xs text-muted-foreground">
+                    {cd.doctor.specialty}
+                  </div>
+                ) : null}
+                {cd.appointmentDate ? (
+                  <div className="ml-4 text-xs text-muted-foreground">
+                    {new Date(cd.appointmentDate).toLocaleDateString("de-DE")}
+                  </div>
+                ) : null}
+                {cd.invoiceReceived ? (
+                  <div className="ml-4 text-xs">
+                    <Badge
+                      variant={cd.invoicePaid ? "info" : "warning"}
+                      className="text-[10px]">
+                      {cd.invoiceAmount?.toFixed(2)} €{" "}
+                      {cd.invoicePaid ? "✓ bezahlt" : "offen"}
+                    </Badge>
+                  </div>
+                ) : null}
+              </div>
+              {canEditCase ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingCaseDoctor(cd);
+                    setDoctorDialogOpen(true);
+                  }}
+                  className="shrink-0 opacity-0 group-hover:opacity-100">
+                  <Edit2 className="size-3 text-muted-foreground" />
+                </button>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <Separator />
+
+      {/* DOLMETSCHER:INNEN */}
+      <SectionHeader
+        title="Dolmetscher:innen"
+        action={
+          canEditCase ? (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 px-2"
+              onClick={() => {
+                setEditingCaseInterpreter(null);
+                setInterpreterDialogOpen(true);
+              }}>
+              <Plus className="size-3" />
+            </Button>
+          ) : null
+        }
+      />
+      {caseInterpreters.length === 0 ? (
+        <div className="text-xs text-muted-foreground">Niemand zugewiesen.</div>
+      ) : (
+        <ul className="space-y-1.5 text-sm">
+          {caseInterpreters.map((ci) => (
+            <li
+              key={ci.id}
+              className="group flex items-start justify-between gap-2 rounded px-1 py-0.5 hover:bg-muted/40">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <Languages className="size-3 shrink-0 text-muted-foreground" />
+                  <span className="font-medium truncate">
+                    {ci.interpreter.name}
+                  </span>
+                </div>
+                {ci.interpreter.languages.length > 0 ? (
+                  <div className="ml-4 text-xs text-muted-foreground">
+                    {ci.interpreter.languages.join(", ")}
+                  </div>
+                ) : null}
+                {ci.appointmentDate ? (
+                  <div className="ml-4 text-xs text-muted-foreground">
+                    {new Date(ci.appointmentDate).toLocaleDateString("de-DE")}
+                    {ci.hoursWorked ? ` · ${ci.hoursWorked}h` : ""}
+                  </div>
+                ) : null}
+                {ci.invoiceReceived ? (
+                  <div className="ml-4 text-xs">
+                    <Badge
+                      variant={ci.invoicePaid ? "info" : "warning"}
+                      className="text-[10px]">
+                      {ci.cost?.toFixed(2)} €{" "}
+                      {ci.invoicePaid ? "✓ bezahlt" : "offen"}
+                    </Badge>
+                  </div>
+                ) : null}
+              </div>
+              {canEditCase ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingCaseInterpreter(ci);
+                    setInterpreterDialogOpen(true);
+                  }}
+                  className="shrink-0 opacity-0 group-hover:opacity-100">
+                  <Edit2 className="size-3 text-muted-foreground" />
+                </button>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      )}
+      <Separator />
+
       {/* KOSTEN */}
       <SectionHeader title="Kosten" />
       <div className="space-y-1 text-sm">
@@ -333,6 +521,22 @@ export default function CaseSidebar({
             patientId={patient.id}
             medication={editingMed}
             onSaved={onPatientSaved}
+          />
+          <CaseDoctorDialog
+            open={doctorDialogOpen}
+            onOpenChange={setDoctorDialogOpen}
+            caseId={caseId}
+            doctorOptions={doctorOptions}
+            caseDoctor={editingCaseDoctor}
+            onSaved={onCaseResourceSaved}
+          />
+          <CaseInterpreterDialog
+            open={interpreterDialogOpen}
+            onOpenChange={setInterpreterDialogOpen}
+            caseId={caseId}
+            interpreterOptions={interpreterOptions}
+            caseInterpreter={editingCaseInterpreter}
+            onSaved={onCaseResourceSaved}
           />
         </>
       ) : null}
