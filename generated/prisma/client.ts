@@ -199,3 +199,23 @@ export type Todo = Prisma.TodoModel
  * 
  */
 export type Event = Prisma.EventModel
+/**
+ * Model Patient
+ * 
+ */
+export type Patient = Prisma.PatientModel
+/**
+ * Model Diagnosis
+ * 
+ */
+export type Diagnosis = Prisma.DiagnosisModel
+/**
+ * Model Medication
+ * 
+ */
+export type Medication = Prisma.MedicationModel
+/**
+ * Model PatientAccessLog
+ * 
+ */
+export type PatientAccessLog = Prisma.PatientAccessLogModel

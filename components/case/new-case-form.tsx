@@ -68,7 +68,6 @@ export default function NewCaseForm({
         patientPseudonym,
         patientLanguage: patientLanguage || null,
         description: description || null,
-        patientNotes: patientNotes || null,
         priority,
         sensitivityLevel: Number(sensitivityLevel),
         dueDate: dueDate ? dueDate.toISOString().slice(0, 10) : null,

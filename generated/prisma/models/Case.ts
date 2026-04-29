@@ -49,9 +49,7 @@ export type CaseMinAggregateOutputType = {
   status: $Enums.CaseStatus | null
   priority: $Enums.CasePriority | null
   sensitivityLevel: number | null
-  patientPseudonym: string | null
-  patientLanguage: string | null
-  patientNotes: string | null
+  patientId: string | null
   creatorId: string | null
   assigneeId: string | null
   closedBy: string | null
@@ -72,9 +70,7 @@ export type CaseMaxAggregateOutputType = {
   status: $Enums.CaseStatus | null
   priority: $Enums.CasePriority | null
   sensitivityLevel: number | null
-  patientPseudonym: string | null
-  patientLanguage: string | null
-  patientNotes: string | null
+  patientId: string | null
   creatorId: string | null
   assigneeId: string | null
   closedBy: string | null
@@ -95,9 +91,7 @@ export type CaseCountAggregateOutputType = {
   status: number
   priority: number
   sensitivityLevel: number
-  patientPseudonym: number
-  patientLanguage: number
-  patientNotes: number
+  patientId: number
   creatorId: number
   assigneeId: number
   closedBy: number
@@ -134,9 +128,7 @@ export type CaseMinAggregateInputType = {
   status?: true
   priority?: true
   sensitivityLevel?: true
-  patientPseudonym?: true
-  patientLanguage?: true
-  patientNotes?: true
+  patientId?: true
   creatorId?: true
   assigneeId?: true
   closedBy?: true
@@ -157,9 +149,7 @@ export type CaseMaxAggregateInputType = {
   status?: true
   priority?: true
   sensitivityLevel?: true
-  patientPseudonym?: true
-  patientLanguage?: true
-  patientNotes?: true
+  patientId?: true
   creatorId?: true
   assigneeId?: true
   closedBy?: true
@@ -180,9 +170,7 @@ export type CaseCountAggregateInputType = {
   status?: true
   priority?: true
   sensitivityLevel?: true
-  patientPseudonym?: true
-  patientLanguage?: true
-  patientNotes?: true
+  patientId?: true
   creatorId?: true
   assigneeId?: true
   closedBy?: true
@@ -290,9 +278,7 @@ export type CaseGroupByOutputType = {
   status: $Enums.CaseStatus
   priority: $Enums.CasePriority
   sensitivityLevel: number
-  patientPseudonym: string
-  patientLanguage: string | null
-  patientNotes: string | null
+  patientId: string
   creatorId: string
   assigneeId: string | null
   closedBy: string | null
@@ -336,9 +322,7 @@ export type CaseWhereInput = {
   status?: Prisma.EnumCaseStatusFilter<"Case"> | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFilter<"Case"> | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFilter<"Case"> | number
-  patientPseudonym?: Prisma.StringFilter<"Case"> | string
-  patientLanguage?: Prisma.StringNullableFilter<"Case"> | string | null
-  patientNotes?: Prisma.StringNullableFilter<"Case"> | string | null
+  patientId?: Prisma.StringFilter<"Case"> | string
   creatorId?: Prisma.StringFilter<"Case"> | string
   assigneeId?: Prisma.StringNullableFilter<"Case"> | string | null
   closedBy?: Prisma.StringNullableFilter<"Case"> | string | null
@@ -361,6 +345,7 @@ export type CaseWhereInput = {
   attachments?: Prisma.CaseAttachmentListRelationFilter
   protocolCases?: Prisma.ProtocolCaseListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
+  patient?: Prisma.XOR<Prisma.PatientScalarRelationFilter, Prisma.PatientWhereInput>
 }
 
 export type CaseOrderByWithRelationInput = {
@@ -372,9 +357,7 @@ export type CaseOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   sensitivityLevel?: Prisma.SortOrder
-  patientPseudonym?: Prisma.SortOrder
-  patientLanguage?: Prisma.SortOrderInput | Prisma.SortOrder
-  patientNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  patientId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   assigneeId?: Prisma.SortOrderInput | Prisma.SortOrder
   closedBy?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -397,6 +380,7 @@ export type CaseOrderByWithRelationInput = {
   attachments?: Prisma.CaseAttachmentOrderByRelationAggregateInput
   protocolCases?: Prisma.ProtocolCaseOrderByRelationAggregateInput
   expenses?: Prisma.ExpenseOrderByRelationAggregateInput
+  patient?: Prisma.PatientOrderByWithRelationInput
 }
 
 export type CaseWhereUniqueInput = Prisma.AtLeast<{
@@ -412,9 +396,7 @@ export type CaseWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumCaseStatusFilter<"Case"> | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFilter<"Case"> | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFilter<"Case"> | number
-  patientPseudonym?: Prisma.StringFilter<"Case"> | string
-  patientLanguage?: Prisma.StringNullableFilter<"Case"> | string | null
-  patientNotes?: Prisma.StringNullableFilter<"Case"> | string | null
+  patientId?: Prisma.StringFilter<"Case"> | string
   creatorId?: Prisma.StringFilter<"Case"> | string
   assigneeId?: Prisma.StringNullableFilter<"Case"> | string | null
   closedBy?: Prisma.StringNullableFilter<"Case"> | string | null
@@ -437,6 +419,7 @@ export type CaseWhereUniqueInput = Prisma.AtLeast<{
   attachments?: Prisma.CaseAttachmentListRelationFilter
   protocolCases?: Prisma.ProtocolCaseListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
+  patient?: Prisma.XOR<Prisma.PatientScalarRelationFilter, Prisma.PatientWhereInput>
 }, "id" | "organizationId_caseNumber">
 
 export type CaseOrderByWithAggregationInput = {
@@ -448,9 +431,7 @@ export type CaseOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   sensitivityLevel?: Prisma.SortOrder
-  patientPseudonym?: Prisma.SortOrder
-  patientLanguage?: Prisma.SortOrderInput | Prisma.SortOrder
-  patientNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  patientId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   assigneeId?: Prisma.SortOrderInput | Prisma.SortOrder
   closedBy?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -479,9 +460,7 @@ export type CaseScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumCaseStatusWithAggregatesFilter<"Case"> | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityWithAggregatesFilter<"Case"> | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntWithAggregatesFilter<"Case"> | number
-  patientPseudonym?: Prisma.StringWithAggregatesFilter<"Case"> | string
-  patientLanguage?: Prisma.StringNullableWithAggregatesFilter<"Case"> | string | null
-  patientNotes?: Prisma.StringNullableWithAggregatesFilter<"Case"> | string | null
+  patientId?: Prisma.StringWithAggregatesFilter<"Case"> | string
   creatorId?: Prisma.StringWithAggregatesFilter<"Case"> | string
   assigneeId?: Prisma.StringNullableWithAggregatesFilter<"Case"> | string | null
   closedBy?: Prisma.StringNullableWithAggregatesFilter<"Case"> | string | null
@@ -501,9 +480,6 @@ export type CaseCreateInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -523,6 +499,7 @@ export type CaseCreateInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateInput = {
@@ -534,9 +511,7 @@ export type CaseUncheckedCreateInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -565,9 +540,6 @@ export type CaseUpdateInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -587,6 +559,7 @@ export type CaseUpdateInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateInput = {
@@ -598,9 +571,7 @@ export type CaseUncheckedUpdateInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -630,9 +601,7 @@ export type CaseCreateManyInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -652,9 +621,6 @@ export type CaseUpdateManyMutationInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -672,9 +638,7 @@ export type CaseUncheckedUpdateManyInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -710,9 +674,7 @@ export type CaseCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   sensitivityLevel?: Prisma.SortOrder
-  patientPseudonym?: Prisma.SortOrder
-  patientLanguage?: Prisma.SortOrder
-  patientNotes?: Prisma.SortOrder
+  patientId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   assigneeId?: Prisma.SortOrder
   closedBy?: Prisma.SortOrder
@@ -740,9 +702,7 @@ export type CaseMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   sensitivityLevel?: Prisma.SortOrder
-  patientPseudonym?: Prisma.SortOrder
-  patientLanguage?: Prisma.SortOrder
-  patientNotes?: Prisma.SortOrder
+  patientId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   assigneeId?: Prisma.SortOrder
   closedBy?: Prisma.SortOrder
@@ -763,9 +723,7 @@ export type CaseMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   sensitivityLevel?: Prisma.SortOrder
-  patientPseudonym?: Prisma.SortOrder
-  patientLanguage?: Prisma.SortOrder
-  patientNotes?: Prisma.SortOrder
+  patientId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   assigneeId?: Prisma.SortOrder
   closedBy?: Prisma.SortOrder
@@ -1114,6 +1072,48 @@ export type CaseUpdateOneWithoutExpensesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CaseUpdateToOneWithWhereWithoutExpensesInput, Prisma.CaseUpdateWithoutExpensesInput>, Prisma.CaseUncheckedUpdateWithoutExpensesInput>
 }
 
+export type CaseCreateNestedManyWithoutPatientInput = {
+  create?: Prisma.XOR<Prisma.CaseCreateWithoutPatientInput, Prisma.CaseUncheckedCreateWithoutPatientInput> | Prisma.CaseCreateWithoutPatientInput[] | Prisma.CaseUncheckedCreateWithoutPatientInput[]
+  connectOrCreate?: Prisma.CaseCreateOrConnectWithoutPatientInput | Prisma.CaseCreateOrConnectWithoutPatientInput[]
+  createMany?: Prisma.CaseCreateManyPatientInputEnvelope
+  connect?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+}
+
+export type CaseUncheckedCreateNestedManyWithoutPatientInput = {
+  create?: Prisma.XOR<Prisma.CaseCreateWithoutPatientInput, Prisma.CaseUncheckedCreateWithoutPatientInput> | Prisma.CaseCreateWithoutPatientInput[] | Prisma.CaseUncheckedCreateWithoutPatientInput[]
+  connectOrCreate?: Prisma.CaseCreateOrConnectWithoutPatientInput | Prisma.CaseCreateOrConnectWithoutPatientInput[]
+  createMany?: Prisma.CaseCreateManyPatientInputEnvelope
+  connect?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+}
+
+export type CaseUpdateManyWithoutPatientNestedInput = {
+  create?: Prisma.XOR<Prisma.CaseCreateWithoutPatientInput, Prisma.CaseUncheckedCreateWithoutPatientInput> | Prisma.CaseCreateWithoutPatientInput[] | Prisma.CaseUncheckedCreateWithoutPatientInput[]
+  connectOrCreate?: Prisma.CaseCreateOrConnectWithoutPatientInput | Prisma.CaseCreateOrConnectWithoutPatientInput[]
+  upsert?: Prisma.CaseUpsertWithWhereUniqueWithoutPatientInput | Prisma.CaseUpsertWithWhereUniqueWithoutPatientInput[]
+  createMany?: Prisma.CaseCreateManyPatientInputEnvelope
+  set?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+  disconnect?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+  delete?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+  connect?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+  update?: Prisma.CaseUpdateWithWhereUniqueWithoutPatientInput | Prisma.CaseUpdateWithWhereUniqueWithoutPatientInput[]
+  updateMany?: Prisma.CaseUpdateManyWithWhereWithoutPatientInput | Prisma.CaseUpdateManyWithWhereWithoutPatientInput[]
+  deleteMany?: Prisma.CaseScalarWhereInput | Prisma.CaseScalarWhereInput[]
+}
+
+export type CaseUncheckedUpdateManyWithoutPatientNestedInput = {
+  create?: Prisma.XOR<Prisma.CaseCreateWithoutPatientInput, Prisma.CaseUncheckedCreateWithoutPatientInput> | Prisma.CaseCreateWithoutPatientInput[] | Prisma.CaseUncheckedCreateWithoutPatientInput[]
+  connectOrCreate?: Prisma.CaseCreateOrConnectWithoutPatientInput | Prisma.CaseCreateOrConnectWithoutPatientInput[]
+  upsert?: Prisma.CaseUpsertWithWhereUniqueWithoutPatientInput | Prisma.CaseUpsertWithWhereUniqueWithoutPatientInput[]
+  createMany?: Prisma.CaseCreateManyPatientInputEnvelope
+  set?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+  disconnect?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+  delete?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+  connect?: Prisma.CaseWhereUniqueInput | Prisma.CaseWhereUniqueInput[]
+  update?: Prisma.CaseUpdateWithWhereUniqueWithoutPatientInput | Prisma.CaseUpdateWithWhereUniqueWithoutPatientInput[]
+  updateMany?: Prisma.CaseUpdateManyWithWhereWithoutPatientInput | Prisma.CaseUpdateManyWithWhereWithoutPatientInput[]
+  deleteMany?: Prisma.CaseScalarWhereInput | Prisma.CaseScalarWhereInput[]
+}
+
 export type CaseCreateWithoutCreatorInput = {
   id?: string
   caseNumber: number
@@ -1122,9 +1122,6 @@ export type CaseCreateWithoutCreatorInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -1143,6 +1140,7 @@ export type CaseCreateWithoutCreatorInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutCreatorInput = {
@@ -1154,9 +1152,7 @@ export type CaseUncheckedCreateWithoutCreatorInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   assigneeId?: string | null
   closedBy?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1194,9 +1190,6 @@ export type CaseCreateWithoutAssigneeInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -1215,6 +1208,7 @@ export type CaseCreateWithoutAssigneeInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutAssigneeInput = {
@@ -1226,9 +1220,7 @@ export type CaseUncheckedCreateWithoutAssigneeInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   closedBy?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1266,9 +1258,6 @@ export type CaseCreateWithoutClosedByUserInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -1287,6 +1276,7 @@ export type CaseCreateWithoutClosedByUserInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutClosedByUserInput = {
@@ -1298,9 +1288,7 @@ export type CaseUncheckedCreateWithoutClosedByUserInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1358,9 +1346,7 @@ export type CaseScalarWhereInput = {
   status?: Prisma.EnumCaseStatusFilter<"Case"> | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFilter<"Case"> | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFilter<"Case"> | number
-  patientPseudonym?: Prisma.StringFilter<"Case"> | string
-  patientLanguage?: Prisma.StringNullableFilter<"Case"> | string | null
-  patientNotes?: Prisma.StringNullableFilter<"Case"> | string | null
+  patientId?: Prisma.StringFilter<"Case"> | string
   creatorId?: Prisma.StringFilter<"Case"> | string
   assigneeId?: Prisma.StringNullableFilter<"Case"> | string | null
   closedBy?: Prisma.StringNullableFilter<"Case"> | string | null
@@ -1412,9 +1398,6 @@ export type CaseCreateWithoutOrganizationInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -1433,6 +1416,7 @@ export type CaseCreateWithoutOrganizationInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutOrganizationInput = {
@@ -1443,9 +1427,7 @@ export type CaseUncheckedCreateWithoutOrganizationInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -1500,9 +1482,6 @@ export type CaseCreateWithoutCommentsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -1521,6 +1500,7 @@ export type CaseCreateWithoutCommentsInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutCommentsInput = {
@@ -1532,9 +1512,7 @@ export type CaseUncheckedCreateWithoutCommentsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -1578,9 +1556,6 @@ export type CaseUpdateWithoutCommentsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1599,6 +1574,7 @@ export type CaseUpdateWithoutCommentsInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutCommentsInput = {
@@ -1610,9 +1586,7 @@ export type CaseUncheckedUpdateWithoutCommentsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1640,9 +1614,6 @@ export type CaseCreateWithoutDoctorsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -1661,6 +1632,7 @@ export type CaseCreateWithoutDoctorsInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutDoctorsInput = {
@@ -1672,9 +1644,7 @@ export type CaseUncheckedCreateWithoutDoctorsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -1718,9 +1688,6 @@ export type CaseUpdateWithoutDoctorsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1739,6 +1706,7 @@ export type CaseUpdateWithoutDoctorsInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutDoctorsInput = {
@@ -1750,9 +1718,7 @@ export type CaseUncheckedUpdateWithoutDoctorsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1780,9 +1746,6 @@ export type CaseCreateWithoutInterpretersInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -1801,6 +1764,7 @@ export type CaseCreateWithoutInterpretersInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutInterpretersInput = {
@@ -1812,9 +1776,7 @@ export type CaseUncheckedCreateWithoutInterpretersInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -1858,9 +1820,6 @@ export type CaseUpdateWithoutInterpretersInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1879,6 +1838,7 @@ export type CaseUpdateWithoutInterpretersInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutInterpretersInput = {
@@ -1890,9 +1850,7 @@ export type CaseUncheckedUpdateWithoutInterpretersInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1920,9 +1878,6 @@ export type CaseCreateWithoutCostsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -1941,6 +1896,7 @@ export type CaseCreateWithoutCostsInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutCostsInput = {
@@ -1952,9 +1908,7 @@ export type CaseUncheckedCreateWithoutCostsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -1998,9 +1952,6 @@ export type CaseUpdateWithoutCostsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2019,6 +1970,7 @@ export type CaseUpdateWithoutCostsInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutCostsInput = {
@@ -2030,9 +1982,7 @@ export type CaseUncheckedUpdateWithoutCostsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2060,9 +2010,6 @@ export type CaseCreateWithoutWatchersInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -2081,6 +2028,7 @@ export type CaseCreateWithoutWatchersInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutWatchersInput = {
@@ -2092,9 +2040,7 @@ export type CaseUncheckedCreateWithoutWatchersInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -2138,9 +2084,6 @@ export type CaseUpdateWithoutWatchersInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2159,6 +2102,7 @@ export type CaseUpdateWithoutWatchersInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutWatchersInput = {
@@ -2170,9 +2114,7 @@ export type CaseUncheckedUpdateWithoutWatchersInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2200,9 +2142,6 @@ export type CaseCreateWithoutLabelsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -2221,6 +2160,7 @@ export type CaseCreateWithoutLabelsInput = {
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutLabelsInput = {
@@ -2232,9 +2172,7 @@ export type CaseUncheckedCreateWithoutLabelsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -2278,9 +2216,6 @@ export type CaseUpdateWithoutLabelsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2299,6 +2234,7 @@ export type CaseUpdateWithoutLabelsInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutLabelsInput = {
@@ -2310,9 +2246,7 @@ export type CaseUncheckedUpdateWithoutLabelsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2340,9 +2274,6 @@ export type CaseCreateWithoutAttachmentsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -2361,6 +2292,7 @@ export type CaseCreateWithoutAttachmentsInput = {
   labels?: Prisma.CaseLabelCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutAttachmentsInput = {
@@ -2372,9 +2304,7 @@ export type CaseUncheckedCreateWithoutAttachmentsInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -2418,9 +2348,6 @@ export type CaseUpdateWithoutAttachmentsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2439,6 +2366,7 @@ export type CaseUpdateWithoutAttachmentsInput = {
   labels?: Prisma.CaseLabelUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutAttachmentsInput = {
@@ -2450,9 +2378,7 @@ export type CaseUncheckedUpdateWithoutAttachmentsInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2480,9 +2406,6 @@ export type CaseCreateWithoutProtocolCasesInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -2501,6 +2424,7 @@ export type CaseCreateWithoutProtocolCasesInput = {
   labels?: Prisma.CaseLabelCreateNestedManyWithoutCaseInput
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutProtocolCasesInput = {
@@ -2512,9 +2436,7 @@ export type CaseUncheckedCreateWithoutProtocolCasesInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -2558,9 +2480,6 @@ export type CaseUpdateWithoutProtocolCasesInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2579,6 +2498,7 @@ export type CaseUpdateWithoutProtocolCasesInput = {
   labels?: Prisma.CaseLabelUpdateManyWithoutCaseNestedInput
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutProtocolCasesInput = {
@@ -2590,9 +2510,7 @@ export type CaseUncheckedUpdateWithoutProtocolCasesInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2620,9 +2538,6 @@ export type CaseCreateWithoutExpensesInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
@@ -2641,6 +2556,7 @@ export type CaseCreateWithoutExpensesInput = {
   labels?: Prisma.CaseLabelCreateNestedManyWithoutCaseInput
   attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
+  patient: Prisma.PatientCreateNestedOneWithoutCasesInput
 }
 
 export type CaseUncheckedCreateWithoutExpensesInput = {
@@ -2652,9 +2568,7 @@ export type CaseUncheckedCreateWithoutExpensesInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -2698,9 +2612,6 @@ export type CaseUpdateWithoutExpensesInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2719,6 +2630,7 @@ export type CaseUpdateWithoutExpensesInput = {
   labels?: Prisma.CaseLabelUpdateManyWithoutCaseNestedInput
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutExpensesInput = {
@@ -2730,9 +2642,7 @@ export type CaseUncheckedUpdateWithoutExpensesInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2752,6 +2662,90 @@ export type CaseUncheckedUpdateWithoutExpensesInput = {
   protocolCases?: Prisma.ProtocolCaseUncheckedUpdateManyWithoutCaseNestedInput
 }
 
+export type CaseCreateWithoutPatientInput = {
+  id?: string
+  caseNumber: number
+  title: string
+  description?: string | null
+  status?: $Enums.CaseStatus
+  priority?: $Enums.CasePriority
+  sensitivityLevel?: number
+  totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  closedAt?: Date | string | null
+  dueDate?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutCasesInput
+  creator: Prisma.UserCreateNestedOneWithoutCreatedCasesInput
+  assignee?: Prisma.UserCreateNestedOneWithoutAssignedCasesInput
+  closedByUser?: Prisma.UserCreateNestedOneWithoutClosedCasesInput
+  comments?: Prisma.CaseCommentCreateNestedManyWithoutCaseInput
+  doctors?: Prisma.CaseDoctorCreateNestedManyWithoutCaseInput
+  interpreters?: Prisma.CaseInterpreterCreateNestedManyWithoutCaseInput
+  costs?: Prisma.CaseCostCreateNestedManyWithoutCaseInput
+  watchers?: Prisma.CaseWatcherCreateNestedManyWithoutCaseInput
+  labels?: Prisma.CaseLabelCreateNestedManyWithoutCaseInput
+  attachments?: Prisma.CaseAttachmentCreateNestedManyWithoutCaseInput
+  protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutCaseInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCaseInput
+}
+
+export type CaseUncheckedCreateWithoutPatientInput = {
+  id?: string
+  organizationId: string
+  caseNumber: number
+  title: string
+  description?: string | null
+  status?: $Enums.CaseStatus
+  priority?: $Enums.CasePriority
+  sensitivityLevel?: number
+  creatorId: string
+  assigneeId?: string | null
+  closedBy?: string | null
+  totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  closedAt?: Date | string | null
+  dueDate?: Date | string | null
+  comments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutCaseInput
+  doctors?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCaseInput
+  interpreters?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCaseInput
+  costs?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCaseInput
+  watchers?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutCaseInput
+  labels?: Prisma.CaseLabelUncheckedCreateNestedManyWithoutCaseInput
+  attachments?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutCaseInput
+  protocolCases?: Prisma.ProtocolCaseUncheckedCreateNestedManyWithoutCaseInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCaseInput
+}
+
+export type CaseCreateOrConnectWithoutPatientInput = {
+  where: Prisma.CaseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CaseCreateWithoutPatientInput, Prisma.CaseUncheckedCreateWithoutPatientInput>
+}
+
+export type CaseCreateManyPatientInputEnvelope = {
+  data: Prisma.CaseCreateManyPatientInput | Prisma.CaseCreateManyPatientInput[]
+  skipDuplicates?: boolean
+}
+
+export type CaseUpsertWithWhereUniqueWithoutPatientInput = {
+  where: Prisma.CaseWhereUniqueInput
+  update: Prisma.XOR<Prisma.CaseUpdateWithoutPatientInput, Prisma.CaseUncheckedUpdateWithoutPatientInput>
+  create: Prisma.XOR<Prisma.CaseCreateWithoutPatientInput, Prisma.CaseUncheckedCreateWithoutPatientInput>
+}
+
+export type CaseUpdateWithWhereUniqueWithoutPatientInput = {
+  where: Prisma.CaseWhereUniqueInput
+  data: Prisma.XOR<Prisma.CaseUpdateWithoutPatientInput, Prisma.CaseUncheckedUpdateWithoutPatientInput>
+}
+
+export type CaseUpdateManyWithWhereWithoutPatientInput = {
+  where: Prisma.CaseScalarWhereInput
+  data: Prisma.XOR<Prisma.CaseUpdateManyMutationInput, Prisma.CaseUncheckedUpdateManyWithoutPatientInput>
+}
+
 export type CaseCreateManyCreatorInput = {
   id?: string
   organizationId: string
@@ -2761,9 +2755,7 @@ export type CaseCreateManyCreatorInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   assigneeId?: string | null
   closedBy?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2783,9 +2775,7 @@ export type CaseCreateManyAssigneeInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   closedBy?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2805,9 +2795,7 @@ export type CaseCreateManyClosedByUserInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2826,9 +2814,6 @@ export type CaseUpdateWithoutCreatorInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2847,6 +2832,7 @@ export type CaseUpdateWithoutCreatorInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutCreatorInput = {
@@ -2858,9 +2844,7 @@ export type CaseUncheckedUpdateWithoutCreatorInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2889,9 +2873,7 @@ export type CaseUncheckedUpdateManyWithoutCreatorInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2910,9 +2892,6 @@ export type CaseUpdateWithoutAssigneeInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2931,6 +2910,7 @@ export type CaseUpdateWithoutAssigneeInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutAssigneeInput = {
@@ -2942,9 +2922,7 @@ export type CaseUncheckedUpdateWithoutAssigneeInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2973,9 +2951,7 @@ export type CaseUncheckedUpdateManyWithoutAssigneeInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -2994,9 +2970,6 @@ export type CaseUpdateWithoutClosedByUserInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3015,6 +2988,7 @@ export type CaseUpdateWithoutClosedByUserInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutClosedByUserInput = {
@@ -3026,9 +3000,7 @@ export type CaseUncheckedUpdateWithoutClosedByUserInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -3057,9 +3029,7 @@ export type CaseUncheckedUpdateManyWithoutClosedByUserInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -3078,9 +3048,7 @@ export type CaseCreateManyOrganizationInput = {
   status?: $Enums.CaseStatus
   priority?: $Enums.CasePriority
   sensitivityLevel?: number
-  patientPseudonym: string
-  patientLanguage?: string | null
-  patientNotes?: string | null
+  patientId: string
   creatorId: string
   assigneeId?: string | null
   closedBy?: string | null
@@ -3100,9 +3068,6 @@ export type CaseUpdateWithoutOrganizationInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3121,6 +3086,7 @@ export type CaseUpdateWithoutOrganizationInput = {
   attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutCasesNestedInput
 }
 
 export type CaseUncheckedUpdateWithoutOrganizationInput = {
@@ -3131,9 +3097,7 @@ export type CaseUncheckedUpdateWithoutOrganizationInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3162,9 +3126,105 @@ export type CaseUncheckedUpdateManyWithoutOrganizationInput = {
   status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
   priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
   sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  patientPseudonym?: Prisma.StringFieldUpdateOperationsInput | string
-  patientLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  patientNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type CaseCreateManyPatientInput = {
+  id?: string
+  organizationId: string
+  caseNumber: number
+  title: string
+  description?: string | null
+  status?: $Enums.CaseStatus
+  priority?: $Enums.CasePriority
+  sensitivityLevel?: number
+  creatorId: string
+  assigneeId?: string | null
+  closedBy?: string | null
+  totalCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedCosts?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  closedAt?: Date | string | null
+  dueDate?: Date | string | null
+}
+
+export type CaseUpdateWithoutPatientInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  caseNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
+  priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
+  sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCasesNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutCreatedCasesNestedInput
+  assignee?: Prisma.UserUpdateOneWithoutAssignedCasesNestedInput
+  closedByUser?: Prisma.UserUpdateOneWithoutClosedCasesNestedInput
+  comments?: Prisma.CaseCommentUpdateManyWithoutCaseNestedInput
+  doctors?: Prisma.CaseDoctorUpdateManyWithoutCaseNestedInput
+  interpreters?: Prisma.CaseInterpreterUpdateManyWithoutCaseNestedInput
+  costs?: Prisma.CaseCostUpdateManyWithoutCaseNestedInput
+  watchers?: Prisma.CaseWatcherUpdateManyWithoutCaseNestedInput
+  labels?: Prisma.CaseLabelUpdateManyWithoutCaseNestedInput
+  attachments?: Prisma.CaseAttachmentUpdateManyWithoutCaseNestedInput
+  protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutCaseNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCaseNestedInput
+}
+
+export type CaseUncheckedUpdateWithoutPatientInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  caseNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
+  priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
+  sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalCosts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedCosts?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  comments?: Prisma.CaseCommentUncheckedUpdateManyWithoutCaseNestedInput
+  doctors?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCaseNestedInput
+  interpreters?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCaseNestedInput
+  costs?: Prisma.CaseCostUncheckedUpdateManyWithoutCaseNestedInput
+  watchers?: Prisma.CaseWatcherUncheckedUpdateManyWithoutCaseNestedInput
+  labels?: Prisma.CaseLabelUncheckedUpdateManyWithoutCaseNestedInput
+  attachments?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutCaseNestedInput
+  protocolCases?: Prisma.ProtocolCaseUncheckedUpdateManyWithoutCaseNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCaseNestedInput
+}
+
+export type CaseUncheckedUpdateManyWithoutPatientInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  caseNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
+  priority?: Prisma.EnumCasePriorityFieldUpdateOperationsInput | $Enums.CasePriority
+  sensitivityLevel?: Prisma.IntFieldUpdateOperationsInput | number
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3288,9 +3348,7 @@ export type CaseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   status?: boolean
   priority?: boolean
   sensitivityLevel?: boolean
-  patientPseudonym?: boolean
-  patientLanguage?: boolean
-  patientNotes?: boolean
+  patientId?: boolean
   creatorId?: boolean
   assigneeId?: boolean
   closedBy?: boolean
@@ -3313,6 +3371,7 @@ export type CaseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   attachments?: boolean | Prisma.Case$attachmentsArgs<ExtArgs>
   protocolCases?: boolean | Prisma.Case$protocolCasesArgs<ExtArgs>
   expenses?: boolean | Prisma.Case$expensesArgs<ExtArgs>
+  patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.CaseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["case"]>
 
@@ -3325,9 +3384,7 @@ export type CaseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   priority?: boolean
   sensitivityLevel?: boolean
-  patientPseudonym?: boolean
-  patientLanguage?: boolean
-  patientNotes?: boolean
+  patientId?: boolean
   creatorId?: boolean
   assigneeId?: boolean
   closedBy?: boolean
@@ -3341,6 +3398,7 @@ export type CaseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignee?: boolean | Prisma.Case$assigneeArgs<ExtArgs>
   closedByUser?: boolean | Prisma.Case$closedByUserArgs<ExtArgs>
+  patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["case"]>
 
 export type CaseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -3352,9 +3410,7 @@ export type CaseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   priority?: boolean
   sensitivityLevel?: boolean
-  patientPseudonym?: boolean
-  patientLanguage?: boolean
-  patientNotes?: boolean
+  patientId?: boolean
   creatorId?: boolean
   assigneeId?: boolean
   closedBy?: boolean
@@ -3368,6 +3424,7 @@ export type CaseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignee?: boolean | Prisma.Case$assigneeArgs<ExtArgs>
   closedByUser?: boolean | Prisma.Case$closedByUserArgs<ExtArgs>
+  patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["case"]>
 
 export type CaseSelectScalar = {
@@ -3379,9 +3436,7 @@ export type CaseSelectScalar = {
   status?: boolean
   priority?: boolean
   sensitivityLevel?: boolean
-  patientPseudonym?: boolean
-  patientLanguage?: boolean
-  patientNotes?: boolean
+  patientId?: boolean
   creatorId?: boolean
   assigneeId?: boolean
   closedBy?: boolean
@@ -3393,7 +3448,7 @@ export type CaseSelectScalar = {
   dueDate?: boolean
 }
 
-export type CaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "caseNumber" | "title" | "description" | "status" | "priority" | "sensitivityLevel" | "patientPseudonym" | "patientLanguage" | "patientNotes" | "creatorId" | "assigneeId" | "closedBy" | "totalCosts" | "estimatedCosts" | "createdAt" | "updatedAt" | "closedAt" | "dueDate", ExtArgs["result"]["case"]>
+export type CaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "caseNumber" | "title" | "description" | "status" | "priority" | "sensitivityLevel" | "patientId" | "creatorId" | "assigneeId" | "closedBy" | "totalCosts" | "estimatedCosts" | "createdAt" | "updatedAt" | "closedAt" | "dueDate", ExtArgs["result"]["case"]>
 export type CaseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -3408,6 +3463,7 @@ export type CaseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   attachments?: boolean | Prisma.Case$attachmentsArgs<ExtArgs>
   protocolCases?: boolean | Prisma.Case$protocolCasesArgs<ExtArgs>
   expenses?: boolean | Prisma.Case$expensesArgs<ExtArgs>
+  patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.CaseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CaseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3415,12 +3471,14 @@ export type CaseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignee?: boolean | Prisma.Case$assigneeArgs<ExtArgs>
   closedByUser?: boolean | Prisma.Case$closedByUserArgs<ExtArgs>
+  patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
 }
 export type CaseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignee?: boolean | Prisma.Case$assigneeArgs<ExtArgs>
   closedByUser?: boolean | Prisma.Case$closedByUserArgs<ExtArgs>
+  patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
 }
 
 export type $CasePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3439,6 +3497,7 @@ export type $CasePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     attachments: Prisma.$CaseAttachmentPayload<ExtArgs>[]
     protocolCases: Prisma.$ProtocolCasePayload<ExtArgs>[]
     expenses: Prisma.$ExpensePayload<ExtArgs>[]
+    patient: Prisma.$PatientPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3449,9 +3508,7 @@ export type $CasePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     status: $Enums.CaseStatus
     priority: $Enums.CasePriority
     sensitivityLevel: number
-    patientPseudonym: string
-    patientLanguage: string | null
-    patientNotes: string | null
+    patientId: string
     creatorId: string
     assigneeId: string | null
     closedBy: string | null
@@ -3868,6 +3925,7 @@ export interface Prisma__CaseClient<T, Null = never, ExtArgs extends runtime.Typ
   attachments<T extends Prisma.Case$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Case$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CaseAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   protocolCases<T extends Prisma.Case$protocolCasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Case$protocolCasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProtocolCasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenses<T extends Prisma.Case$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Case$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  patient<T extends Prisma.PatientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PatientDefaultArgs<ExtArgs>>): Prisma.Prisma__PatientClient<runtime.Types.Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3905,9 +3963,7 @@ export interface CaseFieldRefs {
   readonly status: Prisma.FieldRef<"Case", 'CaseStatus'>
   readonly priority: Prisma.FieldRef<"Case", 'CasePriority'>
   readonly sensitivityLevel: Prisma.FieldRef<"Case", 'Int'>
-  readonly patientPseudonym: Prisma.FieldRef<"Case", 'String'>
-  readonly patientLanguage: Prisma.FieldRef<"Case", 'String'>
-  readonly patientNotes: Prisma.FieldRef<"Case", 'String'>
+  readonly patientId: Prisma.FieldRef<"Case", 'String'>
   readonly creatorId: Prisma.FieldRef<"Case", 'String'>
   readonly assigneeId: Prisma.FieldRef<"Case", 'String'>
   readonly closedBy: Prisma.FieldRef<"Case", 'String'>

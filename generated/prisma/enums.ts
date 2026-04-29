@@ -133,3 +133,35 @@ export const EventColor = {
 } as const
 
 export type EventColor = (typeof EventColor)[keyof typeof EventColor]
+
+
+export const Gender = {
+  FEMALE: 'FEMALE',
+  MALE: 'MALE',
+  DIVERSE: 'DIVERSE',
+  UNKNOWN: 'UNKNOWN'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const ResidenceStatus = {
+  UNDOCUMENTED: 'UNDOCUMENTED',
+  ASYLUM_PROCESS: 'ASYLUM_PROCESS',
+  TOLERATED: 'TOLERATED',
+  RECOGNIZED: 'RECOGNIZED',
+  EU_CITIZEN_NO_INSURANCE: 'EU_CITIZEN_NO_INSURANCE',
+  OTHER: 'OTHER'
+} as const
+
+export type ResidenceStatus = (typeof ResidenceStatus)[keyof typeof ResidenceStatus]
+
+
+export const InsuranceStatus = {
+  NONE: 'NONE',
+  BG: 'BG',
+  KSCHG: 'KSCHG',
+  OTHER: 'OTHER'
+} as const
+
+export type InsuranceStatus = (typeof InsuranceStatus)[keyof typeof InsuranceStatus]

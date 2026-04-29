@@ -86,29 +86,6 @@ export async function PATCH(
       : null;
   }
 
-  if ("patientPseudonym" in body) {
-    const v = String(body.patientPseudonym ?? "").trim();
-    if (!v) {
-      return NextResponse.json(
-        { error: "Patient-Pseudonym darf nicht leer sein." },
-        { status: 400 },
-      );
-    }
-    data.patientPseudonym = v;
-  }
-
-  if ("patientLanguage" in body) {
-    data.patientLanguage = body.patientLanguage
-      ? String(body.patientLanguage).trim()
-      : null;
-  }
-
-  if ("patientNotes" in body) {
-    data.patientNotes = body.patientNotes
-      ? String(body.patientNotes).trim()
-      : null;
-  }
-
   if ("priority" in body && PRIORITY_VALUES.includes(body.priority)) {
     data.priority = body.priority;
   }

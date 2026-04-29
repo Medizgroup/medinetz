@@ -82,7 +82,11 @@ export const ModelName = {
   Notification: 'Notification',
   Mention: 'Mention',
   Todo: 'Todo',
-  Event: 'Event'
+  Event: 'Event',
+  Patient: 'Patient',
+  Diagnosis: 'Diagnosis',
+  Medication: 'Medication',
+  PatientAccessLog: 'PatientAccessLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -302,9 +306,7 @@ export const CaseScalarFieldEnum = {
   status: 'status',
   priority: 'priority',
   sensitivityLevel: 'sensitivityLevel',
-  patientPseudonym: 'patientPseudonym',
-  patientLanguage: 'patientLanguage',
-  patientNotes: 'patientNotes',
+  patientId: 'patientId',
   creatorId: 'creatorId',
   assigneeId: 'assigneeId',
   closedBy: 'closedBy',
@@ -601,6 +603,68 @@ export const EventScalarFieldEnum = {
 } as const
 
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+export const PatientScalarFieldEnum = {
+  id: 'id',
+  pseudonym: 'pseudonym',
+  birthYear: 'birthYear',
+  gender: 'gender',
+  countryOfOrigin: 'countryOfOrigin',
+  primaryLanguage: 'primaryLanguage',
+  postalCodePrefix: 'postalCodePrefix',
+  residenceStatus: 'residenceStatus',
+  insuranceStatus: 'insuranceStatus',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PatientScalarFieldEnum = (typeof PatientScalarFieldEnum)[keyof typeof PatientScalarFieldEnum]
+
+
+export const DiagnosisScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  description: 'description',
+  icdCode: 'icdCode',
+  diagnosedAt: 'diagnosedAt',
+  isActive: 'isActive',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+} as const
+
+export type DiagnosisScalarFieldEnum = (typeof DiagnosisScalarFieldEnum)[keyof typeof DiagnosisScalarFieldEnum]
+
+
+export const MedicationScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  name: 'name',
+  dosage: 'dosage',
+  frequency: 'frequency',
+  prescribedAt: 'prescribedAt',
+  isActive: 'isActive',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+} as const
+
+export type MedicationScalarFieldEnum = (typeof MedicationScalarFieldEnum)[keyof typeof MedicationScalarFieldEnum]
+
+
+export const PatientAccessLogScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  userId: 'userId',
+  context: 'context',
+  contextId: 'contextId',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientAccessLogScalarFieldEnum = (typeof PatientAccessLogScalarFieldEnum)[keyof typeof PatientAccessLogScalarFieldEnum]
 
 
 export const SortOrder = {

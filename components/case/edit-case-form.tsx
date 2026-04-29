@@ -31,9 +31,6 @@ type CaseInput = {
   id: string;
   title: string;
   description: string | null;
-  patientPseudonym: string;
-  patientLanguage: string | null;
-  patientNotes: string | null;
   priority: string;
   sensitivityLevel: number;
   dueDate: string | null;
@@ -47,15 +44,7 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
   const [description, setDescription] = React.useState(
     caseData.description ?? "",
   );
-  const [patientPseudonym, setPatientPseudonym] = React.useState(
-    caseData.patientPseudonym,
-  );
-  const [patientLanguage, setPatientLanguage] = React.useState(
-    caseData.patientLanguage ?? "",
-  );
-  const [patientNotes, setPatientNotes] = React.useState(
-    caseData.patientNotes ?? "",
-  );
+
   const [priority, setPriority] = React.useState(caseData.priority);
   const [sensitivityLevel, setSensitivityLevel] = React.useState(
     String(caseData.sensitivityLevel),
@@ -81,9 +70,6 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
       body: JSON.stringify({
         title,
         description: description || null,
-        patientPseudonym,
-        patientLanguage: patientLanguage || null,
-        patientNotes: patientNotes || null,
         priority,
         sensitivityLevel: Number(sensitivityLevel),
         dueDate: dueDate || null,
@@ -113,22 +99,22 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
           />
         </Field>
 
-        <Field className="gap-2">
+        {/* <Field className="gap-2">
           <FieldLabel>Patient Referenz</FieldLabel>
           <Input
             value={patientPseudonym}
             onChange={(e) => setPatientPseudonym(e.target.value)}
             required
           />
-        </Field>
+        </Field> */}
 
-        <Field className="gap-2">
+        {/* <Field className="gap-2">
           <FieldLabel>Sprache</FieldLabel>
           <Input
             value={patientLanguage}
             onChange={(e) => setPatientLanguage(e.target.value)}
           />
-        </Field>
+        </Field> */}
       </div>
 
       <Field className="gap-2">
@@ -141,7 +127,7 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
         />
       </Field>
 
-      <Field className="gap-2">
+      {/* <Field className="gap-2">
         <FieldLabel>Patient-Notizen</FieldLabel>
         <Textarea
           rows={4}
@@ -149,7 +135,7 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
           className="h-28"
           onChange={(e) => setPatientNotes(e.target.value)}
         />
-      </Field>
+      </Field> */}
 
       <div className="grid gap-4 sm:grid-cols-4">
         <Field className="gap-2">

@@ -42,9 +42,11 @@ export default async function CasesPage() {
       title: true,
       status: true,
       priority: true,
-      patientPseudonym: true,
       createdAt: true,
       updatedAt: true,
+      patient: {
+        select: { pseudonym: true },
+      },
       organization: { select: { id: true, name: true } },
       creator: { select: { displayName: true, name: true } },
       assignee: { select: { id: true, displayName: true, name: true } },

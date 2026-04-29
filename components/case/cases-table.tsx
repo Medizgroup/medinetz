@@ -52,7 +52,7 @@ type CaseRow = {
   title: string;
   status: CaseStatus;
   priority: CasePriority;
-  patientPseudonym: string;
+  patient: { pseudonym: string } | null;
   createdAt: Date;
   updatedAt: Date;
   organization: { id: string; name: string };
@@ -119,10 +119,9 @@ export default function CasesTable({
         header: "Titel",
         filterFn: (row, _id, value: string) => {
           const v = value.toLowerCase();
-          return (
-            row.original.title.toLowerCase().includes(v) ||
-            row.original.patientPseudonym.toLowerCase().includes(v)
-          );
+          return row.original.title.toLowerCase().includes(v);
+          // ||
+          // row.original.patient.pseudonym.toLowerCase().includes(v)
         },
         cell: ({ row }) => (
           <Link
@@ -134,11 +133,12 @@ export default function CasesTable({
       },
       {
         id: "patient",
-        accessorFn: (row) => row.patientPseudonym,
+        accessorFn: (row) => row.patient?.pseudonym ?? "",
+
         header: "Patient",
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground tabular-nums">
-            {row.original.patientPseudonym}
+            {row.original.patient?.pseudonym ?? "—"}
           </span>
         ),
       },

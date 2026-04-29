@@ -107,6 +107,30 @@ enum EventColor {
   ORANGE
 }
 
+
+enum Gender {
+  FEMALE
+  MALE
+  DIVERSE
+  UNKNOWN
+}
+
+enum ResidenceStatus {
+  UNDOCUMENTED
+  ASYLUM_PROCESS
+  TOLERATED
+  RECOGNIZED
+  EU_CITIZEN_NO_INSURANCE
+  OTHER
+}
+
+enum InsuranceStatus {
+  NONE
+  BG
+  KSCHG     // Krankenscheinabrechnung über Sozialamt
+  OTHER
+}
+
 // ============================================================
 //! 1. AUTH & USERS
 // ============================================================
@@ -410,7 +434,6 @@ model Case {
   id               String        @id @default(uuid())
   organizationId   String        @map("organization_id")
   caseNumber       Int           @map("case_number") // #1, #2, #3...
-  
   // Case Info
   title            String
   description      String?       @db.Text
@@ -419,9 +442,7 @@ model Case {
   sensitivityLevel Int           @default(1) @map("sensitivity_level") // 1-3
   
   // Patient Info (anonymized)
-  patientPseudonym String        @map("patient_pseudonym")
-  patientLanguage  String?       @map("patient_language")
-  patientNotes     String?       @map("patient_notes") @db.Text
+  patientId        String       @map("patient_id")
   
   // Assignment
   creatorId        String        @map("creator_id")
@@ -453,7 +474,9 @@ model Case {
   attachments       CaseAttachment[]
   protocolCases     ProtocolCase[]
   expenses          Expense[]
-
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  
+  @@index([patientId])
   @@unique([organizationId, caseNumber])
   @@index([organizationId, status])
   @@index([organizationId, assigneeId])
@@ -462,7 +485,6 @@ model Case {
   @@index([priority])
   @@index([creatorId])
   @@index([assigneeId])
-  @@index([patientPseudonym])
   @@map("cases")
 }
 
@@ -885,4 +907,89 @@ model Event {
   @@index([recurrence])
   @@index([creatorId])
   @@map("events")
+}
+
+model Patient {
+  id              String           @id @default(uuid())
+  pseudonym       String           @unique
+  
+  // Demografische Daten (bewusst grobgranular)
+  birthYear       Int?             @map("birth_year")
+  gender          Gender           @default(UNKNOWN)
+  countryOfOrigin String?          @map("country_of_origin")
+  primaryLanguage String?          @map("primary_language")
+  postalCodePrefix String?         @map("postal_code_prefix") // z.B. "353" statt "35390"
+  residenceStatus ResidenceStatus  @default(OTHER) @map("residence_status")
+  insuranceStatus InsuranceStatus  @default(NONE) @map("insurance_status")
+  
+  notes           String?          @db.Text  // intern, sensibel
+  
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  deletedAt       DateTime?        @map("deleted_at")  // Soft-Delete
+  
+  cases           Case[]
+  diagnoses       Diagnosis[]
+  medications     Medication[]
+  
+  @@index([pseudonym])
+  @@index([deletedAt])
+  @@index([gender])
+  @@index([residenceStatus])
+  @@map("patients")
+}
+
+model Diagnosis {
+  id          String    @id @default(uuid())
+  patientId   String    @map("patient_id")
+  
+  description String              // Free-Text Beschreibung
+  icdCode     String?   @map("icd_code")  // z.B. "F32.1"
+  diagnosedAt DateTime? @map("diagnosed_at") @db.Date
+  isActive    Boolean   @default(true) @map("is_active")
+  notes       String?   @db.Text
+  
+  createdAt   DateTime  @default(now()) @map("created_at")
+  createdBy   String    @map("created_by")
+  
+  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  
+  @@index([patientId])
+  @@index([icdCode])
+  @@index([isActive])
+  @@map("diagnoses")
+}
+
+model Medication {
+  id          String    @id @default(uuid())
+  patientId   String    @map("patient_id")
+  
+  name        String              // z.B. "Metformin"
+  dosage      String?             // z.B. "500mg"
+  frequency   String?             // z.B. "2x täglich"
+  prescribedAt DateTime? @map("prescribed_at") @db.Date
+  isActive    Boolean   @default(true) @map("is_active")
+  notes       String?   @db.Text
+  
+  createdAt   DateTime  @default(now()) @map("created_at")
+  createdBy   String    @map("created_by")
+  
+  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  
+  @@index([patientId])
+  @@index([isActive])
+  @@map("medications")
+}
+
+model PatientAccessLog {
+  id         String   @id @default(uuid())
+  patientId  String   @map("patient_id")
+  userId     String   @map("user_id")
+  context    String   // 'case_view', 'patient_edit', 'diagnosis_edit', etc.
+  contextId  String?  @map("context_id")  // optional Case-ID o.ä.
+  createdAt  DateTime @default(now()) @map("created_at")
+  
+  @@index([patientId, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("patient_access_logs")
 }

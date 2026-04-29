@@ -538,6 +538,57 @@ export type EnumEventRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
 }
 
+export type EnumGenderFilter<$PrismaModel = never> = {
+  equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
+  in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+}
+
+export type EnumResidenceStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ResidenceStatus | Prisma.EnumResidenceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ResidenceStatus[] | Prisma.ListEnumResidenceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ResidenceStatus[] | Prisma.ListEnumResidenceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumResidenceStatusFilter<$PrismaModel> | $Enums.ResidenceStatus
+}
+
+export type EnumInsuranceStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.InsuranceStatus | Prisma.EnumInsuranceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.InsuranceStatus[] | Prisma.ListEnumInsuranceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InsuranceStatus[] | Prisma.ListEnumInsuranceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel> | $Enums.InsuranceStatus
+}
+
+export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
+  in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+}
+
+export type EnumResidenceStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ResidenceStatus | Prisma.EnumResidenceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ResidenceStatus[] | Prisma.ListEnumResidenceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ResidenceStatus[] | Prisma.ListEnumResidenceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumResidenceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ResidenceStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumResidenceStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumResidenceStatusFilter<$PrismaModel>
+}
+
+export type EnumInsuranceStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InsuranceStatus | Prisma.EnumInsuranceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.InsuranceStatus[] | Prisma.ListEnumInsuranceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InsuranceStatus[] | Prisma.ListEnumInsuranceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInsuranceStatusWithAggregatesFilter<$PrismaModel> | $Enums.InsuranceStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1035,6 +1086,57 @@ export type NestedEnumEventRecurrenceWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
+}
+
+export type NestedEnumGenderFilter<$PrismaModel = never> = {
+  equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
+  in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+}
+
+export type NestedEnumResidenceStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ResidenceStatus | Prisma.EnumResidenceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ResidenceStatus[] | Prisma.ListEnumResidenceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ResidenceStatus[] | Prisma.ListEnumResidenceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumResidenceStatusFilter<$PrismaModel> | $Enums.ResidenceStatus
+}
+
+export type NestedEnumInsuranceStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.InsuranceStatus | Prisma.EnumInsuranceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.InsuranceStatus[] | Prisma.ListEnumInsuranceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InsuranceStatus[] | Prisma.ListEnumInsuranceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel> | $Enums.InsuranceStatus
+}
+
+export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
+  in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+}
+
+export type NestedEnumResidenceStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ResidenceStatus | Prisma.EnumResidenceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ResidenceStatus[] | Prisma.ListEnumResidenceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ResidenceStatus[] | Prisma.ListEnumResidenceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumResidenceStatusWithAggregatesFilter<$PrismaModel> | $Enums.ResidenceStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumResidenceStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumResidenceStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumInsuranceStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InsuranceStatus | Prisma.EnumInsuranceStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.InsuranceStatus[] | Prisma.ListEnumInsuranceStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InsuranceStatus[] | Prisma.ListEnumInsuranceStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInsuranceStatusWithAggregatesFilter<$PrismaModel> | $Enums.InsuranceStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel>
 }
 
 

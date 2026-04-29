@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/static-components */
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
@@ -40,9 +41,9 @@ import {
 } from "@/lib/utils/cases";
 import { detailedIcon } from "@/lib/utils/index";
 import EditCaseForm from "@/components/case/edit-case-form";
-import CaseStatusControls from "@/components/case/case-status-controls";
 import ActivityLine from "@/components/activity/activity-line";
 import CaseCommentForm from "@/components/case/case-comment-form";
+import CaseSidebar from "@/components/case/case-sidebar";
 
 export default async function CaseDetailPage({
   params,
@@ -64,9 +65,6 @@ export default async function CaseDetailPage({
       status: true,
       priority: true,
       sensitivityLevel: true,
-      patientPseudonym: true,
-      patientLanguage: true,
-      patientNotes: true,
       totalCosts: true,
       estimatedCosts: true,
       createdAt: true,
@@ -76,6 +74,7 @@ export default async function CaseDetailPage({
       organizationId: true,
       creatorId: true,
       assigneeId: true,
+      patientId: true,
       organization: { select: { id: true, name: true } },
       creator: {
         select: { id: true, displayName: true, name: true, avatarUrl: true },
@@ -85,6 +84,21 @@ export default async function CaseDetailPage({
       },
       closedByUser: {
         select: { id: true, displayName: true, name: true },
+      },
+      patient: {
+        // ← NEU
+        select: {
+          id: true,
+          pseudonym: true,
+          birthYear: true,
+          gender: true,
+          primaryLanguage: true,
+          countryOfOrigin: true,
+          postalCodePrefix: true,
+          residenceStatus: true,
+          insuranceStatus: true,
+          notes: true,
+        },
       },
       comments: {
         orderBy: { createdAt: "asc" },
@@ -239,9 +253,9 @@ export default async function CaseDetailPage({
                   id: c.id,
                   title: c.title,
                   description: c.description,
-                  patientPseudonym: c.patientPseudonym,
-                  patientLanguage: c.patientLanguage,
-                  patientNotes: c.patientNotes,
+                  // patientPseudonym: c.patient?.pseudonym ?? "",
+                  // patientLanguage: c.patient?.primaryLanguage,
+                  // patientNotes: c.patient?.notes,
                   priority: c.priority,
                   sensitivityLevel: c.sensitivityLevel,
                   dueDate: c.dueDate
@@ -378,58 +392,19 @@ export default async function CaseDetailPage({
         </section>
       </div>
 
-      <aside className="mt-24 space-y-6 px-2">
-        {editable ? (
-          <CaseStatusControls
-            caseId={c.id}
-            status={c.status}
-            assigneeId={c.assigneeId}
-            members={memberOptions}
-          />
-        ) : (
-          <div className="space-y-2 text-sm">
-            <div className="text-xs font-medium text-muted-foreground uppercase">
-              Zugewiesen an
-            </div>
-            <div>
-              {c.assignee?.displayName || c.assignee?.name || "— Niemand —"}
-            </div>
-          </div>
-        )}
-
-        <Separator />
-
-        <div className="space-y-3 text-sm">
-          <div>
-            <div className="text-xs font-medium text-muted-foreground uppercase">
-              Patient
-            </div>
-            <div className="font-medium tabular-nums">{c.patientPseudonym}</div>
-            {c.patientLanguage ? (
-              <div className="text-muted-foreground">{c.patientLanguage}</div>
-            ) : null}
-          </div>
-
-          <div>
-            <div className="text-xs font-medium text-muted-foreground uppercase">
-              Geschätzte Kosten
-            </div>
-            <div className="tabular-nums">
-              {c.estimatedCosts
-                ? `${Number(c.estimatedCosts).toFixed(2)} €`
-                : "—"}
-            </div>
-          </div>
-
-          <div>
-            <div className="text-xs font-medium text-muted-foreground uppercase">
-              Bisherige Kosten
-            </div>
-            <div className="tabular-nums">
-              {Number(c.totalCosts).toFixed(2)} €
-            </div>
-          </div>
-        </div>
+      <aside className="mt-24 px-2">
+        <CaseSidebar
+          caseId={c.id}
+          patientId={c.patientId}
+          status={c.status}
+          assigneeId={c.assigneeId}
+          members={memberOptions}
+          estimatedCosts={c.estimatedCosts ? Number(c.estimatedCosts) : null}
+          totalCosts={Number(c.totalCosts)}
+          dueDate={c.dueDate}
+          canEditCase={editable}
+          canEditPatient={editable}
+        />
       </aside>
     </div>
   );

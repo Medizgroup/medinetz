@@ -18,39 +18,76 @@ export async function POST(req: Request) {
 
   const title = String(body?.title ?? "").trim();
   const organizationId = String(body?.organizationId ?? "").trim();
-  const patientPseudonym = String(body?.patientPseudonym ?? "").trim();
 
-  if (!title || !organizationId || !patientPseudonym) {
+  if (!title || !organizationId) {
     return NextResponse.json(
-      { error: "Titel, Organisation und Patient-Pseudonym sind erforderlich." },
+      { error: "Titel und Organisation sind erforderlich." },
       { status: 400 },
     );
   }
 
   const membership = await prisma.organizationMember.findUnique({
     where: {
-      organizationId_userId: {
-        organizationId,
-        userId: session.user.id,
-      },
+      organizationId_userId: { organizationId, userId: session.user.id },
     },
     select: { role: true },
   });
-
   if (!membership || !canCreateCase(membership.role)) {
     return NextResponse.json({ error: "Keine Berechtigung." }, { status: 403 });
   }
 
+  // Patient: existierend oder neu
+  let patientId: string;
+
+  if (body?.patientId) {
+    // Existierender Patient
+    const exists = await prisma.patient.findUnique({
+      where: { id: String(body.patientId) },
+      select: { id: true, deletedAt: true },
+    });
+    if (!exists || exists.deletedAt) {
+      return NextResponse.json(
+        { error: "Patient nicht gefunden." },
+        { status: 400 },
+      );
+    }
+    patientId = exists.id;
+  } else {
+    // Neuen Patient erzeugen
+    const pseudonym = String(body?.patientPseudonym ?? "").trim();
+    if (!pseudonym) {
+      return NextResponse.json(
+        { error: "Patient-Pseudonym ist erforderlich." },
+        { status: 400 },
+      );
+    }
+
+    // Wenn Pseudonym schon existiert: existierenden Patient nutzen
+    const existing = await prisma.patient.findUnique({
+      where: { pseudonym },
+      select: { id: true, deletedAt: true },
+    });
+
+    if (existing && !existing.deletedAt) {
+      patientId = existing.id;
+    } else {
+      const created = await prisma.patient.create({
+        data: {
+          pseudonym,
+          primaryLanguage: body?.patientLanguage
+            ? String(body.patientLanguage).trim()
+            : null,
+        },
+        select: { id: true },
+      });
+      patientId = created.id;
+    }
+  }
+
+  // Case anlegen
   const description = body?.description
     ? String(body.description).trim()
     : null;
-  const patientLanguage = body?.patientLanguage
-    ? String(body.patientLanguage).trim()
-    : null;
-  const patientNotes = body?.patientNotes
-    ? String(body.patientNotes).trim()
-    : null;
-
   const priority: CasePriority = PRIORITY_VALUES.includes(body?.priority)
     ? body.priority
     : "MEDIUM";
@@ -82,9 +119,7 @@ export async function POST(req: Request) {
       description,
       priority,
       sensitivityLevel,
-      patientPseudonym,
-      patientLanguage,
-      patientNotes,
+      patientId,
       creatorId: session.user.id,
       dueDate,
       estimatedCosts: estimatedCosts ?? undefined,
