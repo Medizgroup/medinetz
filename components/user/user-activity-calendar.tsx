@@ -26,7 +26,6 @@ export default function UserActivityCalendar({
         maxLevel={4}
         blockRadius={10}
         blockSize={15}
-        colorScheme="light"
         labels={{
           totalCount: "{{count}} Aktivitäten in den letzten 12 Monaten",
         }}
