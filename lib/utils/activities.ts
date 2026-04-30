@@ -2,11 +2,11 @@ import {
   AtSign,
   CircleCheck,
   Paperclip,
-  PlusCircle,
+  LayersPlus,
   RefreshCcw,
   RotateCcw,
-  Send,
-  UserPlus,
+  MessagesSquare,
+  UserRoundPlus,
   Flag,
   Calendar,
   ShieldAlert,
@@ -96,15 +96,15 @@ export function actionMeta(action: ActivityAction): {
 } {
   switch (action) {
     case "CREATED":
-      return { Icon: PlusCircle, shortLabel: "erstellt" };
+      return { Icon: LayersPlus, shortLabel: "Erstellen" };
     case "UPDATED":
       return { Icon: RefreshCcw, shortLabel: "aktualisiert" };
     case "COMMENTED":
-      return { Icon: Send, shortLabel: "kommentiert" };
+      return { Icon: MessagesSquare, shortLabel: "Kommentar" };
     case "ASSIGNED":
-      return { Icon: UserPlus, shortLabel: "zugewiesen" };
+      return { Icon: UserRoundPlus, shortLabel: "Zuweisung" };
     case "CLOSED":
-      return { Icon: CircleCheck, shortLabel: "geschlossen" };
+      return { Icon: CircleCheck, shortLabel: "Aktion" };
     case "REOPENED":
       return { Icon: RotateCcw, shortLabel: "wieder geöffnet" };
     case "MENTIONED":
@@ -165,7 +165,7 @@ export function describeActivity(
   switch (action) {
     case "CREATED":
       return [
-        { type: "text", value: `hat ${targetTypeLabel(targetType)} ` },
+        { type: "text", value: `hat einen ${targetTypeLabel(targetType)} ` },
         targetPiece,
         ...(meta.title
           ? ([
@@ -197,7 +197,7 @@ export function describeActivity(
       }
 
       const base: DescriptionPiece[] = [
-        { type: "text", value: "hat " },
+        { type: "text", value: "hat den " },
         targetPiece,
         { type: "text", value: " an " },
         { type: "strong", value: toName ?? "—" },
@@ -230,18 +230,11 @@ export function describeActivity(
       ];
 
     case "COMMENTED": {
-      const mentioned = meta.mentionedUserIds?.length ?? 0;
       const pieces: DescriptionPiece[] = [
-        { type: "text", value: "hat " },
+        { type: "text", value: "hat den " },
         targetPiece,
         { type: "text", value: " kommentiert" },
       ];
-      if (mentioned > 0) {
-        pieces.push({
-          type: "muted",
-          value: ` · ${mentioned} Erwähnung${mentioned === 1 ? "" : "en"}`,
-        });
-      }
       return pieces;
     }
 
@@ -313,9 +306,7 @@ export function describeActivity(
         const labels = meta.fields.map(fieldLabel).filter(Boolean) as string[];
         if (labels.length > 0) {
           return [
-            { type: "text", value: "hat " },
-            ...joinStrong(labels),
-            { type: "text", value: " an " },
+            { type: "text", value: "hat die Metadaten von " },
             targetPiece,
             { type: "text", value: " geändert" },
           ];
@@ -397,25 +388,4 @@ function fieldLabel(field: string): string | null {
     default:
       return null;
   }
-}
-
-function joinStrong(labels: string[]): DescriptionPiece[] {
-  if (labels.length === 1) {
-    return [{ type: "strong", value: labels[0] }];
-  }
-  if (labels.length === 2) {
-    return [
-      { type: "strong", value: labels[0] },
-      { type: "text", value: " und " },
-      { type: "strong", value: labels[1] },
-    ];
-  }
-  const out: DescriptionPiece[] = [];
-  labels.forEach((l, i) => {
-    out.push({ type: "strong", value: l });
-    if (i < labels.length - 2) out.push({ type: "text", value: ", " });
-    else if (i === labels.length - 2)
-      out.push({ type: "text", value: " und " });
-  });
-  return out;
 }

@@ -1,4 +1,3 @@
-import { FolderOpen } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 
@@ -96,12 +95,13 @@ function renderChildren(children?: RichTextNode[]) {
       // Neue Mentions: Display-Name in `value`, User-ID in `userId`
       const label = child.value ?? child.children?.[0]?.text ?? "mention";
       return (
-        <span
+        <Link
+          href={`/m/${child.userId}`}
           key={key}
           data-user-id={child.userId}
-          className="rounded bg-primary/10 px-1.5 py-0.5 text-sm font-medium text-primary">
+          className="rounded-md bg-primary/10 px-1.5 py-0.5 text-sm font-medium text-foreground">
           @{label}
-        </span>
+        </Link>
       );
     }
 
@@ -110,8 +110,7 @@ function renderChildren(children?: RichTextNode[]) {
       const caseId = (child as any).caseId as string | undefined;
 
       const inner = (
-        <span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-          <FolderOpen className="size-3.5" />
+        <span className="inline-flex items-center gap-1 rounded-md bg-blue-100 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
           {label}
         </span>
       );

@@ -20,7 +20,7 @@ import {
   TimelineSeparator,
   TimelineTitle,
 } from "@/components/ui/timeline";
-import { format, formatDistance } from "date-fns";
+import { formatDistance, formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 
 import RichTextRenderer from "@/components/protocols/rich-text-renderer";
@@ -39,11 +39,13 @@ import {
   canViewCase,
   canComment,
 } from "@/lib/utils/cases";
-import { detailedIcon } from "@/lib/utils/index";
+import { actionMeta, detailedIcon } from "@/lib/utils/index";
 import EditCaseForm from "@/components/case/edit-case-form";
 import ActivityLine from "@/components/activity/activity-line";
 import CaseCommentForm from "@/components/case/case-comment-form";
 import CaseSidebar from "@/components/case/case-sidebar";
+import { ChevronLeft, ThumbsUp } from "lucide-react";
+import { NotProduct } from "@/components/not-product";
 
 export default async function CaseDetailPage({
   params,
@@ -119,7 +121,7 @@ export default async function CaseDetailPage({
     },
   });
 
-  if (!c) notFound();
+  if (!c) return NotProduct();
 
   const membership = await prisma.organizationMember.findUnique({
     where: {
@@ -131,7 +133,7 @@ export default async function CaseDetailPage({
     select: { role: true },
   });
 
-  if (!membership || !canViewCase(membership.role)) notFound();
+  if (!membership || !canViewCase(membership.role)) return NotProduct();
 
   const editable = canEditCase(
     membership.role,
@@ -233,7 +235,6 @@ export default async function CaseDetailPage({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              {/* <Badge variant="outline" size="lg" className={`rounded-full`}> */}
               <StatusIcon
                 className={`size-4.5 ${statusColorClass(c.status)}`}
               />
@@ -241,8 +242,13 @@ export default async function CaseDetailPage({
                 className={`text-sm opacity-80 ${statusColorClass(c.status)}`}>
                 {STATUS_LABEL[c.status]}
               </span>
-              {/* </Badge> */}
-
+              <span className="block h-1 w-1 bg-primary/40 rounded-full mx-2"></span>
+              <Badge
+                variant={priorityVariant(c.priority)}
+                size="lg"
+                className="mx-2 ">
+                {PRIORITY_LABEL[c.priority]}
+              </Badge>
               {/* {c.dueDate ? (
                 <Badge variant="secondary">
                   Frist: {format(c.dueDate, "dd.MM.yyyy", { locale: de })}
@@ -254,24 +260,32 @@ export default async function CaseDetailPage({
             </span>
             <h1 className="text-2xl font-semibold flex items-center">
               #{c.caseNumber} · {c.title}
-              <Badge
+              {/* <Badge
                 variant={priorityVariant(c.priority)}
                 size="lg"
                 className="mx-2 mt-1">
                 {PRIORITY_LABEL[c.priority]}
-              </Badge>
+              </Badge> */}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Erstellt von {creatorName} ·{" "}
-              {format(c.createdAt, "dd. MMM yyyy", { locale: de })}
-              {/* {c.closedAt
-                ? ` · Geschlossen ${format(c.closedAt, "dd. MMM yyyy", { locale: de })}`
-                : ""} */}
+              Erstellt{" "}
+              {formatDistanceToNow(c.createdAt, {
+                addSuffix: true,
+                locale: de,
+              })}
+              <span className="font-medium text-foreground">
+                {" "}
+                von {creatorName}
+              </span>
             </p>
           </div>
 
           <Button
-            render={<Link href="/cases">Zurück</Link>}
+            render={
+              <Link href="/cases">
+                <ChevronLeft className="size-4" /> Zurück
+              </Link>
+            }
             variant="outline"
             className="rounded-full"
           />
@@ -286,9 +300,6 @@ export default async function CaseDetailPage({
                   id: c.id,
                   title: c.title,
                   description: c.description,
-                  // patientPseudonym: c.patient?.pseudonym ?? "",
-                  // patientLanguage: c.patient?.primaryLanguage,
-                  // patientNotes: c.patient?.notes,
                   priority: c.priority,
                   sensitivityLevel: c.sensitivityLevel,
                   dueDate: c.dueDate
@@ -305,7 +316,7 @@ export default async function CaseDetailPage({
         ) : (
           <section className="space-y-3">
             <h2 className="text-lg font-semibold">Beschreibung</h2>
-            <div className="rounded-2xl border p-5 whitespace-pre-wrap text-sm">
+            <div className="p-5 whitespace-pre-wrap text-sm">
               {c.description || (
                 <span className="text-muted-foreground">
                   Keine Beschreibung.
@@ -341,8 +352,14 @@ export default async function CaseDetailPage({
                     step={k}>
                     <TimelineHeader>
                       <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                      <TimelineTitle className="mt-0.5">
+                      <TimelineTitle className="mt-0.5 flex items-center gap-2">
                         {userName}
+                        <span className="text-muted-foreground text-xs font-light pb-px">
+                          {formatDistanceToNow(comment.createdAt, {
+                            addSuffix: true,
+                            locale: de,
+                          })}
+                        </span>
                       </TimelineTitle>
                       <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
                         <Avatar>
@@ -357,17 +374,10 @@ export default async function CaseDetailPage({
                         </Avatar>
                       </TimelineIndicator>
                     </TimelineHeader>
-                    <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
+                    <TimelineContent className="mt-2  text-foreground">
                       <RichTextRenderer value={comment.content} />
-                      <TimelineDate className="mt-1 mb-0">
-                        vor{" "}
-                        {formatDistance(
-                          new Date(comment.createdAt),
-                          new Date(),
-                          {
-                            locale: de,
-                          },
-                        )}
+                      <TimelineDate className="mt-1 mb-0 ">
+                        <ThumbsUp className="size-4! mt-3 ml-1 text-muted-foreground" />
                       </TimelineDate>
                     </TimelineContent>
                   </TimelineItem>
@@ -397,8 +407,11 @@ export default async function CaseDetailPage({
                   className="group-data-[orientation=vertical]/timeline:ms-10">
                   <TimelineHeader>
                     <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-accent">
-                      <Icon size={14} className="text-muted-foreground" />
+                    <TimelineTitle className="mt-0.5 capitalize">
+                      {actionMeta(a.action).shortLabel}
+                    </TimelineTitle>
+                    <TimelineIndicator className="bg-primary/10 group-data-completed/timeline-item:bg-primary/10 group-data-completed/timeline-item:text-primary flex size-6 items-center justify-center border-none group-data-[orientation=vertical]/timeline:-left-7">
+                      <Icon className="size-3.5" />
                     </TimelineIndicator>
                   </TimelineHeader>
                   <TimelineContent>
@@ -412,7 +425,7 @@ export default async function CaseDetailPage({
                       }}
                     />
                     <TimelineDate className="mb-0 mt-1">
-                      {formatDistance(new Date(a.createdAt), new Date(), {
+                      {formatDistanceToNow(a.createdAt, {
                         addSuffix: true,
                         locale: de,
                       })}

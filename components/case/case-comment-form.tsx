@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -73,14 +74,17 @@ export default function CaseCommentForm({
         />
         <FieldDescription>
           Nutze <span className="font-medium">@</span>, um andere Mitglieder zu
-          erwähnen.
+          erwähnen und <span className="font-medium">#</span> für Fälle.
         </FieldDescription>
       </Field>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={saving || isEmpty(value)}>
+        <Button
+          type="submit"
+          className="rounded-full"
+          disabled={saving || isEmpty(value)}>
           {saving ? <Spinner /> : null}
           Kommentar speichern
         </Button>

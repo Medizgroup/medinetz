@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Check, ChevronsUpDown, UserCircle2 } from "lucide-react";
+import { Check, ChevronDown, ChevronsUpDown, UserCircle2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { Popover, PopoverPopup, PopoverTrigger } from "@/components/ui/popover";
+import { CASE_STATUS_OPTIONS } from "@/lib/constant";
 
 type Member = {
   id: string;
@@ -69,36 +70,49 @@ export default function CaseStatusControls({
 
   return (
     <div className="space-y-4">
+      {/* Status */}
       <div className="space-y-2">
-        <div className="text-xs font-medium text-muted-foreground uppercase">
-          Status
-        </div>
+        <div className="text-xs font-medium uppercase">Status</div>
         <Select
           value={status}
-          items={[
-            { label: "Offen", value: "OPEN" },
-            { label: "In Bearbeitung", value: "IN_PROGRESS" },
-            { label: "Wartend", value: "WAITING" },
-            { label: "Abgeschlossen", value: "CLOSED" },
-          ]}
+          items={CASE_STATUS_OPTIONS}
           onValueChange={(value) => {
             if (value !== null) onStatusChange(value);
           }}
           disabled={savingStatus}>
           <SelectTrigger>
-            <SelectValue />
+            <SelectValue>
+              {(() => {
+                const current = CASE_STATUS_OPTIONS.find(
+                  (opt) => opt.value === status,
+                );
+                if (!current) return null;
+                return (
+                  <span className="flex items-center gap-2">
+                    <span
+                      className={cn("size-1.5 rounded-full", current.color)}
+                    />
+                    <span>{current.label}</span>
+                  </span>
+                );
+              })()}
+            </SelectValue>
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="OPEN">Offen</SelectItem>
-            <SelectItem value="IN_PROGRESS">In Bearbeitung</SelectItem>
-            <SelectItem value="WAITING">Wartend</SelectItem>
-            <SelectItem value="CLOSED">Abgeschlossen</SelectItem>
+          <SelectContent alignItemWithTrigger={false}>
+            {CASE_STATUS_OPTIONS.map((status) => (
+              <SelectItem key={status.value} value={status.value}>
+                <span className="flex items-center gap-2">
+                  <span className={cn("size-1.5 rounded-full", status.color)} />
+                  <span>{status.label}</span>
+                </span>
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
 
       <div className="space-y-2">
-        <div className="text-xs font-medium text-muted-foreground uppercase">
+        <div className="text-xs font-medium text-foreground uppercase">
           Zugewiesen an
         </div>
         <AssigneeCombobox
@@ -156,13 +170,16 @@ function AssigneeCombobox({
                 {selected ? selected.displayName : "Niemand zugewiesen"}
               </span>
             </span>
-            <ChevronsUpDown className="ml-1 size-3.5 shrink-0 opacity-50" />
+            <ChevronDown className="ml-1 size-3.5 shrink-0" />
           </Button>
         }
       />
-      <PopoverPopup className="w-[260px] p-0" align="start">
+      <PopoverPopup className="min-w-[260px] w-full" align="start">
         <Command items={searchableItems}>
-          <CommandInput placeholder="Suchen…" />
+          <CommandInput
+            placeholder="Suchen…"
+            className="border! border-border! w-full"
+          />
           <CommandEmpty>Niemand gefunden.</CommandEmpty>
 
           <CommandList>
@@ -174,17 +191,16 @@ function AssigneeCombobox({
                   onChange(item.member.id);
                   setOpen(false);
                 }}>
-                <Check
-                  className={cn(
-                    "size-4",
-                    assigneeId === item.member.id ? "opacity-100" : "opacity-0",
-                  )}
-                />
-                <div className="flex flex-col ml-2">
+                <div className="flex items-center gap-2 justify-between w-full">
                   <span>{item.member.displayName}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {item.member.email}
-                  </span>
+                  <Check
+                    className={cn(
+                      "size-4",
+                      assigneeId === item.member.id
+                        ? "opacity-100"
+                        : "opacity-0",
+                    )}
+                  />
                 </div>
               </CommandItem>
             )}

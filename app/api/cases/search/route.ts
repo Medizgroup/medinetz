@@ -73,7 +73,6 @@ export async function GET(req: Request) {
       title: true,
       status: true,
       priority: true,
-      patientPseudonym: true,
     },
   });
 

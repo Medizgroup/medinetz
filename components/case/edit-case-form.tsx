@@ -26,6 +26,8 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
 } from "../ui/number-field";
+import { PRIORITY_VALUES } from "@/lib/constant";
+import { Badge } from "../ui/badge";
 
 type CaseInput = {
   id: string;
@@ -88,7 +90,7 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border p-5">
+    <form onSubmit={onSubmit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <Field className="gap-2 sm:col-span-2">
           <FieldLabel>Titel</FieldLabel>
@@ -98,61 +100,30 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
             required
           />
         </Field>
-
-        {/* <Field className="gap-2">
-          <FieldLabel>Patient Referenz</FieldLabel>
-          <Input
-            value={patientPseudonym}
-            onChange={(e) => setPatientPseudonym(e.target.value)}
-            required
-          />
-        </Field> */}
-
-        {/* <Field className="gap-2">
-          <FieldLabel>Sprache</FieldLabel>
-          <Input
-            value={patientLanguage}
-            onChange={(e) => setPatientLanguage(e.target.value)}
-          />
-        </Field> */}
       </div>
-
-      <Field className="gap-2">
-        <FieldLabel>Beschreibung</FieldLabel>
-        <Textarea
-          rows={5}
-          value={description}
-          className="h-32"
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </Field>
-
-      {/* <Field className="gap-2">
-        <FieldLabel>Patient-Notizen</FieldLabel>
-        <Textarea
-          rows={4}
-          value={patientNotes}
-          className="h-28"
-          onChange={(e) => setPatientNotes(e.target.value)}
-        />
-      </Field> */}
 
       <div className="grid gap-4 sm:grid-cols-4">
         <Field className="gap-2">
           <FieldLabel>Priorität</FieldLabel>
           <Select
-            items={[
-              { label: "Niedrig", value: "LOW" },
-              { label: "Mittel", value: "MEDIUM" },
-              { label: "Hoch", value: "HIGH" },
-              { label: "Dringend", value: "URGENT" },
-            ]}
+            items={PRIORITY_VALUES}
             value={priority}
             onValueChange={(value) => {
               if (value !== null) setPriority(value);
             }}>
             <SelectTrigger>
-              <SelectValue />
+              <SelectValue>
+                {(() => {
+                  const current = PRIORITY_VALUES.find(
+                    (opt) => opt.value === priority,
+                  );
+                  return current ? (
+                    <Badge variant={current.variant} size="sm">
+                      {current.label}
+                    </Badge>
+                  ) : null;
+                })()}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="LOW">Niedrig</SelectItem>
@@ -167,9 +138,9 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
           <FieldLabel>Sensibilität</FieldLabel>
           <Select
             items={[
-              { label: "1 – Standard", value: "1" },
-              { label: "2 – Erhöht", value: "2" },
-              { label: "3 – Sehr hoch", value: "3" },
+              { label: "Standard", value: "1" },
+              { label: "Erhöht", value: "2" },
+              { label: "Sehr hoch", value: "3" },
             ]}
             value={sensitivityLevel}
             onValueChange={(value) => {
@@ -179,9 +150,9 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">1 – Standard</SelectItem>
-              <SelectItem value="2">2 – Erhöht</SelectItem>
-              <SelectItem value="3">3 – Sehr hoch</SelectItem>
+              <SelectItem value="1">Standard</SelectItem>
+              <SelectItem value="2">Erhöht</SelectItem>
+              <SelectItem value="3">Sehr hoch</SelectItem>
             </SelectContent>
           </Select>
         </Field>
@@ -225,6 +196,15 @@ export default function EditCaseForm({ caseData }: { caseData: CaseInput }) {
           </NumberField>
         </Field>
       </div>
+      <Field className="gap-2">
+        <FieldLabel>Beschreibung</FieldLabel>
+        <Textarea
+          rows={5}
+          value={description}
+          className="h-32"
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </Field>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
