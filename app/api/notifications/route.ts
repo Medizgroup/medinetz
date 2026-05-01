@@ -3,18 +3,52 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { NotificationType } from "@/generated/prisma/enums";
 
-export async function GET() {
+const VALID_TYPES: NotificationType[] = [
+  "MENTION",
+  "ASSIGNMENT",
+  "COMMENT",
+  "CASE_UPDATE",
+  "PROTOCOL_UPDATE",
+  "EVENT_INVITE",
+];
+
+export async function GET(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const filter = searchParams.get("filter") ?? "all"; // "all" | "unread"
+  const typeParam = searchParams.get("type");
+  const limitParam = parseInt(searchParams.get("limit") ?? "20", 10);
+  const limit = Math.min(Math.max(limitParam, 1), 100);
+  const cursor = searchParams.get("cursor"); // notification id
+
+  const where: {
+    userId: string;
+    read?: boolean;
+    type?: NotificationType;
+  } = {
+    userId: session.user.id,
+  };
+
+  if (filter === "unread") {
+    where.read = false;
+  }
+
+  if (typeParam && VALID_TYPES.includes(typeParam as NotificationType)) {
+    where.type = typeParam as NotificationType;
+  }
+
   const [items, unreadCount] = await Promise.all([
     prisma.notification.findMany({
-      where: { userId: session.user.id },
+      where,
       orderBy: { createdAt: "desc" },
-      take: 20,
+      take: limit + 1, // +1 um zu wissen ob's mehr gibt
+      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
       select: {
         id: true,
         type: true,
@@ -32,7 +66,11 @@ export async function GET() {
     }),
   ]);
 
-  return NextResponse.json({ items, unreadCount });
+  const hasMore = items.length > limit;
+  const result = hasMore ? items.slice(0, limit) : items;
+  const nextCursor = hasMore ? result[result.length - 1].id : null;
+
+  return NextResponse.json({ items: result, unreadCount, nextCursor });
 }
 
 /**
