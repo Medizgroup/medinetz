@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { Fragment } from "react";
 
@@ -123,6 +125,68 @@ function renderChildren(children?: RichTextNode[]) {
         );
       }
       return <Fragment key={key}>{inner}</Fragment>;
+    }
+
+    // Tabelle
+    if (child.type === "table") {
+      return (
+        <table
+          key={key}
+          className="my-4 w-full border-collapse rounded-md border bg-background">
+          <tbody>{renderChildren(child.children)}</tbody>
+        </table>
+      );
+    }
+    if (child.type === "tr") {
+      return (
+        <tr key={key} className="border-b border-border last:border-b-0">
+          {renderChildren(child.children)}
+        </tr>
+      );
+    }
+    if (child.type === "td") {
+      return (
+        <td
+          key={key}
+          className="min-w-[120px] border-r border-border px-3 py-2 align-top text-sm last:border-r-0">
+          {renderChildren(child.children)}
+        </td>
+      );
+    }
+    if (child.type === "th") {
+      return (
+        <th
+          key={key}
+          className="min-w-[120px] border-r border-border bg-muted/40 px-3 py-2 text-left align-top text-sm font-semibold last:border-r-0">
+          {renderChildren(child.children)}
+        </th>
+      );
+    }
+
+    // Image
+    if (child.type === "img") {
+      const url = (child as any).url as string | undefined;
+      const caption = (child as any).caption as string | undefined;
+      if (!url) return null;
+      return (
+        <figure key={key} className="my-4">
+          <img
+            src={url}
+            alt={caption || "Bild"}
+            className="block max-h-[600px] w-full rounded-lg object-contain bg-muted/30"
+          />
+          {caption ? (
+            <figcaption className="mt-1 text-center text-xs text-muted-foreground">
+              {caption}
+            </figcaption>
+          ) : null}
+        </figure>
+      );
+    }
+
+    // Trennlinie
+    if (child.type === "hr") {
+      return <hr key={key} className="my-6 border-border" />;
     }
 
     return <Fragment key={key}>{renderChildren(child.children)}</Fragment>;

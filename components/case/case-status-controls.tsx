@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Check, ChevronDown, ChevronsUpDown, UserCircle2 } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@/components/ui/command";
 import { Popover, PopoverPopup, PopoverTrigger } from "@/components/ui/popover";
 import { CASE_STATUS_OPTIONS } from "@/lib/constant";

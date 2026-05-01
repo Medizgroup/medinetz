@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Edit2, Languages, Plus, Stethoscope } from "lucide-react";
+import { Edit2, Languages, Plus, UserRoundPen } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -23,6 +23,9 @@ import CaseDoctorDialog, { CaseDoctorForEdit } from "./case-doctor-dialog";
 import CaseInterpreterDialog, {
   CaseInterpreterForEdit,
 } from "./case-interpreter-dialog";
+import { Spinner } from "../ui/spinner";
+import { format } from "date-fns";
+import { de } from "date-fns/locale";
 
 type Member = { id: string; displayName: string; email: string };
 
@@ -174,44 +177,42 @@ export default function CaseSidebar({
         action={
           canEditPatient ? (
             <Button
-              size="sm"
+              size="icon"
               variant="ghost"
-              className="h-6 px-2"
               onClick={() => setPatientDialogOpen(true)}>
-              <Edit2 className="size-3" />
+              <UserRoundPen className="size-4" />
             </Button>
           ) : null
         }
       />
 
       {loading || !patient ? (
-        <div className="text-xs text-muted-foreground">Lädt…</div>
+        <Spinner className="mx-auto text-muted-foreground size-4" />
       ) : (
-        <div className="space-y-1.5 text-sm">
-          <div className="font-medium tabular-nums">{patient.pseudonym}</div>
-          <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-            <span>{GENDER_LABEL[patient.gender]}</span>
-            {patient.birthYear ? (
-              <span>
-                {patient.birthYear} (
-                {new Date().getFullYear() - patient.birthYear} J.)
+        <div className="space-y-1 text-sm">
+          <div className="font-medium tabular-nums flex items-center gap-2 flex-wrap">
+            <span
+              className={`text-base pb-1 font-medium ${patient.gender === "MALE" ? "text-blue-500" : patient.gender === "FEMALE" ? "text-pink-500" : ""}`}>
+              {GENDER_LABEL[patient.gender]}
+            </span>
+            {patient.pseudonym}{" "}
+            {patient.primaryLanguage ? (
+              <span className="text-muted-foreground pl-1 font-normal text-xs">
+                <Languages className="size-4 inline-block text-muted-foreground" />{" "}
+                {patient.primaryLanguage}
               </span>
             ) : null}
-            {patient.primaryLanguage ? (
-              <span>{patient.primaryLanguage}</span>
-            ) : null}
+          </div>
+          <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
             {patient.countryOfOrigin ? (
-              <span>{patient.countryOfOrigin}</span>
-            ) : null}
-            {patient.postalCodePrefix ? (
-              <span>PLZ {patient.postalCodePrefix}xx</span>
+              <span>Aus {patient.countryOfOrigin}</span>
             ) : null}
           </div>
           <div className="flex flex-wrap gap-1 pt-1">
-            <Badge variant="secondary" className="text-[10px]">
+            <Badge variant="warning" className="text-[10px]">
               {RESIDENCE_LABEL[patient.residenceStatus]}
             </Badge>
-            <Badge variant="secondary" className="text-[10px]">
+            <Badge variant="info" className="text-[10px]">
               {INSURANCE_LABEL[patient.insuranceStatus]}
             </Badge>
           </div>
@@ -226,14 +227,14 @@ export default function CaseSidebar({
         action={
           canEditPatient ? (
             <Button
-              size="sm"
-              variant="ghost"
-              className="h-6 px-2"
+              size="icon-sm"
+              variant="outline"
+              className="rounded-full"
               onClick={() => {
                 setEditingDiagnosis(null);
                 setDiagnosisDialogOpen(true);
               }}>
-              <Plus className="size-3" />
+              <Plus className="size-4" />
             </Button>
           ) : null
         }
@@ -245,7 +246,7 @@ export default function CaseSidebar({
           {patient?.diagnoses.map((d) => (
             <li
               key={d.id}
-              className={`group flex items-start justify-between gap-2 rounded px-1 py-0.5 hover:bg-muted/40 ${
+              className={`group flex items-center justify-between gap-2  px-2 rounded-lg py-2 bg-muted ${
                 !d.isActive ? "opacity-60" : ""
               }`}>
               <div className="min-w-0 flex-1">
@@ -262,7 +263,9 @@ export default function CaseSidebar({
                 ) : null}
               </div>
               {canEditPatient ? (
-                <button
+                <Button
+                  variant="outline"
+                  size="icon-sm"
                   type="button"
                   onClick={() => {
                     setEditingDiagnosis(d);
@@ -270,7 +273,7 @@ export default function CaseSidebar({
                   }}
                   className="shrink-0 opacity-0 group-hover:opacity-100">
                   <Edit2 className="size-3 text-muted-foreground" />
-                </button>
+                </Button>
               ) : null}
             </li>
           ))}
@@ -285,14 +288,14 @@ export default function CaseSidebar({
         action={
           canEditPatient ? (
             <Button
-              size="sm"
-              variant="ghost"
-              className="h-6 px-2"
+              size="icon-sm"
+              variant="outline"
+              className="rounded-full"
               onClick={() => {
                 setEditingMed(null);
                 setMedDialogOpen(true);
               }}>
-              <Plus className="size-3" />
+              <Plus className="size-4" />
             </Button>
           ) : null
         }
@@ -304,18 +307,18 @@ export default function CaseSidebar({
           {patient?.medications.map((m) => (
             <li
               key={m.id}
-              className={`group flex items-start justify-between gap-2 rounded px-1 py-0.5 hover:bg-muted/40 ${
+              className={`group flex items-center justify-between gap-2  px-2 rounded-lg py-2 bg-muted ${
                 !m.isActive ? "opacity-60" : ""
               }`}>
               <div className="min-w-0 flex-1">
-                <div className="font-medium">{m.name}</div>
-                <div className="text-xs text-muted-foreground">
-                  {[m.dosage, m.frequency].filter(Boolean).join(" · ") || "—"}
-                  {!m.isActive ? " · inaktiv" : null}
+                <div className="font-medium">
+                  {m.name} {m.dosage}
                 </div>
               </div>
               {canEditPatient ? (
-                <button
+                <Button
+                  variant="outline"
+                  size="icon-sm"
                   type="button"
                   onClick={() => {
                     setEditingMed(m);
@@ -323,7 +326,7 @@ export default function CaseSidebar({
                   }}
                   className="shrink-0 opacity-0 group-hover:opacity-100">
                   <Edit2 className="size-3 text-muted-foreground" />
-                </button>
+                </Button>
               ) : null}
             </li>
           ))}
@@ -338,62 +341,66 @@ export default function CaseSidebar({
         action={
           canEditCase ? (
             <Button
-              size="sm"
-              variant="ghost"
-              className="h-6 px-2"
+              size="icon-sm"
+              variant="outline"
+              className="rounded-full"
               onClick={() => {
                 setEditingCaseDoctor(null);
                 setDoctorDialogOpen(true);
               }}>
-              <Plus className="size-3" />
+              <Plus className="size-4" />
             </Button>
           ) : null
         }
       />
       {caseDoctors.length === 0 ? (
-        <div className="text-xs text-muted-foreground">Niemand zugewiesen.</div>
+        <div className="text-xs text-muted-foreground">
+          Noch keine ärztliche Unterstützung
+        </div>
       ) : (
-        <ul className="space-y-1.5 text-sm">
+        <ul className="space-y-1.5 text-sm ">
           {caseDoctors.map((cd) => (
             <li
               key={cd.id}
-              className="group flex items-start justify-between gap-2 rounded px-1 py-0.5 hover:bg-muted/40">
+              className="group flex items-center justify-between gap-2  p-2">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <Stethoscope className="size-3 shrink-0 text-muted-foreground" />
                   <span className="font-medium truncate">{cd.doctor.name}</span>
                 </div>
                 {cd.doctor.specialty ? (
-                  <div className="ml-4 text-xs text-muted-foreground">
+                  <div className="text-sm text-muted-foreground">
                     {cd.doctor.specialty}
                   </div>
                 ) : null}
-                {cd.appointmentDate ? (
-                  <div className="ml-4 text-xs text-muted-foreground">
-                    {new Date(cd.appointmentDate).toLocaleDateString("de-DE")}
+                {/* {cd.appointmentDate ? (
+                  <div className="text-xs text-muted-foreground">
+                    {format(new Date(cd.appointmentDate), "PPP", {
+                      locale: de,
+                    })}
                   </div>
-                ) : null}
+                ) : null} */}
                 {cd.invoiceReceived ? (
-                  <div className="ml-4 text-xs">
+                  <div className="text-xs mt-1">
                     <Badge
                       variant={cd.invoicePaid ? "info" : "warning"}
                       className="text-[10px]">
                       {cd.invoiceAmount?.toFixed(2)} €{" "}
-                      {cd.invoicePaid ? "✓ bezahlt" : "offen"}
                     </Badge>
                   </div>
                 ) : null}
               </div>
               {canEditCase ? (
-                <button
+                <Button
                   type="button"
+                  size="icon-sm"
+                  variant="outline"
                   onClick={() => {
                     setEditingCaseDoctor(cd);
                     setDoctorDialogOpen(true);
                   }}
                   className="shrink-0 opacity-0 group-hover:opacity-100">
                   <Edit2 className="size-3 text-muted-foreground" />
-                </button>
+                </Button>
               ) : null}
             </li>
           ))}
@@ -408,14 +415,14 @@ export default function CaseSidebar({
         action={
           canEditCase ? (
             <Button
-              size="sm"
-              variant="ghost"
-              className="h-6 px-2"
+              size="icon-sm"
+              variant="outline"
+              className="rounded-full"
               onClick={() => {
                 setEditingCaseInterpreter(null);
                 setInterpreterDialogOpen(true);
               }}>
-              <Plus className="size-3" />
+              <Plus className="size-4" />
             </Button>
           ) : null
         }
@@ -427,46 +434,48 @@ export default function CaseSidebar({
           {caseInterpreters.map((ci) => (
             <li
               key={ci.id}
-              className="group flex items-start justify-between gap-2 rounded px-1 py-0.5 hover:bg-muted/40">
+              className="group flex items-center justify-between gap-2 p-2">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <Languages className="size-3 shrink-0 text-muted-foreground" />
                   <span className="font-medium truncate">
                     {ci.interpreter.name}
                   </span>
                 </div>
                 {ci.interpreter.languages.length > 0 ? (
-                  <div className="ml-4 text-xs text-muted-foreground">
+                  <div className="text-xs text-muted-foreground">
                     {ci.interpreter.languages.join(", ")}
                   </div>
                 ) : null}
-                {ci.appointmentDate ? (
+                {/* {ci.appointmentDate ? (
                   <div className="ml-4 text-xs text-muted-foreground">
                     {new Date(ci.appointmentDate).toLocaleDateString("de-DE")}
                     {ci.hoursWorked ? ` · ${ci.hoursWorked}h` : ""}
                   </div>
-                ) : null}
+                ) : null} */}
                 {ci.invoiceReceived ? (
-                  <div className="ml-4 text-xs">
+                  <div className=" text-xs text-muted-foreground mt-2">
                     <Badge
                       variant={ci.invoicePaid ? "info" : "warning"}
                       className="text-[10px]">
                       {ci.cost?.toFixed(2)} €{" "}
-                      {ci.invoicePaid ? "✓ bezahlt" : "offen"}
                     </Badge>
+
+                    {ci.hoursWorked ? ` · ${ci.hoursWorked}h` : ""}
                   </div>
                 ) : null}
               </div>
               {canEditCase ? (
-                <button
+                <Button
                   type="button"
+                  size="icon-sm"
+                  variant="outline"
                   onClick={() => {
                     setEditingCaseInterpreter(ci);
                     setInterpreterDialogOpen(true);
                   }}
                   className="shrink-0 opacity-0 group-hover:opacity-100">
                   <Edit2 className="size-3 text-muted-foreground" />
-                </button>
+                </Button>
               ) : null}
             </li>
           ))}
@@ -494,7 +503,7 @@ export default function CaseSidebar({
           <Separator />
           <SectionHeader title="Frist" />
           <div className="text-sm">
-            {new Date(dueDate).toLocaleDateString("de-DE")}
+            {format(new Date(dueDate), "PPP", { locale: de })}
           </div>
         </>
       ) : null}
@@ -553,7 +562,7 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center justify-between">
-      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+      <div className="text-xs font-medium text-foreground uppercase tracking-wide">
         {title}
       </div>
       {action}

@@ -1,37 +1,30 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
-import type { PlateEditor, PlateElementProps } from 'platejs/react';
+import type { PlateEditor, PlateElementProps } from "platejs/react";
 
-import { AIChatPlugin } from '@platejs/ai/react';
 import {
-  CalendarIcon,
-  ChevronRightIcon,
-  Code2,
   Columns3Icon,
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
+  ImageIcon,
+  ImageUpIcon,
   LightbulbIcon,
   ListIcon,
   ListOrdered,
-  PenToolIcon,
+  Minus,
   PilcrowIcon,
   Quote,
-  RadicalIcon,
-  SparklesIcon,
   Square,
   Table,
-  TableOfContentsIcon,
-} from 'lucide-react';
-import { type TComboboxInputElement, KEYS } from 'platejs';
-import { PlateElement } from 'platejs/react';
+} from "lucide-react";
+import { type TComboboxInputElement, KEYS } from "platejs";
+import { PlateElement } from "platejs/react";
 
-import {
-  insertBlock,
-  insertInlineElement,
-} from '@/components/editor/transforms';
+import { insertBlock } from "@/components/editor/transforms";
 
 import {
   InlineCombobox,
@@ -41,7 +34,7 @@ import {
   InlineComboboxGroupLabel,
   InlineComboboxInput,
   InlineComboboxItem,
-} from './inline-combobox';
+} from "./inline-combobox";
 
 type Group = {
   group: string;
@@ -58,91 +51,66 @@ type Group = {
 
 const groups: Group[] = [
   {
-    group: 'AI',
-    items: [
-      {
-        focusEditor: false,
-        icon: <SparklesIcon />,
-        value: 'AI',
-        onSelect: (editor) => {
-          editor.getApi(AIChatPlugin).aiChat.show();
-        },
-      },
-    ],
-  },
-  {
-    group: 'Basic blocks',
+    group: "Basic blocks",
     items: [
       {
         icon: <PilcrowIcon />,
-        keywords: ['paragraph'],
-        label: 'Text',
+        keywords: ["paragraph"],
+        label: "Text",
         value: KEYS.p,
       },
       {
         icon: <Heading1Icon />,
-        keywords: ['title', 'h1'],
-        label: 'Heading 1',
+        keywords: ["title", "h1"],
+        label: "Heading 1",
         value: KEYS.h1,
       },
       {
         icon: <Heading2Icon />,
-        keywords: ['subtitle', 'h2'],
-        label: 'Heading 2',
+        keywords: ["subtitle", "h2"],
+        label: "Heading 2",
         value: KEYS.h2,
       },
       {
         icon: <Heading3Icon />,
-        keywords: ['subtitle', 'h3'],
-        label: 'Heading 3',
+        keywords: ["subtitle", "h3"],
+        label: "Heading 3",
         value: KEYS.h3,
       },
       {
         icon: <ListIcon />,
-        keywords: ['unordered', 'ul', '-'],
-        label: 'Bulleted list',
+        keywords: ["unordered", "ul", "-"],
+        label: "Bulleted list",
         value: KEYS.ul,
       },
       {
         icon: <ListOrdered />,
-        keywords: ['ordered', 'ol', '1'],
-        label: 'Numbered list',
+        keywords: ["ordered", "ol", "1"],
+        label: "Numbered list",
         value: KEYS.ol,
       },
       {
         icon: <Square />,
-        keywords: ['checklist', 'task', 'checkbox', '[]'],
-        label: 'To-do list',
+        keywords: ["checklist", "task", "checkbox", "[]"],
+        label: "To-do list",
         value: KEYS.listTodo,
       },
       {
-        icon: <ChevronRightIcon />,
-        keywords: ['collapsible', 'expandable'],
-        label: 'Toggle',
-        value: KEYS.toggle,
-      },
-      {
-        icon: <Code2 />,
-        keywords: ['```'],
-        label: 'Code Block',
-        value: KEYS.codeBlock,
-      },
-      {
         icon: <Table />,
-        label: 'Table',
+        label: "Table",
         value: KEYS.table,
       },
       {
         icon: <Quote />,
-        keywords: ['citation', 'blockquote', 'quote', '>'],
-        label: 'Blockquote',
+        keywords: ["citation", "blockquote", "quote", ">"],
+        label: "Blockquote",
         value: KEYS.blockquote,
       },
       {
-        description: 'Insert a highlighted block.',
+        description: "Insert a highlighted block.",
         icon: <LightbulbIcon />,
-        keywords: ['note'],
-        label: 'Callout',
+        keywords: ["note"],
+        label: "Callout",
         value: KEYS.callout,
       },
     ].map((item) => ({
@@ -153,43 +121,12 @@ const groups: Group[] = [
     })),
   },
   {
-    group: 'Advanced blocks',
+    group: "Advanced blocks",
     items: [
       {
-        icon: <TableOfContentsIcon />,
-        keywords: ['toc'],
-        label: 'Table of contents',
-        value: KEYS.toc,
-      },
-      {
         icon: <Columns3Icon />,
-        label: '3 columns',
-        value: 'action_three_columns',
-      },
-      {
-        focusEditor: false,
-        icon: <RadicalIcon />,
-        label: 'Equation',
-        value: KEYS.equation,
-      },
-      {
-        icon: <PenToolIcon />,
-        keywords: ['excalidraw'],
-        label: 'Excalidraw',
-        value: KEYS.excalidraw,
-      },
-      {
-        icon: <Code2 />,
-        keywords: [
-          'code-drawing',
-          'diagram',
-          'plantuml',
-          'graphviz',
-          'flowchart',
-          'mermaid',
-        ],
-        label: 'Code Drawing',
-        value: KEYS.codeDrawing,
+        label: "3 columns",
+        value: "action_three_columns",
       },
     ].map((item) => ({
       ...item,
@@ -199,32 +136,39 @@ const groups: Group[] = [
     })),
   },
   {
-    group: 'Inline',
+    group: "Blöcke",
     items: [
       {
-        focusEditor: true,
-        icon: <CalendarIcon />,
-        keywords: ['time'],
-        label: 'Date',
-        value: KEYS.date,
+        value: "img",
+        label: "Bild",
+        icon: <ImageIcon />,
+        keywords: ["image", "bild", "foto", "picture"],
+        onSelect: (editor) => {
+          const url = window.prompt("Bild-URL eingeben:");
+          if (!url?.trim()) return;
+          editor.tf.insertNodes(
+            {
+              type: KEYS.img,
+              url: url.trim(),
+              children: [{ text: "" }],
+            } as any,
+            { select: true },
+          );
+        },
       },
       {
-        focusEditor: false,
-        icon: <RadicalIcon />,
-        label: 'Inline Equation',
-        value: KEYS.inlineEquation,
+        value: "hr",
+        label: "Divider",
+        icon: <Minus />,
+        keywords: ["divider", "hr", "trenner", "linie"],
+        onSelect: (editor) => insertBlock(editor, KEYS.hr, { upsert: true }),
       },
-    ].map((item) => ({
-      ...item,
-      onSelect: (editor, value) => {
-        insertInlineElement(editor, value);
-      },
-    })),
+    ],
   },
 ];
 
 export function SlashInputElement(
-  props: PlateElementProps<TComboboxInputElement>
+  props: PlateElementProps<TComboboxInputElement>,
 ) {
   const { editor, element } = props;
 
@@ -249,12 +193,11 @@ export function SlashInputElement(
                     label={label}
                     focusEditor={focusEditor}
                     group={group}
-                    keywords={keywords}
-                  >
+                    keywords={keywords}>
                     <div className="mr-2 text-muted-foreground">{icon}</div>
                     {label ?? value}
                   </InlineComboboxItem>
-                )
+                ),
               )}
             </InlineComboboxGroup>
           ))}

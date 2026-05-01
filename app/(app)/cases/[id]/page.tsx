@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/static-components */
 import { headers } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { auth } from "@/lib/auth";
@@ -20,7 +19,7 @@ import {
   TimelineSeparator,
   TimelineTitle,
 } from "@/components/ui/timeline";
-import { formatDistance, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 
 import RichTextRenderer from "@/components/protocols/rich-text-renderer";
