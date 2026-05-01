@@ -231,9 +231,9 @@ export function describeActivity(
 
     case "COMMENTED": {
       const pieces: DescriptionPiece[] = [
-        { type: "text", value: "hat den " },
+        { type: "text", value: "hat einen " },
         targetPiece,
-        { type: "text", value: " kommentiert" },
+        { type: "text", value: " hinterlassen." },
       ];
       return pieces;
     }

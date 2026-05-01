@@ -34,13 +34,14 @@ import {
 import {
   AlertDialog,
   AlertDialogClose,
-  AlertDialogDescription,
+  AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogPopup,
   AlertDialogTitle,
 } from "./alert-dialog";
 import { Button } from "./button";
+import { Label } from "./label";
 
 const MEDIA_CONFIG: Record<
   string,
@@ -126,10 +127,10 @@ export function MediaToolbarButton({
             align="start"
             alignOffset={-32}>
             <DropdownMenuGroup>
-              <DropdownMenuItem onSelect={() => openFilePicker()}>
+              {/* <DropdownMenuItem onSelect={() => openFilePicker()}>
                 {currentConfig.icon}
                 Upload from computer
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem onSelect={() => setDialogOpen(true)}>
                 <LinkIcon />
                 Insert via URL
@@ -186,12 +187,10 @@ function MediaUrlDialogContent({
         <AlertDialogTitle>{currentConfig.title}</AlertDialogTitle>
       </AlertDialogHeader>
 
-      <AlertDialogDescription className="group relative w-full">
-        <label
-          className="-translate-y-1/2 absolute top-1/2 block cursor-text px-1 text-muted-foreground/70 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:font-medium group-focus-within:text-foreground group-focus-within:text-xs has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:font-medium has-[+input:not(:placeholder-shown)]:text-foreground has-[+input:not(:placeholder-shown)]:text-xs"
-          htmlFor="url">
-          <span className="inline-flex bg-background px-2">URL</span>
-        </label>
+      <div className="group relative w-full px-6">
+        <Label htmlFor="url" className="mb-2">
+          URL
+        </Label>
         <Input
           id="url"
           className="w-full"
@@ -204,16 +203,16 @@ function MediaUrlDialogContent({
           type="url"
           autoFocus
         />
-      </AlertDialogDescription>
+      </div>
 
       <AlertDialogFooter>
-        <AlertDialogClose>Cancel</AlertDialogClose>
+        <AlertDialogClose>Abbrechen</AlertDialogClose>
         <Button
           onClick={(e) => {
             e.preventDefault();
             embedMedia();
           }}>
-          Accept
+          Bestätigen
         </Button>
       </AlertDialogFooter>
     </>

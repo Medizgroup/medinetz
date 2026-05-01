@@ -26,6 +26,7 @@ import { ExitBreakKit } from "../editor/plugins/exit-break-kit";
 import { EmojiKit } from "../editor/plugins/emoji-kit";
 import { FixedToolbarKit } from "../editor/plugins/fixed-toolbar-kit";
 import { FloatingToolbarKit } from "../editor/plugins/floating-toolbar-kit";
+import { CursorOverlayKit } from "../editor/plugins/cursor-overlay-kit";
 
 const emptyValue: Value = [
   {
@@ -66,6 +67,7 @@ export default function ProtocolEditor({
       ...EmojiKit,
       ...FixedToolbarKit,
       ...FloatingToolbarKit,
+      ...CursorOverlayKit,
     ],
     value: value && value.length > 0 ? value : emptyValue,
   });
@@ -78,7 +80,7 @@ export default function ProtocolEditor({
           onChange(value);
         }}>
         <EditorContainer className="min-h-[280px] rounded-xl">
-          <Editor placeholder={placeholder} className="" />
+          <Editor placeholder={placeholder} className="" variant="fullWidth" />
         </EditorContainer>
       </Plate>
     </ProtocolEditorProvider>

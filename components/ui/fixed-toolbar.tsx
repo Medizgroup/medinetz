@@ -11,7 +11,7 @@ export function FixedToolbar(props: React.ComponentProps<typeof Toolbar>) {
         {...props}
         className={cn(
           props.className,
-          "border w-full overflow-x-auto justify-start p-2  rounded-xl",
+          "border w-full overflow-x-auto justify-start p-1.5  rounded-xl",
         )}
       />
     </TooltipProvider>

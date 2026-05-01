@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { headers } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
@@ -12,7 +13,14 @@ import { TElement } from "platejs";
 import ProtocolCommentForm from "@/components/protocols/protocol-comment-form";
 import EditProtocolForm from "@/components/protocols/edit-protocol-form";
 import { Badge } from "@/components/ui/badge";
-import { Circle, CircleCheck, Clock, Loader } from "lucide-react";
+import {
+  ChevronLeft,
+  Circle,
+  CircleCheck,
+  Clock,
+  Loader,
+  ThumbsUp,
+} from "lucide-react";
 
 import {
   Timeline,
@@ -25,13 +33,15 @@ import {
   TimelineTitle,
 } from "@/components/ui/timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { formatDistance } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
-import { detailedIcon } from "@/lib/utils/index";
+import { actionMeta, detailedIcon } from "@/lib/utils/index";
 import { getInitials } from "@/lib/helper/user";
 import ActivityLine from "@/components/activity/activity-line";
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipContent } from "@radix-ui/react-tooltip";
+import { NotProduct } from "@/components/not-product";
+import { orgTypeBadge, STATUS_LABEL } from "@/lib/utils/cases";
 
 function orgBadge(type: string) {
   if (type === "ROUTINE") return "R";
@@ -138,7 +148,7 @@ export default async function ProtocolDetailPage({
     },
   });
 
-  if (!protocol) notFound();
+  if (!protocol) return NotProduct();
 
   const membership = await prisma.organizationMember.findUnique({
     where: {
@@ -152,7 +162,7 @@ export default async function ProtocolDetailPage({
     },
   });
 
-  if (!membership) notFound();
+  if (!membership) return NotProduct();
 
   // const editable = canEdit(membership.role);
   const commentable = canComment(membership.role);
@@ -162,11 +172,14 @@ export default async function ProtocolDetailPage({
       organizationId: protocol.organizationId,
       OR: [
         { targetType: "protocol", targetId: protocol.id },
-        { targetType: "protocol_comment" },
+        {
+          targetType: "protocol_comment",
+          targetId: { in: protocol.comments.map((c) => c.id) },
+        },
       ],
     },
     orderBy: { createdAt: "desc" },
-    take: 20,
+    take: 10,
     select: {
       id: true,
       action: true,
@@ -184,13 +197,14 @@ export default async function ProtocolDetailPage({
     `User ${protocol.creator.id.slice(0, 6)}`;
 
   return (
-    <div className="w-full grid grid-cols-4 gap-4">
-      <div className="mx-auto w-full max-w-6xl px-6 py-8 space-y-10 col-span-3">
+    <div className="w-full grid grid-cols-9 gap-4">
+      <div className="mx-auto w-full max-w-6xl px-6 py-8 space-y-10 col-span-7 ">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-muted text-sm font-semibold">
-                {orgBadge(protocol.organization.type)}
+              <span
+                className={`flex justify-center items-center rounded-md p-1 px-2 ${orgTypeBadge(protocol.organization.type).className}`}>
+                {orgTypeBadge(protocol.organization.type).label}
               </span>
               <span className="text-sm text-muted-foreground">
                 {protocol.organization.name}
@@ -210,9 +224,11 @@ export default async function ProtocolDetailPage({
 
           <div className="flex gap-2">
             <Button
-              render={<Link href="/protocols">Zurück</Link>}
+              render={<Link href="/protocols" />}
               variant="outline"
-              className="rounded-full"></Button>
+              className="rounded-full">
+              <ChevronLeft className="size-4" /> Zurück
+            </Button>
           </div>
         </div>
 
@@ -270,7 +286,15 @@ export default async function ProtocolDetailPage({
                   step={k}>
                   <TimelineHeader>
                     <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                    <TimelineTitle className="mt-0.5">{userName}</TimelineTitle>
+                    <TimelineTitle className="mt-0.5 flex items-center gap-2">
+                      {userName}
+                      <span className="text-muted-foreground text-xs font-light pb-px">
+                        {formatDistanceToNow(comment.createdAt, {
+                          addSuffix: true,
+                          locale: de,
+                        })}
+                      </span>
+                    </TimelineTitle>
                     <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
                       <Avatar>
                         <AvatarImage
@@ -288,14 +312,11 @@ export default async function ProtocolDetailPage({
                       </Avatar>
                     </TimelineIndicator>
                   </TimelineHeader>
-                  <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground">
+                  <TimelineContent className="mt-2 text-foreground">
                     <RichTextRenderer value={comment.content} />
-                    <TimelineDate className="mt-1 mb-0">
-                      vor{" "}
-                      {formatDistance(new Date(comment.createdAt), new Date(), {
-                        locale: de,
-                      })}
-                    </TimelineDate>
+                    {/* <TimelineDate className="mt-1 mb-0 ">
+                      <ThumbsUp className="size-4! mt-3 ml-1 text-muted-foreground" />
+                    </TimelineDate> */}
                   </TimelineContent>
                 </TimelineItem>
               );
@@ -325,22 +346,25 @@ export default async function ProtocolDetailPage({
                   className="group-data-[orientation=vertical]/timeline:ms-10">
                   <TimelineHeader>
                     <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-accent">
-                      <Icon size={14} className="text-muted-foreground" />
+                    <TimelineTitle className="mt-0.5 capitalize">
+                      {actionMeta(a.action).shortLabel}
+                    </TimelineTitle>
+                    <TimelineIndicator className="bg-primary/10 group-data-completed/timeline-item:bg-primary/10 group-data-completed/timeline-item:text-primary flex size-6 items-center justify-center border-none group-data-[orientation=vertical]/timeline:-left-7">
+                      <Icon className="size-3.5" />
                     </TimelineIndicator>
                   </TimelineHeader>
                   <TimelineContent>
                     <ActivityLine
                       activity={{
                         action: a.action,
-                        targetType: "case",
+                        targetType: a.targetType,
                         targetId: a.id,
                         metadata: (a.metadata ?? {}) as any,
                         user: a.user,
                       }}
                     />
                     <TimelineDate className="mb-0 mt-1">
-                      {formatDistance(new Date(a.createdAt), new Date(), {
+                      {formatDistanceToNow(a.createdAt, {
                         addSuffix: true,
                         locale: de,
                       })}
@@ -353,7 +377,7 @@ export default async function ProtocolDetailPage({
         </section>
       </div>
       {/* Aktion */}
-      <div className="gap-4 mt-24 ">
+      <div className="gap-4 mt-24  col-span-2 h-screen sticky top-10 px-4">
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Verknüpfte Fälle</h2>
 
@@ -367,25 +391,28 @@ export default async function ProtocolDetailPage({
                 <Link
                   href={`/cases/${entry.case.id}`}
                   key={entry.id}
-                  className="flex items-start justify-between gap-4 text-sm pb-2">
+                  className={`flex items-start justify-between gap-4 text-sm pb-2 ${entry.case.status === "CLOSED" ? "opacity-70" : ""}`}>
                   <div className="min-w-0">
                     <div className="truncate">
+                      {/* <span>
+                        {entry.case.status === "WAITING" ? (
+                          <Clock className="size-4" />
+                        ) : entry.case.status === "CLOSED" ? (
+                          <CircleCheck className="size-4 text-blue-500" />
+                        ) : entry.case.status === "IN_PROGRESS" ? (
+                          <Loader className="size-4  text-amber-500" />
+                        ) : entry.case.status === "OPEN" ? (
+                          <Circle className="size-4 text-green-500" />
+                        ) : null}
+                      </span> */}
                       <span className="font-medium">
                         #{entry.case.caseNumber}{" "}
                       </span>
                       · {entry.case.title}
                     </div>
                     <div className="flex items-center gap-2 mt-1 text-muted-foreground">
-                      {entry.case.status === "WAITING" ? (
-                        <Clock className="size-4 " />
-                      ) : entry.case.status === "CLOSED" ? (
-                        <CircleCheck className="size-4 text-blue-500" />
-                      ) : entry.case.status === "IN_PROGRESS" ? (
-                        <Loader className="size-4  text-amber-500" />
-                      ) : entry.case.status === "OPEN" ? (
-                        <Circle className="size-4 text-green-500" />
-                      ) : null}
                       <Badge
+                        size="sm"
                         variant={
                           entry.case.priority === "HIGH"
                             ? "error"
@@ -399,6 +426,18 @@ export default async function ProtocolDetailPage({
                         }>
                         {entry.case.priority}
                       </Badge>
+                      <span className="flex items-center gap-1 text-xs">
+                        {entry.case.status === "WAITING" ? (
+                          <Clock className="size-3 " />
+                        ) : entry.case.status === "CLOSED" ? (
+                          <CircleCheck className="size-3 text-blue-500" />
+                        ) : entry.case.status === "IN_PROGRESS" ? (
+                          <Loader className="size-3  text-amber-500" />
+                        ) : entry.case.status === "OPEN" ? (
+                          <Circle className="size-3 text-green-500" />
+                        ) : null}
+                        {STATUS_LABEL[entry.case.status]}
+                      </span>
                     </div>
                   </div>
                 </Link>

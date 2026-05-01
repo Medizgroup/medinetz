@@ -58,7 +58,7 @@ export default function EditProtocolForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border p-5">
+    <form onSubmit={onSubmit} className="space-y-4 p-5 ">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field className="gap-2">
           <FieldLabel>Titel</FieldLabel>

@@ -45,6 +45,7 @@ import CaseCommentForm from "@/components/case/case-comment-form";
 import CaseSidebar from "@/components/case/case-sidebar";
 import { ChevronLeft, ThumbsUp } from "lucide-react";
 import { NotProduct } from "@/components/not-product";
+import { getInitials } from "@/lib/helper/user";
 
 export default async function CaseDetailPage({
   params,
@@ -368,12 +369,16 @@ export default async function CaseDetailPage({
                             src={comment.user.avatarUrl ?? undefined}
                           />
                           <AvatarFallback>
-                            {userName.slice(0, 2).toUpperCase()}
+                            {getInitials(
+                              comment.user.displayName ??
+                                comment.user.name ??
+                                "User",
+                            )}
                           </AvatarFallback>
                         </Avatar>
                       </TimelineIndicator>
                     </TimelineHeader>
-                    <TimelineContent className="mt-2  text-foreground">
+                    <TimelineContent className="mt-2 text-foreground">
                       <RichTextRenderer value={comment.content} />
                       <TimelineDate className="mt-1 mb-0 ">
                         <ThumbsUp className="size-4! mt-3 ml-1 text-muted-foreground" />

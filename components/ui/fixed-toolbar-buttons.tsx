@@ -50,18 +50,12 @@ export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
 
   return (
-    <div className="flex w-full">
+    <div className="flex">
       {!readOnly && (
         <>
           <ToolbarGroup>
             <UndoToolbarButton />
             <RedoToolbarButton />
-          </ToolbarGroup>
-
-          <ToolbarGroup>
-            <AIToolbarButton tooltip="AI commands">
-              <WandSparklesIcon />
-            </AIToolbarButton>
           </ToolbarGroup>
 
           <ToolbarGroup>
@@ -99,10 +93,6 @@ export function FixedToolbarButtons() {
               <StrikethroughIcon />
             </MarkToolbarButton>
 
-            <MarkToolbarButton nodeType={KEYS.code} tooltip="Code (⌘+E)">
-              <Code2Icon />
-            </MarkToolbarButton>
-
             <FontColorToolbarButton nodeType={KEYS.color} tooltip="Text color">
               <BaselineIcon />
             </FontColorToolbarButton>
@@ -120,20 +110,18 @@ export function FixedToolbarButtons() {
             <NumberedListToolbarButton />
             <BulletedListToolbarButton />
             <TodoListToolbarButton />
-            <ToggleToolbarButton />
           </ToolbarGroup>
 
           <ToolbarGroup>
-            <LinkToolbarButton />
             <TableToolbarButton />
             <EmojiToolbarButton />
           </ToolbarGroup>
 
           <ToolbarGroup>
             <MediaToolbarButton nodeType={KEYS.img} />
-            <MediaToolbarButton nodeType={KEYS.video} />
+            {/* <MediaToolbarButton nodeType={KEYS.video} />
             <MediaToolbarButton nodeType={KEYS.audio} />
-            <MediaToolbarButton nodeType={KEYS.file} />
+            <MediaToolbarButton nodeType={KEYS.file} /> */}
           </ToolbarGroup>
 
           <ToolbarGroup>
