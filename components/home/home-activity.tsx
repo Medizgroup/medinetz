@@ -98,10 +98,7 @@ export default function HomeActivity({ items }: Props) {
                 <img
                   alt={userLabel}
                   className="size-7 rounded-full"
-                  src={
-                    item.user.avatarUrl ??
-                    `https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(userLabel)}`
-                  }
+                  src={item.user.avatarUrl ?? ""}
                 />
 
                 <TimelineContent className="text-foreground">

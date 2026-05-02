@@ -70,7 +70,12 @@ export default function UserBadge({
           <MenuItem render={<Link href="/settings/profile" />}>
             Profil bearbeiten
           </MenuItem>
-          <MenuItem render={<Link href="/settings" />}>Einstellungen</MenuItem>
+          <MenuItem render={<Link href="/settings/organizations" />}>
+            Organisationen
+          </MenuItem>
+          <MenuItem render={<Link href="/settings/account" />}>
+            Einstellungen
+          </MenuItem>
         </MenuGroup>
 
         <MenuSeparator />
@@ -106,7 +111,9 @@ export default function UserBadge({
         <MenuGroup>
           <MenuGroupLabel>preference</MenuGroupLabel>
           <MenuItem>Benachrichtigung</MenuItem>
-          <MenuItem>App Theme</MenuItem>
+          <MenuItem render={<Link href="/settings/appearance" />}>
+            App Theme
+          </MenuItem>
         </MenuGroup>
         <MenuSeparator />
         <MenuItem variant="destructive" onClick={logOut}>
