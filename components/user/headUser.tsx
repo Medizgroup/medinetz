@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 import NotificationsPopover from "@/components/notifications/notifications-popover";
 import Link from "next/link";
+import QuickAddTodo from "../header/quick-add-todo";
 
 async function HeadUser() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -45,9 +46,7 @@ async function HeadUser() {
   return (
     <div className="flex items-center gap-4 px-4 h-4">
       {/* TODO: später für Quick-Create (Todos, Invites etc.) */}
-      <Button size="icon-xs" variant="outline" className="rounded-full">
-        <Plus className="size-4" />
-      </Button>
+      <QuickAddTodo />
 
       <NotificationsPopover />
 
