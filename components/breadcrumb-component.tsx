@@ -31,6 +31,7 @@ const SECTION_LABELS: Record<string, string> = {
   admin: "Admin",
   profile: "Profil",
   account: "Konto",
+  activities: "Aktivitäten",
 };
 
 const ACTION_LABELS: Record<string, string> = {
