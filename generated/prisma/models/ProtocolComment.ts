@@ -168,7 +168,7 @@ export type ProtocolCommentGroupByOutputType = {
   _max: ProtocolCommentMaxAggregateOutputType | null
 }
 
-type GetProtocolCommentGroupByPayload<T extends ProtocolCommentGroupByArgs> = Prisma.PrismaPromise<
+export type GetProtocolCommentGroupByPayload<T extends ProtocolCommentGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ProtocolCommentGroupByOutputType, T['by']> &
       {
@@ -1445,6 +1445,11 @@ export type ProtocolCommentFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` ProtocolComments.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ProtocolComments.
+   */
   distinct?: Prisma.ProtocolCommentScalarFieldEnum | Prisma.ProtocolCommentScalarFieldEnum[]
 }
 

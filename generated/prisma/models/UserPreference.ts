@@ -168,7 +168,7 @@ export type UserPreferenceGroupByOutputType = {
   _max: UserPreferenceMaxAggregateOutputType | null
 }
 
-type GetUserPreferenceGroupByPayload<T extends UserPreferenceGroupByArgs> = Prisma.PrismaPromise<
+export type GetUserPreferenceGroupByPayload<T extends UserPreferenceGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<UserPreferenceGroupByOutputType, T['by']> &
       {
@@ -1130,6 +1130,11 @@ export type UserPreferenceFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` UserPreferences.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of UserPreferences.
+   */
   distinct?: Prisma.UserPreferenceScalarFieldEnum | Prisma.UserPreferenceScalarFieldEnum[]
 }
 

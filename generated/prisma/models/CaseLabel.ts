@@ -158,7 +158,7 @@ export type CaseLabelGroupByOutputType = {
   _max: CaseLabelMaxAggregateOutputType | null
 }
 
-type GetCaseLabelGroupByPayload<T extends CaseLabelGroupByArgs> = Prisma.PrismaPromise<
+export type GetCaseLabelGroupByPayload<T extends CaseLabelGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CaseLabelGroupByOutputType, T['by']> &
       {
@@ -1122,6 +1122,11 @@ export type CaseLabelFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` CaseLabels.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of CaseLabels.
+   */
   distinct?: Prisma.CaseLabelScalarFieldEnum | Prisma.CaseLabelScalarFieldEnum[]
 }
 

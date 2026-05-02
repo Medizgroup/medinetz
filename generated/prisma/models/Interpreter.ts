@@ -269,7 +269,7 @@ export type InterpreterGroupByOutputType = {
   _max: InterpreterMaxAggregateOutputType | null
 }
 
-type GetInterpreterGroupByPayload<T extends InterpreterGroupByArgs> = Prisma.PrismaPromise<
+export type GetInterpreterGroupByPayload<T extends InterpreterGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<InterpreterGroupByOutputType, T['by']> &
       {
@@ -1734,6 +1734,11 @@ export type InterpreterFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` Interpreters.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Interpreters.
+   */
   distinct?: Prisma.InterpreterScalarFieldEnum | Prisma.InterpreterScalarFieldEnum[]
 }
 

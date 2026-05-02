@@ -223,7 +223,7 @@ export type ProtocolGroupByOutputType = {
   _max: ProtocolMaxAggregateOutputType | null
 }
 
-type GetProtocolGroupByPayload<T extends ProtocolGroupByArgs> = Prisma.PrismaPromise<
+export type GetProtocolGroupByPayload<T extends ProtocolGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ProtocolGroupByOutputType, T['by']> &
       {
@@ -1879,6 +1879,11 @@ export type ProtocolFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` Protocols.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Protocols.
+   */
   distinct?: Prisma.ProtocolScalarFieldEnum | Prisma.ProtocolScalarFieldEnum[]
 }
 

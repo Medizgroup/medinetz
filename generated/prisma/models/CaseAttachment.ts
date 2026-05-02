@@ -213,7 +213,7 @@ export type CaseAttachmentGroupByOutputType = {
   _max: CaseAttachmentMaxAggregateOutputType | null
 }
 
-type GetCaseAttachmentGroupByPayload<T extends CaseAttachmentGroupByArgs> = Prisma.PrismaPromise<
+export type GetCaseAttachmentGroupByPayload<T extends CaseAttachmentGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CaseAttachmentGroupByOutputType, T['by']> &
       {
@@ -1417,6 +1417,11 @@ export type CaseAttachmentFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` CaseAttachments.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of CaseAttachments.
+   */
   distinct?: Prisma.CaseAttachmentScalarFieldEnum | Prisma.CaseAttachmentScalarFieldEnum[]
 }
 

@@ -238,7 +238,7 @@ export type FinancialReportGroupByOutputType = {
   _max: FinancialReportMaxAggregateOutputType | null
 }
 
-type GetFinancialReportGroupByPayload<T extends FinancialReportGroupByArgs> = Prisma.PrismaPromise<
+export type GetFinancialReportGroupByPayload<T extends FinancialReportGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FinancialReportGroupByOutputType, T['by']> &
       {
@@ -1538,6 +1538,11 @@ export type FinancialReportFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` FinancialReports.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of FinancialReports.
+   */
   distinct?: Prisma.FinancialReportScalarFieldEnum | Prisma.FinancialReportScalarFieldEnum[]
 }
 

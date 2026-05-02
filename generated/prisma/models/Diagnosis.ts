@@ -186,7 +186,7 @@ export type DiagnosisGroupByOutputType = {
   _max: DiagnosisMaxAggregateOutputType | null
 }
 
-type GetDiagnosisGroupByPayload<T extends DiagnosisGroupByArgs> = Prisma.PrismaPromise<
+export type GetDiagnosisGroupByPayload<T extends DiagnosisGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DiagnosisGroupByOutputType, T['by']> &
       {
@@ -1262,6 +1262,11 @@ export type DiagnosisFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` Diagnoses.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Diagnoses.
+   */
   distinct?: Prisma.DiagnosisScalarFieldEnum | Prisma.DiagnosisScalarFieldEnum[]
 }
 

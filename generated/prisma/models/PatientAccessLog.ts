@@ -165,7 +165,7 @@ export type PatientAccessLogGroupByOutputType = {
   _max: PatientAccessLogMaxAggregateOutputType | null
 }
 
-type GetPatientAccessLogGroupByPayload<T extends PatientAccessLogGroupByArgs> = Prisma.PrismaPromise<
+export type GetPatientAccessLogGroupByPayload<T extends PatientAccessLogGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PatientAccessLogGroupByOutputType, T['by']> &
       {
@@ -982,6 +982,11 @@ export type PatientAccessLogFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` PatientAccessLogs.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of PatientAccessLogs.
+   */
   distinct?: Prisma.PatientAccessLogScalarFieldEnum | Prisma.PatientAccessLogScalarFieldEnum[]
 }
 

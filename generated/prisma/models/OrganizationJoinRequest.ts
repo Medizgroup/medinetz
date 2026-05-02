@@ -179,7 +179,7 @@ export type OrganizationJoinRequestGroupByOutputType = {
   _max: OrganizationJoinRequestMaxAggregateOutputType | null
 }
 
-type GetOrganizationJoinRequestGroupByPayload<T extends OrganizationJoinRequestGroupByArgs> = Prisma.PrismaPromise<
+export type GetOrganizationJoinRequestGroupByPayload<T extends OrganizationJoinRequestGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<OrganizationJoinRequestGroupByOutputType, T['by']> &
       {
@@ -1513,6 +1513,11 @@ export type OrganizationJoinRequestFindManyArgs<ExtArgs extends runtime.Types.Ex
    * Skip the first `n` OrganizationJoinRequests.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of OrganizationJoinRequests.
+   */
   distinct?: Prisma.OrganizationJoinRequestScalarFieldEnum | Prisma.OrganizationJoinRequestScalarFieldEnum[]
 }
 

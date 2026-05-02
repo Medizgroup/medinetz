@@ -165,7 +165,7 @@ export type ResourceTagGroupByOutputType = {
   _max: ResourceTagMaxAggregateOutputType | null
 }
 
-type GetResourceTagGroupByPayload<T extends ResourceTagGroupByArgs> = Prisma.PrismaPromise<
+export type GetResourceTagGroupByPayload<T extends ResourceTagGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ResourceTagGroupByOutputType, T['by']> &
       {
@@ -982,6 +982,11 @@ export type ResourceTagFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` ResourceTags.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ResourceTags.
+   */
   distinct?: Prisma.ResourceTagScalarFieldEnum | Prisma.ResourceTagScalarFieldEnum[]
 }
 

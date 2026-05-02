@@ -165,7 +165,7 @@ export type OrganizationMemberGroupByOutputType = {
   _max: OrganizationMemberMaxAggregateOutputType | null
 }
 
-type GetOrganizationMemberGroupByPayload<T extends OrganizationMemberGroupByArgs> = Prisma.PrismaPromise<
+export type GetOrganizationMemberGroupByPayload<T extends OrganizationMemberGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<OrganizationMemberGroupByOutputType, T['by']> &
       {
@@ -1293,6 +1293,11 @@ export type OrganizationMemberFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Skip the first `n` OrganizationMembers.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of OrganizationMembers.
+   */
   distinct?: Prisma.OrganizationMemberScalarFieldEnum | Prisma.OrganizationMemberScalarFieldEnum[]
 }
 

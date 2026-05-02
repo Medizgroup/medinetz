@@ -182,7 +182,7 @@ export type CaseCommentGroupByOutputType = {
   _max: CaseCommentMaxAggregateOutputType | null
 }
 
-type GetCaseCommentGroupByPayload<T extends CaseCommentGroupByArgs> = Prisma.PrismaPromise<
+export type GetCaseCommentGroupByPayload<T extends CaseCommentGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CaseCommentGroupByOutputType, T['by']> &
       {
@@ -1535,6 +1535,11 @@ export type CaseCommentFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` CaseComments.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of CaseComments.
+   */
   distinct?: Prisma.CaseCommentScalarFieldEnum | Prisma.CaseCommentScalarFieldEnum[]
 }
 

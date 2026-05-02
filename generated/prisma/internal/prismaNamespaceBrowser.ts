@@ -116,6 +116,7 @@ export const UserScalarFieldEnum = {
   displayName: 'displayName',
   avatarUrl: 'avatarUrl',
   isActive: 'isActive',
+  isInstanceAdmin: 'isInstanceAdmin',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

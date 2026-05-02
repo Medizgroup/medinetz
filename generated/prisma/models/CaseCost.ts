@@ -227,7 +227,7 @@ export type CaseCostGroupByOutputType = {
   _max: CaseCostMaxAggregateOutputType | null
 }
 
-type GetCaseCostGroupByPayload<T extends CaseCostGroupByArgs> = Prisma.PrismaPromise<
+export type GetCaseCostGroupByPayload<T extends CaseCostGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CaseCostGroupByOutputType, T['by']> &
       {
@@ -1495,6 +1495,11 @@ export type CaseCostFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` CaseCosts.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of CaseCosts.
+   */
   distinct?: Prisma.CaseCostScalarFieldEnum | Prisma.CaseCostScalarFieldEnum[]
 }
 

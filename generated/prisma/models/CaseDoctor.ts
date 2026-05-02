@@ -248,7 +248,7 @@ export type CaseDoctorGroupByOutputType = {
   _max: CaseDoctorMaxAggregateOutputType | null
 }
 
-type GetCaseDoctorGroupByPayload<T extends CaseDoctorGroupByArgs> = Prisma.PrismaPromise<
+export type GetCaseDoctorGroupByPayload<T extends CaseDoctorGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CaseDoctorGroupByOutputType, T['by']> &
       {
@@ -1782,6 +1782,11 @@ export type CaseDoctorFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` CaseDoctors.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of CaseDoctors.
+   */
   distinct?: Prisma.CaseDoctorScalarFieldEnum | Prisma.CaseDoctorScalarFieldEnum[]
 }
 
