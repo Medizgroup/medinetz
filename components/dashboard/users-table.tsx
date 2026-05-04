@@ -2,21 +2,17 @@
 
 import * as React from "react";
 import {
-  CheckCheck,
   ChevronLeft,
   ChevronRight,
   Download,
   Loader2,
   MoreHorizontal,
   MoreHorizontalIcon,
-  Plus,
   Search,
   Shield,
-  UserCheck,
   UserRoundCheck,
   UserRoundPlus,
   UserRoundX,
-  UserX,
 } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
@@ -35,7 +31,6 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent,
   SelectItem,
   SelectPopup,
   SelectTrigger,
@@ -74,13 +69,6 @@ type User = {
 };
 
 type Org = { id: string; name: string };
-
-const ROLE_LABEL: Record<string, string> = {
-  LIMITED: "Eingeschränkt",
-  VIEWER: "Betrachter",
-  COORDINATOR: "Koordinator",
-  ADMIN: "Admin",
-};
 
 const ROLE_VARIANT: Record<string, "secondary" | "info" | "warning" | "error"> =
   {
