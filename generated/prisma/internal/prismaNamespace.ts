@@ -3508,6 +3508,8 @@ export const DonationScalarFieldEnum = {
   donationDate: 'donationDate',
   purpose: 'purpose',
   notes: 'notes',
+  isAnonymous: 'isAnonymous',
+  receiptSent: 'receiptSent',
   createdAt: 'createdAt',
   createdBy: 'createdBy'
 } as const
@@ -3523,6 +3525,9 @@ export const ExpenseScalarFieldEnum = {
   amount: 'amount',
   expenseDate: 'expenseDate',
   description: 'description',
+  vendor: 'vendor',
+  isPaid: 'isPaid',
+  notes: 'notes',
   createdAt: 'createdAt'
 } as const
 

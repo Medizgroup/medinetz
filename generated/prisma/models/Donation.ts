@@ -42,6 +42,8 @@ export type DonationMinAggregateOutputType = {
   donationDate: Date | null
   purpose: string | null
   notes: string | null
+  isAnonymous: boolean | null
+  receiptSent: boolean | null
   createdAt: Date | null
   createdBy: string | null
 }
@@ -54,6 +56,8 @@ export type DonationMaxAggregateOutputType = {
   donationDate: Date | null
   purpose: string | null
   notes: string | null
+  isAnonymous: boolean | null
+  receiptSent: boolean | null
   createdAt: Date | null
   createdBy: string | null
 }
@@ -66,6 +70,8 @@ export type DonationCountAggregateOutputType = {
   donationDate: number
   purpose: number
   notes: number
+  isAnonymous: number
+  receiptSent: number
   createdAt: number
   createdBy: number
   _all: number
@@ -88,6 +94,8 @@ export type DonationMinAggregateInputType = {
   donationDate?: true
   purpose?: true
   notes?: true
+  isAnonymous?: true
+  receiptSent?: true
   createdAt?: true
   createdBy?: true
 }
@@ -100,6 +108,8 @@ export type DonationMaxAggregateInputType = {
   donationDate?: true
   purpose?: true
   notes?: true
+  isAnonymous?: true
+  receiptSent?: true
   createdAt?: true
   createdBy?: true
 }
@@ -112,6 +122,8 @@ export type DonationCountAggregateInputType = {
   donationDate?: true
   purpose?: true
   notes?: true
+  isAnonymous?: true
+  receiptSent?: true
   createdAt?: true
   createdBy?: true
   _all?: true
@@ -211,6 +223,8 @@ export type DonationGroupByOutputType = {
   donationDate: Date
   purpose: string | null
   notes: string | null
+  isAnonymous: boolean
+  receiptSent: boolean
   createdAt: Date
   createdBy: string
   _count: DonationCountAggregateOutputType | null
@@ -246,6 +260,8 @@ export type DonationWhereInput = {
   donationDate?: Prisma.DateTimeFilter<"Donation"> | Date | string
   purpose?: Prisma.StringNullableFilter<"Donation"> | string | null
   notes?: Prisma.StringNullableFilter<"Donation"> | string | null
+  isAnonymous?: Prisma.BoolFilter<"Donation"> | boolean
+  receiptSent?: Prisma.BoolFilter<"Donation"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Donation"> | Date | string
   createdBy?: Prisma.StringFilter<"Donation"> | string
   organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
@@ -260,6 +276,8 @@ export type DonationOrderByWithRelationInput = {
   donationDate?: Prisma.SortOrder
   purpose?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  isAnonymous?: Prisma.SortOrder
+  receiptSent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
@@ -277,6 +295,8 @@ export type DonationWhereUniqueInput = Prisma.AtLeast<{
   donationDate?: Prisma.DateTimeFilter<"Donation"> | Date | string
   purpose?: Prisma.StringNullableFilter<"Donation"> | string | null
   notes?: Prisma.StringNullableFilter<"Donation"> | string | null
+  isAnonymous?: Prisma.BoolFilter<"Donation"> | boolean
+  receiptSent?: Prisma.BoolFilter<"Donation"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Donation"> | Date | string
   createdBy?: Prisma.StringFilter<"Donation"> | string
   organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
@@ -291,6 +311,8 @@ export type DonationOrderByWithAggregationInput = {
   donationDate?: Prisma.SortOrder
   purpose?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  isAnonymous?: Prisma.SortOrder
+  receiptSent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
   _count?: Prisma.DonationCountOrderByAggregateInput
@@ -311,6 +333,8 @@ export type DonationScalarWhereWithAggregatesInput = {
   donationDate?: Prisma.DateTimeWithAggregatesFilter<"Donation"> | Date | string
   purpose?: Prisma.StringNullableWithAggregatesFilter<"Donation"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Donation"> | string | null
+  isAnonymous?: Prisma.BoolWithAggregatesFilter<"Donation"> | boolean
+  receiptSent?: Prisma.BoolWithAggregatesFilter<"Donation"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Donation"> | Date | string
   createdBy?: Prisma.StringWithAggregatesFilter<"Donation"> | string
 }
@@ -322,6 +346,8 @@ export type DonationCreateInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
   organization?: Prisma.OrganizationCreateNestedOneWithoutDonationsInput
   creator: Prisma.UserCreateNestedOneWithoutCreatedDonationsInput
@@ -335,6 +361,8 @@ export type DonationUncheckedCreateInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
   createdBy: string
 }
@@ -346,6 +374,8 @@ export type DonationUpdateInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneWithoutDonationsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedDonationsNestedInput
@@ -359,6 +389,8 @@ export type DonationUncheckedUpdateInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -371,6 +403,8 @@ export type DonationCreateManyInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
   createdBy: string
 }
@@ -382,6 +416,8 @@ export type DonationUpdateManyMutationInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -393,6 +429,8 @@ export type DonationUncheckedUpdateManyInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -415,6 +453,8 @@ export type DonationCountOrderByAggregateInput = {
   donationDate?: Prisma.SortOrder
   purpose?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  isAnonymous?: Prisma.SortOrder
+  receiptSent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
 }
@@ -431,6 +471,8 @@ export type DonationMaxOrderByAggregateInput = {
   donationDate?: Prisma.SortOrder
   purpose?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  isAnonymous?: Prisma.SortOrder
+  receiptSent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
 }
@@ -443,6 +485,8 @@ export type DonationMinOrderByAggregateInput = {
   donationDate?: Prisma.SortOrder
   purpose?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  isAnonymous?: Prisma.SortOrder
+  receiptSent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
 }
@@ -542,6 +586,8 @@ export type DonationCreateWithoutCreatorInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
   organization?: Prisma.OrganizationCreateNestedOneWithoutDonationsInput
 }
@@ -554,6 +600,8 @@ export type DonationUncheckedCreateWithoutCreatorInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
 }
 
@@ -594,6 +642,8 @@ export type DonationScalarWhereInput = {
   donationDate?: Prisma.DateTimeFilter<"Donation"> | Date | string
   purpose?: Prisma.StringNullableFilter<"Donation"> | string | null
   notes?: Prisma.StringNullableFilter<"Donation"> | string | null
+  isAnonymous?: Prisma.BoolFilter<"Donation"> | boolean
+  receiptSent?: Prisma.BoolFilter<"Donation"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Donation"> | Date | string
   createdBy?: Prisma.StringFilter<"Donation"> | string
 }
@@ -605,6 +655,8 @@ export type DonationCreateWithoutOrganizationInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
   creator: Prisma.UserCreateNestedOneWithoutCreatedDonationsInput
 }
@@ -616,6 +668,8 @@ export type DonationUncheckedCreateWithoutOrganizationInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
   createdBy: string
 }
@@ -654,6 +708,8 @@ export type DonationCreateManyCreatorInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
 }
 
@@ -664,6 +720,8 @@ export type DonationUpdateWithoutCreatorInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneWithoutDonationsNestedInput
 }
@@ -676,6 +734,8 @@ export type DonationUncheckedUpdateWithoutCreatorInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -687,6 +747,8 @@ export type DonationUncheckedUpdateManyWithoutCreatorInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -697,6 +759,8 @@ export type DonationCreateManyOrganizationInput = {
   donationDate: Date | string
   purpose?: string | null
   notes?: string | null
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: Date | string
   createdBy: string
 }
@@ -708,6 +772,8 @@ export type DonationUpdateWithoutOrganizationInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedDonationsNestedInput
 }
@@ -719,6 +785,8 @@ export type DonationUncheckedUpdateWithoutOrganizationInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -730,6 +798,8 @@ export type DonationUncheckedUpdateManyWithoutOrganizationInput = {
   donationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAnonymous?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  receiptSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -744,6 +814,8 @@ export type DonationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   donationDate?: boolean
   purpose?: boolean
   notes?: boolean
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: boolean
   createdBy?: boolean
   organization?: boolean | Prisma.Donation$organizationArgs<ExtArgs>
@@ -758,6 +830,8 @@ export type DonationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   donationDate?: boolean
   purpose?: boolean
   notes?: boolean
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: boolean
   createdBy?: boolean
   organization?: boolean | Prisma.Donation$organizationArgs<ExtArgs>
@@ -772,6 +846,8 @@ export type DonationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   donationDate?: boolean
   purpose?: boolean
   notes?: boolean
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: boolean
   createdBy?: boolean
   organization?: boolean | Prisma.Donation$organizationArgs<ExtArgs>
@@ -786,11 +862,13 @@ export type DonationSelectScalar = {
   donationDate?: boolean
   purpose?: boolean
   notes?: boolean
+  isAnonymous?: boolean
+  receiptSent?: boolean
   createdAt?: boolean
   createdBy?: boolean
 }
 
-export type DonationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "amount" | "donorName" | "donationDate" | "purpose" | "notes" | "createdAt" | "createdBy", ExtArgs["result"]["donation"]>
+export type DonationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "amount" | "donorName" | "donationDate" | "purpose" | "notes" | "isAnonymous" | "receiptSent" | "createdAt" | "createdBy", ExtArgs["result"]["donation"]>
 export type DonationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.Donation$organizationArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -818,6 +896,8 @@ export type $DonationPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     donationDate: Date
     purpose: string | null
     notes: string | null
+    isAnonymous: boolean
+    receiptSent: boolean
     createdAt: Date
     createdBy: string
   }, ExtArgs["result"]["donation"]>
@@ -1252,6 +1332,8 @@ export interface DonationFieldRefs {
   readonly donationDate: Prisma.FieldRef<"Donation", 'DateTime'>
   readonly purpose: Prisma.FieldRef<"Donation", 'String'>
   readonly notes: Prisma.FieldRef<"Donation", 'String'>
+  readonly isAnonymous: Prisma.FieldRef<"Donation", 'Boolean'>
+  readonly receiptSent: Prisma.FieldRef<"Donation", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Donation", 'DateTime'>
   readonly createdBy: Prisma.FieldRef<"Donation", 'String'>
 }

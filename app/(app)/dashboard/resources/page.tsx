@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import { requireInstanceAdmin } from "@/lib/utils/admin/permissions";
+import DashboardResourcesTable from "@/components/dashboard/resources-table";
 
 export default async function DashboardResourcesPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -14,12 +15,11 @@ export default async function DashboardResourcesPage() {
       <div>
         <h1 className="text-2xl font-semibold">Ressourcen-Verwaltung</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Ärzt:innen und Dolmetscher:innen verwalten.
+          Ärzt:innen und Dolmetscher:innen verwalten. Koordinaten +
+          Verfügbarkeit pflegen.
         </p>
       </div>
-      <div className="rounded-lg border p-12 text-center text-sm text-muted-foreground">
-        Tabelle kommt in Phase 3.
-      </div>
+      <DashboardResourcesTable />
     </div>
   );
 }

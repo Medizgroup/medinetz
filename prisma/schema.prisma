@@ -702,6 +702,8 @@ model Donation {
   donationDate   DateTime @map("donation_date") @db.Date
   purpose        String?  // 'general', 'pregnancy', 'emergency'
   notes          String?  @db.Text
+  isAnonymous    Boolean  @default(false) @map("is_anonymous")
+  receiptSent    Boolean  @default(false) @map("receipt_sent")
   createdAt      DateTime @default(now()) @map("created_at")
   createdBy      String   @map("created_by")
 
@@ -721,6 +723,9 @@ model Expense {
   amount         Decimal         @db.Decimal(10, 2)
   expenseDate    DateTime        @map("expense_date") @db.Date
   description    String?
+  vendor         String?
+  isPaid         Boolean         @default(false) @map("is_paid")
+  notes          String?         @db.Text
   createdAt      DateTime        @default(now()) @map("created_at")
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
