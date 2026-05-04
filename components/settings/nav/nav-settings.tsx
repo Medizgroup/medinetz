@@ -6,11 +6,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Bell, Building2, Settings2, UserRound, Wallpaper } from "lucide-react";
+import {
+  Bell,
+  Building2,
+  Settings2,
+  Undo,
+  UserRound,
+  Wallpaper,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const items = [
+  {
+    title: "Zurück zu Home",
+    url: "/home",
+    icon: Undo,
+  },
   {
     title: "Profil",
     url: "/settings/profile",
