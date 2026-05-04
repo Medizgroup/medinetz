@@ -4,11 +4,11 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  BarChart3,
   Building2,
   CreditCard,
+  Gauge,
   Stethoscope,
-  Users,
+  UsersRound,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -21,8 +21,13 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { href: "/dashboard/home", label: "Übersicht", icon: BarChart3 },
-  { href: "/dashboard/users", label: "Benutzer", icon: Users, adminOnly: true },
+  { href: "/dashboard/home", label: "Übersicht", icon: Gauge },
+  {
+    href: "/dashboard/users",
+    label: "Benutzer",
+    icon: UsersRound,
+    adminOnly: true,
+  },
   {
     href: "/dashboard/organizations",
     label: "Organisationen",
@@ -51,7 +56,7 @@ export default function DashboardNav({ isAdmin }: { isAdmin: boolean }) {
   );
 
   return (
-    <div className="border-b">
+    <div className="">
       <nav className="flex flex-wrap gap-1 px-4 py-2">
         {visibleItems.map((item) => {
           const Icon = item.icon;
@@ -62,12 +67,14 @@ export default function DashboardNav({ isAdmin }: { isAdmin: boolean }) {
               key={item.href}
               href={item.href}
               className={cn(
-                "inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                "inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-sm transition-colors ease-in",
                 active
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  ? "bg-accent text-blue-500 font-medium "
+                  : "text-foreground hover:bg-accent hover:text-blue-500",
               )}>
-              <Icon className="size-4" />
+              <Icon
+                className={cn("size-4 ", active ? "fill-blue-500/10" : "")}
+              />
               {item.label}
             </Link>
           );

@@ -8,10 +8,14 @@ import {
   Download,
   Loader2,
   MoreHorizontal,
+  MoreHorizontalIcon,
   Plus,
   Search,
   Shield,
   UserCheck,
+  UserRoundCheck,
+  UserRoundPlus,
+  UserRoundX,
   UserX,
 } from "lucide-react";
 import { format } from "date-fns";
@@ -33,6 +37,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -47,6 +52,9 @@ import {
 
 import { getInitials } from "@/lib/helper/user";
 import InviteUserDialog from "./invite-user-dialog";
+import { ButtonGroup } from "../ui/group";
+import { DropdownMenuGroup, DropdownMenuLabel } from "../ui/menu";
+import { cn } from "@/lib/utils";
 
 type OrgMember = {
   role: string;
@@ -74,15 +82,13 @@ const ROLE_LABEL: Record<string, string> = {
   ADMIN: "Admin",
 };
 
-const ROLE_VARIANT: Record<
-  string,
-  "secondary" | "info" | "warning" | "destructive"
-> = {
-  LIMITED: "secondary",
-  VIEWER: "info",
-  COORDINATOR: "warning",
-  ADMIN: "destructive",
-};
+const ROLE_VARIANT: Record<string, "secondary" | "info" | "warning" | "error"> =
+  {
+    LIMITED: "secondary",
+    VIEWER: "info",
+    COORDINATOR: "warning",
+    ADMIN: "error",
+  };
 
 export default function UsersTable({
   availableOrgs,
@@ -178,37 +184,65 @@ export default function UsersTable({
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap gap-2">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground z-10" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Suche nach Name oder Email…"
-              className="w-[280px] pl-9"
+              className="w-[280px] pl-6"
             />
           </div>
           <Select
+            items={[
+              { label: "Alle", value: "all" },
+              { label: "Aktiv", value: "true" },
+              { label: "Inaktiv", value: "false" },
+            ]}
             value={activeFilter}
             onValueChange={(v) => setActiveFilter(v ?? "all")}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Alle Status" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectPopup alignItemWithTrigger={false}>
               <SelectItem value="all">Alle</SelectItem>
               <SelectItem value="true">Aktiv</SelectItem>
               <SelectItem value="false">Inaktiv</SelectItem>
-            </SelectContent>
+            </SelectPopup>
           </Select>
         </div>
 
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={handleExport}>
-            <Download className="size-4" />
-            CSV
-          </Button>
-          <Button size="sm" onClick={() => setInviteOpen(true)}>
-            <Plus className="size-4" />
-            Einladen
-          </Button>
+        <div className="flex gap-4">
+          <ButtonGroup>
+            <Button
+              onClick={() => setInviteOpen(true)}
+              variant="outline"
+              size="default"
+              className="rounded-full px-4"
+              aria-label="Invite Users ">
+              <UserRoundPlus aria-hidden="true" />
+              Einladen
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  aria-label="More options"
+                  className="rounded-full">
+                  <MoreHorizontalIcon aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Export</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={handleExport}>
+                    <Download className="size-4" />
+                    CSV
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </ButtonGroup>
         </div>
       </div>
 
@@ -243,7 +277,13 @@ export default function UsersTable({
                 <TableRow key={u.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <Avatar className="size-8">
+                      <Avatar
+                        className={cn(
+                          "size-8 ",
+                          u.isInstanceAdmin
+                            ? "ring-destructive ring-offset-background size-8 ring-2 ring-offset-2"
+                            : "",
+                        )}>
                         <AvatarImage
                           src={u.avatarUrl ?? undefined}
                           alt={userName(u)}
@@ -255,9 +295,6 @@ export default function UsersTable({
                       <div>
                         <div className="flex items-center gap-1.5 font-medium text-sm">
                           {userName(u)}
-                          {u.isInstanceAdmin ? (
-                            <Shield className="size-3 text-primary" />
-                          ) : null}
                         </div>
                         <div className="text-xs text-muted-foreground">
                           {u.email}
@@ -273,19 +310,15 @@ export default function UsersTable({
                         u.organizationMembers.map((m, i) => (
                           <Badge
                             key={i}
-                            variant={ROLE_VARIANT[m.role] ?? "secondary"}
-                            className="text-[10px]">
-                            {m.organization.name} ·{" "}
-                            {ROLE_LABEL[m.role] ?? m.role}
+                            variant={ROLE_VARIANT[m.role] ?? "secondary"}>
+                            {m.organization.name}
                           </Badge>
                         ))
                       )}
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={u.isActive ? "default" : "secondary"}
-                      className="text-[10px]">
+                    <Badge variant={u.isActive ? "success" : "error"}>
                       {u.isActive ? "Aktiv" : "Inaktiv"}
                     </Badge>
                   </TableCell>
@@ -309,12 +342,18 @@ export default function UsersTable({
                           <DropdownMenuItem onClick={() => toggleActive(u)}>
                             {u.isActive ? (
                               <>
-                                <UserX className="size-4" />
+                                <UserRoundX
+                                  aria-hidden="true"
+                                  className="size-4"
+                                />
                                 Deaktivieren
                               </>
                             ) : (
                               <>
-                                <UserCheck className="size-4" />
+                                <UserRoundCheck
+                                  aria-hidden="true"
+                                  className="size-4"
+                                />
                                 Aktivieren
                               </>
                             )}
@@ -337,7 +376,7 @@ export default function UsersTable({
                                 toggleActive({ ...u, isActive: true });
                               }
                             }}>
-                            <UserX className="size-4" />
+                            <UserRoundX className="size-4" />
                             Deaktivieren & sperren
                           </DropdownMenuItem>
                         </DropdownMenuContent>

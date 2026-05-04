@@ -44,6 +44,19 @@ export async function POST(req: Request) {
     );
   }
 
+  // Email prüfen
+  const existingUser = await prisma.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+
+  if (!existingUser) {
+    return NextResponse.json(
+      { error: "Kein Benutzer mit dieser E-Mail-Adresse gefunden." },
+      { status: 404 },
+    );
+  }
+
   // Existierenden Invite für diese Email+Org löschen
   await prisma.organizationInvite.deleteMany({
     where: { email, organizationId },

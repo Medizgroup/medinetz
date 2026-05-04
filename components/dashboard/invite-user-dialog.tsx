@@ -9,20 +9,21 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
+  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogPanel,
-  DialogPopup,
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
   Select,
-  SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toastManager } from "../ui/toast";
 
 type Org = { id: string; name: string };
 
@@ -95,19 +96,17 @@ export default function InviteUserDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogPopup className="sm:max-w-[460px]">
+      <DialogContent className="sm:max-w-[460px]">
         <DialogHeader>
           <DialogTitle>Benutzer einladen</DialogTitle>
           <DialogDescription>
-            Einladungslink wird in der App angezeigt — kein E-Mail-Versand.
+            Einladungslink wird in der App angezeigt.
           </DialogDescription>
         </DialogHeader>
 
         <DialogPanel>
           {error ? (
-            <div className="rounded-md bg-destructive/15 px-3 py-2 text-sm text-destructive">
-              {error}
-            </div>
+            <div className="py-2 text-sm text-destructive">{error}</div>
           ) : null}
 
           {inviteLink ? (
@@ -144,32 +143,58 @@ export default function InviteUserDialog({
 
               <Field className="gap-2">
                 <FieldLabel>Organisation</FieldLabel>
-                <Select value={orgId} onValueChange={(v) => setOrgId(v ?? "")}>
+                <Select
+                  items={availableOrgs.map((o) => ({
+                    label: o.name,
+                    value: o.id,
+                  }))}
+                  value={orgId}
+                  onValueChange={(v) => setOrgId(v ?? "")}>
                   <SelectTrigger>
                     <SelectValue placeholder="wählen…" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectPopup alignItemWithTrigger={false}>
                     {availableOrgs.map((o) => (
                       <SelectItem key={o.id} value={o.id}>
                         {o.name}
                       </SelectItem>
                     ))}
-                  </SelectContent>
+                  </SelectPopup>
                 </Select>
               </Field>
 
               <Field className="gap-2">
                 <FieldLabel>Rolle</FieldLabel>
-                <Select value={role} onValueChange={setRole}>
+                <Select
+                  items={[
+                    {
+                      label: "Eingeschränkt",
+                      value: "LIMITED",
+                    },
+                    {
+                      label: "Betrachter",
+                      value: "VIEWER",
+                    },
+                    {
+                      label: "Koordinator",
+                      value: "COORDINATOR",
+                    },
+                    {
+                      label: "Admin",
+                      value: "ADMIN",
+                    },
+                  ]}
+                  value={role}
+                  onValueChange={(v) => setRole(v ?? "")}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectPopup alignItemWithTrigger={false}>
                     <SelectItem value="LIMITED">Eingeschränkt</SelectItem>
                     <SelectItem value="VIEWER">Betrachter</SelectItem>
                     <SelectItem value="COORDINATOR">Koordinator</SelectItem>
                     <SelectItem value="ADMIN">Admin</SelectItem>
-                  </SelectContent>
+                  </SelectPopup>
                 </Select>
               </Field>
             </div>
@@ -177,19 +202,23 @@ export default function InviteUserDialog({
         </DialogPanel>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="destructive-outline"
+            className="rounded-full"
+            onClick={() => onOpenChange(false)}>
             {inviteLink ? "Schließen" : "Abbrechen"}
           </Button>
           {!inviteLink ? (
             <Button
               onClick={handleInvite}
+              className="rounded-full"
               disabled={!email.trim() || !orgId || saving}>
               {saving ? <Loader2 className="size-4 animate-spin" /> : null}
               Einladungslink erstellen
             </Button>
           ) : null}
         </DialogFooter>
-      </DialogPopup>
+      </DialogContent>
     </Dialog>
   );
 }

@@ -23,8 +23,7 @@ export default async function DashboardUsersPage() {
         <div>
           <h1 className="text-2xl font-semibold">Benutzer</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Alle Benutzer der Instanz verwalten — aktivieren, einladen,
-            Admin-Status.
+            Alle Benutzer der Instanz verwalten — aktivieren, einladen.
           </p>
         </div>
       </div>
