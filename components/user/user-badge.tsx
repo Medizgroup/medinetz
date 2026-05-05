@@ -1,6 +1,6 @@
 "use client";
-import { LogOut } from "lucide-react";
-
+import { LogOut, MoonIcon, SunIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
   Menu,
@@ -20,6 +20,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getInitials } from "@/lib/helper/user";
+import { Switch } from "../ui/switch";
 export default function UserBadge({
   user,
 }: {
@@ -30,6 +31,9 @@ export default function UserBadge({
     displayName: string | null;
   };
 }) {
+  const { theme, setTheme } = useTheme();
+  const id = "themes";
+
   const router = useRouter();
   const logOut = async () => {
     await authClient.signOut({
@@ -82,38 +86,55 @@ export default function UserBadge({
         {/* Admin Panel */}
         <MenuGroup>
           <MenuGroupLabel>Admin</MenuGroupLabel>
-          <MenuSub>
-            <MenuSubTrigger>Organisations</MenuSubTrigger>
-            <MenuSubPopup>
-              <MenuItem>Org. hinzufügen</MenuItem>
-              <MenuItem>Org. verwalten</MenuItem>
-            </MenuSubPopup>
-          </MenuSub>
-          <MenuSub>
-            <MenuSubTrigger>Benutzer</MenuSubTrigger>
-            <MenuSubPopup>
-              <MenuItem>Benutzer verwalten</MenuItem>
-              <MenuItem>Benutzer freigeben</MenuItem>
-              <MenuItem>Benutzer hinzufügen</MenuItem>
-            </MenuSubPopup>
-          </MenuSub>
-          <MenuSub>
-            <MenuSubTrigger>Ressourcen</MenuSubTrigger>
-            <MenuSubPopup>
-              <MenuItem>Praxen und Instituten </MenuItem>
-              <MenuItem>Dolmetscher</MenuItem>
-            </MenuSubPopup>
-          </MenuSub>
-          <MenuItem>Finanzen</MenuItem>
+          <MenuItem render={<Link href="/dashboard" />}>Dashboard</MenuItem>
+          <MenuItem render={<Link href="/dashboard/organizations" />}>
+            Organisation
+          </MenuItem>
+          <MenuItem render={<Link href="/dashboard/users" />}>
+            Benutzer
+          </MenuItem>
+          <MenuItem render={<Link href="/dashboard/resources" />}>
+            Ressourcen
+          </MenuItem>
+          <MenuItem render={<Link href="/dashboard/organizations" />}>
+            Organisation
+          </MenuItem>
+          <MenuItem render={<Link href="/dashboard/finance" />}>
+            Finanzen
+          </MenuItem>
         </MenuGroup>
 
         <MenuSeparator />
         <MenuGroup>
           <MenuGroupLabel>preference</MenuGroupLabel>
           <MenuItem>Benachrichtigung</MenuItem>
-          <MenuItem render={<Link href="/settings/appearance" />}>
+          <div
+            className="flex justify-between py-4 items-start gap-2 px-2"
+            onClick={(e) => e.preventDefault()}>
             App Theme
-          </MenuItem>
+            <div
+              className="group inline-flex items-center gap-2 pt-1"
+              data-state={theme === "dark" ? "checked" : "unchecked"}>
+              <span
+                aria-controls={id}
+                className="flex-1 cursor-pointer text-right font-medium text-sm group-data-[state=checked]:text-muted-foreground/70"
+                id={`${id}-off`}
+                onClick={() => setTheme("dark")}>
+                <MoonIcon aria-hidden="true" size={16} />
+              </span>
+              <Switch
+                checked={theme === "dark"}
+                onCheckedChange={(value) => setTheme(value ? "dark" : "light")}
+              />
+              <span
+                aria-controls={id}
+                className="flex-1 cursor-pointer text-left font-medium text-sm group-data-[state=unchecked]:text-muted-foreground/70"
+                id={`${id}-on`}
+                onClick={() => setTheme("dark")}>
+                <SunIcon aria-hidden="true" size={16} />
+              </span>
+            </div>
+          </div>
         </MenuGroup>
         <MenuSeparator />
         <MenuItem variant="destructive" onClick={logOut}>

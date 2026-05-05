@@ -2,7 +2,6 @@ import { GalleryVerticalEnd, ListTodo, Plus } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import UserBadge from "./user-badge";
-import { Button } from "../ui/button";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
@@ -45,7 +44,6 @@ async function HeadUser() {
 
   return (
     <div className="flex items-center gap-4 px-4 h-4">
-      {/* TODO: später für Quick-Create (Todos, Invites etc.) */}
       <QuickAddTodo />
 
       <NotificationsPopover />
