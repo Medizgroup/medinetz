@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -9,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -142,55 +143,73 @@ export default function ActivitiesList() {
   return (
     <div className="space-y-4">
       <div className="rounded-lg border bg-muted/20 p-3 space-y-3">
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-2">
           {orgs.length > 1 ? (
             <Select
+              items={[
+                { label: "Alle Organisationen", value: "all" },
+                ...orgs.map((o) => ({ label: o.name, value: o.id })),
+              ]}
               value={orgFilter}
               onValueChange={(v) => setOrgFilter(v ?? "all")}>
               <SelectTrigger>
                 <SelectValue placeholder="Alle Organisationen" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectPopup alignItemWithTrigger={false}>
                 <SelectItem value="all">Alle Organisationen</SelectItem>
                 {orgs.map((o) => (
                   <SelectItem key={o.id} value={o.id}>
                     {o.name}
                   </SelectItem>
                 ))}
-              </SelectContent>
+              </SelectPopup>
             </Select>
           ) : null}
 
           <Select
             value={actionFilter}
+            items={[
+              { label: "Alle Aktionen", value: "all" },
+              ...Object.entries(ACTION_LABELS).map(([k, v]) => ({
+                label: v,
+                value: k,
+              })),
+            ]}
             onValueChange={(v) => setActionFilter(v ?? "all")}>
             <SelectTrigger>
               <SelectValue placeholder="Alle Aktionen" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectPopup alignItemWithTrigger={false}>
               <SelectItem value="all">Alle Aktionen</SelectItem>
               {Object.entries(ACTION_LABELS).map(([k, v]) => (
                 <SelectItem key={k} value={k}>
                   {v}
                 </SelectItem>
               ))}
-            </SelectContent>
+            </SelectPopup>
           </Select>
 
           <Select
+            items={[
+              { label: "Alle Bereiche", value: "all" },
+              ...Object.entries(TARGET_TYPE_LABELS).map(([k, v]) => ({
+                label: v,
+                value: k,
+              })),
+            ]}
             value={targetTypeFilter}
             onValueChange={(v) => setTargetTypeFilter(v ?? "all")}>
             <SelectTrigger>
               <SelectValue placeholder="Alle Bereiche" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectPopup alignItemWithTrigger={false}>
               <SelectItem value="all">Alle Bereiche</SelectItem>
               {Object.entries(TARGET_TYPE_LABELS).map(([k, v]) => (
                 <SelectItem key={k} value={k}>
                   {v}
                 </SelectItem>
               ))}
-            </SelectContent>
+            </SelectPopup>
           </Select>
 
           <div className="flex gap-2">

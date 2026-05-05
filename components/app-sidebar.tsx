@@ -115,25 +115,8 @@ const data = {
   ressources: [
     {
       name: "Ressourcen",
-      url: "/ressources",
+      url: "/resources",
       icon: Folder,
-      items: [
-        {
-          name: "Praxis und Ärzte",
-          url: "/doctors",
-          icon: Stethoscope,
-        },
-        {
-          name: "Dolmetscher",
-          url: "/interpreters",
-          icon: Languages,
-        },
-      ],
-    },
-    {
-      name: "Finanzen",
-      url: "/finance",
-      icon: CreditCard,
     },
   ],
 };
@@ -175,9 +158,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarContent>
       )}
 
-      <SidebarFooter>
-        <NavUser project={data.project} />
-      </SidebarFooter>
+      {/* <SidebarFooter><NavUser project={data.project} /></SidebarFooter> */}
     </Sidebar>
   );
 }

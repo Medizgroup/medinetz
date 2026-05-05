@@ -24,7 +24,7 @@ export default function UserActivityCalendar({
         data={data}
         theme={orangeTheme}
         maxLevel={4}
-        blockRadius={10}
+        blockRadius={2}
         blockSize={15}
         labels={{
           totalCount: "{{count}} Aktivitäten in den letzten 12 Monaten",

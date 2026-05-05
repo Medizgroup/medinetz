@@ -117,7 +117,7 @@ export default function UserBadge({
               data-state={theme === "dark" ? "checked" : "unchecked"}>
               <span
                 aria-controls={id}
-                className="flex-1 cursor-pointer text-right font-medium text-sm group-data-[state=checked]:text-muted-foreground/70"
+                className="flex-1 cursor-pointer text-right font-medium text-sm group-data-[state=unchecked]:text-muted-foreground/70"
                 id={`${id}-off`}
                 onClick={() => setTheme("dark")}>
                 <MoonIcon aria-hidden="true" size={16} />
@@ -128,7 +128,7 @@ export default function UserBadge({
               />
               <span
                 aria-controls={id}
-                className="flex-1 cursor-pointer text-left font-medium text-sm group-data-[state=unchecked]:text-muted-foreground/70"
+                className="flex-1 cursor-pointer text-left font-medium text-sm group-data-[state=checked]:text-muted-foreground/70"
                 id={`${id}-on`}
                 onClick={() => setTheme("dark")}>
                 <SunIcon aria-hidden="true" size={16} />

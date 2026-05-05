@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Plus, ChevronDown, ChevronUp, Loader2, Flag } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Flag } from "lucide-react";
 import { format, isPast, isToday } from "date-fns";
 import { de } from "date-fns/locale";
 
@@ -12,8 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
-  SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -123,34 +123,38 @@ export default function TodosList() {
   return (
     <div className="space-y-4">
       {/* Quick-Add */}
-      <form
-        onSubmit={handleQuickAdd}
-        className="space-y-2 rounded-lg border bg-muted/20 p-3">
+      <form onSubmit={handleQuickAdd} className="space-y-2 ">
         <div className="flex gap-2">
-          <Plus className="mt-2 size-4 shrink-0 text-muted-foreground" />
           <Input
             value={newTitle}
+            size="lg"
             onChange={(e) => setNewTitle(e.target.value)}
-            placeholder="Neues Todo… (Enter zum Hinzufügen)"
-            className="border-0 bg-transparent shadow-none focus-visible:bg-background"
+            placeholder="Neues Todo..."
           />
-          <Button type="submit" size="sm" disabled={!newTitle.trim() || adding}>
+          <Button type="submit" disabled={!newTitle.trim() || adding}>
             {adding ? <Loader2 className="size-4 animate-spin" /> : null}
             Hinzufügen
           </Button>
         </div>
 
         {showQuickAddDetails ? (
-          <div className="grid gap-2 sm:grid-cols-2 pl-6">
-            <Select value={newPriority} onValueChange={setNewPriority}>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <Select
+              items={[
+                { value: "3", label: "Hoch" },
+                { value: "2", label: "Mittel" },
+                { value: "1", label: "Niedrig" },
+              ]}
+              value={newPriority}
+              onValueChange={(v) => setNewPriority(v ?? "1")}>
               <SelectTrigger className="text-xs">
                 <SelectValue placeholder="Priorität" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectPopup alignItemWithTrigger={false} className="w-auto">
                 <SelectItem value="3">Hoch</SelectItem>
                 <SelectItem value="2">Mittel</SelectItem>
                 <SelectItem value="1">Niedrig</SelectItem>
-              </SelectContent>
+              </SelectPopup>
             </Select>
             <Input
               type="date"
@@ -165,7 +169,7 @@ export default function TodosList() {
         <button
           type="button"
           onClick={() => setShowQuickAddDetails((v) => !v)}
-          className="ml-6 text-xs text-muted-foreground hover:text-foreground">
+          className=" text-xs text-muted-foreground hover:text-foreground">
           {showQuickAddDetails ? (
             <>
               <ChevronUp className="inline size-3" /> Details ausblenden
@@ -182,29 +186,40 @@ export default function TodosList() {
       <div className="flex flex-wrap items-center gap-2">
         <Select
           value={filter}
+          items={[
+            { value: "open", label: `Offen (${openCount})` },
+            { value: "done", label: `Erledigt (${doneCount})` },
+            { value: "all", label: "Alle" },
+          ]}
           onValueChange={(v) => setFilter((v ?? "open") as typeof filter)}>
           <SelectTrigger className="w-[160px]">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectPopup alignItemWithTrigger={false} className="w-auto">
             <SelectItem value="open">Offen ({openCount})</SelectItem>
             <SelectItem value="done">Erledigt ({doneCount})</SelectItem>
             <SelectItem value="all">Alle</SelectItem>
-          </SelectContent>
+          </SelectPopup>
         </Select>
 
         <Select
           value={priorityFilter}
+          items={[
+            { value: "all", label: "Alle Prioritäten" },
+            { value: "3", label: "Hoch" },
+            { value: "2", label: "Mittel" },
+            { value: "1", label: "Niedrig" },
+          ]}
           onValueChange={(v) => setPriorityFilter(v ?? "all")}>
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Alle Prioritäten" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectPopup alignItemWithTrigger={false} className="w-auto">
             <SelectItem value="all">Alle Prioritäten</SelectItem>
             <SelectItem value="3">Hoch</SelectItem>
             <SelectItem value="2">Mittel</SelectItem>
             <SelectItem value="1">Niedrig</SelectItem>
-          </SelectContent>
+          </SelectPopup>
         </Select>
       </div>
 

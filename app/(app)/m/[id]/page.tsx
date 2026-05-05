@@ -25,6 +25,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { CircleCheck, FolderOpen, Loader, PauseCircle } from "lucide-react";
 import ActivityLine from "@/components/activity/activity-line";
+import { NotProduct } from "@/components/not-product";
 
 // --- helpers ---
 function toISODate(d: Date) {
@@ -108,7 +109,7 @@ export default async function Page({
   });
 
   if (!user) {
-    notFound();
+    return NotProduct();
   }
 
   // Inaktiv: Owner darf es sehen, andere nicht
@@ -116,7 +117,7 @@ export default async function Page({
     if (isOwner) {
       return <InactiveComponent />;
     }
-    notFound();
+    return NotProduct();
   }
 
   const latestActivities = await prisma.activity.findMany({
@@ -196,7 +197,7 @@ export default async function Page({
       {/* Activity Calendar */}
       <section className="space-y-3">
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-lg font-semibold">Aktivität</h2>
+          <h2 className="text-lg font-semibold">Aktivitäten</h2>
 
           {/* “Mehr anzeigen” kann öffentlich sein */}
           <Button
