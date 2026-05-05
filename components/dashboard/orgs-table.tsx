@@ -8,11 +8,9 @@ import {
   MoreHorizontal,
   Plus,
   Search,
-  Users,
 } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
-import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +18,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -33,6 +30,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import CreateOrgDialog from "./create-org-dialog";
+import { toastManager } from "../ui/toast";
+import { getInitials } from "@/lib/helper/user";
+import Link from "next/link";
 
 type Org = {
   id: string;
@@ -42,6 +42,12 @@ type Org = {
   isArchived: boolean;
   createdAt: string;
   _count: { members: number; cases: number };
+  members: {
+    id: string;
+    displayName: string;
+    email: string;
+    avatarUrl: string | null;
+  }[];
 };
 
 const TYPE_LABELS: Record<string, string> = {
@@ -99,12 +105,19 @@ export default function OrgsTable() {
       body: JSON.stringify({ isArchived: !o.isArchived }),
     });
     if (!r.ok) {
-      toast.error("Fehler.");
+      toastManager.add({
+        description: `Organisation konnte nicht ${!o.isArchived ? "archiviert" : "wiederhergestellt"} werden.`,
+        title: "Error!",
+        type: "error",
+      });
       return;
     }
-    toast.success(
-      `Organisation ${!o.isArchived ? "archiviert" : "wiederhergestellt"}.`,
-    );
+
+    toastManager.add({
+      description: `Organisation ${!o.isArchived ? "archiviert" : "wiederhergestellt"}.`,
+      title: "Success!",
+      type: "success",
+    });
     load();
   }
 
@@ -112,15 +125,18 @@ export default function OrgsTable() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground z-10" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Suche nach Name oder Slug…"
-            className="w-[280px] pl-9"
+            className="w-[280px] pl-6"
           />
         </div>
-        <Button size="sm" onClick={() => setCreateOpen(true)}>
+        <Button
+          className="rounded-full"
+          size="sm"
+          onClick={() => setCreateOpen(true)}>
           <Plus className="size-4" />
           Organisation erstellen
         </Button>
@@ -160,28 +176,22 @@ export default function OrgsTable() {
                   key={o.id}
                   className={o.isArchived ? "opacity-50" : ""}>
                   <TableCell>
-                    <div>
+                    <Link
+                      href={`/dashboard/organizations/${o.id}`}
+                      className="flex items-center gap-3 h-full">
                       <div className="font-medium">{o.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {o.slug}
-                      </div>
-                    </div>
+                    </Link>
                   </TableCell>
                   <TableCell>
                     <Badge variant="secondary" className="text-[10px]">
                       {TYPE_LABELS[o.type] ?? o.type}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1 text-sm">
-                      <Users className="size-3.5 text-muted-foreground" />
-                      {o._count.members}
-                    </div>
-                  </TableCell>
+                  <TableCell className="text-sm">{o._count.members}</TableCell>
                   <TableCell className="text-sm">{o._count.cases}</TableCell>
                   <TableCell>
                     <Badge
-                      variant={o.isArchived ? "secondary" : "default"}
+                      variant={o.isArchived ? "secondary" : "success"}
                       className="text-[10px]">
                       {o.isArchived ? "Archiviert" : "Aktiv"}
                     </Badge>

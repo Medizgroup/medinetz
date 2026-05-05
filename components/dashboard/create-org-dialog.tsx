@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   Select,
-  SelectContent,
+  SelectPopup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -111,7 +111,7 @@ export default function CreateOrgDialog({
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="z.B. Medinetz Gießen"
+                placeholder="Sozial Netzwerk"
               />
             </Field>
 
@@ -120,26 +120,30 @@ export default function CreateOrgDialog({
               <Input
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
-                placeholder="medinetz-giessen"
+                placeholder="routine"
               />
-              <FieldDescription>
-                Wird automatisch aus dem Namen generiert. Nur Kleinbuchstaben,
-                Zahlen, Bindestriche.
-              </FieldDescription>
             </Field>
 
             <Field className="gap-2">
               <FieldLabel>Typ</FieldLabel>
-              <Select value={type} onValueChange={setType}>
+              <Select
+                items={[
+                  { label: "Routine", value: "ROUTINE" },
+                  { label: "Schwangerschaft", value: "PREGNANCY" },
+                  { label: "Verwaltung", value: "MANAGEMENT" },
+                  { label: "Sonstige", value: "CUSTOM" },
+                ]}
+                value={type}
+                onValueChange={(value) => value && setType(value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectPopup alignItemWithTrigger={false}>
                   <SelectItem value="ROUTINE">Routine</SelectItem>
                   <SelectItem value="PREGNANCY">Schwangerschaft</SelectItem>
                   <SelectItem value="MANAGEMENT">Verwaltung</SelectItem>
                   <SelectItem value="CUSTOM">Sonstige</SelectItem>
-                </SelectContent>
+                </SelectPopup>
               </Select>
             </Field>
           </div>

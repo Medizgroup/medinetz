@@ -21,27 +21,57 @@ export async function GET(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const members = await prisma.organizationMember.findMany({
-    where: { organizationId: id },
-    orderBy: { joinedAt: "asc" },
+  // const members = await prisma.organizationMember.findMany({
+  //   where: { organizationId: id },
+  //   orderBy: { joinedAt: "asc" },
+  //   select: {
+  //     id: true,
+  //     role: true,
+  //     joinedAt: true,
+  //     user: {
+  //       select: {
+  //         id: true,
+  //         email: true,
+  //         displayName: true,
+  //         name: true,
+  //         avatarUrl: true,
+  //         isActive: true,
+  //       },
+  //     },
+  //   },
+  // });
+
+  const org = await prisma.organization.findUnique({
+    where: { id },
     select: {
       id: true,
-      role: true,
-      joinedAt: true,
-      user: {
+      name: true,
+      slug: true,
+      isArchived: true,
+      members: {
         select: {
           id: true,
-          email: true,
-          displayName: true,
-          name: true,
-          avatarUrl: true,
-          isActive: true,
+          role: true,
+          joinedAt: true,
+          user: {
+            select: {
+              id: true,
+              email: true,
+              displayName: true,
+              firstName: true,
+              lastName: true,
+              isActive: true,
+            },
+          },
         },
+        orderBy: { joinedAt: "asc" },
       },
     },
   });
 
-  return NextResponse.json({ members });
+  if (!org)
+    return NextResponse.json({ error: "Nicht gefunden." }, { status: 404 });
+  return NextResponse.json(org);
 }
 
 export async function PATCH(

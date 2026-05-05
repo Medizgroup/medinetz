@@ -50,6 +50,7 @@ import InviteUserDialog from "./invite-user-dialog";
 import { ButtonGroup } from "../ui/group";
 import { DropdownMenuGroup, DropdownMenuLabel } from "../ui/menu";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "../ui/checkbox";
 
 type OrgMember = {
   role: string;
@@ -87,6 +88,8 @@ export default function UsersTable({
   const [total, setTotal] = React.useState(0);
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
+  const [selected, setSelected] = React.useState<Set<string>>(new Set());
+  const [bulkLoading, setBulkLoading] = React.useState(false);
 
   const [search, setSearch] = React.useState("");
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
@@ -164,6 +167,36 @@ export default function UsersTable({
     window.open("/api/admin/users/export", "_blank");
   }
 
+  function toggleSelect(id: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+
+      return next;
+    });
+  }
+
+  function toggleAll(ids: string[]) {
+    setSelected((prev) =>
+      prev.size === ids.length ? new Set() : new Set(ids),
+    );
+  }
+
+  async function handleBulk(action: "activate" | "deactivate") {
+    setBulkLoading(true);
+    await fetch("/api/admin/users/bulk", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, userIds: Array.from(selected) }),
+    });
+    setSelected(new Set());
+    setBulkLoading(false);
+    load(); // deine bestehende reload-Funktion
+  }
   const userName = (u: User) =>
     u.displayName ?? u.name ?? u.email.split("@")[0];
 
@@ -198,7 +231,33 @@ export default function UsersTable({
             </SelectPopup>
           </Select>
         </div>
-
+        {selected.size > 0 && (
+          <div className="flex items-center gap-3 rounded-md border bg-muted/50 px-3 py-2 text-sm">
+            <span className="text-muted-foreground">
+              {selected.size} ausgewählt
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkLoading}
+              onClick={() => handleBulk("activate")}>
+              Aktivieren
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkLoading}
+              onClick={() => handleBulk("deactivate")}>
+              Deaktivieren
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setSelected(new Set())}>
+              Auswahl aufheben
+            </Button>
+          </div>
+        )}
         <div className="flex gap-4">
           <ButtonGroup>
             <Button
@@ -238,6 +297,12 @@ export default function UsersTable({
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-10">
+                <Checkbox
+                  checked={selected.size === users.length && users.length > 0}
+                  onCheckedChange={() => toggleAll(users.map((u) => u.id))}
+                />
+              </TableHead>
               <TableHead>Benutzer</TableHead>
               <TableHead>Organisationen</TableHead>
               <TableHead>Status</TableHead>
@@ -263,6 +328,12 @@ export default function UsersTable({
             ) : (
               users.map((u) => (
                 <TableRow key={u.id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selected.has(u.id)}
+                      onCheckedChange={() => toggleSelect(u.id)}
+                    />
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar
