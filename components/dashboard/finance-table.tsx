@@ -9,6 +9,7 @@ import {
   MoreHorizontal,
   Plus,
   Search,
+  TrendingUp,
 } from "lucide-react";
 import { format, parseISO, isValid } from "date-fns";
 import { de } from "date-fns/locale";
@@ -42,6 +43,8 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 
 import FinanceItemDialog from "./finance-item-dialog";
+import { cn } from "@/lib/utils";
+import { toastManager } from "../ui/toast";
 
 type Org = { id: string; name: string };
 
@@ -130,10 +133,18 @@ export default function FinanceTable({
       method: "DELETE",
     });
     if (!r.ok) {
-      toast.error("Fehler.");
+      toastManager.add({
+        description: "Der Eintrag konnte nicht gelöscht werden.",
+        title: "Fehler",
+        type: "error",
+      });
       return;
     }
-    toast.success("Gelöscht.");
+    toastManager.add({
+      description: "Der Eintrag wurde gelöscht.",
+      title: "Success!",
+      type: "success",
+    });
     load();
   }
 
@@ -160,12 +171,25 @@ export default function FinanceTable({
         ))}
       </div>
 
-      <Card>
-        <CardContent className="p-4">
-          <div className="text-xs text-muted-foreground">
-            Gesamt ({tab === "donations" ? "Spenden" : "Ausgaben"})
+      <Card className="rounded-none! border-0! shadow-none! py-0 inline-flex">
+        <CardContent className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 p-4 sm:p-6">
+          <div className="text-sm font-medium text-muted-foreground">
+            Gesamt
           </div>
-          <div className="text-2xl font-semibold tabular-nums">
+          <div
+            className={cn(
+              "tabular-nums text-xs font-medium",
+              isDonation
+                ? "text-green-800 dark:text-green-400"
+                : "text-red-800 dark:text-red-400",
+            )}>
+            {isDonation ? (
+              <TrendingUp className="size-4 inline-block" />
+            ) : (
+              <TrendingUp className="size-4 inline-block rotate-180" />
+            )}
+          </div>
+          <div className="tabular-nums w-full flex-none text-3xl font-semibold tracking-tight text-foreground">
             {totalAmount.toLocaleString("de-DE", {
               style: "currency",
               currency: "EUR",
@@ -177,17 +201,21 @@ export default function FinanceTable({
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap gap-2">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground z-10" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Suche…"
-              className="w-[240px] pl-9"
+              className="w-[240px] pl-6"
             />
           </div>
           {availableOrgs.length > 1 ? (
             <Select
               value={orgFilter}
+              items={[
+                { value: "all", label: "Alle Organisationen" },
+                ...availableOrgs.map((o) => ({ value: o.id, label: o.name })),
+              ]}
               onValueChange={(v) => setOrgFilter(v ?? "all")}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Alle Orgs" />
@@ -294,7 +322,7 @@ export default function FinanceTable({
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant={d.receiptSent ? "default" : "secondary"}
+                          variant={d.receiptSent ? "success" : "secondary"}
                           className="text-[10px]">
                           {d.receiptSent ? "Gesendet" : "Ausstehend"}
                         </Badge>
@@ -368,7 +396,7 @@ export default function FinanceTable({
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant={e.isPaid ? "default" : "warning"}
+                          variant={e.isPaid ? "success" : "warning"}
                           className="text-[10px]">
                           {e.isPaid ? "Bezahlt" : "Offen"}
                         </Badge>
