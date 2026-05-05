@@ -15,8 +15,7 @@ export default async function DashboardResourcesPage() {
       <div>
         <h1 className="text-2xl font-semibold">Ressourcen-Verwaltung</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Ärzt:innen und Dolmetscher:innen verwalten. Koordinaten +
-          Verfügbarkeit pflegen.
+          Ärzt:innen und Dolmetscher:innen verwalten.
         </p>
       </div>
       <DashboardResourcesTable />

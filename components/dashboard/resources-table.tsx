@@ -23,8 +23,8 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -46,13 +46,10 @@ const AVAILABILITY_LABELS: Record<string, string> = {
   LOW: "Niedrig",
 };
 
-const AVAILABILITY_VARIANT: Record<
-  string,
-  "default" | "warning" | "secondary"
-> = {
-  HIGH: "default",
+const AVAILABILITY_VARIANT: Record<string, "success" | "warning" | "info"> = {
+  HIGH: "success",
   MEDIUM: "warning",
-  LOW: "secondary",
+  LOW: "info",
 };
 
 export default function DashboardResourcesTable() {
@@ -134,15 +131,20 @@ export default function DashboardResourcesTable() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap gap-2">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground z-10" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Suche…"
-              className="w-[240px] pl-9"
+              className="w-[240px] pl-6"
             />
           </div>
           <Select
+            items={[
+              { label: "Alle Typen", value: "ALL" },
+              { label: "Ärzt:innen", value: "DOCTOR" },
+              { label: "Dolmetscher:innen", value: "INTERPRETER" },
+            ]}
             value={typeFilter}
             onValueChange={(v) =>
               setTypeFilter((v ?? "ALL") as typeof typeFilter)
@@ -150,11 +152,11 @@ export default function DashboardResourcesTable() {
             <SelectTrigger className="w-[180px]">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectPopup alignItemWithTrigger={false}>
               <SelectItem value="ALL">Alle Typen</SelectItem>
               <SelectItem value="DOCTOR">Ärzt:innen</SelectItem>
               <SelectItem value="INTERPRETER">Dolmetscher:innen</SelectItem>
-            </SelectContent>
+            </SelectPopup>
           </Select>
         </div>
 
@@ -216,7 +218,7 @@ export default function DashboardResourcesTable() {
                     <Badge
                       variant={r.type === "DOCTOR" ? "info" : "secondary"}
                       className="text-[10px]">
-                      {r.type === "DOCTOR" ? "Arzt/Ärztin" : "Dolmetscher:in"}
+                      {r.type === "DOCTOR" ? "Arzt" : "Dolmetscher"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -224,7 +226,7 @@ export default function DashboardResourcesTable() {
                       {r.languages.slice(0, 3).map((l, i) => (
                         <Badge
                           key={i}
-                          variant="secondary"
+                          variant="outline"
                           className="text-[10px]">
                           {l}
                         </Badge>
@@ -254,7 +256,7 @@ export default function DashboardResourcesTable() {
                   </TableCell>
                   <TableCell>
                     <Badge
-                      variant={r.isActive ? "default" : "secondary"}
+                      variant={r.isActive ? "success" : "secondary"}
                       className="text-[10px]">
                       {r.isActive ? "Aktiv" : "Inaktiv"}
                     </Badge>
