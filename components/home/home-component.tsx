@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import HomeWelcome from "./home-welcome";
 import HomeCard from "./home-card";
 import HomeActivity from "./home-activity";
-import { User } from "@/generated/prisma/client";
+import { Case, User } from "@/generated/prisma/client";
 
 export default async function HomeComponent() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -18,7 +18,6 @@ export default async function HomeComponent() {
     );
   }
 
-  // 1) User
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
@@ -71,7 +70,6 @@ export default async function HomeComponent() {
   });
 
   // 5) Activity Feed (limit 6) aus allen Orgas
-  // Wenn du auch "global" Activities (organizationId NULL) zeigen willst, OR hinzufügen.
   const activities = await prisma.activity.findMany({
     where: {
       OR: [
@@ -94,13 +92,32 @@ export default async function HomeComponent() {
     },
   });
 
+  // Case
+  const cases = await prisma.case.findMany({
+    where: {
+      assigneeId: userId,
+      status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] },
+    },
+    orderBy: { updatedAt: "asc" },
+    take: 5,
+    select: {
+      id: true,
+      title: true,
+      status: true,
+      priority: true,
+      caseNumber: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
   return (
     <>
       <div>
         <HomeWelcome user={user as User} />
       </div>
 
-      <div className="grid auto-rows-min gap-4 md:grid-cols-9">
+      <div className="grid auto-rows-min gap-4 lg:grid-cols-9">
         <HomeCard
           stats={{
             todosOpen: openTodosCount,
@@ -109,6 +126,7 @@ export default async function HomeComponent() {
           }}
           todos={todos}
           userId={userId}
+          cases={cases as Case[]}
         />
 
         <HomeActivity items={activities} />

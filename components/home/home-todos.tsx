@@ -1,15 +1,19 @@
 "use client";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { CheckIcon } from "lucide-react";
 import Link from "next/link";
-
+import { Todo } from "@/generated/prisma/client";
+import { useRouter } from "next/navigation";
+import { toastManager } from "../ui/toast";
+import React from "react";
 type Props = {
   todos: {
     id: string;
     title: string;
+    done: boolean;
     dueDate: Date | null;
     priority: number;
     createdAt: Date;
@@ -18,10 +22,37 @@ type Props = {
 };
 
 export default function HomeTodo({ todos }: Props) {
+  const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
+  function toggleDone(t: Todo) {
+    setLoading(true);
+    try {
+      fetch(`/api/todos/${t.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ done: !t.done }),
+      }).catch(() => {});
+
+      toastManager.add({
+        title: "Success",
+        description: "Aufgabe als erledigt markiert",
+        type: "success",
+      });
+
+      router.refresh();
+    } catch (e) {
+      toastManager.add({
+        title: "Error",
+        description: "Fehler beim Markieren als erledigt" + e,
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div className="w-full space-y-3">
-      <div className="text-sm font-medium text-muted-foreground">
-        Meine Todos
+      <div className="text-sm font-medium text-muted-foreground dark:text-foreground/80">
+        Zu erledigende Aufgaben
       </div>
 
       <Card className="rounded-2xl">
@@ -32,14 +63,21 @@ export default function HomeTodo({ todos }: Props) {
             </div>
           ) : (
             todos.map((t) => (
-              <div
-                key={t.id}
-                className="flex items-start justify-between gap-3">
+              <div key={t.id} className="flex items-start gap-3">
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon-xs"
+                    onClick={() => toggleDone(t as Todo)}
+                    className="bg-accent size-4 sm:size-5"></Button>
+                </div>
                 <div className="min-w-0 flex flex-col gap-1">
-                  <div className="text-sm font-medium truncate">{t.title}</div>
+                  <div
+                    className={`text-sm font-medium truncate ${t.done ? "line-through text-foreground" : ""}`}>
+                    {t.title}
+                  </div>
                   <div className="text-xs text-muted-foreground">
                     <Badge
-                      size="sm"
                       variant={
                         t.priority === 1
                           ? "info"
@@ -60,19 +98,14 @@ export default function HomeTodo({ todos }: Props) {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon-xs" className="bg-accent">
-                    <CheckIcon className="size-4" />
-                  </Button>
-                </div>
               </div>
             ))
           )}
 
           <Link
             href="/todos"
-            className="text-sm text-primary hover:text-primary/90">
-            Alles ansehen &#8594;
+            className="text-sm text-muted-foreground hover:text-primary/90">
+            Alle Aufgaben ansehen &#8594;
           </Link>
         </CardContent>
       </Card>

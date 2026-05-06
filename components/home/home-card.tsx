@@ -5,6 +5,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { GalleryVerticalEnd, LayersPlus, ListTodo } from "lucide-react";
 import HomeTodo from "./home-todos";
+import { Case } from "@/generated/prisma/client";
+import HomeCase from "./home-cases";
 
 type Props = {
   userId: string;
@@ -16,14 +18,16 @@ type Props = {
   todos: {
     id: string;
     title: string;
+    done: boolean;
     dueDate: Date | null;
     priority: number;
     createdAt: Date;
     description: string | null;
   }[];
+  cases: Case[];
 };
 
-export default function HomeCard({ stats, todos }: Props) {
+export default function HomeCard({ stats, todos, cases }: Props) {
   const data = [
     {
       name: "Todos",
@@ -46,7 +50,7 @@ export default function HomeCard({ stats, todos }: Props) {
   ];
 
   return (
-    <div className="flex justify-center p-4 sm:p-10 w-full sm:col-span-6 flex-col gap-8 items-start">
+    <div className="flex justify-center p-4  w-full sm:col-span-6 flex-col gap-8 items-start">
       <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full">
         {data.map((item) => (
           <Card key={item.name} className="p-0 gap-0">
@@ -76,6 +80,7 @@ export default function HomeCard({ stats, todos }: Props) {
       </dl>
 
       <HomeTodo todos={todos} />
+      <HomeCase cases={cases} />
     </div>
   );
 }
