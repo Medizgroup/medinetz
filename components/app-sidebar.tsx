@@ -5,7 +5,6 @@ import {
   BookOpen,
   CalendarDays,
   CircleQuestionMark,
-  CreditCard,
   Folder,
   Form,
   Frame,
@@ -13,18 +12,16 @@ import {
   GalleryVerticalEnd,
   History,
   Home,
-  Languages,
   Leaf,
   ListTodo,
+  Panda,
   Send,
   Siren,
-  Stethoscope,
 } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -33,7 +30,6 @@ import {
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
 import { NavSecondary } from "./nav-secondary";
-import { NavUser } from "./dash-project";
 import Link from "next/link";
 import { NavRessources } from "./nav-ressources";
 import { NavSettings } from "./settings/nav/nav-settings";
@@ -130,12 +126,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="bg-accent text-indigo-500 flex aspect-square size-10 items-center justify-center rounded-lg">
-                  <Leaf className="size-6" />
+                <div className="bg-accent  flex aspect-square size-10 items-center justify-center rounded-2xl">
+                  <Panda className="size-6" />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Medinetz</span>
-                  <span className="truncate text-xs">Gießen</span>
+                <div className="grid flex-1 text-left text-xl leading-tight">
+                  <span className="truncate font-semibold">Medizgroup</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -145,8 +140,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {pathname.startsWith("/settings") ? (
         <SidebarContent>
           <NavSettings />
-          {/* <NavProjects projects={data.projects} /> */}
-          {/* <NavRessources ressources={data.ressources} /> */}
           <NavSecondary items={data.navSecondary} className="mt-auto" />
         </SidebarContent>
       ) : (
@@ -157,8 +150,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <NavSecondary items={data.navSecondary} className="mt-auto" />
         </SidebarContent>
       )}
-
-      {/* <SidebarFooter><NavUser project={data.project} /></SidebarFooter> */}
     </Sidebar>
   );
 }
