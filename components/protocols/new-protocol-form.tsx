@@ -136,7 +136,9 @@ export default function NewProtocolForm({
             items={memberships.map((m) => ({
               label: m.organization.name,
               value: m.organization.id,
-            }))}>
+            }))}
+            onValueChange={(orgId) => orgId && setOrganizationId(orgId)} // setzt organisationID wenn ausgewählt
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
