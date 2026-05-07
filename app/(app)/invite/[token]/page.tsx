@@ -6,13 +6,22 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Send } from "lucide-react";
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Loading } from "@/components/loading-component";
+import { NotProduct } from "@/components/not-product";
+import { Spinner } from "@/components/ui/spinner";
 
 const ROLE_LABELS: Record<string, string> = {
   LIMITED: "Eingeschränkt",
@@ -51,10 +60,6 @@ export default function InvitePage() {
       .finally(() => setLoading(false));
   }, [token]);
 
-  function handleLoginRedirect() {
-    router.push(`/login?redirect=/invite/${token}`);
-  }
-
   async function handleAccept() {
     setAccepting(true);
     const res = await fetch(`/api/invite/${token}/accept`, { method: "POST" });
@@ -64,15 +69,11 @@ export default function InvitePage() {
       setAccepting(false);
       return;
     }
-    router.push(`/dashboard`);
+    router.push(`/home`);
   }
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground text-sm">Lade Einladung...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
@@ -103,60 +104,41 @@ export default function InvitePage() {
   const isLoggedIn = !!loggedInEmail;
   const emailMismatch = isLoggedIn && loggedInEmail !== invite.email;
 
+  if (emailMismatch) {
+    return NotProduct();
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Einladung zu {invite.organization.name}</CardTitle>
-          <CardDescription>
-            {inviterName} hat dich eingeladen, als{" "}
-            <Badge variant="secondary">
-              {ROLE_LABELS[invite.role] ?? invite.role}
-            </Badge>{" "}
-            beizutreten.
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="space-y-3 text-sm text-muted-foreground">
-          <p>Eingeladen: {invite.email}</p>
-          {isLoggedIn && (
-            <p>
-              Angemeldet als:{" "}
-              <span className="font-medium text-foreground">
-                {loggedInEmail}
-              </span>
-            </p>
-          )}
-          {emailMismatch && (
-            <p className="text-amber-600">
-              Hinweis: Du bist mit einer anderen E-Mail angemeldet. Die
-              Einladung gilt trotzdem.
-            </p>
-          )}
-        </CardContent>
-
-        <CardFooter className="flex gap-2">
-          {!isLoggedIn ? (
-            <Button className="w-full" onClick={handleLoginRedirect}>
-              Anmelden und annehmen
-            </Button>
-          ) : (
-            <>
-              <Button
-                className="flex-1"
-                onClick={handleAccept}
-                disabled={accepting}>
-                {accepting ? "Wird angenommen..." : "Annehmen"}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => router.push("/dashboard")}>
-                Ablehnen
-              </Button>
-            </>
-          )}
-        </CardFooter>
-      </Card>
+    <div className="flex  items-center justify-center p-4">
+      <Alert>
+        <Send />
+        <AlertTitle>Einladung zu {invite.organization.name}</AlertTitle>
+        <AlertDescription className="flex-row items-center gap-2">
+          <span className="text-foreground">{inviterName}</span>hat dich
+          eingeladen, als{" "}
+          <Badge variant="warning" className="inline-flex">
+            {ROLE_LABELS[invite.role] ?? invite.role}
+          </Badge>{" "}
+          beizutreten.
+        </AlertDescription>
+        <AlertAction>
+          <Button
+            size="xs"
+            variant="destructive-outline"
+            onClick={() => router.push("/home")}>
+            Ablehnen
+          </Button>
+          <Button size="xs" onClick={handleAccept} disabled={accepting}>
+            {accepting ? (
+              <>
+                <Spinner /> Wird angenommen...
+              </>
+            ) : (
+              "Annehmen"
+            )}
+          </Button>
+        </AlertAction>
+      </Alert>
     </div>
   );
 }

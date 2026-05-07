@@ -12,7 +12,6 @@ import {
   History,
   Home,
   ListTodo,
-  Panda,
   Send,
 } from "lucide-react";
 
@@ -31,6 +30,7 @@ import Link from "next/link";
 import { NavRessources } from "./nav-ressources";
 import { NavSettings } from "./settings/nav/nav-settings";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export function AppSidebar({
   openTodosCount,
@@ -119,14 +119,22 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
-                <div className="bg-accent  flex aspect-square size-10 items-center justify-center rounded-2xl">
-                  <Panda className="size-6" />
-                </div>
-                <div className="grid flex-1 text-left text-xl leading-tight">
-                  <span className="truncate font-semibold">Medizgroup</span>
-                </div>
+            <SidebarMenuButton size="lg" asChild className="px-0!">
+              <Link href="/" className="flex items-center">
+                <Image
+                  className="dark:hidden"
+                  src="/Logo/Medizgroup-light.svg"
+                  alt="Medizgroup Logo"
+                  width={400}
+                  height={80}
+                />
+                <Image
+                  className="hidden dark:inline"
+                  src="/Logo/Medizgroup-dark.svg"
+                  alt="Medizgroup Logo"
+                  width={500}
+                  height={80}
+                />
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

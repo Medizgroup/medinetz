@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Form } from "@/components/ui/form";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import Image from "next/image";
+import { Spinner } from "@/components/ui/spinner";
 
 type Step = "email" | "profile" | "password";
 type Errors = Record<string, string | string[]>;
@@ -95,8 +97,8 @@ export default function SignUpPage() {
   });
 
   const subtitle = useMemo(() => {
-    if (step === "email")
-      return "Willkommen! Erstelle dein Konto, um fortzufahren.";
+    if (step === "email") return "Gib eine gültige E-Mail-Adresse ein.";
+
     if (step === "profile") return "Wie sollen wir dich ansprechen?";
     return "Lege ein Passwort fest.";
   }, [step]);
@@ -203,10 +205,26 @@ export default function SignUpPage() {
           <Form onSubmit={onSubmit} errors={errors}>
             <div className="flex flex-col items-center space-y-8">
               <div className="space-y-2 text-center">
-                <h1 className="text-balance text-3xl font-bold text-foreground">
-                  Medinetz
+                <div className="flex items-center justify-center">
+                  <Image
+                    src="/Logo/logo-light.svg"
+                    alt="Logo"
+                    width={90}
+                    height={90}
+                    className="inline dark:hidden"
+                  />
+                  <Image
+                    src="/Logo/logo-dark.svg"
+                    alt="Logo"
+                    width={90}
+                    height={90}
+                    className="hidden dark:inline"
+                  />
+                </div>
+                <h1 className="text-balance text-3xl font-semibold text-foreground">
+                  Ein Konto erstellen
                 </h1>
-                <p className="text-pretty text-muted-foreground text-sm">
+                <p className="text-pretty text-foreground/80 text-sm">
                   {subtitle}
                 </p>
               </div>
@@ -225,7 +243,6 @@ export default function SignUpPage() {
                       name="email"
                       type="email"
                       size="lg"
-                      placeholder="your-email@example.com"
                       className="w-full rounded-xl"
                       defaultValue={draft.email}
                       disabled={loading}
@@ -330,13 +347,21 @@ export default function SignUpPage() {
                   className="w-full rounded-xl"
                   size="lg"
                   disabled={loading}>
-                  {step === "password"
-                    ? loading
-                      ? "Erstelle Konto..."
-                      : "Konto erstellen"
-                    : loading
-                      ? "Lädt..."
-                      : "Weiter"}
+                  {step === "password" ? (
+                    loading ? (
+                      <>
+                        <Spinner /> Loading...
+                      </>
+                    ) : (
+                      "Konto erstellen"
+                    )
+                  ) : loading ? (
+                    <>
+                      <Spinner /> Loading...
+                    </>
+                  ) : (
+                    "Weiter"
+                  )}
                 </Button>
 
                 {step === "email" && (

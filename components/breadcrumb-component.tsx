@@ -36,6 +36,7 @@ const SECTION_LABELS: Record<string, string> = {
   dashboard: "Dashboard",
   finance: "Finanzen",
   appearance: "Erscheinungsbild",
+  invite: "Einladung",
 };
 
 const ACTION_LABELS: Record<string, string> = {

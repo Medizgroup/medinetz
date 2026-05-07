@@ -19,6 +19,8 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { CircleAlertIcon } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import Image from "next/image";
 type Step = "email" | "password";
 type Errors = Record<string, string | string[]>;
 
@@ -183,6 +185,22 @@ export default function SignInPage() {
             <Form onSubmit={onSubmit} errors={errors}>
               <div className="flex flex-col items-center space-y-8">
                 <div className="space-y-2 text-center">
+                  <div>
+                    <Image
+                      src="/Logo/logo-light.svg"
+                      alt="Logo"
+                      className="dark:hidden"
+                      width={90}
+                      height={90}
+                    />
+                    <Image
+                      src="/Logo/logo-dark.svg"
+                      alt="Logo Text"
+                      className="hidden dark:inline "
+                      width={90}
+                      height={90}
+                    />
+                  </div>
                   <h1 className="text-balance text-3xl font-semibold text-foreground">
                     Willkommen zurück!
                   </h1>
@@ -220,7 +238,6 @@ export default function SignInPage() {
                           className="w-full rounded-xl"
                           defaultValue={draft.password}
                           disabled={loading}
-                          autoComplete="current-password"
                         />
                         <FieldError />
                       </Field>
@@ -246,13 +263,21 @@ export default function SignInPage() {
                     className="w-full rounded-xl"
                     size="lg"
                     disabled={loading}>
-                    {step === "password"
-                      ? loading
-                        ? "Lädt..."
-                        : "Anmelden"
-                      : loading
-                        ? "Lädt..."
-                        : "Fortfahren"}
+                    {step === "password" ? (
+                      loading ? (
+                        <>
+                          <Spinner /> Loading...
+                        </>
+                      ) : (
+                        "Anmelden"
+                      )
+                    ) : loading ? (
+                      <>
+                        <Spinner /> Prüfen...
+                      </>
+                    ) : (
+                      "Fortfahren"
+                    )}
                   </Button>
 
                   {step === "email" && (
