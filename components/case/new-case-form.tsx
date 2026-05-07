@@ -11,6 +11,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -26,6 +27,11 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
 } from "../ui/number-field";
+import {
+  PatientPseudonymInput,
+  type PatientPseudonymValue,
+} from "./patient-pseudonym-input";
+import { toastManager } from "../ui/toast";
 
 type Membership = {
   organization: { id: string; name: string };
@@ -42,10 +48,10 @@ export default function NewCaseForm({
   const [organizationId, setOrganizationId] = React.useState(
     memberships[0]?.organization.id ?? "",
   );
-  const [patientPseudonym, setPatientPseudonym] = React.useState("");
+  const [patientValue, setPatientValue] =
+    React.useState<PatientPseudonymValue | null>(null);
   const [patientLanguage, setPatientLanguage] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [patientNotes, setPatientNotes] = React.useState("");
   const [priority, setPriority] = React.useState("MEDIUM");
   const [sensitivityLevel, setSensitivityLevel] = React.useState("1");
   const [dueDate, setDueDate] = React.useState<Date | undefined>();
@@ -54,30 +60,56 @@ export default function NewCaseForm({
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
+  const canSubmit =
+    !!title &&
+    !!organizationId &&
+    !!patientValue &&
+    // If patient exists the user must have made a choice
+    (patientValue.mode !== "existing" || !!patientValue.patientId);
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!patientValue) return;
+
     setSaving(true);
     setError(null);
+
+    const body: Record<string, unknown> = {
+      title,
+      organizationId,
+      patientLanguage: patientLanguage || null,
+      description: description || null,
+      priority,
+      sensitivityLevel: Number(sensitivityLevel),
+      dueDate: dueDate ? dueDate.toISOString().slice(0, 10) : null,
+      estimatedCosts: estimatedCosts ?? null,
+    };
+
+    if (patientValue.mode === "existing") {
+      body.patientId = patientValue.patientId;
+    } else {
+      body.patientPseudonym = patientValue.pseudonym;
+      if (patientValue.mode === "new-forced") {
+        body.forceNewPatient = true;
+      }
+    }
 
     const res = await fetch("/api/cases", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        organizationId,
-        patientPseudonym,
-        patientLanguage: patientLanguage || null,
-        description: description || null,
-        priority,
-        sensitivityLevel: Number(sensitivityLevel),
-        dueDate: dueDate ? dueDate.toISOString().slice(0, 10) : null,
-        estimatedCosts: estimatedCosts ?? null,
-      }),
+      body: JSON.stringify(body),
     });
 
     const data = await res.json().catch(() => null);
     setSaving(false);
 
+    toastManager.add({
+      title: res.ok ? "Success" : "Error",
+      description: res.ok
+        ? "Fall wurde erfolgreich erstellt."
+        : (data?.error ?? "Fehler beim Erstellen des Falls."),
+      type: res.ok ? "success" : "error",
+    });
     if (!res.ok) {
       setError(data?.error ?? "Speichern fehlgeschlagen.");
       return;
@@ -120,13 +152,13 @@ export default function NewCaseForm({
               <SelectTrigger>
                 <SelectValue placeholder="Organisation wählen" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectPopup alignItemWithTrigger={false}>
                 {memberships.map((m) => (
                   <SelectItem key={m.organization.id} value={m.organization.id}>
                     {m.organization.name}
                   </SelectItem>
                 ))}
-              </SelectContent>
+              </SelectPopup>
             </Select>
           </Field>
 
@@ -144,40 +176,37 @@ export default function NewCaseForm({
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectPopup alignItemWithTrigger={false}>
                 <SelectItem value="LOW">Niedrig</SelectItem>
                 <SelectItem value="MEDIUM">Mittel</SelectItem>
                 <SelectItem value="HIGH">Hoch</SelectItem>
                 <SelectItem value="URGENT">Dringend</SelectItem>
-              </SelectContent>
+              </SelectPopup>
             </Select>
           </Field>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field className="gap-2">
-            <FieldLabel>Patient Referenz</FieldLabel>
-            <Input
-              value={patientPseudonym}
-              onChange={(e) => setPatientPseudonym(e.target.value)}
-              required
-            />
-            <FieldDescription>
-              Pseudonymisierten Code verwenden.
-            </FieldDescription>
-          </Field>
+        {/* Patient reference – replaces the old patientPseudonym input */}
+        <Field className="gap-2">
+          <FieldLabel>Patient Referenz</FieldLabel>
+          <FieldDescription>
+            Pseudonymisierte ID aufbauen. Kein Klarname.
+          </FieldDescription>
+          <PatientPseudonymInput onValueChange={setPatientValue} />
+        </Field>
 
-          <Field className="gap-2">
-            <FieldLabel>Sprache</FieldLabel>
-            <Input
-              value={patientLanguage}
-              onChange={(e) => setPatientLanguage(e.target.value)}
-            />
-            <FieldDescription>
-              Welche Sprache spricht der Patient
-            </FieldDescription>
-          </Field>
-        </div>
+        <Field className="gap-2">
+          <FieldLabel>Sprache</FieldLabel>
+          <Input
+            value={patientLanguage}
+            onChange={(e) => setPatientLanguage(e.target.value)}
+            placeholder="z.B. Arabisch, Tigrinya"
+          />
+          <FieldDescription>
+            Welche Sprache spricht der Patient
+          </FieldDescription>
+        </Field>
+
         <div className="grid gap-4 sm:grid-cols-3">
           <Field className="gap-2">
             <FieldLabel>Sensibilität</FieldLabel>
@@ -251,17 +280,6 @@ export default function NewCaseForm({
           />
         </Field>
 
-        <Field className="gap-2">
-          <FieldLabel>Patient-Notizen (intern)</FieldLabel>
-          <Textarea
-            rows={4}
-            className="h-32"
-            value={patientNotes}
-            onChange={(e) => setPatientNotes(e.target.value)}
-            placeholder="Zusätzliche Informationen zum Patienten — sensibel behandeln."
-          />
-        </Field>
-
         {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
         <div className="flex justify-end gap-3">
@@ -272,7 +290,10 @@ export default function NewCaseForm({
             onClick={() => router.push("/cases")}>
             Abbrechen
           </Button>
-          <Button type="submit" className="rounded-full" disabled={saving}>
+          <Button
+            type="submit"
+            className="rounded-full"
+            disabled={saving || !canSubmit}>
             {saving ? "Speichere…" : "Fall erstellen"}
           </Button>
         </div>

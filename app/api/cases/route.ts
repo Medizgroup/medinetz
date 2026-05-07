@@ -36,11 +36,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Keine Berechtigung." }, { status: 403 });
   }
 
-  // Patient: existierend oder neu
+  // ─── Patient resolution ───────────────────────────────────────────────────────
+  // Drop-in replacement for the patient block in app/api/cases/route.ts
+
   let patientId: string;
 
   if (body?.patientId) {
-    // Existierender Patient
+    // Mode: reuse existing patient (user chose "Bestehenden verwenden")
     const exists = await prisma.patient.findUnique({
       where: { id: String(body.patientId) },
       select: { id: true, deletedAt: true },
@@ -53,27 +55,66 @@ export async function POST(req: Request) {
     }
     patientId = exists.id;
   } else {
-    // Neuen Patient erzeugen
-    const pseudonym = String(body?.patientPseudonym ?? "").trim();
-    if (!pseudonym) {
+    // Mode: create or reuse by pseudonym
+    const basePseudonym = String(body?.patientPseudonym ?? "").trim();
+    if (!basePseudonym) {
       return NextResponse.json(
         { error: "Patient-Pseudonym ist erforderlich." },
         { status: 400 },
       );
     }
 
-    // Wenn Pseudonym schon existiert: existierenden Patient nutzen
-    const existing = await prisma.patient.findUnique({
-      where: { pseudonym },
-      select: { id: true, deletedAt: true },
-    });
+    const forceNew = body?.forceNewPatient === true;
 
-    if (existing && !existing.deletedAt) {
-      patientId = existing.id;
+    if (!forceNew) {
+      // Standard: reuse if pseudonym already taken
+      const existing = await prisma.patient.findUnique({
+        where: { pseudonym: basePseudonym },
+        select: { id: true, deletedAt: true },
+      });
+      if (existing && !existing.deletedAt) {
+        patientId = existing.id;
+      } else {
+        const created = await prisma.patient.create({
+          data: {
+            pseudonym: basePseudonym,
+            primaryLanguage: body?.patientLanguage
+              ? String(body.patientLanguage).trim()
+              : null,
+          },
+          select: { id: true },
+        });
+        patientId = created.id;
+      }
     } else {
+      // forceNew: user explicitly wants a new patient despite collision → append suffix
+      const clashes = await prisma.patient.findMany({
+        where: {
+          pseudonym: { startsWith: basePseudonym },
+          deletedAt: null,
+        },
+        select: { pseudonym: true },
+      });
+
+      // Find the highest existing suffix (base counts as 0)
+      const suffixPattern = new RegExp(
+        `^${escapeRegex(basePseudonym)}(?:-(\\d+))?$`,
+      );
+      const maxSuffix = clashes.reduce((max, { pseudonym }) => {
+        const m = pseudonym.match(suffixPattern);
+        if (!m) return max;
+        const n = m[1] ? parseInt(m[1], 10) : 0;
+        return Math.max(max, n);
+      }, -1);
+
+      const uniquePseudonym =
+        maxSuffix === -1
+          ? basePseudonym // no real clash found (race condition safety)
+          : `${basePseudonym}-${maxSuffix + 1}`;
+
       const created = await prisma.patient.create({
         data: {
-          pseudonym,
+          pseudonym: uniquePseudonym,
           primaryLanguage: body?.patientLanguage
             ? String(body.patientLanguage).trim()
             : null,
@@ -82,6 +123,11 @@ export async function POST(req: Request) {
       });
       patientId = created.id;
     }
+  }
+
+  // ─── Helper (add at module level) ─────────────────────────────────────────────
+  function escapeRegex(s: string) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
   // Case anlegen
