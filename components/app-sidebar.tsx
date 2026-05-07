@@ -3,20 +3,17 @@
 import * as React from "react";
 import {
   BookOpen,
-  CalendarDays,
+  CalendarIcon,
   CircleQuestionMark,
   Folder,
   Form,
   Frame,
-  GalleryHorizontalEnd,
   GalleryVerticalEnd,
   History,
   Home,
-  Leaf,
   ListTodo,
   Panda,
   Send,
-  Siren,
 } from "lucide-react";
 
 import {
@@ -35,90 +32,88 @@ import { NavRessources } from "./nav-ressources";
 import { NavSettings } from "./settings/nav/nav-settings";
 import { usePathname } from "next/navigation";
 
-const data = {
-  project: {
-    projectName: "Routine",
-    projectAvatar: "",
-    projectUrl: "/routine",
-    projectIcon: Frame,
-  },
-  navMain: [
-    {
-      title: "Home",
-      url: "/home",
-      icon: Home,
-    },
-    {
-      title: "Veranstaltungen",
-      url: "/events",
-      icon: CalendarDays,
-    },
-    {
-      title: "Protokolle",
-      url: "/protocols",
-      icon: Form,
-    },
-    {
-      title: "Fälle",
-      url: "/cases",
-      icon: GalleryVerticalEnd,
-    },
-    {
-      title: "Todo's",
-      url: "/todos",
-      icon: ListTodo,
-    },
-    {
-      title: "Aktivitäten",
-      url: "/activities",
-      icon: History,
-    },
-    {
-      title: "Wikis",
-      url: "/wikis",
-      icon: BookOpen,
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Hilfe",
-      url: "#",
-      icon: CircleQuestionMark,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Routine",
-      url: "/routine",
-      icon: Frame,
-    },
-    {
-      name: "Schwangerschaft",
-      url: "/pregnancy",
-      icon: Siren,
-    },
-    {
-      name: "Management",
-      url: "/management",
-      icon: GalleryHorizontalEnd,
-    },
-  ],
-  ressources: [
-    {
-      name: "Ressourcen",
-      url: "/resources",
-      icon: Folder,
-    },
-  ],
-};
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  openTodosCount,
+  assignedCasesCount,
+  eventsCount,
+  organizations,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & {
+  openTodosCount: number;
+  assignedCasesCount: number;
+  eventsCount: number;
+  organizations: { id: string; name: string; color: string; slug: string }[];
+}) {
   const pathname = usePathname();
+
+  const data = {
+    project: {
+      projectName: "Routine",
+      projectAvatar: "",
+      projectUrl: "/routine",
+      projectIcon: Frame,
+    },
+    navMain: [
+      {
+        title: "Home",
+        url: "/home",
+        icon: Home,
+      },
+      {
+        title: "Kalender",
+        url: "/events",
+        icon: CalendarIcon,
+        count: eventsCount,
+      },
+      {
+        title: "Protokolle",
+        url: "/protocols",
+        icon: Form,
+      },
+      {
+        title: "Fälle",
+        url: "/cases",
+        icon: GalleryVerticalEnd,
+        count: assignedCasesCount,
+      },
+      {
+        title: "Todo's",
+        url: "/todos",
+        icon: ListTodo,
+        count: openTodosCount,
+      },
+      {
+        title: "Aktivitäten",
+        url: "/activities",
+        icon: History,
+      },
+      {
+        title: "Wikis",
+        url: "/wikis",
+        icon: BookOpen,
+      },
+    ],
+    navSecondary: [
+      {
+        title: "Hilfe",
+        url: "#",
+        icon: CircleQuestionMark,
+      },
+      {
+        title: "Feedback",
+        url: "#",
+        icon: Send,
+      },
+    ],
+    organizations: organizations,
+    ressources: [
+      {
+        name: "Ressourcen",
+        url: "/resources",
+        icon: Folder,
+      },
+    ],
+  };
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -145,7 +140,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       ) : (
         <SidebarContent>
           <NavMain items={data.navMain} />
-          <NavProjects projects={data.projects} />
+          <NavProjects organizations={data.organizations} />
           <NavRessources ressources={data.ressources} />
           <NavSecondary items={data.navSecondary} className="mt-auto" />
         </SidebarContent>

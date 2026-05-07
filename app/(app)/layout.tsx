@@ -36,9 +36,65 @@ export default async function AppLayout({
     redirect("/inactive");
   }
 
+  // get OrgIds
+  const orgIds = await prisma.organizationMember.findMany({
+    where: { userId: session.user.id },
+    select: { organizationId: true },
+  });
+
+  const orgIdsArray = orgIds.map((m) => m.organizationId);
+
+  const userId = session.user.id;
+
+  const [openTodosCount, assignedCasesCount, eventsCount] = await Promise.all([
+    prisma.todo.count({ where: { userId, done: false } }),
+
+    prisma.case.count({
+      where: {
+        assigneeId: userId,
+        status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] },
+      },
+    }),
+
+    prisma.event.count({
+      where: {
+        OR: [
+          {
+            creatorId: userId,
+            visibility: "PRIVATE",
+          },
+          {
+            visibility: "ORGANIZATION",
+            organizationId: { in: orgIdsArray },
+          },
+        ],
+      },
+    }),
+  ]);
+
+  const organizations = await prisma.organizationMember.findMany({
+    where: { userId },
+    select: {
+      organization: {
+        select: { id: true, name: true, color: true, slug: true },
+      },
+    },
+    orderBy: { organization: { createdAt: "asc" } },
+  });
+
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar
+        openTodosCount={openTodosCount}
+        assignedCasesCount={assignedCasesCount}
+        eventsCount={eventsCount}
+        organizations={organizations.map((org) => ({
+          id: org.organization.id,
+          name: org.organization.name,
+          color: org.organization.color ?? "#cccccc",
+          slug: org.organization.slug,
+        }))}
+      />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center justify-between w-full">

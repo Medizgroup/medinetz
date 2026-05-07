@@ -22,6 +22,7 @@ export function NavMain({
       title: string;
       url: string;
     }[];
+    count?: number;
   }[];
 }) {
   const pathname = usePathname();
@@ -34,9 +35,18 @@ export function NavMain({
               asChild
               tooltip={item.title}
               className={`${pathname === item.url ? "bg-accent text-foreground font-semibold" : "text-foreground/80 hover:text-foreground"} rounded-xl `}>
-              <Link href={item.url} className="w-full">
-                <item.icon className="size-4.5" />
-                <span>{item.title}</span>
+              <Link
+                href={item.url}
+                className="w-full flex items-center gap-2 justify-between">
+                <div className="flex items-center gap-2">
+                  <item.icon className="size-4.5" />
+                  <span>{item.title}</span>
+                </div>
+                {item.count && (
+                  <span className="text-xs text-foreground font-semibold pr-2">
+                    {item.count}
+                  </span>
+                )}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

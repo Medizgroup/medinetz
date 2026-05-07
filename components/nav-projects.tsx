@@ -1,84 +1,53 @@
 "use client";
 
-import {
-  Folder,
-  MoreHorizontal,
-  Share,
-  Trash2,
-  type LucideIcon,
-} from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  Menu,
-  MenuItem,
-  MenuPopup,
-  MenuSeparator,
-  MenuTrigger,
-} from "./ui/menu";
+import Link from "next/link";
 
 export function NavProjects({
-  projects,
+  organizations,
 }: {
-  projects: {
+  organizations: {
+    id: string;
     name: string;
-    url: string;
-    icon: LucideIcon;
+    color: string;
+    slug: string;
   }[];
 }) {
-  const { isMobile } = useSidebar();
-
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Organisationen</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
+        {organizations.slice(0, 4).map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
+              <Link href={`/settings/organizations text-foreground/80`}>
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: item.color }}></span>
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
-            <Menu>
-              <MenuTrigger render={<SidebarMenuAction showOnHover />}>
-                <MoreHorizontal />
-              </MenuTrigger>
-              <MenuPopup
-                className="w-48"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}>
-                <MenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
-                </MenuItem>
-                <MenuItem>
-                  <Share className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </MenuItem>
-                <MenuSeparator />
-                <MenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </MenuItem>
-              </MenuPopup>
-            </Menu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton>
-            <MoreHorizontal />
-            <span>Mehr</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+        {/* If more than 4 organizations, show the "Mehr" button */}
+        {organizations.length > 4 && (
+          <Link href={`/settings/organizations`}>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <MoreHorizontal />
+                <span>Mehr</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </Link>
+        )}
       </SidebarMenu>
     </SidebarGroup>
   );
