@@ -63,6 +63,7 @@ export default async function HomeComponent() {
       id: true,
       title: true,
       dueDate: true,
+      done: true,
       priority: true,
       createdAt: true,
       description: true,
@@ -84,6 +85,8 @@ export default async function HomeComponent() {
       id: true,
       action: true,
       targetType: true,
+      targetId: true,
+      metadata: true,
       createdAt: true,
       organization: { select: { id: true, name: true } },
       user: {

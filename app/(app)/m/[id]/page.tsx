@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
@@ -26,6 +27,7 @@ import { Badge } from "@/components/ui/badge";
 import { CircleCheck, FolderOpen, Loader, PauseCircle } from "lucide-react";
 import ActivityLine from "@/components/activity/activity-line";
 import { NotProduct } from "@/components/not-product";
+import Image from "next/image";
 
 // --- helpers ---
 function toISODate(d: Date) {
@@ -166,8 +168,9 @@ export default async function Page({
         <div className="flex items-center gap-4">
           <div className="size-44 overflow-hidden rounded-full">
             {user.avatarUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
+                width={176}
+                height={176}
                 src={user.avatarUrl}
                 alt="Avatar"
                 className="h-full w-full object-cover"

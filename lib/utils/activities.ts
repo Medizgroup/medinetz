@@ -52,6 +52,7 @@ export type ActivityForDisplay = {
     id: string;
     displayName: string | null;
     name: string | null;
+    avatarUrl: string | null;
   };
 };
 
@@ -217,14 +218,14 @@ export function describeActivity(
 
     case "CLOSED":
       return [
-        { type: "text", value: "hat " },
+        { type: "text", value: "hat den " },
         targetPiece,
         { type: "text", value: " abgeschlossen" },
       ];
 
     case "REOPENED":
       return [
-        { type: "text", value: "hat " },
+        { type: "text", value: "hat den " },
         targetPiece,
         { type: "text", value: " wieder geöffnet" },
       ];
@@ -244,7 +245,7 @@ export function describeActivity(
       // Status-Wechsel
       if (field === "status" && meta.from && meta.to) {
         return [
-          { type: "text", value: "hat " },
+          { type: "text", value: "hat den" },
           targetPiece,
           { type: "text", value: " auf " },
           {
@@ -314,7 +315,7 @@ export function describeActivity(
       }
 
       return [
-        { type: "text", value: "hat " },
+        { type: "text", value: "hat einen " },
         targetPiece,
         { type: "text", value: " bearbeitet" },
       ];

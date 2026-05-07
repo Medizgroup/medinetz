@@ -22,9 +22,13 @@ import {
 import {
   Timeline,
   TimelineContent,
+  TimelineHeader,
+  TimelineIndicator,
   TimelineItem,
+  TimelineSeparator,
 } from "@/components/ui/timeline";
 import ActivityLine from "../activity/activity-line";
+import { detailedIcon } from "@/lib/utils/activities";
 
 type Item = {
   id: string;
@@ -43,34 +47,11 @@ type Item = {
 };
 type Props = { items: Item[] };
 
-function getActionIcon(action: ActivityAction): LucideIcon {
-  switch (action) {
-    case "CREATED":
-      return PlusIcon;
-    case "UPDATED":
-      return RefreshCcw;
-    case "COMMENTED":
-      return MessagesSquare;
-    case "ASSIGNED":
-      return AtSign;
-    case "CLOSED":
-      return CheckCircle2;
-    case "REOPENED":
-      return RotateCcw;
-    case "MENTIONED":
-      return AtSign;
-    case "ATTACHED":
-      return Paperclip;
-    default:
-      return BookOpenIcon;
-  }
-}
-
 export default function HomeActivity({ items }: Props) {
   return (
     <div className="space-y-3 sm:col-span-3 p-4">
-      <div className="font-medium text-muted-foreground text-sm">
-        Aktivitäten
+      <div className="font-medium text-muted-foreground text-sm dark:text-foreground/80">
+        Folge die letzten Updates
       </div>
 
       <Timeline>
@@ -80,28 +61,27 @@ export default function HomeActivity({ items }: Props) {
           </div>
         ) : (
           items.map((item, idx) => {
-            const ActionIcon = getActionIcon(item.action);
-            const userLabel =
-              item.user.displayName ||
-              item.user.name ||
-              `User ${item.user.id.slice(0, 6)}`;
-
+            const Icon = detailedIcon({
+              action: item.action,
+              targetType: item.targetType,
+              targetId: item.targetId,
+              metadata: (item.metadata ?? {}) as any,
+              user: item.user,
+            });
             return (
               <TimelineItem
-                className="m-0! flex-row items-center gap-3 py-2.5!"
+                className="group-data-[orientation=vertical]/timeline:ms-10"
                 key={item.id}
                 step={idx + 1}>
-                <ActionIcon className="text-muted-foreground/80 size-5" />
+                <TimelineHeader>
+                  <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
 
-                {/* Avatar */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  alt={userLabel}
-                  className="size-7 rounded-full"
-                  src={item.user.avatarUrl ?? ""}
-                />
+                  <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-5 items-center justify-center border-none bg-primary/10 group-data-completed/timeline-item:bg-primary/10 group-data-completed/timeline-item:text-foreground ">
+                    <Icon size={12} />
+                  </TimelineIndicator>
+                </TimelineHeader>
 
-                <TimelineContent className="text-foreground">
+                <TimelineContent>
                   <ActivityLine
                     activity={{
                       action: item.action,
@@ -113,7 +93,7 @@ export default function HomeActivity({ items }: Props) {
                   />
                   {item.organization?.name ? (
                     <span className="text-muted-foreground text-xs">
-                      · {item.organization.name} ·{" "}
+                      in {item.organization.name}{" "}
                       {formatDistanceToNow(new Date(item.createdAt), {
                         addSuffix: true,
                         locale: de,
@@ -121,7 +101,7 @@ export default function HomeActivity({ items }: Props) {
                     </span>
                   ) : (
                     <span className="text-muted-foreground text-xs">
-                      ·{" "}
+                      {" "}
                       {formatDistanceToNow(new Date(item.createdAt), {
                         addSuffix: true,
                         locale: de,
@@ -135,8 +115,8 @@ export default function HomeActivity({ items }: Props) {
         )}
 
         <Link
-          href="/activity"
-          className="text-muted-foreground text-sm pt-4 hover:underline">
+          href="/activities"
+          className="text-muted-foreground text-sm pt-4 hover:text-primary">
           alle ansehen &#8594;
         </Link>
       </Timeline>
