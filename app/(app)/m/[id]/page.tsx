@@ -22,48 +22,60 @@ import {
 import { detailedIcon } from "@/lib/utils/index";
 import { formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { CircleCheck, FolderOpen, Loader, PauseCircle } from "lucide-react";
 import ActivityLine from "@/components/activity/activity-line";
 import { NotProduct } from "@/components/not-product";
 import Image from "next/image";
+import HomeCase from "@/components/home/home-cases";
 
 // --- helpers ---
-function toISODate(d: Date) {
-  return d.toISOString().slice(0, 10);
+function toISODate(date: Date): string {
+  return date.toISOString().split("T")[0];
 }
 
 function buildCalendarData(dates: Date[]) {
   const today = new Date();
+
+  // UTC-normalisieren
+  today.setUTCHours(0, 0, 0, 0);
+
   const start = new Date(today);
-  start.setDate(start.getDate() - 365);
+  start.setUTCDate(start.getUTCDate() - 365);
 
   const counts = new Map<string, number>();
+
   for (const dt of dates) {
     const key = toISODate(dt);
+
     counts.set(key, (counts.get(key) ?? 0) + 1);
   }
 
   const allDays: { date: string; count: number }[] = [];
+
   const cur = new Date(start);
+
   while (cur <= today) {
     const key = toISODate(cur);
-    allDays.push({ date: key, count: counts.get(key) ?? 0 });
-    cur.setDate(cur.getDate() + 1);
+
+    allDays.push({
+      date: key,
+      count: counts.get(key) ?? 0,
+    });
+
+    cur.setUTCDate(cur.getUTCDate() + 1);
   }
 
-  const max = Math.max(0, ...allDays.map((d) => d.count));
   const levelOf = (count: number): 0 | 1 | 2 | 3 | 4 => {
-    if (count <= 0 || max === 0) return 0;
-    const r = count / max;
-    if (r <= 0.25) return 1;
-    if (r <= 0.5) return 2;
-    if (r <= 0.75) return 3;
+    if (count === 0) return 0;
+    if (count === 1) return 1;
+    if (count <= 4) return 2;
+    if (count <= 7) return 3;
     return 4;
   };
 
-  return allDays.map((d) => ({ ...d, level: levelOf(d.count) }));
+  return allDays.map((d) => ({
+    ...d,
+    level: levelOf(d.count),
+  }));
 }
 
 export default async function Page({
@@ -80,6 +92,11 @@ export default async function Page({
   const session = await auth.api.getSession({ headers: await headers() });
   const isOwner = session?.user?.id === id;
 
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  const oneYearAgo = new Date(today);
+  oneYearAgo.setUTCDate(oneYearAgo.getUTCDate() - 365);
   // User laden (öffentlich sichtbare Felder)
   const user = await prisma.user.findUnique({
     where: { id },
@@ -87,6 +104,7 @@ export default async function Page({
       id: true,
       isActive: true,
       displayName: true,
+      email: true,
       name: true,
       avatarUrl: true,
       createdAt: true,
@@ -95,14 +113,7 @@ export default async function Page({
       activities: {
         where: {
           createdAt: {
-            // Use a stable "one year ago" date for the query
-            gte: (() => {
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              const oneYearAgo = new Date(today);
-              oneYearAgo.setDate(oneYearAgo.getDate() - 365);
-              return oneYearAgo;
-            })(),
+            gte: oneYearAgo,
           },
         },
         select: { createdAt: true },
@@ -148,9 +159,11 @@ export default async function Page({
     select: {
       id: true,
       title: true,
+      caseNumber: true,
       status: true,
       priority: true,
       updatedAt: true,
+      createdAt: true,
       organization: { select: { id: true, name: true } },
     },
   });
@@ -158,6 +171,7 @@ export default async function Page({
   const calendarData = buildCalendarData(
     user.activities.map((a) => a.createdAt),
   );
+
   const display =
     user.displayName || user.name || `User ${user.id.slice(0, 6)}`;
 
@@ -180,8 +194,9 @@ export default async function Page({
             )}
           </div>
 
-          <div>
+          <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-semibold leading-tight">{display}</h1>
+            <p className="text-sm font-medium">{user.email}</p>
             <p className="text-sm text-muted-foreground">
               Mitglied seit {user.createdAt.toLocaleDateString("de-DE")}
             </p>
@@ -207,7 +222,7 @@ export default async function Page({
             variant="outline"
             size="xs"
             className="rounded-full"
-            render={<Link href={`/m/${user.id}/activity`} />}>
+            render={<Link href="/activities" />}>
             Mehr anzeigen
           </Button>
         </div>
@@ -215,6 +230,58 @@ export default async function Page({
         <div className="rounded-2xl border p-4">
           <UserActivityCalendar data={calendarData} />
         </div>
+      </section>
+
+      {/* Assigned cases */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between gap-4 py-4">
+          <h2 className="text-lg font-semibold">Zugewiesene Cases</h2>
+        </div>
+
+        <HomeCase cases={assignedCases} />
+        {/* <div className="gap-4 flex flex-col">
+          {assignedCases.length === 0 ? (
+            <div className="flex items-center justify-center p-4">
+              <Empty className="py-4">
+                <EmptyHeader>
+                  <EmptyMedia>
+                    <SearchCardsIllustration />
+                  </EmptyMedia>
+                  <EmptyTitle>Keine offenen Cases zugewiesen</EmptyTitle>
+                </EmptyHeader>
+              </Empty>
+            </div>
+          ) : (
+            assignedCases.map((c) => {
+              const Icon = statusIcon(c.status);
+              return (
+                <Alert key={c.id} variant={priorityVariant(c.priority)}>
+                  <Icon size={16} />
+                  <AlertTitle>{c.title}</AlertTitle>
+                  <AlertDescription className="flex items-center flex-row gap-2">
+                    In {c.organization.name}
+                    <Badge
+                      variant={
+                        c.priority === "HIGH"
+                          ? "error"
+                          : c.priority === "LOW"
+                            ? "warning"
+                            : c.priority === "MEDIUM"
+                              ? "info"
+                              : "success"
+                      }
+                      className="capitalize!">
+                      {c.priority}
+                    </Badge>
+                  </AlertDescription>
+                  <span className="px-6 text-xs text-muted-foreground flex ">
+                    {c.updatedAt.toLocaleDateString("de-DE")}
+                  </span>
+                </Alert>
+              );
+            })
+          )}
+        </div> */}
       </section>
 
       {/* Latest Activity List */}
@@ -276,57 +343,6 @@ export default async function Page({
                 );
               })}
             </Timeline>
-          )}
-        </div>
-      </section>
-      {/* Assigned cases */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-lg font-semibold">Zugewiesene Cases</h2>
-          <Button variant="outline" size="sm" className="rounded-full">
-            <Link href="/cases">Alle Cases</Link>
-          </Button>
-        </div>
-
-        <div className="gap-4 flex flex-col">
-          {assignedCases.length === 0 ? (
-            <div className="p-4 text-sm text-muted-foreground">
-              Aktuell keine offenen Cases zugewiesen.
-            </div>
-          ) : (
-            assignedCases.map((c) => (
-              <Alert key={c.id}>
-                {c.status === "OPEN" ? (
-                  <FolderOpen />
-                ) : c.status === "IN_PROGRESS" ? (
-                  <Loader />
-                ) : c.status === "WAITING" ? (
-                  <PauseCircle />
-                ) : c.status === "CLOSED" ? (
-                  <CircleCheck />
-                ) : null}
-                <AlertTitle>{c.title}</AlertTitle>
-                <AlertDescription className="flex items-center flex-row gap-2">
-                  In {c.organization.name}
-                  <Badge
-                    variant={
-                      c.priority === "HIGH"
-                        ? "error"
-                        : c.priority === "LOW"
-                          ? "warning"
-                          : c.priority === "MEDIUM"
-                            ? "info"
-                            : "success"
-                    }
-                    className="capitalize!">
-                    {c.priority}
-                  </Badge>
-                </AlertDescription>
-                <span className="px-6 text-xs text-muted-foreground flex ">
-                  {c.updatedAt.toLocaleDateString("de-DE")}
-                </span>
-              </Alert>
-            ))
           )}
         </div>
       </section>

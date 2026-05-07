@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { GalleryVerticalEnd, LayersPlus, ListTodo } from "lucide-react";
 import HomeTodo from "./home-todos";
-import { Case } from "@/generated/prisma/client";
+import { Case, CasePriority, CaseStatus } from "@/generated/prisma/client";
 import HomeCase from "./home-cases";
 
 type Props = {
@@ -80,7 +80,20 @@ export default function HomeCard({ stats, todos, cases }: Props) {
       </dl>
 
       <HomeTodo todos={todos} />
-      <HomeCase cases={cases} />
+      <HomeCase
+        cases={
+          cases as unknown as {
+            id: string;
+            title: string;
+            status: CaseStatus;
+            priority: CasePriority;
+            caseNumber: number;
+            createdAt: Date;
+            updatedAt: Date;
+            organization: { id: string; name: string } | null;
+          }[]
+        }
+      />
     </div>
   );
 }

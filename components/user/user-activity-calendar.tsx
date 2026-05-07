@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import { ActivityCalendar, type ThemeInput } from "react-activity-calendar";
 
 export type CalendarDay = {
@@ -9,8 +10,8 @@ export type CalendarDay = {
 };
 
 const orangeTheme = {
-  light: ["#fff", "#f3f7e0", "#d9ef74", "#a6cf45", "#486c1c"],
-  dark: ["#18181b", "#27472f", "#5aa152", "#89e07c", "#e6ffea"],
+  light: ["#f5f5f5", "#93c5fd", "#3b82f6", "#1d4ed8", "#1e40af"],
+  dark: ["#262626", "#172554", "#1e40af", "#2563eb", "#60a5fa"],
 } satisfies ThemeInput;
 
 export default function UserActivityCalendar({
@@ -18,14 +19,16 @@ export default function UserActivityCalendar({
 }: {
   data: CalendarDay[];
 }) {
+  const { theme } = useTheme();
   return (
     <div className="overflow-x-auto">
       <ActivityCalendar
         data={data}
         theme={orangeTheme}
         maxLevel={4}
-        blockRadius={2}
-        blockSize={15}
+        blockRadius={10}
+        blockSize={16}
+        colorScheme={theme === "dark" ? "dark" : "light"}
         labels={{
           totalCount: "{{count}} Aktivitäten in den letzten 12 Monaten",
         }}
