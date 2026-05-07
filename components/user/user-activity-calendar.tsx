@@ -10,7 +10,7 @@ export type CalendarDay = {
 };
 
 const orangeTheme = {
-  light: ["#f5f5f5", "#93c5fd", "#3b82f6", "#1d4ed8", "#1e40af"],
+  light: ["#fafaf9", "#dbeafe", "#3b82f6", "#1d4ed8", "#1e40af"],
   dark: ["#262626", "#172554", "#1e40af", "#2563eb", "#60a5fa"],
 } satisfies ThemeInput;
 
@@ -31,6 +31,10 @@ export default function UserActivityCalendar({
         colorScheme={theme === "dark" ? "dark" : "light"}
         labels={{
           totalCount: "{{count}} Aktivitäten in den letzten 12 Monaten",
+          legend: {
+            less: "Weniger",
+            more: "Mehr",
+          },
         }}
         tooltips={{
           activity: {

@@ -13,14 +13,7 @@ import { TElement } from "platejs";
 import ProtocolCommentForm from "@/components/protocols/protocol-comment-form";
 import EditProtocolForm from "@/components/protocols/edit-protocol-form";
 import { Badge } from "@/components/ui/badge";
-import {
-  ChevronLeft,
-  Circle,
-  CircleCheck,
-  Clock,
-  Loader,
-  ThumbsUp,
-} from "lucide-react";
+import { ChevronLeft, Circle, CircleCheck, Clock, Loader } from "lucide-react";
 
 import {
   Timeline,
@@ -41,14 +34,13 @@ import ActivityLine from "@/components/activity/activity-line";
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipContent } from "@radix-ui/react-tooltip";
 import { NotProduct } from "@/components/not-product";
-import { orgTypeBadge, STATUS_LABEL } from "@/lib/utils/cases";
-
-function orgBadge(type: string) {
-  if (type === "ROUTINE") return "R";
-  if (type === "PREGNANCY") return "S";
-  if (type === "MANAGEMENT") return "M";
-  return "C";
-}
+import {
+  orgTypeBadge,
+  PRIORITY_LABEL,
+  priorityVariant,
+  STATUS_LABEL,
+} from "@/lib/utils/cases";
+import { cn } from "@/lib/utils";
 
 // function canEdit(role?: string) {
 //   return role === "COORDINATOR" || role === "ADMIN";
@@ -187,7 +179,9 @@ export default async function ProtocolDetailPage({
       targetId: true,
       createdAt: true,
       metadata: true,
-      user: { select: { id: true, displayName: true, name: true } },
+      user: {
+        select: { id: true, displayName: true, name: true, avatarUrl: true },
+      },
     },
   });
 
@@ -203,7 +197,11 @@ export default async function ProtocolDetailPage({
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <span
-                className={`flex justify-center items-center rounded-md p-1 px-2 ${orgTypeBadge(protocol.organization.type).className}`}>
+                className={cn(
+                  "inline-flex h-6 w-6 items-center justify-center rounded-md border text-xs font-semibold",
+                  orgTypeBadge(protocol.organization.type).className,
+                )}
+                title={protocol.organization.type}>
                 {orgTypeBadge(protocol.organization.type).label}
               </span>
               <span className="text-sm text-muted-foreground">
@@ -232,8 +230,6 @@ export default async function ProtocolDetailPage({
           </div>
         </div>
 
-        {/* {editable ? (
-        <> */}
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">Bearbeiten</h2>
 
@@ -249,16 +245,6 @@ export default async function ProtocolDetailPage({
         </div>
 
         <Separator />
-        {/* </>
-      ) : null} */}
-
-        {/* Vielleicht mal Später */}
-        {/* <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Beschreibung</h2>
-          <div className="rounded-2xl border p-5">
-            <RichTextRenderer value={protocol.description} />
-          </div>
-        </section> */}
 
         {/* Kommentar Block */}
         <section className="space-y-4">
@@ -394,17 +380,6 @@ export default async function ProtocolDetailPage({
                   className={`flex items-start justify-between gap-4 text-sm pb-2 ${entry.case.status === "CLOSED" ? "opacity-70" : ""}`}>
                   <div className="min-w-0">
                     <div className="truncate">
-                      {/* <span>
-                        {entry.case.status === "WAITING" ? (
-                          <Clock className="size-4" />
-                        ) : entry.case.status === "CLOSED" ? (
-                          <CircleCheck className="size-4 text-blue-500" />
-                        ) : entry.case.status === "IN_PROGRESS" ? (
-                          <Loader className="size-4  text-amber-500" />
-                        ) : entry.case.status === "OPEN" ? (
-                          <Circle className="size-4 text-green-500" />
-                        ) : null}
-                      </span> */}
                       <span className="font-medium">
                         #{entry.case.caseNumber}{" "}
                       </span>
@@ -413,18 +388,8 @@ export default async function ProtocolDetailPage({
                     <div className="flex items-center gap-2 mt-1 text-muted-foreground">
                       <Badge
                         size="sm"
-                        variant={
-                          entry.case.priority === "HIGH"
-                            ? "error"
-                            : entry.case.priority === "LOW"
-                              ? "info"
-                              : entry.case.priority === "MEDIUM"
-                                ? "warning"
-                                : entry.case.priority === "URGENT"
-                                  ? "destructive"
-                                  : "secondary"
-                        }>
-                        {entry.case.priority}
+                        variant={priorityVariant(entry.case.priority)}>
+                        {PRIORITY_LABEL[entry.case.priority]}
                       </Badge>
                       <span className="flex items-center gap-1 text-xs">
                         {entry.case.status === "WAITING" ? (

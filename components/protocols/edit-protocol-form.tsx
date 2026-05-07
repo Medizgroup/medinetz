@@ -8,6 +8,11 @@ import ProtocolEditor from "@/components/protocols/protocol-editor";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "../ui/calendar";
+import { format } from "date-fns";
+import { de } from "date-fns/locale";
 
 export default function EditProtocolForm({
   protocol,
@@ -23,7 +28,9 @@ export default function EditProtocolForm({
   const router = useRouter();
 
   const [title, setTitle] = React.useState(protocol.title);
-  const [date, setDate] = React.useState(protocol.date);
+  const [date, setDate] = React.useState<Date | undefined>(
+    protocol.date ? new Date(protocol.date) : undefined,
+  );
   const [value, setValue] = React.useState<Value>(protocol.description ?? []);
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -40,7 +47,7 @@ export default function EditProtocolForm({
       },
       body: JSON.stringify({
         title,
-        date,
+        date: date ? format(date, "yyyy-MM-dd") : null,
         description: value,
       }),
     });
@@ -67,11 +74,25 @@ export default function EditProtocolForm({
 
         <Field className="gap-2">
           <FieldLabel>Datum</FieldLabel>
-          <Input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button
+                  className="w-[280px] justify-start text-left font-normal"
+                  variant="outline"
+                />
+              }>
+              <CalendarIcon />
+              {date ? (
+                format(date, "PPP", { locale: de })
+              ) : (
+                <span> Datum auswählen</span>
+              )}
+            </PopoverTrigger>
+            <PopoverPopup align="start" className="w-auto p-0">
+              <Calendar mode="single" selected={date} onSelect={setDate} />
+            </PopoverPopup>
+          </Popover>
         </Field>
       </div>
 

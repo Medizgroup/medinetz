@@ -66,7 +66,7 @@ export default function NewProtocolForm({
       },
       body: JSON.stringify({
         title,
-        date,
+        date: date ? format(date, "yyyy-MM-dd") : null,
         organizationId,
         description: value,
       }),
@@ -140,7 +140,7 @@ export default function NewProtocolForm({
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
-            <SelectPopup>
+            <SelectPopup alignItemWithTrigger={false}>
               {memberships.map((m) => (
                 <SelectItem key={m.organization.id} value={m.organization.id}>
                   {m.organization.name}
