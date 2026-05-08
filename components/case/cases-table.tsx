@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 "use client";
 
 import * as React from "react";
@@ -11,10 +12,18 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
-import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from "lucide-react";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRight,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  SearchIcon,
+} from "lucide-react";
 import AssigneeFilter, { type AssigneeOption } from "./assignee-filter";
 
 import { cn } from "@/lib/utils";
@@ -22,7 +31,6 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent,
   SelectItem,
   SelectPopup,
   SelectTrigger,
@@ -45,6 +53,7 @@ import {
   statusIcon,
 } from "@/lib/utils/cases";
 import type { CasePriority, CaseStatus } from "@/generated/prisma/client";
+import { Button } from "../ui/button";
 
 type CaseRow = {
   id: string;
@@ -80,6 +89,10 @@ export default function CasesTable({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 15,
+  });
   const [search, setSearch] = React.useState("");
 
   const assigneeOptions = React.useMemo<AssigneeOption[]>(() => {
@@ -229,16 +242,19 @@ export default function CasesTable({
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, columnFilters },
+    state: { sorting, columnFilters, pagination },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   React.useEffect(() => {
     table.getColumn("title")?.setFilterValue(search);
+    table.setPageIndex(0);
   }, [search, table]);
 
   React.useEffect(() => {
@@ -270,7 +286,7 @@ export default function CasesTable({
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
-          <SelectPopup>
+          <SelectPopup alignItemWithTrigger={false}>
             <SelectItem value="all">Alle Status</SelectItem>
             <SelectItem value="OPEN">Offen</SelectItem>
             <SelectItem value="IN_PROGRESS">In Bearbeitung</SelectItem>
@@ -291,13 +307,13 @@ export default function CasesTable({
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="Priorität" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectPopup alignItemWithTrigger={false}>
             <SelectItem value="all">Alle Prioritäten</SelectItem>
             <SelectItem value="URGENT">Dringend</SelectItem>
             <SelectItem value="HIGH">Hoch</SelectItem>
             <SelectItem value="MEDIUM">Mittel</SelectItem>
             <SelectItem value="LOW">Niedrig</SelectItem>
-          </SelectContent>
+          </SelectPopup>
         </Select>
 
         {orgOptions.length > 1 ? (
@@ -312,14 +328,14 @@ export default function CasesTable({
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Organisation" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectPopup alignItemWithTrigger={false}>
               <SelectItem value="all">Alle Organisationen</SelectItem>
               {orgOptions.map((o) => (
                 <SelectItem key={o.id} value={o.id}>
                   {o.name}
                 </SelectItem>
               ))}
-            </SelectContent>
+            </SelectPopup>
           </Select>
         ) : null}
 
@@ -393,6 +409,32 @@ export default function CasesTable({
             )}
           </TableBody>
         </Table>
+      </div>
+      {/* nach dem </div> der Table */}
+      <div className="flex items-center justify-between px-1 pt-3 text-sm text-muted-foreground">
+        <span>
+          Seite {table.getState().pagination.pageIndex + 1} von{" "}
+          {table.getPageCount()} · {table.getFilteredRowModel().rows.length}{" "}
+          Fälle
+        </span>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
+            <ChevronLeftIcon className="size-4" />
+            Zurück
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
+            Weiter
+            <ChevronRightIcon className="size-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

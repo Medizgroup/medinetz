@@ -119,20 +119,23 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild className="px-0!">
+            <SidebarMenuButton
+              size="lg"
+              asChild
+              className="px-0! hover:bg-transparent!">
               <Link href="/" className="flex items-center">
                 <Image
                   className="dark:hidden"
                   src="/Logo/Medizgroup-light.svg"
                   alt="Medizgroup Logo"
-                  width={400}
+                  width={200}
                   height={80}
                 />
                 <Image
                   className="hidden dark:inline"
                   src="/Logo/Medizgroup-dark.svg"
                   alt="Medizgroup Logo"
-                  width={500}
+                  width={200}
                   height={80}
                 />
               </Link>

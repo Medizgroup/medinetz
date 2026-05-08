@@ -189,9 +189,7 @@ export default function NewCaseForm({
         {/* Patient reference – replaces the old patientPseudonym input */}
         <Field className="gap-2">
           <FieldLabel>Patient Referenz</FieldLabel>
-          <FieldDescription>
-            Pseudonymisierte ID aufbauen. Kein Klarname.
-          </FieldDescription>
+          <FieldDescription>Pseudonymisierte ID aufbauen.</FieldDescription>
           <PatientPseudonymInput onValueChange={setPatientValue} />
         </Field>
 
