@@ -13,6 +13,8 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
+import { toastManager } from "../ui/toast";
+import { Spinner } from "../ui/spinner";
 
 export default function EditProtocolForm({
   protocol,
@@ -56,6 +58,14 @@ export default function EditProtocolForm({
 
     setSaving(false);
 
+    toastManager.add({
+      title: res.ok ? "Erfolg" : "Fehler",
+      description: res.ok
+        ? "Protokoll erfolgreich aktualisiert."
+        : (data?.error ?? "Fehler beim Aktualisieren des Protokolls."),
+      type: res.ok ? "success" : "error",
+    });
+
     if (!res.ok) {
       setError(data?.error ?? "Speichern fehlgeschlagen.");
       return;
@@ -78,7 +88,7 @@ export default function EditProtocolForm({
             <PopoverTrigger
               render={
                 <Button
-                  className="w-[280px] justify-start text-left font-normal"
+                  className="w-full justify-start text-left font-normal"
                   variant="outline"
                 />
               }>
@@ -109,7 +119,13 @@ export default function EditProtocolForm({
 
       <div className="flex justify-end">
         <Button type="submit" className="rounded-full" disabled={saving}>
-          {saving ? "Lädt..." : "Änderungen speichern"}
+          {saving ? (
+            <>
+              <Spinner className="size-3" /> Loading...
+            </>
+          ) : (
+            "Änderungen speichern"
+          )}
         </Button>
       </div>
     </form>

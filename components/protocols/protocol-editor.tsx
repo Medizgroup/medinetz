@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -27,13 +28,99 @@ import { EmojiKit } from "../editor/plugins/emoji-kit";
 import { FixedToolbarKit } from "../editor/plugins/fixed-toolbar-kit";
 import { FloatingToolbarKit } from "../editor/plugins/floating-toolbar-kit";
 import { CursorOverlayKit } from "../editor/plugins/cursor-overlay-kit";
+import { AutoformatKit } from "../editor/plugins/autoformat-kit";
+import { LinkKit } from "../editor/plugins/link-kit";
 
-const emptyValue: Value = [
-  {
-    type: "p",
-    children: [{ text: "Anwesende: " }],
-  },
-];
+// Helper functions
+const p = (text = "", color?: string) => ({
+  type: "p",
+  children: [{ text, ...(color && { color }) }],
+});
+const h2 = (text: string) => ({ type: "h2", children: [{ text }] });
+const blockquote = (text: string, color?: string) => ({
+  type: "blockquote",
+  children: [{ text, ...(color && { color }) }],
+});
+const callout = (text: string) => ({ type: "callout", children: [{ text }] });
+const th = (text: string) => ({ type: "td", children: [p(text)] });
+const td = (text = "") => ({ type: "td", children: [p(text)] });
+const tr = (cells: any[]) => ({ type: "tr", children: cells });
+const table = (rows: any[], colSizes?: number[]) => ({
+  type: "table",
+  colSizes,
+  children: rows,
+});
+
+const caseTable = () =>
+  table(
+    [
+      tr([
+        th("Fall"),
+        th("Betreuer"),
+        th("Termine"),
+        th("Status"),
+        th("Bemerkung"),
+      ]),
+      tr([td(), td(), td(), td(), td()]),
+      tr([td(), td(), td(), td(), td()]),
+    ],
+    [100, 200, 200, 150, 400],
+  );
+
+const agTable = () =>
+  table(
+    [tr([th("Protokoll Link"), th("Bemerkungen")]), tr([td(), td()])],
+    [300, 550],
+  );
+
+// Removed illegal call to useTheme. React hooks must be called inside a component or custom Hook.
+export const defaultTemplate: Value = [
+  p("Anwesend: ", "#f59e0b"),
+
+  h2("1. Aktuelle Fälle"),
+  p(" "),
+  caseTable(),
+
+  h2("2. Neue Anfragen"),
+  p(" "),
+  caseTable(),
+
+  h2("3. AG Schwangerenprojekt"),
+  p(" "),
+  blockquote("Nur den Protokoll-Link eingeben und die Bemerkungen.", "#f59e0b"),
+  p(" "),
+  agTable(),
+
+  h2("4. AG Clearingstelle Gießen Marburg"),
+  p(" "),
+  agTable(),
+
+  h2("5. AG Öffentlichkeitsarbeit"),
+  p(" "),
+  agTable(),
+
+  h2("6. Termine & Organisatorisches"),
+  p(" "),
+  p("Kommende Termine und Veranstaltungen:"),
+  p(" "),
+  blockquote("Tipp: Kalender ansehen!"),
+  table(
+    [
+      tr([th("Aufgaben"), th("Notizen")]),
+      tr([td("📅 Termine / Veranstaltungen"), td()]),
+      tr([td("☎️ Handy"), td()]),
+      tr([td("📪 Mails"), td()]),
+      tr([td("💰 Finanzen / Rechnungen"), td()]),
+      tr([td("🏛️ Politische Arbeit / ABSH"), td()]),
+    ],
+    [300, 600],
+  ),
+
+  h2("7. To-Dos bis nächstes Plenum"),
+  p(""),
+
+  callout("cmd + T um eine Todo Liste zu erstellen!"),
+] as Value;
 
 export default function ProtocolEditor({
   value,
@@ -59,7 +146,7 @@ export default function ProtocolEditor({
       ...DndKit,
       ...CalloutKit,
       ...IndentKit,
-      // ...AutoformatKit,
+      ...AutoformatKit,
       ...TableKit,
       ...MediaKit,
       ...BlockPlaceholderKit,
@@ -68,8 +155,9 @@ export default function ProtocolEditor({
       ...FixedToolbarKit,
       ...FloatingToolbarKit,
       ...CursorOverlayKit,
+      ...LinkKit,
     ],
-    value: value && value.length > 0 ? value : emptyValue,
+    value: value && value.length > 0 ? value : defaultTemplate,
   });
 
   return (
@@ -80,7 +168,11 @@ export default function ProtocolEditor({
           onChange(value);
         }}>
         <EditorContainer className="min-h-[280px] rounded-xl">
-          <Editor placeholder={placeholder} className="" variant="fullWidth" />
+          <Editor
+            placeholder={placeholder}
+            className="px-6!"
+            variant="fullWidth"
+          />
         </EditorContainer>
       </Plate>
     </ProtocolEditorProvider>

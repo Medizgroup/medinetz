@@ -4,7 +4,9 @@ import * as React from "react";
 import type { Value } from "platejs";
 import { useRouter } from "next/navigation";
 
-import ProtocolEditor from "@/components/protocols/protocol-editor";
+import ProtocolEditor, {
+  defaultTemplate,
+} from "@/components/protocols/protocol-editor";
 
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -30,13 +32,6 @@ type Membership = {
   };
 };
 
-const emptyValue: Value = [
-  {
-    type: "p",
-    children: [{ text: "" }],
-  },
-];
-
 export default function NewProtocolForm({
   memberships,
 }: {
@@ -49,7 +44,7 @@ export default function NewProtocolForm({
   const [organizationId, setOrganizationId] = React.useState(
     memberships[0]?.organization.id ?? "",
   );
-  const [value, setValue] = React.useState<Value>(emptyValue);
+  const [value, setValue] = React.useState<Value>(defaultTemplate);
 
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -85,7 +80,7 @@ export default function NewProtocolForm({
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-8 space-y-8">
+    <div className="mx-auto w-full max-w-7xl px-6 py-8 space-y-8">
       <div>
         <h1 className="text-2xl font-semibold">Neues Protokoll</h1>
         <p className="mt-1 text-sm text-muted-foreground">

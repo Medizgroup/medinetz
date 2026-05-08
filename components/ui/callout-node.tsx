@@ -39,13 +39,13 @@ export function CalloutElement({
         "data-plate-open-context-menu": true,
       }}
       {...props}>
-      <div className="flex w-full gap-2 rounded-md">
+      <div className="flex w-full gap-2 items-center rounded-md">
         <EmojiPopover
           {...emojiToolbarDropdownProps}
           control={
             <Button
               variant="ghost"
-              className="size-6 select-none p-1 text-[18px] hover:bg-muted-foreground/15"
+              className="select-none p-1 text-[20px]! sm:text-[20px]! hover:bg-muted-foreground/15"
               style={{
                 fontFamily:
                   '"Apple Color Emoji", "Segoe UI Emoji", NotoColorEmoji, "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", EmojiSymbols',
