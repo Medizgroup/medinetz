@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -29,11 +30,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   STATUS_LABEL,
   PRIORITY_LABEL,
-  //   SENSITIVITY_LABEL,
   priorityVariant,
   statusColorClass,
   statusIcon,
-  //   sensitivityIcon,
   canEditCase,
   canViewCase,
   canComment,
@@ -184,7 +183,7 @@ export default async function CaseDetailPage({
       createdAt: true,
       metadata: true,
       user: {
-        select: { id: true, displayName: true, name: true },
+        select: { id: true, displayName: true, name: true, avatarUrl: true },
       },
     },
   });
