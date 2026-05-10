@@ -42,7 +42,16 @@ export default async function HomeComponent() {
   // 3) Home Stats (für Cards)
   const [openTodosCount, assignedCasesCount, createdCasesCount] =
     await Promise.all([
-      prisma.todo.count({ where: { assigneeId: userId, done: false } }),
+      prisma.todo.count({
+        where: {
+          done: false,
+          OR: [
+            { assigneeId: userId },
+            { creatorId: userId },
+            { assigneeId: null },
+          ],
+        },
+      }),
 
       prisma.case.count({
         where: {
@@ -56,7 +65,10 @@ export default async function HomeComponent() {
 
   // 4) Todos (limit 5)
   const todos = await prisma.todo.findMany({
-    where: { assigneeId: userId, done: false },
+    where: {
+      done: false,
+      OR: [{ assigneeId: userId }, { creatorId: userId }, { assigneeId: null }],
+    },
     orderBy: { createdAt: "desc" },
     take: 5,
     select: {

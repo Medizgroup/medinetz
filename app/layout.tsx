@@ -10,9 +10,9 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Medinetz",
+  title: "Medizgroup",
   description:
-    "Medinetz is a platform for managing medical records and patient data",
+    "Medizgroup is a platform for managing medical records and patient data",
 };
 
 export default function RootLayout({

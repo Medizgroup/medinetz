@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import { CalendarIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { format, isPast, isToday } from "date-fns";
 import { de } from "date-fns/locale";
 
@@ -22,8 +22,15 @@ import {
 
 import TodoEditDialog, { type TodoForEdit } from "./todo-edit-dialog";
 import UserPicker from "./user-picker";
-import { PRIORITY_LABEL, priorityBgClass } from "@/lib/utils/todos/priority";
+import { priorities_todos, PRIORITY_LABEL } from "@/lib/utils/todos/priority";
 import { getInitials } from "@/lib/helper/user";
+import { Field, FieldLabel } from "../ui/field";
+import { Textarea } from "../ui/textarea";
+import { Badge } from "../ui/badge";
+import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { Calendar } from "../ui/calendar";
+import { Separator } from "../ui/separator";
+import { Spinner } from "../ui/spinner";
 
 type Todo = TodoForEdit;
 type View = "mine" | "created" | "unassigned" | "all";
@@ -38,6 +45,7 @@ export default function TodosList({
   const [doneCount, setDoneCount] = React.useState(0);
   const [mineOpen, setMineOpen] = React.useState(0);
   const [unassignedOpen, setUnassignedOpen] = React.useState(0);
+  const [description, setDescription] = React.useState("");
   const [loading, setLoading] = React.useState(true);
 
   const [view, setView] = React.useState<View>("mine");
@@ -45,8 +53,8 @@ export default function TodosList({
   const [priorityFilter, setPriorityFilter] = React.useState<string>("all");
 
   const [newTitle, setNewTitle] = React.useState("");
-  const [newPriority, setNewPriority] = React.useState("2");
-  const [newDueDate, setNewDueDate] = React.useState("");
+  const [newPriority, setNewPriority] = React.useState(2);
+  const [newDueDate, setNewDueDate] = React.useState<Date | undefined>();
   const [newAssigneeId, setNewAssigneeId] = React.useState<string | null>(
     currentUserId,
   );
@@ -99,8 +107,8 @@ export default function TodosList({
       });
       if (!res.ok) return;
       setNewTitle("");
-      setNewDueDate("");
-      setNewPriority("2");
+      setNewDueDate(undefined);
+      setNewPriority(2);
       setNewAssigneeId(currentUserId);
       setShowQuickAddDetails(false);
       window.dispatchEvent(new Event("todos:changed"));
@@ -135,53 +143,91 @@ export default function TodosList({
   return (
     <div className="space-y-4">
       {/* Quick-Add */}
-      <form onSubmit={handleQuickAdd} className="space-y-2">
-        <div className="flex gap-2">
+      <form onSubmit={handleQuickAdd} className="space-y-2 hidden">
+        <div className="grid gap-4">
           <Input
             value={newTitle}
             size="lg"
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Neues Todo…"
           />
-          <Button type="submit" disabled={!newTitle.trim() || adding}>
+          <Field className="w-full">
+            <FieldLabel htmlFor="textarea-with-desc">Beschreibung</FieldLabel>
+            <Textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              id="textarea-with-desc"
+              placeholder="Worum geht es bei dieser Aufgabe?"
+              rows={6}
+            />
+          </Field>
+          {/* <Button type="submit" disabled={!newTitle.trim() || adding}>
             {adding ? <Loader2 className="size-4 animate-spin" /> : null}
             Hinzufügen
-          </Button>
+          </Button> */}
         </div>
 
-        {showQuickAddDetails ? (
-          <div className="grid gap-2 sm:grid-cols-3">
-            <Select
-              items={[
-                { value: "3", label: "Hoch" },
-                { value: "2", label: "Mittel" },
-                { value: "1", label: "Niedrig" },
-              ]}
-              value={newPriority}
-              onValueChange={(v) => setNewPriority(v ?? "2")}>
-              <SelectTrigger className="text-xs">
-                <SelectValue placeholder="Priorität" />
-              </SelectTrigger>
-              <SelectPopup alignItemWithTrigger={false} className="w-auto">
-                <SelectItem value="3">Hoch</SelectItem>
-                <SelectItem value="2">Mittel</SelectItem>
-                <SelectItem value="1">Niedrig</SelectItem>
-              </SelectPopup>
-            </Select>
-            <Input
-              type="date"
-              value={newDueDate}
-              onChange={(e) => setNewDueDate(e.target.value)}
-              className="text-xs"
-              placeholder="Fällig am"
-            />
-            <UserPicker
-              value={newAssigneeId}
-              onChange={setNewAssigneeId}
-              placeholder="Niemand (für alle)"
-            />
-          </div>
-        ) : null}
+        <div className="grid gap-2 sm:grid-cols-3">
+          <Select
+            items={priorities_todos}
+            value={newPriority}
+            onValueChange={(v) => setNewPriority(v ?? 2)}>
+            <SelectTrigger className="text-xs">
+              <SelectValue>
+                {(() => {
+                  const selectedPriority = priorities_todos.find(
+                    (p) => p.value === newPriority,
+                  );
+                  return selectedPriority ? (
+                    <span className="flex items-center gap-2">
+                      <Badge variant={selectedPriority.variant} size="sm">
+                        {selectedPriority.label}
+                      </Badge>
+                    </span>
+                  ) : null;
+                })()}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectPopup alignItemWithTrigger={false} className="w-auto">
+              {priorities_todos.map((priority) => (
+                <SelectItem key={priority.value} value={priority.value}>
+                  <span className="flex items-center gap-2">
+                    <Badge variant={priority.variant} size="sm">
+                      {priority.label}
+                    </Badge>
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectPopup>
+          </Select>
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button className="w-full justify-start" variant="outline" />
+              }>
+              <CalendarIcon aria-hidden="true" />
+              {newDueDate
+                ? format(newDueDate, "PPP", { locale: de })
+                : "Datum auswählen"}
+            </PopoverTrigger>
+            <PopoverPopup>
+              <Calendar
+                defaultMonth={newDueDate ? new Date(newDueDate) : undefined}
+                mode="single"
+                onSelect={setNewDueDate}
+                selected={newDueDate}
+              />
+            </PopoverPopup>
+          </Popover>
+
+          <UserPicker
+            value={newAssigneeId}
+            onChange={setNewAssigneeId}
+            placeholder={
+              newAssigneeId ? "Default Benutzer" : "Für alle sichtbar"
+            }
+          />
+        </div>
 
         <button
           type="button"
@@ -200,15 +246,28 @@ export default function TodosList({
         </button>
       </form>
 
+      <Separator />
       {/* View-Tabs + Filter */}
       <div className="flex flex-wrap items-center gap-2">
         <Select
           value={view}
           items={[
-            { value: "mine", label: `Meine (${mineOpen})` },
+            {
+              value: "mine",
+              label: (
+                <span className="flex items-center gap-2">
+                  Meine <Badge variant="secondary">{mineOpen}</Badge>
+                </span>
+              ),
+            },
             {
               value: "unassigned",
-              label: `Offen für alle (${unassignedOpen})`,
+              label: (
+                <span className="flex items-center gap-2">
+                  Offen für alle{" "}
+                  <Badge variant="secondary">{unassignedOpen}</Badge>
+                </span>
+              ),
             },
             { value: "created", label: "Von mir erstellt" },
             { value: "all", label: "Alle sichtbaren" },
@@ -218,9 +277,12 @@ export default function TodosList({
             <SelectValue />
           </SelectTrigger>
           <SelectPopup alignItemWithTrigger={false} className="w-auto">
-            <SelectItem value="mine">Meine ({mineOpen})</SelectItem>
+            <SelectItem value="mine" className="justify-between!">
+              <span>Meine</span>
+              <Badge variant="secondary">{mineOpen}</Badge>
+            </SelectItem>
             <SelectItem value="unassigned">
-              Offen für alle ({unassignedOpen})
+              Offen für alle <Badge variant="secondary">{unassignedOpen}</Badge>
             </SelectItem>
             <SelectItem value="created">Von mir erstellt</SelectItem>
             <SelectItem value="all">Alle sichtbaren</SelectItem>
@@ -230,8 +292,22 @@ export default function TodosList({
         <Select
           value={filter}
           items={[
-            { value: "open", label: `Offen (${openCount})` },
-            { value: "done", label: `Erledigt (${doneCount})` },
+            {
+              value: "open",
+              label: (
+                <span className="flex items-center gap-2">
+                  Offen <Badge variant="secondary">{openCount}</Badge>
+                </span>
+              ),
+            },
+            {
+              value: "done",
+              label: (
+                <span className="flex items-center gap-2">
+                  Erledigt <Badge variant="secondary">{doneCount}</Badge>
+                </span>
+              ),
+            },
             { value: "all", label: "Alle" },
           ]}
           onValueChange={(v) => setFilter((v ?? "open") as typeof filter)}>
@@ -239,8 +315,12 @@ export default function TodosList({
             <SelectValue />
           </SelectTrigger>
           <SelectPopup alignItemWithTrigger={false} className="w-auto">
-            <SelectItem value="open">Offen ({openCount})</SelectItem>
-            <SelectItem value="done">Erledigt ({doneCount})</SelectItem>
+            <SelectItem value="open">
+              Offen <Badge variant="secondary">{openCount}</Badge>
+            </SelectItem>
+            <SelectItem value="done">
+              Erledigt <Badge variant="secondary">{doneCount}</Badge>
+            </SelectItem>
             <SelectItem value="all">Alle</SelectItem>
           </SelectPopup>
         </Select>
@@ -268,8 +348,8 @@ export default function TodosList({
 
       {/* Liste */}
       {loading ? (
-        <div className="rounded-lg border p-12 text-center text-sm text-muted-foreground">
-          Lädt…
+        <div className="w-full flex items-center justify-center text-muted-foreground gap-2 py-8">
+          <Spinner className="size-4" /> Loading...
         </div>
       ) : items.length === 0 ? (
         <div className="rounded-lg border p-12 text-center text-sm text-muted-foreground">
@@ -280,37 +360,30 @@ export default function TodosList({
               : "Keine offenen Todos."}
         </div>
       ) : (
-        <ul className="divide-y rounded-lg border">
+        <ul className="space-y-4">
           {items.map((t) => {
             const due = t.dueDate ? new Date(t.dueDate) : null;
             const isOverdue = due && !t.done && isPast(due) && !isToday(due);
             const isDueToday = due && !t.done && isToday(due);
-            const isUnassigned = !t.assignee;
             const isMine = t.assignee?.id === currentUserId;
 
             return (
               <li
                 key={t.id}
                 className={cn(
-                  "group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-muted/40",
+                  "group flex items-start gap-3 px-4 py-3 transition-colors bg-muted/40 rounded-lg cursor-pointer hover:bg-muted",
+                  isOverdue && "bg-destructive/10 hover:bg-destructive/15",
                   t.done && "opacity-60",
                 )}>
                 <Checkbox
                   checked={t.done}
                   onCheckedChange={() => toggleDone(t)}
-                  className="mt-0.5"
+                  className="mt-0.5 "
                 />
                 <div
                   className="min-w-0 flex-1 cursor-pointer"
                   onClick={() => openEdit(t)}>
-                  <div className="flex items-start gap-2">
-                    <span
-                      className={cn(
-                        "size-2 shrink-0 rounded-full mt-1.5",
-                        priorityBgClass(t.priority),
-                      )}
-                      title={`Priorität: ${PRIORITY_LABEL[t.priority]}`}
-                    />
+                  <div className="flex items-start gap-2 flex-col">
                     <span
                       className={cn(
                         "text-sm leading-snug",
@@ -318,31 +391,9 @@ export default function TodosList({
                       )}>
                       {t.title}
                     </span>
-                    {isUnassigned ? (
-                      <span className="ml-1 rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
-                        Offen
-                      </span>
-                    ) : null}
                   </div>
 
-                  <div className="mt-1 ml-4 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
-                    {due ? (
-                      <span
-                        className={cn(
-                          isOverdue && "text-red-500 font-medium",
-                          isDueToday && "text-amber-500 font-medium",
-                        )}>
-                        {isOverdue
-                          ? "Überfällig: "
-                          : isDueToday
-                            ? "Heute"
-                            : null}
-                        {!isDueToday
-                          ? format(due, "dd. MMM yyyy", { locale: de })
-                          : null}
-                      </span>
-                    ) : null}
-
+                  <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
                     {t.targetLabel ? (
                       <>
                         {due ? <span>·</span> : null}
@@ -363,18 +414,38 @@ export default function TodosList({
 
                     {t.description ? (
                       <>
-                        <span>·</span>
+                        <Badge
+                          variant={
+                            t.priority === 1
+                              ? "info"
+                              : t.priority === 2
+                                ? "warning"
+                                : "destructive"
+                          }
+                          size="sm">
+                          {PRIORITY_LABEL[t.priority]}
+                        </Badge>
                         <span className="truncate">{t.description}</span>
                       </>
                     ) : null}
 
                     {t.creator && t.creator.id !== currentUserId ? (
-                      <>
-                        <span>·</span>
-                        <span>
-                          erstellt von {t.creator.displayName ?? t.creator.name}
-                        </span>
-                      </>
+                      <span className="text-foreground">
+                        erstellt von {t.creator.displayName ?? t.creator.name}
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="mt-2 flex flex-wrap items-center text-xs text-muted-foreground">
+                    {due ? (
+                      <span
+                        className={cn(
+                          isOverdue && "text-red-500 font-medium",
+                          isDueToday && "text-amber-500 font-medium",
+                        )}>
+                        {!isDueToday
+                          ? format(due, "dd. MMM yyyy", { locale: de })
+                          : null}
+                      </span>
                     ) : null}
                   </div>
                 </div>

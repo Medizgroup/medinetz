@@ -13,7 +13,7 @@ export default async function TodosPage() {
       <div>
         <h1 className="text-2xl font-semibold">Meine Todos</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Persönliche Aufgaben — separat von Fällen.
+          Die welt ein kleines Stück verbessern - ein Todo nach dem anderen.
         </p>
       </div>
       <TodosList currentUserId={session.user.id} />

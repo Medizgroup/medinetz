@@ -9,6 +9,7 @@ import { Todo } from "@/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import { toastManager } from "../ui/toast";
 import React from "react";
+import { cn } from "@/lib/utils";
 type Props = {
   todos: {
     id: string;
@@ -24,7 +25,10 @@ type Props = {
 export default function HomeTodo({ todos }: Props) {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
+  const [hasClicked, setHasClicked] = React.useState("");
+
   function toggleDone(t: Todo) {
+    setHasClicked(t.id);
     setLoading(true);
     try {
       fetch(`/api/todos/${t.id}`, {
@@ -49,6 +53,7 @@ export default function HomeTodo({ todos }: Props) {
       setLoading(false);
     }
   }
+
   return (
     <div className="w-full space-y-3">
       <div className="text-sm font-medium text-muted-foreground dark:text-foreground/80">
@@ -68,15 +73,25 @@ export default function HomeTodo({ todos }: Props) {
                   <Button
                     variant="outline"
                     size="icon-xs"
-                    onClick={() => toggleDone(t as Todo)}
-                    className="bg-accent size-4 sm:size-5"></Button>
+                    onClick={() => {
+                      toggleDone(t as Todo);
+                    }}
+                    className="bg-accent size-4 sm:size-5">
+                    {hasClicked === t.id ? (
+                      <CheckIcon className="size-4 text-foreground" />
+                    ) : null}
+                  </Button>
                 </div>
-                <div className="min-w-0 flex flex-col gap-1">
+                <div className="min-w-0 flex flex-col gap-1 -pt-1">
                   <div
-                    className={`text-sm font-medium truncate ${t.done ? "line-through text-foreground" : ""}`}>
+                    className={`text-sm font-medium truncate ${hasClicked === t.id ? "line-through text-foreground" : ""}`}>
                     {t.title}
                   </div>
-                  <div className="text-xs text-muted-foreground">
+                  <div
+                    className={cn(
+                      "text-xs text-muted-foreground",
+                      hasClicked === t.id ? "line-through opacity-30" : "",
+                    )}>
                     <Badge
                       variant={
                         t.priority === 1
@@ -92,7 +107,11 @@ export default function HomeTodo({ todos }: Props) {
                           : "Hoch"}
                     </Badge>
                     {t.description && (
-                      <div className="text-xs text-muted-foreground ml-1 inline-flex">
+                      <div
+                        className={cn(
+                          "text-xs text-muted-foreground ml-1 inline-flex",
+                          hasClicked === t.id ? "line-through" : "",
+                        )}>
                         {t.description}
                       </div>
                     )}
