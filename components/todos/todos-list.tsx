@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import * as React from "react";
 import Link from "next/link";
-import { ChevronDown, ChevronUp, Loader2, Flag } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import { format, isPast, isToday } from "date-fns";
 import { de } from "date-fns/locale";
 
@@ -10,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Select,
   SelectItem,
@@ -19,31 +21,38 @@ import {
 } from "@/components/ui/select";
 
 import TodoEditDialog, { type TodoForEdit } from "./todo-edit-dialog";
-import {
-  PRIORITY_LABEL,
-  priorityBgClass,
-  priorityColorClass,
-} from "@/lib/utils/todos/priority";
+import UserPicker from "./user-picker";
+import { PRIORITY_LABEL, priorityBgClass } from "@/lib/utils/todos/priority";
+import { getInitials } from "@/lib/helper/user";
 
 type Todo = TodoForEdit;
+type View = "mine" | "created" | "unassigned" | "all";
 
-export default function TodosList() {
+export default function TodosList({
+  currentUserId,
+}: {
+  currentUserId: string;
+}) {
   const [items, setItems] = React.useState<Todo[]>([]);
   const [openCount, setOpenCount] = React.useState(0);
   const [doneCount, setDoneCount] = React.useState(0);
+  const [mineOpen, setMineOpen] = React.useState(0);
+  const [unassignedOpen, setUnassignedOpen] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
 
+  const [view, setView] = React.useState<View>("mine");
   const [filter, setFilter] = React.useState<"open" | "done" | "all">("open");
   const [priorityFilter, setPriorityFilter] = React.useState<string>("all");
 
-  // Quick-Add
   const [newTitle, setNewTitle] = React.useState("");
   const [newPriority, setNewPriority] = React.useState("2");
   const [newDueDate, setNewDueDate] = React.useState("");
+  const [newAssigneeId, setNewAssigneeId] = React.useState<string | null>(
+    currentUserId,
+  );
   const [adding, setAdding] = React.useState(false);
   const [showQuickAddDetails, setShowQuickAddDetails] = React.useState(false);
 
-  // Edit-Dialog
   const [editingTodo, setEditingTodo] = React.useState<Todo | null>(null);
   const [editOpen, setEditOpen] = React.useState(false);
 
@@ -51,6 +60,7 @@ export default function TodosList() {
     setLoading(true);
     try {
       const params = new URLSearchParams();
+      params.set("view", view);
       params.set("filter", filter);
       if (priorityFilter !== "all") params.set("priority", priorityFilter);
       const r = await fetch(`/api/todos?${params.toString()}`, {
@@ -61,10 +71,12 @@ export default function TodosList() {
       setItems(data.items ?? []);
       setOpenCount(data.openCount ?? 0);
       setDoneCount(data.doneCount ?? 0);
+      setMineOpen(data.mineOpen ?? 0);
+      setUnassignedOpen(data.unassignedOpen ?? 0);
     } finally {
       setLoading(false);
     }
-  }, [filter, priorityFilter]);
+  }, [view, filter, priorityFilter]);
 
   React.useEffect(() => {
     load();
@@ -82,13 +94,16 @@ export default function TodosList() {
           title: newTitle.trim(),
           priority: Number(newPriority),
           dueDate: newDueDate || null,
+          assigneeId: newAssigneeId,
         }),
       });
       if (!res.ok) return;
       setNewTitle("");
       setNewDueDate("");
       setNewPriority("2");
+      setNewAssigneeId(currentUserId);
       setShowQuickAddDetails(false);
+      window.dispatchEvent(new Event("todos:changed"));
       await load();
     } finally {
       setAdding(false);
@@ -96,7 +111,6 @@ export default function TodosList() {
   }
 
   async function toggleDone(t: Todo) {
-    // Optimistic
     setItems((prev) =>
       prev.map((x) => (x.id === t.id ? { ...x, done: !x.done } : x)),
     );
@@ -109,10 +123,8 @@ export default function TodosList() {
       body: JSON.stringify({ done: !t.done }),
     }).catch(() => {});
 
-    // Reload (für Sortierung + falls Filter "open" gewählt ist soll es verschwinden)
-    if (filter !== "all") {
-      await load();
-    }
+    window.dispatchEvent(new Event("todos:changed"));
+    if (filter !== "all") await load();
   }
 
   function openEdit(t: Todo) {
@@ -123,13 +135,13 @@ export default function TodosList() {
   return (
     <div className="space-y-4">
       {/* Quick-Add */}
-      <form onSubmit={handleQuickAdd} className="space-y-2 ">
+      <form onSubmit={handleQuickAdd} className="space-y-2">
         <div className="flex gap-2">
           <Input
             value={newTitle}
             size="lg"
             onChange={(e) => setNewTitle(e.target.value)}
-            placeholder="Neues Todo..."
+            placeholder="Neues Todo…"
           />
           <Button type="submit" disabled={!newTitle.trim() || adding}>
             {adding ? <Loader2 className="size-4 animate-spin" /> : null}
@@ -138,7 +150,7 @@ export default function TodosList() {
         </div>
 
         {showQuickAddDetails ? (
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-3">
             <Select
               items={[
                 { value: "3", label: "Hoch" },
@@ -146,7 +158,7 @@ export default function TodosList() {
                 { value: "1", label: "Niedrig" },
               ]}
               value={newPriority}
-              onValueChange={(v) => setNewPriority(v ?? "1")}>
+              onValueChange={(v) => setNewPriority(v ?? "2")}>
               <SelectTrigger className="text-xs">
                 <SelectValue placeholder="Priorität" />
               </SelectTrigger>
@@ -163,27 +175,58 @@ export default function TodosList() {
               className="text-xs"
               placeholder="Fällig am"
             />
+            <UserPicker
+              value={newAssigneeId}
+              onChange={setNewAssigneeId}
+              placeholder="Niemand (für alle)"
+            />
           </div>
         ) : null}
 
         <button
           type="button"
           onClick={() => setShowQuickAddDetails((v) => !v)}
-          className=" text-xs text-muted-foreground hover:text-foreground">
+          className="text-xs text-muted-foreground hover:text-foreground">
           {showQuickAddDetails ? (
             <>
               <ChevronUp className="inline size-3" /> Details ausblenden
             </>
           ) : (
             <>
-              <ChevronDown className="inline size-3" /> Priorität & Frist
+              <ChevronDown className="inline size-3" /> Priorität, Frist &
+              Zuweisung
             </>
           )}
         </button>
       </form>
 
-      {/* Filter */}
+      {/* View-Tabs + Filter */}
       <div className="flex flex-wrap items-center gap-2">
+        <Select
+          value={view}
+          items={[
+            { value: "mine", label: `Meine (${mineOpen})` },
+            {
+              value: "unassigned",
+              label: `Offen für alle (${unassignedOpen})`,
+            },
+            { value: "created", label: "Von mir erstellt" },
+            { value: "all", label: "Alle sichtbaren" },
+          ]}
+          onValueChange={(v) => setView((v ?? "mine") as View)}>
+          <SelectTrigger className="w-[210px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectPopup alignItemWithTrigger={false} className="w-auto">
+            <SelectItem value="mine">Meine ({mineOpen})</SelectItem>
+            <SelectItem value="unassigned">
+              Offen für alle ({unassignedOpen})
+            </SelectItem>
+            <SelectItem value="created">Von mir erstellt</SelectItem>
+            <SelectItem value="all">Alle sichtbaren</SelectItem>
+          </SelectPopup>
+        </Select>
+
         <Select
           value={filter}
           items={[
@@ -192,7 +235,7 @@ export default function TodosList() {
             { value: "all", label: "Alle" },
           ]}
           onValueChange={(v) => setFilter((v ?? "open") as typeof filter)}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-[150px]">
             <SelectValue />
           </SelectTrigger>
           <SelectPopup alignItemWithTrigger={false} className="w-auto">
@@ -232,9 +275,9 @@ export default function TodosList() {
         <div className="rounded-lg border p-12 text-center text-sm text-muted-foreground">
           {filter === "done"
             ? "Noch nichts erledigt."
-            : filter === "open"
-              ? "Keine offenen Todos. 🎉"
-              : "Noch keine Todos."}
+            : view === "unassigned"
+              ? "Keine offenen Aufgaben für alle."
+              : "Keine offenen Todos."}
         </div>
       ) : (
         <ul className="divide-y rounded-lg border">
@@ -242,6 +285,8 @@ export default function TodosList() {
             const due = t.dueDate ? new Date(t.dueDate) : null;
             const isOverdue = due && !t.done && isPast(due) && !isToday(due);
             const isDueToday = due && !t.done && isToday(due);
+            const isUnassigned = !t.assignee;
+            const isMine = t.assignee?.id === currentUserId;
 
             return (
               <li
@@ -273,6 +318,11 @@ export default function TodosList() {
                       )}>
                       {t.title}
                     </span>
+                    {isUnassigned ? (
+                      <span className="ml-1 rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                        Offen
+                      </span>
+                    ) : null}
                   </div>
 
                   <div className="mt-1 ml-4 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
@@ -317,15 +367,35 @@ export default function TodosList() {
                         <span className="truncate">{t.description}</span>
                       </>
                     ) : null}
+
+                    {t.creator && t.creator.id !== currentUserId ? (
+                      <>
+                        <span>·</span>
+                        <span>
+                          erstellt von {t.creator.displayName ?? t.creator.name}
+                        </span>
+                      </>
+                    ) : null}
                   </div>
                 </div>
 
-                <Flag
-                  className={cn(
-                    "mt-1 size-3 shrink-0 opacity-0 transition group-hover:opacity-100",
-                    priorityColorClass(t.priority),
-                  )}
-                />
+                {/* Assignee-Avatar */}
+                {t.assignee ? (
+                  <Avatar
+                    className="size-6 shrink-0"
+                    title={
+                      isMine
+                        ? "Dir zugewiesen"
+                        : `Zugewiesen: ${t.assignee.displayName ?? t.assignee.name}`
+                    }>
+                    <AvatarImage src={t.assignee.avatarUrl ?? ""} />
+                    <AvatarFallback className="text-[10px]">
+                      {getInitials(
+                        t.assignee.displayName ?? t.assignee.name ?? "?",
+                      )}
+                    </AvatarFallback>
+                  </Avatar>
+                ) : null}
               </li>
             );
           })}
@@ -337,6 +407,7 @@ export default function TodosList() {
           open={editOpen}
           onOpenChange={setEditOpen}
           todo={editingTodo}
+          currentUserId={currentUserId}
           onSaved={load}
         />
       ) : null}

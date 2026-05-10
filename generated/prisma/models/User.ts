@@ -280,7 +280,9 @@ export type UserWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   mentions?: Prisma.MentionListRelationFilter
   mentioning?: Prisma.MentionListRelationFilter
-  todos?: Prisma.TodoListRelationFilter
+  createdTodos?: Prisma.TodoListRelationFilter
+  assignedTodos?: Prisma.TodoListRelationFilter
+  completedTodos?: Prisma.TodoListRelationFilter
   attachmentUploads?: Prisma.CaseAttachmentListRelationFilter
 }
 
@@ -325,7 +327,9 @@ export type UserOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   mentions?: Prisma.MentionOrderByRelationAggregateInput
   mentioning?: Prisma.MentionOrderByRelationAggregateInput
-  todos?: Prisma.TodoOrderByRelationAggregateInput
+  createdTodos?: Prisma.TodoOrderByRelationAggregateInput
+  assignedTodos?: Prisma.TodoOrderByRelationAggregateInput
+  completedTodos?: Prisma.TodoOrderByRelationAggregateInput
   attachmentUploads?: Prisma.CaseAttachmentOrderByRelationAggregateInput
 }
 
@@ -373,7 +377,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   mentions?: Prisma.MentionListRelationFilter
   mentioning?: Prisma.MentionListRelationFilter
-  todos?: Prisma.TodoListRelationFilter
+  createdTodos?: Prisma.TodoListRelationFilter
+  assignedTodos?: Prisma.TodoListRelationFilter
+  completedTodos?: Prisma.TodoListRelationFilter
   attachmentUploads?: Prisma.CaseAttachmentListRelationFilter
 }, "id" | "email">
 
@@ -458,7 +464,9 @@ export type UserCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -503,7 +511,9 @@ export type UserUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -548,7 +558,9 @@ export type UserUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -593,7 +605,9 @@ export type UserUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1099,18 +1113,50 @@ export type UserUpdateOneRequiredWithoutMentioningNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMentioningInput, Prisma.UserUpdateWithoutMentioningInput>, Prisma.UserUncheckedUpdateWithoutMentioningInput>
 }
 
-export type UserCreateNestedOneWithoutTodosInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTodosInput, Prisma.UserUncheckedCreateWithoutTodosInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTodosInput
+export type UserCreateNestedOneWithoutCreatedTodosInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTodosInput, Prisma.UserUncheckedCreateWithoutCreatedTodosInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTodosInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutTodosNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTodosInput, Prisma.UserUncheckedCreateWithoutTodosInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTodosInput
-  upsert?: Prisma.UserUpsertWithoutTodosInput
+export type UserCreateNestedOneWithoutAssignedTodosInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedTodosInput, Prisma.UserUncheckedCreateWithoutAssignedTodosInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedTodosInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTodosInput, Prisma.UserUpdateWithoutTodosInput>, Prisma.UserUncheckedUpdateWithoutTodosInput>
+}
+
+export type UserCreateNestedOneWithoutCompletedTodosInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCompletedTodosInput, Prisma.UserUncheckedCreateWithoutCompletedTodosInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCompletedTodosInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedTodosNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTodosInput, Prisma.UserUncheckedCreateWithoutCreatedTodosInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTodosInput
+  upsert?: Prisma.UserUpsertWithoutCreatedTodosInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedTodosInput, Prisma.UserUpdateWithoutCreatedTodosInput>, Prisma.UserUncheckedUpdateWithoutCreatedTodosInput>
+}
+
+export type UserUpdateOneWithoutAssignedTodosNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedTodosInput, Prisma.UserUncheckedCreateWithoutAssignedTodosInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedTodosInput
+  upsert?: Prisma.UserUpsertWithoutAssignedTodosInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedTodosInput, Prisma.UserUpdateWithoutAssignedTodosInput>, Prisma.UserUncheckedUpdateWithoutAssignedTodosInput>
+}
+
+export type UserUpdateOneWithoutCompletedTodosNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCompletedTodosInput, Prisma.UserUncheckedCreateWithoutCompletedTodosInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCompletedTodosInput
+  upsert?: Prisma.UserUpsertWithoutCompletedTodosInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCompletedTodosInput, Prisma.UserUpdateWithoutCompletedTodosInput>, Prisma.UserUncheckedUpdateWithoutCompletedTodosInput>
 }
 
 export type UserCreateNestedOneWithoutCreatedEventsInput = {
@@ -1167,7 +1213,9 @@ export type UserCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -1211,7 +1259,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -1271,7 +1321,9 @@ export type UserUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1315,7 +1367,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1359,7 +1413,9 @@ export type UserCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -1403,7 +1459,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -1463,7 +1521,9 @@ export type UserUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1507,7 +1567,9 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1551,7 +1613,9 @@ export type UserCreateWithoutOrganizationMembersInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -1595,7 +1659,9 @@ export type UserUncheckedCreateWithoutOrganizationMembersInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -1655,7 +1721,9 @@ export type UserUpdateWithoutOrganizationMembersInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1699,7 +1767,9 @@ export type UserUncheckedUpdateWithoutOrganizationMembersInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1743,7 +1813,9 @@ export type UserCreateWithoutOrganizationInvitesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -1787,7 +1859,9 @@ export type UserUncheckedCreateWithoutOrganizationInvitesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -1847,7 +1921,9 @@ export type UserUpdateWithoutOrganizationInvitesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1891,7 +1967,9 @@ export type UserUncheckedUpdateWithoutOrganizationInvitesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -1935,7 +2013,9 @@ export type UserCreateWithoutOrganizationJoinRequestsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -1979,7 +2059,9 @@ export type UserUncheckedCreateWithoutOrganizationJoinRequestsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -2028,7 +2110,9 @@ export type UserCreateWithoutDecidedJoinRequestsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -2072,7 +2156,9 @@ export type UserUncheckedCreateWithoutDecidedJoinRequestsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -2132,7 +2218,9 @@ export type UserUpdateWithoutOrganizationJoinRequestsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2176,7 +2264,9 @@ export type UserUncheckedUpdateWithoutOrganizationJoinRequestsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2231,7 +2321,9 @@ export type UserUpdateWithoutDecidedJoinRequestsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2275,7 +2367,9 @@ export type UserUncheckedUpdateWithoutDecidedJoinRequestsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2319,7 +2413,9 @@ export type UserCreateWithoutPreferencesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -2363,7 +2459,9 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -2423,7 +2521,9 @@ export type UserUpdateWithoutPreferencesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2467,7 +2567,9 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2511,7 +2613,9 @@ export type UserCreateWithoutCreatedDoctorsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -2555,7 +2659,9 @@ export type UserUncheckedCreateWithoutCreatedDoctorsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -2615,7 +2721,9 @@ export type UserUpdateWithoutCreatedDoctorsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2659,7 +2767,9 @@ export type UserUncheckedUpdateWithoutCreatedDoctorsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2703,7 +2813,9 @@ export type UserCreateWithoutCreatedInterpretersInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -2747,7 +2859,9 @@ export type UserUncheckedCreateWithoutCreatedInterpretersInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -2807,7 +2921,9 @@ export type UserUpdateWithoutCreatedInterpretersInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2851,7 +2967,9 @@ export type UserUncheckedUpdateWithoutCreatedInterpretersInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -2895,7 +3013,9 @@ export type UserCreateWithoutCreatedCasesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -2939,7 +3059,9 @@ export type UserUncheckedCreateWithoutCreatedCasesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -2988,7 +3110,9 @@ export type UserCreateWithoutAssignedCasesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -3032,7 +3156,9 @@ export type UserUncheckedCreateWithoutAssignedCasesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -3081,7 +3207,9 @@ export type UserCreateWithoutClosedCasesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -3125,7 +3253,9 @@ export type UserUncheckedCreateWithoutClosedCasesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -3185,7 +3315,9 @@ export type UserUpdateWithoutCreatedCasesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3229,7 +3361,9 @@ export type UserUncheckedUpdateWithoutCreatedCasesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3284,7 +3418,9 @@ export type UserUpdateWithoutAssignedCasesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3328,7 +3464,9 @@ export type UserUncheckedUpdateWithoutAssignedCasesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3383,7 +3521,9 @@ export type UserUpdateWithoutClosedCasesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3427,7 +3567,9 @@ export type UserUncheckedUpdateWithoutClosedCasesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3471,7 +3613,9 @@ export type UserCreateWithoutCaseCommentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -3515,7 +3659,9 @@ export type UserUncheckedCreateWithoutCaseCommentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -3575,7 +3721,9 @@ export type UserUpdateWithoutCaseCommentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3619,7 +3767,9 @@ export type UserUncheckedUpdateWithoutCaseCommentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3663,7 +3813,9 @@ export type UserCreateWithoutCaseDoctorsCreatedInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -3707,7 +3859,9 @@ export type UserUncheckedCreateWithoutCaseDoctorsCreatedInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -3767,7 +3921,9 @@ export type UserUpdateWithoutCaseDoctorsCreatedInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3811,7 +3967,9 @@ export type UserUncheckedUpdateWithoutCaseDoctorsCreatedInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -3855,7 +4013,9 @@ export type UserCreateWithoutCaseInterpretersCreatedInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -3899,7 +4059,9 @@ export type UserUncheckedCreateWithoutCaseInterpretersCreatedInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -3959,7 +4121,9 @@ export type UserUpdateWithoutCaseInterpretersCreatedInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4003,7 +4167,9 @@ export type UserUncheckedUpdateWithoutCaseInterpretersCreatedInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4047,7 +4213,9 @@ export type UserCreateWithoutCaseCostsCreatedInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -4091,7 +4259,9 @@ export type UserUncheckedCreateWithoutCaseCostsCreatedInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -4151,7 +4321,9 @@ export type UserUpdateWithoutCaseCostsCreatedInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4195,7 +4367,9 @@ export type UserUncheckedUpdateWithoutCaseCostsCreatedInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4239,7 +4413,9 @@ export type UserCreateWithoutWatchedCasesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -4283,7 +4459,9 @@ export type UserUncheckedCreateWithoutWatchedCasesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -4343,7 +4521,9 @@ export type UserUpdateWithoutWatchedCasesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4387,7 +4567,9 @@ export type UserUncheckedUpdateWithoutWatchedCasesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4432,7 +4614,9 @@ export type UserCreateWithoutAttachmentUploadsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
 }
 
 export type UserUncheckedCreateWithoutAttachmentUploadsInput = {
@@ -4476,7 +4660,9 @@ export type UserUncheckedCreateWithoutAttachmentUploadsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
 }
 
 export type UserCreateOrConnectWithoutAttachmentUploadsInput = {
@@ -4536,7 +4722,9 @@ export type UserUpdateWithoutAttachmentUploadsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttachmentUploadsInput = {
@@ -4580,7 +4768,9 @@ export type UserUncheckedUpdateWithoutAttachmentUploadsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
 }
 
 export type UserCreateWithoutCreatedProtocolsInput = {
@@ -4623,7 +4813,9 @@ export type UserCreateWithoutCreatedProtocolsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -4667,7 +4859,9 @@ export type UserUncheckedCreateWithoutCreatedProtocolsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -4727,7 +4921,9 @@ export type UserUpdateWithoutCreatedProtocolsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4771,7 +4967,9 @@ export type UserUncheckedUpdateWithoutCreatedProtocolsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4815,7 +5013,9 @@ export type UserCreateWithoutProtocolCommentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -4859,7 +5059,9 @@ export type UserUncheckedCreateWithoutProtocolCommentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -4919,7 +5121,9 @@ export type UserUpdateWithoutProtocolCommentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -4963,7 +5167,9 @@ export type UserUncheckedUpdateWithoutProtocolCommentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5007,7 +5213,9 @@ export type UserCreateWithoutCreatedDonationsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -5051,7 +5259,9 @@ export type UserUncheckedCreateWithoutCreatedDonationsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -5111,7 +5321,9 @@ export type UserUpdateWithoutCreatedDonationsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5155,7 +5367,9 @@ export type UserUncheckedUpdateWithoutCreatedDonationsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5199,7 +5413,9 @@ export type UserCreateWithoutGeneratedReportsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -5243,7 +5459,9 @@ export type UserUncheckedCreateWithoutGeneratedReportsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -5303,7 +5521,9 @@ export type UserUpdateWithoutGeneratedReportsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5347,7 +5567,9 @@ export type UserUncheckedUpdateWithoutGeneratedReportsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5391,7 +5613,9 @@ export type UserCreateWithoutActivitiesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -5435,7 +5659,9 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -5495,7 +5721,9 @@ export type UserUpdateWithoutActivitiesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5539,7 +5767,9 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5583,7 +5813,9 @@ export type UserCreateWithoutNotificationsInput = {
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -5627,7 +5859,9 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -5687,7 +5921,9 @@ export type UserUpdateWithoutNotificationsInput = {
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5731,7 +5967,9 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -5775,7 +6013,9 @@ export type UserCreateWithoutMentionsInput = {
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -5819,7 +6059,9 @@ export type UserUncheckedCreateWithoutMentionsInput = {
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -5868,7 +6110,9 @@ export type UserCreateWithoutMentioningInput = {
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -5912,7 +6156,9 @@ export type UserUncheckedCreateWithoutMentioningInput = {
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -5972,7 +6218,9 @@ export type UserUpdateWithoutMentionsInput = {
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -6016,7 +6264,9 @@ export type UserUncheckedUpdateWithoutMentionsInput = {
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -6071,7 +6321,9 @@ export type UserUpdateWithoutMentioningInput = {
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -6115,11 +6367,13 @@ export type UserUncheckedUpdateWithoutMentioningInput = {
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
-export type UserCreateWithoutTodosInput = {
+export type UserCreateWithoutCreatedTodosInput = {
   id?: string
   email: string
   name?: string | null
@@ -6160,10 +6414,12 @@ export type UserCreateWithoutTodosInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
-export type UserUncheckedCreateWithoutTodosInput = {
+export type UserUncheckedCreateWithoutCreatedTodosInput = {
   id?: string
   email: string
   name?: string | null
@@ -6204,26 +6460,222 @@ export type UserUncheckedCreateWithoutTodosInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
-export type UserCreateOrConnectWithoutTodosInput = {
+export type UserCreateOrConnectWithoutCreatedTodosInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutTodosInput, Prisma.UserUncheckedCreateWithoutTodosInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedTodosInput, Prisma.UserUncheckedCreateWithoutCreatedTodosInput>
 }
 
-export type UserUpsertWithoutTodosInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutTodosInput, Prisma.UserUncheckedUpdateWithoutTodosInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutTodosInput, Prisma.UserUncheckedCreateWithoutTodosInput>
+export type UserCreateWithoutAssignedTodosInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  isInstanceAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
+  createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
+  attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
+}
+
+export type UserUncheckedCreateWithoutAssignedTodosInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  isInstanceAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
+  createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
+}
+
+export type UserCreateOrConnectWithoutAssignedTodosInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedTodosInput, Prisma.UserUncheckedCreateWithoutAssignedTodosInput>
+}
+
+export type UserCreateWithoutCompletedTodosInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  isInstanceAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
+  createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
+}
+
+export type UserUncheckedCreateWithoutCompletedTodosInput = {
+  id?: string
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  isActive?: boolean
+  isInstanceAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
+  preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
+  createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
+  assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
+  closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
+  caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
+  watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
+  createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
+  createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
+  createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
+  createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
+  generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
+  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
+  mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
+}
+
+export type UserCreateOrConnectWithoutCompletedTodosInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCompletedTodosInput, Prisma.UserUncheckedCreateWithoutCompletedTodosInput>
+}
+
+export type UserUpsertWithoutCreatedTodosInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedTodosInput, Prisma.UserUncheckedUpdateWithoutCreatedTodosInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedTodosInput, Prisma.UserUncheckedCreateWithoutCreatedTodosInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutTodosInput = {
+export type UserUpdateToOneWithWhereWithoutCreatedTodosInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutTodosInput, Prisma.UserUncheckedUpdateWithoutTodosInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedTodosInput, Prisma.UserUncheckedUpdateWithoutCreatedTodosInput>
 }
 
-export type UserUpdateWithoutTodosInput = {
+export type UserUpdateWithoutCreatedTodosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6264,10 +6716,12 @@ export type UserUpdateWithoutTodosInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
-export type UserUncheckedUpdateWithoutTodosInput = {
+export type UserUncheckedUpdateWithoutCreatedTodosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6308,6 +6762,214 @@ export type UserUncheckedUpdateWithoutTodosInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserUpsertWithoutAssignedTodosInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTodosInput, Prisma.UserUncheckedUpdateWithoutAssignedTodosInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedTodosInput, Prisma.UserUncheckedCreateWithoutAssignedTodosInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssignedTodosInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTodosInput, Prisma.UserUncheckedUpdateWithoutAssignedTodosInput>
+}
+
+export type UserUpdateWithoutAssignedTodosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssignedTodosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserUpsertWithoutCompletedTodosInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCompletedTodosInput, Prisma.UserUncheckedUpdateWithoutCompletedTodosInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCompletedTodosInput, Prisma.UserUncheckedCreateWithoutCompletedTodosInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCompletedTodosInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCompletedTodosInput, Prisma.UserUncheckedUpdateWithoutCompletedTodosInput>
+}
+
+export type UserUpdateWithoutCompletedTodosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCompletedTodosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
+  organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
+  preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
+  createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
+  closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
+  caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
+  watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
+  createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
+  protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
+  createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
+  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
+  caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
+  createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
+  generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
+  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
+  mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -6351,7 +7013,9 @@ export type UserCreateWithoutCreatedEventsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
 }
 
@@ -6395,7 +7059,9 @@ export type UserUncheckedCreateWithoutCreatedEventsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
   mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
 }
 
@@ -6455,7 +7121,9 @@ export type UserUpdateWithoutCreatedEventsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
 }
 
@@ -6499,7 +7167,9 @@ export type UserUncheckedUpdateWithoutCreatedEventsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
   attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
@@ -6534,7 +7204,9 @@ export type UserCountOutputType = {
   notifications: number
   mentions: number
   mentioning: number
-  todos: number
+  createdTodos: number
+  assignedTodos: number
+  completedTodos: number
   attachmentUploads: number
 }
 
@@ -6564,7 +7236,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   mentions?: boolean | UserCountOutputTypeCountMentionsArgs
   mentioning?: boolean | UserCountOutputTypeCountMentioningArgs
-  todos?: boolean | UserCountOutputTypeCountTodosArgs
+  createdTodos?: boolean | UserCountOutputTypeCountCreatedTodosArgs
+  assignedTodos?: boolean | UserCountOutputTypeCountAssignedTodosArgs
+  completedTodos?: boolean | UserCountOutputTypeCountCompletedTodosArgs
   attachmentUploads?: boolean | UserCountOutputTypeCountAttachmentUploadsArgs
 }
 
@@ -6756,7 +7430,21 @@ export type UserCountOutputTypeCountMentioningArgs<ExtArgs extends runtime.Types
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountTodosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountCreatedTodosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TodoWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssignedTodosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TodoWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCompletedTodosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TodoWhereInput
 }
 
@@ -6809,7 +7497,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   mentions?: boolean | Prisma.User$mentionsArgs<ExtArgs>
   mentioning?: boolean | Prisma.User$mentioningArgs<ExtArgs>
-  todos?: boolean | Prisma.User$todosArgs<ExtArgs>
+  createdTodos?: boolean | Prisma.User$createdTodosArgs<ExtArgs>
+  assignedTodos?: boolean | Prisma.User$assignedTodosArgs<ExtArgs>
+  completedTodos?: boolean | Prisma.User$completedTodosArgs<ExtArgs>
   attachmentUploads?: boolean | Prisma.User$attachmentUploadsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -6893,7 +7583,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   mentions?: boolean | Prisma.User$mentionsArgs<ExtArgs>
   mentioning?: boolean | Prisma.User$mentioningArgs<ExtArgs>
-  todos?: boolean | Prisma.User$todosArgs<ExtArgs>
+  createdTodos?: boolean | Prisma.User$createdTodosArgs<ExtArgs>
+  assignedTodos?: boolean | Prisma.User$assignedTodosArgs<ExtArgs>
+  completedTodos?: boolean | Prisma.User$completedTodosArgs<ExtArgs>
   attachmentUploads?: boolean | Prisma.User$attachmentUploadsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -6929,7 +7621,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     mentions: Prisma.$MentionPayload<ExtArgs>[]
     mentioning: Prisma.$MentionPayload<ExtArgs>[]
-    todos: Prisma.$TodoPayload<ExtArgs>[]
+    createdTodos: Prisma.$TodoPayload<ExtArgs>[]
+    assignedTodos: Prisma.$TodoPayload<ExtArgs>[]
+    completedTodos: Prisma.$TodoPayload<ExtArgs>[]
     attachmentUploads: Prisma.$CaseAttachmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -7367,7 +8061,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mentions<T extends Prisma.User$mentionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MentionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mentioning<T extends Prisma.User$mentioningArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentioningArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MentionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  todos<T extends Prisma.User$todosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$todosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TodoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdTodos<T extends Prisma.User$createdTodosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTodosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TodoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedTodos<T extends Prisma.User$assignedTodosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedTodosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TodoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  completedTodos<T extends Prisma.User$completedTodosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$completedTodosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TodoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attachmentUploads<T extends Prisma.User$attachmentUploadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attachmentUploadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CaseAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8424,9 +9120,57 @@ export type User$mentioningArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * User.todos
+ * User.createdTodos
  */
-export type User$todosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$createdTodosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Todo
+   */
+  select?: Prisma.TodoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Todo
+   */
+  omit?: Prisma.TodoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TodoInclude<ExtArgs> | null
+  where?: Prisma.TodoWhereInput
+  orderBy?: Prisma.TodoOrderByWithRelationInput | Prisma.TodoOrderByWithRelationInput[]
+  cursor?: Prisma.TodoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TodoScalarFieldEnum | Prisma.TodoScalarFieldEnum[]
+}
+
+/**
+ * User.assignedTodos
+ */
+export type User$assignedTodosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Todo
+   */
+  select?: Prisma.TodoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Todo
+   */
+  omit?: Prisma.TodoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TodoInclude<ExtArgs> | null
+  where?: Prisma.TodoWhereInput
+  orderBy?: Prisma.TodoOrderByWithRelationInput | Prisma.TodoOrderByWithRelationInput[]
+  cursor?: Prisma.TodoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TodoScalarFieldEnum | Prisma.TodoScalarFieldEnum[]
+}
+
+/**
+ * User.completedTodos
+ */
+export type User$completedTodosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Todo
    */

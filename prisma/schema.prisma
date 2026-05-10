@@ -196,7 +196,10 @@ model User {
   notifications         Notification[]
   mentions              Mention[]            @relation("MentionedUser")
   mentioning            Mention[]            @relation("MentioningUser")
-  todos                 Todo[]
+  // Todos
+  createdTodos    Todo[] @relation("TodoCreator")
+  assignedTodos   Todo[] @relation("TodoAssignee")
+  completedTodos  Todo[] @relation("TodoCompleter")
   attachmentUploads     CaseAttachment[]     @relation("AttachmentUploader")
 
   @@index([email])
@@ -860,23 +863,37 @@ model Mention {
 
 model Todo {
   id          String    @id @default(uuid())
-  userId      String    @map("user_id")
+
+  // Wer erstellt hat (war vorher userId)
+  creatorId   String    @map("creator_id")
+  // Wem zugewiesen — null = "für alle sichtbar / offen"
+  assigneeId  String?   @map("assignee_id")
+
   title       String
   description String?   @db.Text
   done        Boolean   @default(false)
   priority    Int       @default(2) // 1=Low, 2=Medium, 3=High
   dueDate     DateTime? @map("due_date") @db.Date
-  targetType  String?   @map("target_type") // Optional: 'case', 'protocol'
+
+  // Optional: 'case' | 'protocol'
+  targetType  String?   @map("target_type")
   targetId    String?   @map("target_id")
+
   createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
   completedAt DateTime? @map("completed_at")
+  completedBy String?   @map("completed_by")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creator   User  @relation("TodoCreator",   fields: [creatorId],   references: [id], onDelete: Cascade)
+  assignee  User? @relation("TodoAssignee",  fields: [assigneeId],  references: [id], onDelete: SetNull)
+  completer User? @relation("TodoCompleter", fields: [completedBy], references: [id], onDelete: SetNull)
 
-  @@index([userId])
+  @@index([creatorId])
+  @@index([assigneeId])
   @@index([done])
   @@index([dueDate])
-  @@index([userId, done])
+  @@index([assigneeId, done])
+  @@index([creatorId, done])
   @@map("todos")
 }
 

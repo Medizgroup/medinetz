@@ -16,7 +16,7 @@ export default async function TodosPage() {
           Persönliche Aufgaben — separat von Fällen.
         </p>
       </div>
-      <TodosList />
+      <TodosList currentUserId={session.user.id} />
     </div>
   );
 }

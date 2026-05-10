@@ -16,6 +16,8 @@ export function notificationHref(
       return null;
     case "event":
       return `/events`;
+    case "todo":
+      return `/todos`;
     default:
       return null;
   }

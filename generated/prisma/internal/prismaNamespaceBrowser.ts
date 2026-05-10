@@ -575,7 +575,8 @@ export type MentionScalarFieldEnum = (typeof MentionScalarFieldEnum)[keyof typeo
 
 export const TodoScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
+  creatorId: 'creatorId',
+  assigneeId: 'assigneeId',
   title: 'title',
   description: 'description',
   done: 'done',
@@ -584,7 +585,9 @@ export const TodoScalarFieldEnum = {
   targetType: 'targetType',
   targetId: 'targetId',
   createdAt: 'createdAt',
-  completedAt: 'completedAt'
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt',
+  completedBy: 'completedBy'
 } as const
 
 export type TodoScalarFieldEnum = (typeof TodoScalarFieldEnum)[keyof typeof TodoScalarFieldEnum]

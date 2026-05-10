@@ -1,4 +1,4 @@
-import { GalleryVerticalEnd, ListTodo, Plus } from "lucide-react";
+import { GalleryVerticalEnd, ListTodo } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import UserBadge from "./user-badge";
@@ -34,7 +34,7 @@ async function HeadUser() {
     }),
     prisma.todo.count({
       where: {
-        userId,
+        assigneeId: userId,
         done: false,
       },
     }),
@@ -44,7 +44,7 @@ async function HeadUser() {
 
   return (
     <div className="flex items-center gap-4 px-4 h-4">
-      <QuickAddTodo />
+      <QuickAddTodo currentUserId={userId} />
 
       <NotificationsPopover />
 

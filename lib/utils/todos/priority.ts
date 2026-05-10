@@ -1,5 +1,11 @@
 import { Flag } from "lucide-react";
 
+export const priorities_todos = [
+  { value: 3, label: "Hoch", variant: "destructive" as const },
+  { value: 2, label: "Mittel", variant: "warning" as const },
+  { value: 1, label: "Niedrig", variant: "info" as const },
+];
+
 export const PRIORITY_LABEL: Record<number, string> = {
   1: "Niedrig",
   2: "Mittel",

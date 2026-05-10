@@ -47,7 +47,7 @@ export default async function AppLayout({
   const userId = session.user.id;
 
   const [openTodosCount, assignedCasesCount, eventsCount] = await Promise.all([
-    prisma.todo.count({ where: { userId, done: false } }),
+    prisma.todo.count({ where: { assigneeId: userId, done: false } }),
 
     prisma.case.count({
       where: {
