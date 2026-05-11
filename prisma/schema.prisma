@@ -527,7 +527,8 @@ model CaseDoctor {
   notes           String?   @db.Text
   createdAt       DateTime  @default(now()) @map("created_at")
   createdBy       String    @map("created_by")
-
+  event Event?
+  
   case    Case   @relation(fields: [caseId], references: [id], onDelete: Cascade)
   doctor  Doctor @relation(fields: [doctorId], references: [id])
   creator User   @relation("CaseDoctorCreator", fields: [createdBy], references: [id])
@@ -554,7 +555,8 @@ model CaseInterpreter {
   case        Case        @relation(fields: [caseId], references: [id], onDelete: Cascade)
   interpreter Interpreter @relation(fields: [interpreterId], references: [id])
   creator     User        @relation("CaseInterpreterCreator", fields: [createdBy], references: [id])
-
+  event Event?
+  
   @@index([caseId])
   @@index([interpreterId])
   @@index([invoicePaid])
@@ -924,7 +926,12 @@ model Event {
   
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   creator        User          @relation("EventCreator", fields: [creatorId], references: [id])
-  
+  caseDoctorId      String? @unique @map("case_doctor_id")
+  caseInterpreterId String? @unique @map("case_interpreter_id")
+
+  caseDoctor      CaseDoctor?      @relation(fields: [caseDoctorId], references: [id], onDelete: Cascade)
+  caseInterpreter CaseInterpreter? @relation(fields: [caseInterpreterId], references: [id], onDelete: Cascade)
+
   @@index([organizationId, startsAt])
   @@index([startsAt])
   @@index([recurrence])

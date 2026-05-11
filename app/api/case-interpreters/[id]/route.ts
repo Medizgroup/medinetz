@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { canUserEditCase } from "@/lib/utils/cases/permissions";
 import { recalculateCaseTotal } from "@/lib/utils/cases/totals";
+import { syncCaseInterpreterEvent } from "@/lib/event/sync-resource-events";
 
 export async function PATCH(
   req: Request,
@@ -60,7 +61,7 @@ export async function PATCH(
 
   await prisma.caseInterpreter.update({ where: { id }, data });
   await recalculateCaseTotal(existing.caseId);
-
+  await syncCaseInterpreterEvent(id);
   return NextResponse.json({ ok: true });
 }
 

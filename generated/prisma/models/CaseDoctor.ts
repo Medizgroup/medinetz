@@ -280,6 +280,7 @@ export type CaseDoctorWhereInput = {
   notes?: Prisma.StringNullableFilter<"CaseDoctor"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CaseDoctor"> | Date | string
   createdBy?: Prisma.StringFilter<"CaseDoctor"> | string
+  event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.EventWhereInput> | null
   case?: Prisma.XOR<Prisma.CaseScalarRelationFilter, Prisma.CaseWhereInput>
   doctor?: Prisma.XOR<Prisma.DoctorScalarRelationFilter, Prisma.DoctorWhereInput>
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -299,6 +300,7 @@ export type CaseDoctorOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
+  event?: Prisma.EventOrderByWithRelationInput
   case?: Prisma.CaseOrderByWithRelationInput
   doctor?: Prisma.DoctorOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
@@ -321,6 +323,7 @@ export type CaseDoctorWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"CaseDoctor"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CaseDoctor"> | Date | string
   createdBy?: Prisma.StringFilter<"CaseDoctor"> | string
+  event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.EventWhereInput> | null
   case?: Prisma.XOR<Prisma.CaseScalarRelationFilter, Prisma.CaseWhereInput>
   doctor?: Prisma.XOR<Prisma.DoctorScalarRelationFilter, Prisma.DoctorWhereInput>
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -377,6 +380,7 @@ export type CaseDoctorCreateInput = {
   diagnosis?: string | null
   notes?: string | null
   createdAt?: Date | string
+  event?: Prisma.EventCreateNestedOneWithoutCaseDoctorInput
   case: Prisma.CaseCreateNestedOneWithoutDoctorsInput
   doctor: Prisma.DoctorCreateNestedOneWithoutCaseDoctorsInput
   creator: Prisma.UserCreateNestedOneWithoutCaseDoctorsCreatedInput
@@ -396,6 +400,7 @@ export type CaseDoctorUncheckedCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   createdBy: string
+  event?: Prisma.EventUncheckedCreateNestedOneWithoutCaseDoctorInput
 }
 
 export type CaseDoctorUpdateInput = {
@@ -409,6 +414,7 @@ export type CaseDoctorUpdateInput = {
   diagnosis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.EventUpdateOneWithoutCaseDoctorNestedInput
   case?: Prisma.CaseUpdateOneRequiredWithoutDoctorsNestedInput
   doctor?: Prisma.DoctorUpdateOneRequiredWithoutCaseDoctorsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCaseDoctorsCreatedNestedInput
@@ -428,6 +434,7 @@ export type CaseDoctorUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  event?: Prisma.EventUncheckedUpdateOneWithoutCaseDoctorNestedInput
 }
 
 export type CaseDoctorCreateManyInput = {
@@ -539,6 +546,11 @@ export type CaseDoctorMinOrderByAggregateInput = {
 
 export type CaseDoctorSumOrderByAggregateInput = {
   invoiceAmount?: Prisma.SortOrder
+}
+
+export type CaseDoctorNullableScalarRelationFilter = {
+  is?: Prisma.CaseDoctorWhereInput | null
+  isNot?: Prisma.CaseDoctorWhereInput | null
 }
 
 export type CaseDoctorCreateNestedManyWithoutCreatorInput = {
@@ -667,6 +679,22 @@ export type CaseDoctorUncheckedUpdateManyWithoutCaseNestedInput = {
   deleteMany?: Prisma.CaseDoctorScalarWhereInput | Prisma.CaseDoctorScalarWhereInput[]
 }
 
+export type CaseDoctorCreateNestedOneWithoutEventInput = {
+  create?: Prisma.XOR<Prisma.CaseDoctorCreateWithoutEventInput, Prisma.CaseDoctorUncheckedCreateWithoutEventInput>
+  connectOrCreate?: Prisma.CaseDoctorCreateOrConnectWithoutEventInput
+  connect?: Prisma.CaseDoctorWhereUniqueInput
+}
+
+export type CaseDoctorUpdateOneWithoutEventNestedInput = {
+  create?: Prisma.XOR<Prisma.CaseDoctorCreateWithoutEventInput, Prisma.CaseDoctorUncheckedCreateWithoutEventInput>
+  connectOrCreate?: Prisma.CaseDoctorCreateOrConnectWithoutEventInput
+  upsert?: Prisma.CaseDoctorUpsertWithoutEventInput
+  disconnect?: Prisma.CaseDoctorWhereInput | boolean
+  delete?: Prisma.CaseDoctorWhereInput | boolean
+  connect?: Prisma.CaseDoctorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CaseDoctorUpdateToOneWithWhereWithoutEventInput, Prisma.CaseDoctorUpdateWithoutEventInput>, Prisma.CaseDoctorUncheckedUpdateWithoutEventInput>
+}
+
 export type CaseDoctorCreateWithoutCreatorInput = {
   id?: string
   appointmentDate?: Date | string | null
@@ -678,6 +706,7 @@ export type CaseDoctorCreateWithoutCreatorInput = {
   diagnosis?: string | null
   notes?: string | null
   createdAt?: Date | string
+  event?: Prisma.EventCreateNestedOneWithoutCaseDoctorInput
   case: Prisma.CaseCreateNestedOneWithoutDoctorsInput
   doctor: Prisma.DoctorCreateNestedOneWithoutCaseDoctorsInput
 }
@@ -695,6 +724,7 @@ export type CaseDoctorUncheckedCreateWithoutCreatorInput = {
   diagnosis?: string | null
   notes?: string | null
   createdAt?: Date | string
+  event?: Prisma.EventUncheckedCreateNestedOneWithoutCaseDoctorInput
 }
 
 export type CaseDoctorCreateOrConnectWithoutCreatorInput = {
@@ -753,6 +783,7 @@ export type CaseDoctorCreateWithoutDoctorInput = {
   diagnosis?: string | null
   notes?: string | null
   createdAt?: Date | string
+  event?: Prisma.EventCreateNestedOneWithoutCaseDoctorInput
   case: Prisma.CaseCreateNestedOneWithoutDoctorsInput
   creator: Prisma.UserCreateNestedOneWithoutCaseDoctorsCreatedInput
 }
@@ -770,6 +801,7 @@ export type CaseDoctorUncheckedCreateWithoutDoctorInput = {
   notes?: string | null
   createdAt?: Date | string
   createdBy: string
+  event?: Prisma.EventUncheckedCreateNestedOneWithoutCaseDoctorInput
 }
 
 export type CaseDoctorCreateOrConnectWithoutDoctorInput = {
@@ -809,6 +841,7 @@ export type CaseDoctorCreateWithoutCaseInput = {
   diagnosis?: string | null
   notes?: string | null
   createdAt?: Date | string
+  event?: Prisma.EventCreateNestedOneWithoutCaseDoctorInput
   doctor: Prisma.DoctorCreateNestedOneWithoutCaseDoctorsInput
   creator: Prisma.UserCreateNestedOneWithoutCaseDoctorsCreatedInput
 }
@@ -826,6 +859,7 @@ export type CaseDoctorUncheckedCreateWithoutCaseInput = {
   notes?: string | null
   createdAt?: Date | string
   createdBy: string
+  event?: Prisma.EventUncheckedCreateNestedOneWithoutCaseDoctorInput
 }
 
 export type CaseDoctorCreateOrConnectWithoutCaseInput = {
@@ -854,6 +888,86 @@ export type CaseDoctorUpdateManyWithWhereWithoutCaseInput = {
   data: Prisma.XOR<Prisma.CaseDoctorUpdateManyMutationInput, Prisma.CaseDoctorUncheckedUpdateManyWithoutCaseInput>
 }
 
+export type CaseDoctorCreateWithoutEventInput = {
+  id?: string
+  appointmentDate?: Date | string | null
+  appointmentNotes?: string | null
+  invoiceReceived?: boolean
+  invoiceAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  invoiceDate?: Date | string | null
+  invoicePaid?: boolean
+  diagnosis?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  case: Prisma.CaseCreateNestedOneWithoutDoctorsInput
+  doctor: Prisma.DoctorCreateNestedOneWithoutCaseDoctorsInput
+  creator: Prisma.UserCreateNestedOneWithoutCaseDoctorsCreatedInput
+}
+
+export type CaseDoctorUncheckedCreateWithoutEventInput = {
+  id?: string
+  caseId: string
+  doctorId: string
+  appointmentDate?: Date | string | null
+  appointmentNotes?: string | null
+  invoiceReceived?: boolean
+  invoiceAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  invoiceDate?: Date | string | null
+  invoicePaid?: boolean
+  diagnosis?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  createdBy: string
+}
+
+export type CaseDoctorCreateOrConnectWithoutEventInput = {
+  where: Prisma.CaseDoctorWhereUniqueInput
+  create: Prisma.XOR<Prisma.CaseDoctorCreateWithoutEventInput, Prisma.CaseDoctorUncheckedCreateWithoutEventInput>
+}
+
+export type CaseDoctorUpsertWithoutEventInput = {
+  update: Prisma.XOR<Prisma.CaseDoctorUpdateWithoutEventInput, Prisma.CaseDoctorUncheckedUpdateWithoutEventInput>
+  create: Prisma.XOR<Prisma.CaseDoctorCreateWithoutEventInput, Prisma.CaseDoctorUncheckedCreateWithoutEventInput>
+  where?: Prisma.CaseDoctorWhereInput
+}
+
+export type CaseDoctorUpdateToOneWithWhereWithoutEventInput = {
+  where?: Prisma.CaseDoctorWhereInput
+  data: Prisma.XOR<Prisma.CaseDoctorUpdateWithoutEventInput, Prisma.CaseDoctorUncheckedUpdateWithoutEventInput>
+}
+
+export type CaseDoctorUpdateWithoutEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  appointmentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  appointmentNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceReceived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invoiceAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  invoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  invoicePaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  diagnosis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  case?: Prisma.CaseUpdateOneRequiredWithoutDoctorsNestedInput
+  doctor?: Prisma.DoctorUpdateOneRequiredWithoutCaseDoctorsNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutCaseDoctorsCreatedNestedInput
+}
+
+export type CaseDoctorUncheckedUpdateWithoutEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  caseId?: Prisma.StringFieldUpdateOperationsInput | string
+  doctorId?: Prisma.StringFieldUpdateOperationsInput | string
+  appointmentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  appointmentNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceReceived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invoiceAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  invoiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  invoicePaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  diagnosis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 export type CaseDoctorCreateManyCreatorInput = {
   id?: string
   caseId: string
@@ -880,6 +994,7 @@ export type CaseDoctorUpdateWithoutCreatorInput = {
   diagnosis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.EventUpdateOneWithoutCaseDoctorNestedInput
   case?: Prisma.CaseUpdateOneRequiredWithoutDoctorsNestedInput
   doctor?: Prisma.DoctorUpdateOneRequiredWithoutCaseDoctorsNestedInput
 }
@@ -897,6 +1012,7 @@ export type CaseDoctorUncheckedUpdateWithoutCreatorInput = {
   diagnosis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.EventUncheckedUpdateOneWithoutCaseDoctorNestedInput
 }
 
 export type CaseDoctorUncheckedUpdateManyWithoutCreatorInput = {
@@ -940,6 +1056,7 @@ export type CaseDoctorUpdateWithoutDoctorInput = {
   diagnosis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.EventUpdateOneWithoutCaseDoctorNestedInput
   case?: Prisma.CaseUpdateOneRequiredWithoutDoctorsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCaseDoctorsCreatedNestedInput
 }
@@ -957,6 +1074,7 @@ export type CaseDoctorUncheckedUpdateWithoutDoctorInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  event?: Prisma.EventUncheckedUpdateOneWithoutCaseDoctorNestedInput
 }
 
 export type CaseDoctorUncheckedUpdateManyWithoutDoctorInput = {
@@ -1000,6 +1118,7 @@ export type CaseDoctorUpdateWithoutCaseInput = {
   diagnosis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.EventUpdateOneWithoutCaseDoctorNestedInput
   doctor?: Prisma.DoctorUpdateOneRequiredWithoutCaseDoctorsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCaseDoctorsCreatedNestedInput
 }
@@ -1017,6 +1136,7 @@ export type CaseDoctorUncheckedUpdateWithoutCaseInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  event?: Prisma.EventUncheckedUpdateOneWithoutCaseDoctorNestedInput
 }
 
 export type CaseDoctorUncheckedUpdateManyWithoutCaseInput = {
@@ -1050,6 +1170,7 @@ export type CaseDoctorSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   notes?: boolean
   createdAt?: boolean
   createdBy?: boolean
+  event?: boolean | Prisma.CaseDoctor$eventArgs<ExtArgs>
   case?: boolean | Prisma.CaseDefaultArgs<ExtArgs>
   doctor?: boolean | Prisma.DoctorDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1111,6 +1232,7 @@ export type CaseDoctorSelectScalar = {
 
 export type CaseDoctorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "caseId" | "doctorId" | "appointmentDate" | "appointmentNotes" | "invoiceReceived" | "invoiceAmount" | "invoiceDate" | "invoicePaid" | "diagnosis" | "notes" | "createdAt" | "createdBy", ExtArgs["result"]["caseDoctor"]>
 export type CaseDoctorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  event?: boolean | Prisma.CaseDoctor$eventArgs<ExtArgs>
   case?: boolean | Prisma.CaseDefaultArgs<ExtArgs>
   doctor?: boolean | Prisma.DoctorDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1129,6 +1251,7 @@ export type CaseDoctorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type $CaseDoctorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CaseDoctor"
   objects: {
+    event: Prisma.$EventPayload<ExtArgs> | null
     case: Prisma.$CasePayload<ExtArgs>
     doctor: Prisma.$DoctorPayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs>
@@ -1541,6 +1664,7 @@ readonly fields: CaseDoctorFieldRefs;
  */
 export interface Prisma__CaseDoctorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  event<T extends Prisma.CaseDoctor$eventArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CaseDoctor$eventArgs<ExtArgs>>): Prisma.Prisma__EventClient<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   case<T extends Prisma.CaseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CaseDefaultArgs<ExtArgs>>): Prisma.Prisma__CaseClient<runtime.Types.Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   doctor<T extends Prisma.DoctorDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DoctorDefaultArgs<ExtArgs>>): Prisma.Prisma__DoctorClient<runtime.Types.Result.GetResult<Prisma.$DoctorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -1984,6 +2108,25 @@ export type CaseDoctorDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many CaseDoctors to delete.
    */
   limit?: number
+}
+
+/**
+ * CaseDoctor.event
+ */
+export type CaseDoctor$eventArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Event
+   */
+  select?: Prisma.EventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Event
+   */
+  omit?: Prisma.EventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventInclude<ExtArgs> | null
+  where?: Prisma.EventWhereInput
 }
 
 /**

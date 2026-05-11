@@ -271,6 +271,7 @@ export type CaseInterpreterWhereInput = {
   case?: Prisma.XOR<Prisma.CaseScalarRelationFilter, Prisma.CaseWhereInput>
   interpreter?: Prisma.XOR<Prisma.InterpreterScalarRelationFilter, Prisma.InterpreterWhereInput>
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.EventWhereInput> | null
 }
 
 export type CaseInterpreterOrderByWithRelationInput = {
@@ -288,6 +289,7 @@ export type CaseInterpreterOrderByWithRelationInput = {
   case?: Prisma.CaseOrderByWithRelationInput
   interpreter?: Prisma.InterpreterOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
+  event?: Prisma.EventOrderByWithRelationInput
 }
 
 export type CaseInterpreterWhereUniqueInput = Prisma.AtLeast<{
@@ -308,6 +310,7 @@ export type CaseInterpreterWhereUniqueInput = Prisma.AtLeast<{
   case?: Prisma.XOR<Prisma.CaseScalarRelationFilter, Prisma.CaseWhereInput>
   interpreter?: Prisma.XOR<Prisma.InterpreterScalarRelationFilter, Prisma.InterpreterWhereInput>
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.EventWhereInput> | null
 }, "id">
 
 export type CaseInterpreterOrderByWithAggregationInput = {
@@ -358,6 +361,7 @@ export type CaseInterpreterCreateInput = {
   case: Prisma.CaseCreateNestedOneWithoutInterpretersInput
   interpreter: Prisma.InterpreterCreateNestedOneWithoutCaseInterpretersInput
   creator: Prisma.UserCreateNestedOneWithoutCaseInterpretersCreatedInput
+  event?: Prisma.EventCreateNestedOneWithoutCaseInterpreterInput
 }
 
 export type CaseInterpreterUncheckedCreateInput = {
@@ -372,6 +376,7 @@ export type CaseInterpreterUncheckedCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   createdBy: string
+  event?: Prisma.EventUncheckedCreateNestedOneWithoutCaseInterpreterInput
 }
 
 export type CaseInterpreterUpdateInput = {
@@ -386,6 +391,7 @@ export type CaseInterpreterUpdateInput = {
   case?: Prisma.CaseUpdateOneRequiredWithoutInterpretersNestedInput
   interpreter?: Prisma.InterpreterUpdateOneRequiredWithoutCaseInterpretersNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCaseInterpretersCreatedNestedInput
+  event?: Prisma.EventUpdateOneWithoutCaseInterpreterNestedInput
 }
 
 export type CaseInterpreterUncheckedUpdateInput = {
@@ -400,6 +406,7 @@ export type CaseInterpreterUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  event?: Prisma.EventUncheckedUpdateOneWithoutCaseInterpreterNestedInput
 }
 
 export type CaseInterpreterCreateManyInput = {
@@ -501,6 +508,11 @@ export type CaseInterpreterMinOrderByAggregateInput = {
 export type CaseInterpreterSumOrderByAggregateInput = {
   hoursWorked?: Prisma.SortOrder
   cost?: Prisma.SortOrder
+}
+
+export type CaseInterpreterNullableScalarRelationFilter = {
+  is?: Prisma.CaseInterpreterWhereInput | null
+  isNot?: Prisma.CaseInterpreterWhereInput | null
 }
 
 export type CaseInterpreterCreateNestedManyWithoutCreatorInput = {
@@ -629,6 +641,22 @@ export type CaseInterpreterUncheckedUpdateManyWithoutCaseNestedInput = {
   deleteMany?: Prisma.CaseInterpreterScalarWhereInput | Prisma.CaseInterpreterScalarWhereInput[]
 }
 
+export type CaseInterpreterCreateNestedOneWithoutEventInput = {
+  create?: Prisma.XOR<Prisma.CaseInterpreterCreateWithoutEventInput, Prisma.CaseInterpreterUncheckedCreateWithoutEventInput>
+  connectOrCreate?: Prisma.CaseInterpreterCreateOrConnectWithoutEventInput
+  connect?: Prisma.CaseInterpreterWhereUniqueInput
+}
+
+export type CaseInterpreterUpdateOneWithoutEventNestedInput = {
+  create?: Prisma.XOR<Prisma.CaseInterpreterCreateWithoutEventInput, Prisma.CaseInterpreterUncheckedCreateWithoutEventInput>
+  connectOrCreate?: Prisma.CaseInterpreterCreateOrConnectWithoutEventInput
+  upsert?: Prisma.CaseInterpreterUpsertWithoutEventInput
+  disconnect?: Prisma.CaseInterpreterWhereInput | boolean
+  delete?: Prisma.CaseInterpreterWhereInput | boolean
+  connect?: Prisma.CaseInterpreterWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CaseInterpreterUpdateToOneWithWhereWithoutEventInput, Prisma.CaseInterpreterUpdateWithoutEventInput>, Prisma.CaseInterpreterUncheckedUpdateWithoutEventInput>
+}
+
 export type CaseInterpreterCreateWithoutCreatorInput = {
   id?: string
   appointmentDate?: Date | string | null
@@ -640,6 +668,7 @@ export type CaseInterpreterCreateWithoutCreatorInput = {
   createdAt?: Date | string
   case: Prisma.CaseCreateNestedOneWithoutInterpretersInput
   interpreter: Prisma.InterpreterCreateNestedOneWithoutCaseInterpretersInput
+  event?: Prisma.EventCreateNestedOneWithoutCaseInterpreterInput
 }
 
 export type CaseInterpreterUncheckedCreateWithoutCreatorInput = {
@@ -653,6 +682,7 @@ export type CaseInterpreterUncheckedCreateWithoutCreatorInput = {
   invoicePaid?: boolean
   notes?: string | null
   createdAt?: Date | string
+  event?: Prisma.EventUncheckedCreateNestedOneWithoutCaseInterpreterInput
 }
 
 export type CaseInterpreterCreateOrConnectWithoutCreatorInput = {
@@ -709,6 +739,7 @@ export type CaseInterpreterCreateWithoutInterpreterInput = {
   createdAt?: Date | string
   case: Prisma.CaseCreateNestedOneWithoutInterpretersInput
   creator: Prisma.UserCreateNestedOneWithoutCaseInterpretersCreatedInput
+  event?: Prisma.EventCreateNestedOneWithoutCaseInterpreterInput
 }
 
 export type CaseInterpreterUncheckedCreateWithoutInterpreterInput = {
@@ -722,6 +753,7 @@ export type CaseInterpreterUncheckedCreateWithoutInterpreterInput = {
   notes?: string | null
   createdAt?: Date | string
   createdBy: string
+  event?: Prisma.EventUncheckedCreateNestedOneWithoutCaseInterpreterInput
 }
 
 export type CaseInterpreterCreateOrConnectWithoutInterpreterInput = {
@@ -761,6 +793,7 @@ export type CaseInterpreterCreateWithoutCaseInput = {
   createdAt?: Date | string
   interpreter: Prisma.InterpreterCreateNestedOneWithoutCaseInterpretersInput
   creator: Prisma.UserCreateNestedOneWithoutCaseInterpretersCreatedInput
+  event?: Prisma.EventCreateNestedOneWithoutCaseInterpreterInput
 }
 
 export type CaseInterpreterUncheckedCreateWithoutCaseInput = {
@@ -774,6 +807,7 @@ export type CaseInterpreterUncheckedCreateWithoutCaseInput = {
   notes?: string | null
   createdAt?: Date | string
   createdBy: string
+  event?: Prisma.EventUncheckedCreateNestedOneWithoutCaseInterpreterInput
 }
 
 export type CaseInterpreterCreateOrConnectWithoutCaseInput = {
@@ -802,6 +836,78 @@ export type CaseInterpreterUpdateManyWithWhereWithoutCaseInput = {
   data: Prisma.XOR<Prisma.CaseInterpreterUpdateManyMutationInput, Prisma.CaseInterpreterUncheckedUpdateManyWithoutCaseInput>
 }
 
+export type CaseInterpreterCreateWithoutEventInput = {
+  id?: string
+  appointmentDate?: Date | string | null
+  hoursWorked?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  invoiceReceived?: boolean
+  invoicePaid?: boolean
+  notes?: string | null
+  createdAt?: Date | string
+  case: Prisma.CaseCreateNestedOneWithoutInterpretersInput
+  interpreter: Prisma.InterpreterCreateNestedOneWithoutCaseInterpretersInput
+  creator: Prisma.UserCreateNestedOneWithoutCaseInterpretersCreatedInput
+}
+
+export type CaseInterpreterUncheckedCreateWithoutEventInput = {
+  id?: string
+  caseId: string
+  interpreterId: string
+  appointmentDate?: Date | string | null
+  hoursWorked?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  invoiceReceived?: boolean
+  invoicePaid?: boolean
+  notes?: string | null
+  createdAt?: Date | string
+  createdBy: string
+}
+
+export type CaseInterpreterCreateOrConnectWithoutEventInput = {
+  where: Prisma.CaseInterpreterWhereUniqueInput
+  create: Prisma.XOR<Prisma.CaseInterpreterCreateWithoutEventInput, Prisma.CaseInterpreterUncheckedCreateWithoutEventInput>
+}
+
+export type CaseInterpreterUpsertWithoutEventInput = {
+  update: Prisma.XOR<Prisma.CaseInterpreterUpdateWithoutEventInput, Prisma.CaseInterpreterUncheckedUpdateWithoutEventInput>
+  create: Prisma.XOR<Prisma.CaseInterpreterCreateWithoutEventInput, Prisma.CaseInterpreterUncheckedCreateWithoutEventInput>
+  where?: Prisma.CaseInterpreterWhereInput
+}
+
+export type CaseInterpreterUpdateToOneWithWhereWithoutEventInput = {
+  where?: Prisma.CaseInterpreterWhereInput
+  data: Prisma.XOR<Prisma.CaseInterpreterUpdateWithoutEventInput, Prisma.CaseInterpreterUncheckedUpdateWithoutEventInput>
+}
+
+export type CaseInterpreterUpdateWithoutEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  appointmentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hoursWorked?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  invoiceReceived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invoicePaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  case?: Prisma.CaseUpdateOneRequiredWithoutInterpretersNestedInput
+  interpreter?: Prisma.InterpreterUpdateOneRequiredWithoutCaseInterpretersNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutCaseInterpretersCreatedNestedInput
+}
+
+export type CaseInterpreterUncheckedUpdateWithoutEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  caseId?: Prisma.StringFieldUpdateOperationsInput | string
+  interpreterId?: Prisma.StringFieldUpdateOperationsInput | string
+  appointmentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hoursWorked?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  invoiceReceived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  invoicePaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 export type CaseInterpreterCreateManyCreatorInput = {
   id?: string
   caseId: string
@@ -826,6 +932,7 @@ export type CaseInterpreterUpdateWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   case?: Prisma.CaseUpdateOneRequiredWithoutInterpretersNestedInput
   interpreter?: Prisma.InterpreterUpdateOneRequiredWithoutCaseInterpretersNestedInput
+  event?: Prisma.EventUpdateOneWithoutCaseInterpreterNestedInput
 }
 
 export type CaseInterpreterUncheckedUpdateWithoutCreatorInput = {
@@ -839,6 +946,7 @@ export type CaseInterpreterUncheckedUpdateWithoutCreatorInput = {
   invoicePaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.EventUncheckedUpdateOneWithoutCaseInterpreterNestedInput
 }
 
 export type CaseInterpreterUncheckedUpdateManyWithoutCreatorInput = {
@@ -878,6 +986,7 @@ export type CaseInterpreterUpdateWithoutInterpreterInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   case?: Prisma.CaseUpdateOneRequiredWithoutInterpretersNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCaseInterpretersCreatedNestedInput
+  event?: Prisma.EventUpdateOneWithoutCaseInterpreterNestedInput
 }
 
 export type CaseInterpreterUncheckedUpdateWithoutInterpreterInput = {
@@ -891,6 +1000,7 @@ export type CaseInterpreterUncheckedUpdateWithoutInterpreterInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  event?: Prisma.EventUncheckedUpdateOneWithoutCaseInterpreterNestedInput
 }
 
 export type CaseInterpreterUncheckedUpdateManyWithoutInterpreterInput = {
@@ -930,6 +1040,7 @@ export type CaseInterpreterUpdateWithoutCaseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   interpreter?: Prisma.InterpreterUpdateOneRequiredWithoutCaseInterpretersNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCaseInterpretersCreatedNestedInput
+  event?: Prisma.EventUpdateOneWithoutCaseInterpreterNestedInput
 }
 
 export type CaseInterpreterUncheckedUpdateWithoutCaseInput = {
@@ -943,6 +1054,7 @@ export type CaseInterpreterUncheckedUpdateWithoutCaseInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.StringFieldUpdateOperationsInput | string
+  event?: Prisma.EventUncheckedUpdateOneWithoutCaseInterpreterNestedInput
 }
 
 export type CaseInterpreterUncheckedUpdateManyWithoutCaseInput = {
@@ -975,6 +1087,7 @@ export type CaseInterpreterSelect<ExtArgs extends runtime.Types.Extensions.Inter
   case?: boolean | Prisma.CaseDefaultArgs<ExtArgs>
   interpreter?: boolean | Prisma.InterpreterDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  event?: boolean | Prisma.CaseInterpreter$eventArgs<ExtArgs>
 }, ExtArgs["result"]["caseInterpreter"]>
 
 export type CaseInterpreterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1030,6 +1143,7 @@ export type CaseInterpreterInclude<ExtArgs extends runtime.Types.Extensions.Inte
   case?: boolean | Prisma.CaseDefaultArgs<ExtArgs>
   interpreter?: boolean | Prisma.InterpreterDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  event?: boolean | Prisma.CaseInterpreter$eventArgs<ExtArgs>
 }
 export type CaseInterpreterIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   case?: boolean | Prisma.CaseDefaultArgs<ExtArgs>
@@ -1048,6 +1162,7 @@ export type $CaseInterpreterPayload<ExtArgs extends runtime.Types.Extensions.Int
     case: Prisma.$CasePayload<ExtArgs>
     interpreter: Prisma.$InterpreterPayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs>
+    event: Prisma.$EventPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1458,6 +1573,7 @@ export interface Prisma__CaseInterpreterClient<T, Null = never, ExtArgs extends 
   case<T extends Prisma.CaseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CaseDefaultArgs<ExtArgs>>): Prisma.Prisma__CaseClient<runtime.Types.Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   interpreter<T extends Prisma.InterpreterDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InterpreterDefaultArgs<ExtArgs>>): Prisma.Prisma__InterpreterClient<runtime.Types.Result.GetResult<Prisma.$InterpreterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  event<T extends Prisma.CaseInterpreter$eventArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CaseInterpreter$eventArgs<ExtArgs>>): Prisma.Prisma__EventClient<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1896,6 +2012,25 @@ export type CaseInterpreterDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many CaseInterpreters to delete.
    */
   limit?: number
+}
+
+/**
+ * CaseInterpreter.event
+ */
+export type CaseInterpreter$eventArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Event
+   */
+  select?: Prisma.EventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Event
+   */
+  omit?: Prisma.EventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventInclude<ExtArgs> | null
+  where?: Prisma.EventWhereInput
 }
 
 /**

@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { canUserEditCase } from "@/lib/utils/cases/permissions";
 import { recalculateCaseTotal } from "@/lib/utils/cases/totals";
+import { syncCaseInterpreterEvent } from "@/lib/event/sync-resource-events";
 
 export async function GET(
   _req: Request,
@@ -90,6 +91,7 @@ export async function POST(
     select: { id: true, caseId: true },
   });
 
+  await syncCaseInterpreterEvent(created.id);
   if (Boolean(body?.invoiceReceived)) {
     await recalculateCaseTotal(created.caseId);
   }

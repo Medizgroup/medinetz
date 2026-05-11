@@ -3645,7 +3645,9 @@ export const EventScalarFieldEnum = {
   recurrenceEndDate: 'recurrenceEndDate',
   creatorId: 'creatorId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  caseDoctorId: 'caseDoctorId',
+  caseInterpreterId: 'caseInterpreterId'
 } as const
 
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]

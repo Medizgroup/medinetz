@@ -40,6 +40,8 @@ export type EventMinAggregateOutputType = {
   creatorId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  caseDoctorId: string | null
+  caseInterpreterId: string | null
 }
 
 export type EventMaxAggregateOutputType = {
@@ -58,6 +60,8 @@ export type EventMaxAggregateOutputType = {
   creatorId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  caseDoctorId: string | null
+  caseInterpreterId: string | null
 }
 
 export type EventCountAggregateOutputType = {
@@ -76,6 +80,8 @@ export type EventCountAggregateOutputType = {
   creatorId: number
   createdAt: number
   updatedAt: number
+  caseDoctorId: number
+  caseInterpreterId: number
   _all: number
 }
 
@@ -96,6 +102,8 @@ export type EventMinAggregateInputType = {
   creatorId?: true
   createdAt?: true
   updatedAt?: true
+  caseDoctorId?: true
+  caseInterpreterId?: true
 }
 
 export type EventMaxAggregateInputType = {
@@ -114,6 +122,8 @@ export type EventMaxAggregateInputType = {
   creatorId?: true
   createdAt?: true
   updatedAt?: true
+  caseDoctorId?: true
+  caseInterpreterId?: true
 }
 
 export type EventCountAggregateInputType = {
@@ -132,6 +142,8 @@ export type EventCountAggregateInputType = {
   creatorId?: true
   createdAt?: true
   updatedAt?: true
+  caseDoctorId?: true
+  caseInterpreterId?: true
   _all?: true
 }
 
@@ -223,6 +235,8 @@ export type EventGroupByOutputType = {
   creatorId: string
   createdAt: Date
   updatedAt: Date
+  caseDoctorId: string | null
+  caseInterpreterId: string | null
   _count: EventCountAggregateOutputType | null
   _min: EventMinAggregateOutputType | null
   _max: EventMaxAggregateOutputType | null
@@ -262,8 +276,12 @@ export type EventWhereInput = {
   creatorId?: Prisma.StringFilter<"Event"> | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+  caseDoctorId?: Prisma.StringNullableFilter<"Event"> | string | null
+  caseInterpreterId?: Prisma.StringNullableFilter<"Event"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  caseDoctor?: Prisma.XOR<Prisma.CaseDoctorNullableScalarRelationFilter, Prisma.CaseDoctorWhereInput> | null
+  caseInterpreter?: Prisma.XOR<Prisma.CaseInterpreterNullableScalarRelationFilter, Prisma.CaseInterpreterWhereInput> | null
 }
 
 export type EventOrderByWithRelationInput = {
@@ -282,12 +300,18 @@ export type EventOrderByWithRelationInput = {
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  caseDoctorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  caseInterpreterId?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
+  caseDoctor?: Prisma.CaseDoctorOrderByWithRelationInput
+  caseInterpreter?: Prisma.CaseInterpreterOrderByWithRelationInput
 }
 
 export type EventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  caseDoctorId?: string
+  caseInterpreterId?: string
   AND?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
   OR?: Prisma.EventWhereInput[]
   NOT?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
@@ -307,7 +331,9 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id">
+  caseDoctor?: Prisma.XOR<Prisma.CaseDoctorNullableScalarRelationFilter, Prisma.CaseDoctorWhereInput> | null
+  caseInterpreter?: Prisma.XOR<Prisma.CaseInterpreterNullableScalarRelationFilter, Prisma.CaseInterpreterWhereInput> | null
+}, "id" | "caseDoctorId" | "caseInterpreterId">
 
 export type EventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -325,6 +351,8 @@ export type EventOrderByWithAggregationInput = {
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  caseDoctorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  caseInterpreterId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
   _max?: Prisma.EventMaxOrderByAggregateInput
   _min?: Prisma.EventMinOrderByAggregateInput
@@ -349,6 +377,8 @@ export type EventScalarWhereWithAggregatesInput = {
   creatorId?: Prisma.StringWithAggregatesFilter<"Event"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
+  caseDoctorId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  caseInterpreterId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
 }
 
 export type EventCreateInput = {
@@ -367,6 +397,8 @@ export type EventCreateInput = {
   updatedAt?: Date | string
   organization?: Prisma.OrganizationCreateNestedOneWithoutEventsInput
   creator: Prisma.UserCreateNestedOneWithoutCreatedEventsInput
+  caseDoctor?: Prisma.CaseDoctorCreateNestedOneWithoutEventInput
+  caseInterpreter?: Prisma.CaseInterpreterCreateNestedOneWithoutEventInput
 }
 
 export type EventUncheckedCreateInput = {
@@ -385,6 +417,8 @@ export type EventUncheckedCreateInput = {
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  caseDoctorId?: string | null
+  caseInterpreterId?: string | null
 }
 
 export type EventUpdateInput = {
@@ -403,6 +437,8 @@ export type EventUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneWithoutEventsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedEventsNestedInput
+  caseDoctor?: Prisma.CaseDoctorUpdateOneWithoutEventNestedInput
+  caseInterpreter?: Prisma.CaseInterpreterUpdateOneWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateInput = {
@@ -421,6 +457,8 @@ export type EventUncheckedUpdateInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  caseDoctorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseInterpreterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EventCreateManyInput = {
@@ -439,6 +477,8 @@ export type EventCreateManyInput = {
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  caseDoctorId?: string | null
+  caseInterpreterId?: string | null
 }
 
 export type EventUpdateManyMutationInput = {
@@ -473,6 +513,8 @@ export type EventUncheckedUpdateManyInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  caseDoctorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseInterpreterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EventListRelationFilter = {
@@ -483,6 +525,11 @@ export type EventListRelationFilter = {
 
 export type EventOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type EventNullableScalarRelationFilter = {
+  is?: Prisma.EventWhereInput | null
+  isNot?: Prisma.EventWhereInput | null
 }
 
 export type EventCountOrderByAggregateInput = {
@@ -501,6 +548,8 @@ export type EventCountOrderByAggregateInput = {
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  caseDoctorId?: Prisma.SortOrder
+  caseInterpreterId?: Prisma.SortOrder
 }
 
 export type EventMaxOrderByAggregateInput = {
@@ -519,6 +568,8 @@ export type EventMaxOrderByAggregateInput = {
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  caseDoctorId?: Prisma.SortOrder
+  caseInterpreterId?: Prisma.SortOrder
 }
 
 export type EventMinOrderByAggregateInput = {
@@ -537,6 +588,8 @@ export type EventMinOrderByAggregateInput = {
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  caseDoctorId?: Prisma.SortOrder
+  caseInterpreterId?: Prisma.SortOrder
 }
 
 export type EventCreateNestedManyWithoutCreatorInput = {
@@ -623,6 +676,70 @@ export type EventUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
 }
 
+export type EventCreateNestedOneWithoutCaseDoctorInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCaseDoctorInput, Prisma.EventUncheckedCreateWithoutCaseDoctorInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCaseDoctorInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUncheckedCreateNestedOneWithoutCaseDoctorInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCaseDoctorInput, Prisma.EventUncheckedCreateWithoutCaseDoctorInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCaseDoctorInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUpdateOneWithoutCaseDoctorNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCaseDoctorInput, Prisma.EventUncheckedCreateWithoutCaseDoctorInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCaseDoctorInput
+  upsert?: Prisma.EventUpsertWithoutCaseDoctorInput
+  disconnect?: Prisma.EventWhereInput | boolean
+  delete?: Prisma.EventWhereInput | boolean
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutCaseDoctorInput, Prisma.EventUpdateWithoutCaseDoctorInput>, Prisma.EventUncheckedUpdateWithoutCaseDoctorInput>
+}
+
+export type EventUncheckedUpdateOneWithoutCaseDoctorNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCaseDoctorInput, Prisma.EventUncheckedCreateWithoutCaseDoctorInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCaseDoctorInput
+  upsert?: Prisma.EventUpsertWithoutCaseDoctorInput
+  disconnect?: Prisma.EventWhereInput | boolean
+  delete?: Prisma.EventWhereInput | boolean
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutCaseDoctorInput, Prisma.EventUpdateWithoutCaseDoctorInput>, Prisma.EventUncheckedUpdateWithoutCaseDoctorInput>
+}
+
+export type EventCreateNestedOneWithoutCaseInterpreterInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCaseInterpreterInput, Prisma.EventUncheckedCreateWithoutCaseInterpreterInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCaseInterpreterInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUncheckedCreateNestedOneWithoutCaseInterpreterInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCaseInterpreterInput, Prisma.EventUncheckedCreateWithoutCaseInterpreterInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCaseInterpreterInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUpdateOneWithoutCaseInterpreterNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCaseInterpreterInput, Prisma.EventUncheckedCreateWithoutCaseInterpreterInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCaseInterpreterInput
+  upsert?: Prisma.EventUpsertWithoutCaseInterpreterInput
+  disconnect?: Prisma.EventWhereInput | boolean
+  delete?: Prisma.EventWhereInput | boolean
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutCaseInterpreterInput, Prisma.EventUpdateWithoutCaseInterpreterInput>, Prisma.EventUncheckedUpdateWithoutCaseInterpreterInput>
+}
+
+export type EventUncheckedUpdateOneWithoutCaseInterpreterNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutCaseInterpreterInput, Prisma.EventUncheckedCreateWithoutCaseInterpreterInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutCaseInterpreterInput
+  upsert?: Prisma.EventUpsertWithoutCaseInterpreterInput
+  disconnect?: Prisma.EventWhereInput | boolean
+  delete?: Prisma.EventWhereInput | boolean
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutCaseInterpreterInput, Prisma.EventUpdateWithoutCaseInterpreterInput>, Prisma.EventUncheckedUpdateWithoutCaseInterpreterInput>
+}
+
 export type EnumEventColorFieldUpdateOperationsInput = {
   set?: $Enums.EventColor
 }
@@ -650,6 +767,8 @@ export type EventCreateWithoutCreatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organization?: Prisma.OrganizationCreateNestedOneWithoutEventsInput
+  caseDoctor?: Prisma.CaseDoctorCreateNestedOneWithoutEventInput
+  caseInterpreter?: Prisma.CaseInterpreterCreateNestedOneWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutCreatorInput = {
@@ -667,6 +786,8 @@ export type EventUncheckedCreateWithoutCreatorInput = {
   recurrenceEndDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  caseDoctorId?: string | null
+  caseInterpreterId?: string | null
 }
 
 export type EventCreateOrConnectWithoutCreatorInput = {
@@ -714,6 +835,8 @@ export type EventScalarWhereInput = {
   creatorId?: Prisma.StringFilter<"Event"> | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+  caseDoctorId?: Prisma.StringNullableFilter<"Event"> | string | null
+  caseInterpreterId?: Prisma.StringNullableFilter<"Event"> | string | null
 }
 
 export type EventCreateWithoutOrganizationInput = {
@@ -731,6 +854,8 @@ export type EventCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   creator: Prisma.UserCreateNestedOneWithoutCreatedEventsInput
+  caseDoctor?: Prisma.CaseDoctorCreateNestedOneWithoutEventInput
+  caseInterpreter?: Prisma.CaseInterpreterCreateNestedOneWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutOrganizationInput = {
@@ -748,6 +873,8 @@ export type EventUncheckedCreateWithoutOrganizationInput = {
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  caseDoctorId?: string | null
+  caseInterpreterId?: string | null
 }
 
 export type EventCreateOrConnectWithoutOrganizationInput = {
@@ -776,6 +903,190 @@ export type EventUpdateManyWithWhereWithoutOrganizationInput = {
   data: Prisma.XOR<Prisma.EventUpdateManyMutationInput, Prisma.EventUncheckedUpdateManyWithoutOrganizationInput>
 }
 
+export type EventCreateWithoutCaseDoctorInput = {
+  id?: string
+  title: string
+  description?: string | null
+  location?: string | null
+  startsAt: Date | string
+  endsAt: Date | string
+  allDay?: boolean
+  color?: $Enums.EventColor
+  visibility?: $Enums.EventVisibility
+  recurrence?: $Enums.EventRecurrence
+  recurrenceEndDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization?: Prisma.OrganizationCreateNestedOneWithoutEventsInput
+  creator: Prisma.UserCreateNestedOneWithoutCreatedEventsInput
+  caseInterpreter?: Prisma.CaseInterpreterCreateNestedOneWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutCaseDoctorInput = {
+  id?: string
+  organizationId?: string | null
+  title: string
+  description?: string | null
+  location?: string | null
+  startsAt: Date | string
+  endsAt: Date | string
+  allDay?: boolean
+  color?: $Enums.EventColor
+  visibility?: $Enums.EventVisibility
+  recurrence?: $Enums.EventRecurrence
+  recurrenceEndDate?: Date | string | null
+  creatorId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  caseInterpreterId?: string | null
+}
+
+export type EventCreateOrConnectWithoutCaseDoctorInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutCaseDoctorInput, Prisma.EventUncheckedCreateWithoutCaseDoctorInput>
+}
+
+export type EventUpsertWithoutCaseDoctorInput = {
+  update: Prisma.XOR<Prisma.EventUpdateWithoutCaseDoctorInput, Prisma.EventUncheckedUpdateWithoutCaseDoctorInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutCaseDoctorInput, Prisma.EventUncheckedCreateWithoutCaseDoctorInput>
+  where?: Prisma.EventWhereInput
+}
+
+export type EventUpdateToOneWithWhereWithoutCaseDoctorInput = {
+  where?: Prisma.EventWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutCaseDoctorInput, Prisma.EventUncheckedUpdateWithoutCaseDoctorInput>
+}
+
+export type EventUpdateWithoutCaseDoctorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  color?: Prisma.EnumEventColorFieldUpdateOperationsInput | $Enums.EventColor
+  visibility?: Prisma.EnumEventVisibilityFieldUpdateOperationsInput | $Enums.EventVisibility
+  recurrence?: Prisma.EnumEventRecurrenceFieldUpdateOperationsInput | $Enums.EventRecurrence
+  recurrenceEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneWithoutEventsNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutCreatedEventsNestedInput
+  caseInterpreter?: Prisma.CaseInterpreterUpdateOneWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutCaseDoctorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  color?: Prisma.EnumEventColorFieldUpdateOperationsInput | $Enums.EventColor
+  visibility?: Prisma.EnumEventVisibilityFieldUpdateOperationsInput | $Enums.EventVisibility
+  recurrence?: Prisma.EnumEventRecurrenceFieldUpdateOperationsInput | $Enums.EventRecurrence
+  recurrenceEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  caseInterpreterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type EventCreateWithoutCaseInterpreterInput = {
+  id?: string
+  title: string
+  description?: string | null
+  location?: string | null
+  startsAt: Date | string
+  endsAt: Date | string
+  allDay?: boolean
+  color?: $Enums.EventColor
+  visibility?: $Enums.EventVisibility
+  recurrence?: $Enums.EventRecurrence
+  recurrenceEndDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization?: Prisma.OrganizationCreateNestedOneWithoutEventsInput
+  creator: Prisma.UserCreateNestedOneWithoutCreatedEventsInput
+  caseDoctor?: Prisma.CaseDoctorCreateNestedOneWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutCaseInterpreterInput = {
+  id?: string
+  organizationId?: string | null
+  title: string
+  description?: string | null
+  location?: string | null
+  startsAt: Date | string
+  endsAt: Date | string
+  allDay?: boolean
+  color?: $Enums.EventColor
+  visibility?: $Enums.EventVisibility
+  recurrence?: $Enums.EventRecurrence
+  recurrenceEndDate?: Date | string | null
+  creatorId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  caseDoctorId?: string | null
+}
+
+export type EventCreateOrConnectWithoutCaseInterpreterInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutCaseInterpreterInput, Prisma.EventUncheckedCreateWithoutCaseInterpreterInput>
+}
+
+export type EventUpsertWithoutCaseInterpreterInput = {
+  update: Prisma.XOR<Prisma.EventUpdateWithoutCaseInterpreterInput, Prisma.EventUncheckedUpdateWithoutCaseInterpreterInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutCaseInterpreterInput, Prisma.EventUncheckedCreateWithoutCaseInterpreterInput>
+  where?: Prisma.EventWhereInput
+}
+
+export type EventUpdateToOneWithWhereWithoutCaseInterpreterInput = {
+  where?: Prisma.EventWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutCaseInterpreterInput, Prisma.EventUncheckedUpdateWithoutCaseInterpreterInput>
+}
+
+export type EventUpdateWithoutCaseInterpreterInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  color?: Prisma.EnumEventColorFieldUpdateOperationsInput | $Enums.EventColor
+  visibility?: Prisma.EnumEventVisibilityFieldUpdateOperationsInput | $Enums.EventVisibility
+  recurrence?: Prisma.EnumEventRecurrenceFieldUpdateOperationsInput | $Enums.EventRecurrence
+  recurrenceEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneWithoutEventsNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutCreatedEventsNestedInput
+  caseDoctor?: Prisma.CaseDoctorUpdateOneWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutCaseInterpreterInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  allDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  color?: Prisma.EnumEventColorFieldUpdateOperationsInput | $Enums.EventColor
+  visibility?: Prisma.EnumEventVisibilityFieldUpdateOperationsInput | $Enums.EventVisibility
+  recurrence?: Prisma.EnumEventRecurrenceFieldUpdateOperationsInput | $Enums.EventRecurrence
+  recurrenceEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  caseDoctorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
 export type EventCreateManyCreatorInput = {
   id?: string
   organizationId?: string | null
@@ -791,6 +1102,8 @@ export type EventCreateManyCreatorInput = {
   recurrenceEndDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  caseDoctorId?: string | null
+  caseInterpreterId?: string | null
 }
 
 export type EventUpdateWithoutCreatorInput = {
@@ -808,6 +1121,8 @@ export type EventUpdateWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneWithoutEventsNestedInput
+  caseDoctor?: Prisma.CaseDoctorUpdateOneWithoutEventNestedInput
+  caseInterpreter?: Prisma.CaseInterpreterUpdateOneWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutCreatorInput = {
@@ -825,6 +1140,8 @@ export type EventUncheckedUpdateWithoutCreatorInput = {
   recurrenceEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  caseDoctorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseInterpreterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EventUncheckedUpdateManyWithoutCreatorInput = {
@@ -842,6 +1159,8 @@ export type EventUncheckedUpdateManyWithoutCreatorInput = {
   recurrenceEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  caseDoctorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseInterpreterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EventCreateManyOrganizationInput = {
@@ -859,6 +1178,8 @@ export type EventCreateManyOrganizationInput = {
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  caseDoctorId?: string | null
+  caseInterpreterId?: string | null
 }
 
 export type EventUpdateWithoutOrganizationInput = {
@@ -876,6 +1197,8 @@ export type EventUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedEventsNestedInput
+  caseDoctor?: Prisma.CaseDoctorUpdateOneWithoutEventNestedInput
+  caseInterpreter?: Prisma.CaseInterpreterUpdateOneWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutOrganizationInput = {
@@ -893,6 +1216,8 @@ export type EventUncheckedUpdateWithoutOrganizationInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  caseDoctorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseInterpreterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EventUncheckedUpdateManyWithoutOrganizationInput = {
@@ -910,6 +1235,8 @@ export type EventUncheckedUpdateManyWithoutOrganizationInput = {
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  caseDoctorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caseInterpreterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -930,8 +1257,12 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  caseDoctorId?: boolean
+  caseInterpreterId?: boolean
   organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  caseDoctor?: boolean | Prisma.Event$caseDoctorArgs<ExtArgs>
+  caseInterpreter?: boolean | Prisma.Event$caseInterpreterArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -950,8 +1281,12 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  caseDoctorId?: boolean
+  caseInterpreterId?: boolean
   organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  caseDoctor?: boolean | Prisma.Event$caseDoctorArgs<ExtArgs>
+  caseInterpreter?: boolean | Prisma.Event$caseInterpreterArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -970,8 +1305,12 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  caseDoctorId?: boolean
+  caseInterpreterId?: boolean
   organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  caseDoctor?: boolean | Prisma.Event$caseDoctorArgs<ExtArgs>
+  caseInterpreter?: boolean | Prisma.Event$caseInterpreterArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectScalar = {
@@ -990,20 +1329,28 @@ export type EventSelectScalar = {
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  caseDoctorId?: boolean
+  caseInterpreterId?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "title" | "description" | "location" | "startsAt" | "endsAt" | "allDay" | "color" | "visibility" | "recurrence" | "recurrenceEndDate" | "creatorId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "title" | "description" | "location" | "startsAt" | "endsAt" | "allDay" | "color" | "visibility" | "recurrence" | "recurrenceEndDate" | "creatorId" | "createdAt" | "updatedAt" | "caseDoctorId" | "caseInterpreterId", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  caseDoctor?: boolean | Prisma.Event$caseDoctorArgs<ExtArgs>
+  caseInterpreter?: boolean | Prisma.Event$caseInterpreterArgs<ExtArgs>
 }
 export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  caseDoctor?: boolean | Prisma.Event$caseDoctorArgs<ExtArgs>
+  caseInterpreter?: boolean | Prisma.Event$caseInterpreterArgs<ExtArgs>
 }
 export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  caseDoctor?: boolean | Prisma.Event$caseDoctorArgs<ExtArgs>
+  caseInterpreter?: boolean | Prisma.Event$caseInterpreterArgs<ExtArgs>
 }
 
 export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1011,6 +1358,8 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs> | null
     creator: Prisma.$UserPayload<ExtArgs>
+    caseDoctor: Prisma.$CaseDoctorPayload<ExtArgs> | null
+    caseInterpreter: Prisma.$CaseInterpreterPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1028,6 +1377,8 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     creatorId: string
     createdAt: Date
     updatedAt: Date
+    caseDoctorId: string | null
+    caseInterpreterId: string | null
   }, ExtArgs["result"]["event"]>
   composites: {}
 }
@@ -1424,6 +1775,8 @@ export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.Event$organizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$organizationArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  caseDoctor<T extends Prisma.Event$caseDoctorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$caseDoctorArgs<ExtArgs>>): Prisma.Prisma__CaseDoctorClient<runtime.Types.Result.GetResult<Prisma.$CaseDoctorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  caseInterpreter<T extends Prisma.Event$caseInterpreterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$caseInterpreterArgs<ExtArgs>>): Prisma.Prisma__CaseInterpreterClient<runtime.Types.Result.GetResult<Prisma.$CaseInterpreterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1468,6 +1821,8 @@ export interface EventFieldRefs {
   readonly creatorId: Prisma.FieldRef<"Event", 'String'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Event", 'DateTime'>
+  readonly caseDoctorId: Prisma.FieldRef<"Event", 'String'>
+  readonly caseInterpreterId: Prisma.FieldRef<"Event", 'String'>
 }
     
 
@@ -1885,6 +2240,44 @@ export type Event$organizationArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   include?: Prisma.OrganizationInclude<ExtArgs> | null
   where?: Prisma.OrganizationWhereInput
+}
+
+/**
+ * Event.caseDoctor
+ */
+export type Event$caseDoctorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CaseDoctor
+   */
+  select?: Prisma.CaseDoctorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CaseDoctor
+   */
+  omit?: Prisma.CaseDoctorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CaseDoctorInclude<ExtArgs> | null
+  where?: Prisma.CaseDoctorWhereInput
+}
+
+/**
+ * Event.caseInterpreter
+ */
+export type Event$caseInterpreterArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CaseInterpreter
+   */
+  select?: Prisma.CaseInterpreterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CaseInterpreter
+   */
+  omit?: Prisma.CaseInterpreterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CaseInterpreterInclude<ExtArgs> | null
+  where?: Prisma.CaseInterpreterWhereInput
 }
 
 /**
