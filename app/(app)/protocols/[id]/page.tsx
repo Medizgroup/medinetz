@@ -363,7 +363,7 @@ export default async function ProtocolDetailPage({
         </section>
       </div>
       {/* Aktion */}
-      <div className="gap-4 mt-24  col-span-2 h-screen sticky top-10 px-4">
+      <div className="hidden md:block gap-4 mt-24  col-span-2 h-screen sticky top-10 px-4">
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Verknüpfte Fälle</h2>
 
