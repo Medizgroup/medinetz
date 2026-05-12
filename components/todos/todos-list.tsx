@@ -63,6 +63,7 @@ export default function TodosList({
 
   const [editingTodo, setEditingTodo] = React.useState<Todo | null>(null);
   const [editOpen, setEditOpen] = React.useState(false);
+  const [showNewTodo, setShowNewTodo] = React.useState(false);
 
   const load = React.useCallback(async () => {
     setLoading(true);
@@ -142,8 +143,23 @@ export default function TodosList({
 
   return (
     <div className="space-y-4">
+      <Button
+        onClick={() => setShowNewTodo((v) => !v)}
+        className="w-full md:w-auto">
+        {showNewTodo ? (
+          <>
+            <ChevronUp className="inline size-4" /> Neues Todo ausblenden
+          </>
+        ) : (
+          <>
+            <ChevronDown className="inline size-4" /> Neues Todo hinzufügen
+          </>
+        )}
+      </Button>
       {/* Quick-Add */}
-      <form onSubmit={handleQuickAdd} className="space-y-2 hidden">
+      <form
+        onSubmit={handleQuickAdd}
+        className={cn("space-y-2", !showNewTodo && "hidden")}>
         <div className="grid gap-4">
           <Input
             value={newTitle}
@@ -383,7 +399,21 @@ export default function TodosList({
                 <div
                   className="min-w-0 flex-1 cursor-pointer"
                   onClick={() => openEdit(t)}>
-                  <div className="flex items-start gap-2 flex-col">
+                  <div className="flex items-start gap-2 ">
+                    {t.priority && (
+                      <Badge
+                        variant={
+                          t.priority === 1
+                            ? "info"
+                            : t.priority === 2
+                              ? "warning"
+                              : "destructive"
+                        }
+                        size="sm"
+                        className="inline-flex mt-0.5">
+                        {PRIORITY_LABEL[t.priority]}
+                      </Badge>
+                    )}
                     <span
                       className={cn(
                         "text-sm leading-snug",
@@ -413,20 +443,7 @@ export default function TodosList({
                     ) : null}
 
                     {t.description ? (
-                      <>
-                        <Badge
-                          variant={
-                            t.priority === 1
-                              ? "info"
-                              : t.priority === 2
-                                ? "warning"
-                                : "destructive"
-                          }
-                          size="sm">
-                          {PRIORITY_LABEL[t.priority]}
-                        </Badge>
-                        <span className="truncate">{t.description}</span>
-                      </>
+                      <span className="truncate">{t.description}</span>
                     ) : null}
 
                     {t.creator && t.creator.id !== currentUserId ? (

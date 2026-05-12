@@ -48,6 +48,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon, Trash2 } from "lucide-react";
+import { de } from "date-fns/locale";
 
 interface EventDialogProps {
   event: CalendarEvent | null;
@@ -269,12 +270,12 @@ export function EventDialog({
       <DialogPopup className="sm:max-w-[530px]">
         <DialogHeader>
           <DialogTitle>
-            {event?.id ? "Event bearbeiten" : "Neues Event"}
+            {event?.id ? "Termin bearbeiten" : "Neuer Termin"}
           </DialogTitle>
-          <DialogDescription className="sr-only">
+          <DialogDescription className="">
             {event?.id
-              ? "Bearbeite die Details dieses Events"
-              : "Neues Event zum Kalender hinzufügen"}
+              ? "Bearbeite die Details dieses Termin"
+              : "Neuer Termin zum Kalender hinzufügen"}
           </DialogDescription>
         </DialogHeader>
 
@@ -294,16 +295,6 @@ export function EventDialog({
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
                 placeholder=""
-              />
-            </div>
-
-            <div className="*:not-first:mt-1.5">
-              <Label htmlFor="description">Beschreibung</Label>
-              <Textarea
-                id="description"
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-                value={description}
               />
             </div>
 
@@ -360,9 +351,26 @@ export function EventDialog({
                 </div>
               ) : null}
             </div>
-
+            <div className="*:not-first:mt-1.5">
+              <Label htmlFor="description">Beschreibung</Label>
+              <Textarea
+                id="description"
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                value={description}
+              />
+            </div>
+            {/*! === All-day Toggle === */}
+            <div className="flex items-center gap-2 pt-6">
+              <Checkbox
+                checked={allDay}
+                id="all-day"
+                onCheckedChange={(checked) => setAllDay(checked === true)}
+              />
+              <Label htmlFor="all-day">Ist der Termin ganztägig ?</Label>
+            </div>
             {/* === Wiederholung === */}
-            <div className="grid gap-4 sm:grid-cols-2 border-t pt-4">
+            <div className="grid gap-4 sm:grid-cols-2 pt-4">
               <div className="*:not-first:mt-1.5 ">
                 <Label>Wiederholung</Label>
                 <Select
@@ -439,37 +447,36 @@ export function EventDialog({
                 </div>
               ) : null}
             </div>
-            {/*! === All-day Toggle === */}
-            <div className="flex items-center gap-2 sm:grid-cols-2 pt-2">
-              <Checkbox
-                checked={allDay}
-                id="all-day"
-                onCheckedChange={(checked) => setAllDay(checked === true)}
-              />
-              <Label htmlFor="all-day">Ganztägig</Label>
-            </div>
 
             {/* === Start === */}
-            <div className="flex gap-4">
+            <div
+              className={cn(
+                " gap-4 grid  sm:grid-cols-2",
+                allDay && "sm:grid-cols-1",
+              )}>
               <div className="flex-1 *:not-first:mt-1.5 flex-col flex">
                 <Label htmlFor="start-date">Start</Label>
                 <Popover onOpenChange={setStartDateOpen} open={startDateOpen}>
-                  <PopoverTrigger>
-                    <Button
-                      className={cn(
-                        "group w-full justify-between border-input bg-background px-3 font-normal hover:bg-background",
-                        !startDate && "text-muted-foreground",
-                      )}
-                      id="start-date"
-                      variant="outline">
-                      <span className="truncate">
-                        {startDate ? format(startDate, "PPP") : "Datum wählen"}
-                      </span>
-                      <CalendarIcon
-                        className="shrink-0 text-muted-foreground/80"
-                        size={16}
+                  <PopoverTrigger
+                    render={
+                      <Button
+                        className={cn(
+                          "group w-full justify-between border-input bg-background px-3 font-normal hover:bg-background",
+                          !startDate && "text-muted-foreground",
+                        )}
+                        id="start-date"
+                        variant="outline"
                       />
-                    </Button>
+                    }>
+                    <span className="truncate">
+                      {startDate
+                        ? format(startDate, "PPPP", { locale: de })
+                        : "Datum wählen"}
+                    </span>
+                    <CalendarIcon
+                      className="shrink-0 text-muted-foreground/80"
+                      size={16}
+                    />
                   </PopoverTrigger>
                   <PopoverContent align="start" className="w-auto p-2">
                     <Calendar
@@ -492,46 +499,46 @@ export function EventDialog({
               {!allDay && (
                 <div className="min-w-28 *:not-first:mt-1.5 flex flex-col">
                   <Label htmlFor="start-time">Uhrzeit</Label>
-                  <Select
+                  <Input
+                    id="start-time"
+                    type="time"
+                    value={startTime}
                     onValueChange={(value) => setStartTime(value || "")}
-                    value={startTime}>
-                    <SelectTrigger id="start-time">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {timeOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  />
                 </div>
               )}
             </div>
 
             {/* === Ende === Nur bei einmaligen Events sichtbar */}
             {!isRecurring ? (
-              <div className="flex gap-4">
+              <div
+                className={cn(
+                  "grid sm:grid-cols-2 gap-4 ",
+                  allDay && "sm:grid-cols-1",
+                )}>
                 <div className="flex-1 *:not-first:mt-1.5 flex-col flex">
                   <Label htmlFor="end-date">Ende</Label>
                   <Popover onOpenChange={setEndDateOpen} open={endDateOpen}>
-                    <PopoverTrigger>
-                      <Button
-                        className={cn(
-                          "group w-full justify-between border-input bg-background px-3 font-normal hover:bg-background",
-                          !endDate && "text-muted-foreground",
-                        )}
-                        id="end-date"
-                        variant="outline">
-                        <span className="truncate">
-                          {endDate ? format(endDate, "PPP") : "Datum wählen"}
-                        </span>
-                        <CalendarIcon
-                          className="shrink-0 text-muted-foreground/80"
-                          size={16}
+                    <PopoverTrigger
+                      render={
+                        <Button
+                          className={cn(
+                            "group w-full justify-between border-input bg-background px-3 font-normal hover:bg-background",
+                            !endDate && "text-muted-foreground",
+                          )}
+                          id="end-date"
+                          variant="outline"
                         />
-                      </Button>
+                      }>
+                      <span className="truncate">
+                        {endDate
+                          ? format(endDate, "PPPP", { locale: de })
+                          : "Datum wählen"}
+                      </span>
+                      <CalendarIcon
+                        className="shrink-0 text-muted-foreground/80"
+                        size={16}
+                      />
                     </PopoverTrigger>
                     <PopoverContent align="start" className="w-auto p-2">
                       <Calendar
@@ -552,22 +559,14 @@ export function EventDialog({
                 </div>
 
                 {!allDay && (
-                  <div className="min-w-28 *:not-first:mt-1.5">
+                  <div className="min-w-28 *:not-first:mt-1.5 flex-col flex">
                     <Label htmlFor="end-time">Uhrzeit</Label>
-                    <Select
+                    <Input
+                      id="end-time"
+                      type="time"
+                      value={endTime}
                       onValueChange={(value) => setEndTime(value || "")}
-                      value={endTime}>
-                      <SelectTrigger id="end-time">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timeOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    />
                   </div>
                 )}
               </div>
@@ -576,24 +575,12 @@ export function EventDialog({
               !allDay && (
                 <div className="*:not-first:mt-1.5 max-w-48 flex flex-col">
                   <Label htmlFor="end-time-rec">Endet um</Label>
-                  <Select
-                    onValueChange={(value) => {
-                      setEndTime(value || "");
-                      // Bei Recurrence: end date = start date
-                      setEndDate(startDate);
-                    }}
-                    value={endTime}>
-                    <SelectTrigger id="end-time-rec">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {timeOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    id="end-time-rec"
+                    type="time"
+                    value={endTime}
+                    onValueChange={(value) => setEndTime(value || "")}
+                  />
                 </div>
               )
             )}

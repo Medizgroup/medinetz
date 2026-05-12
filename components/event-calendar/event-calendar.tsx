@@ -20,7 +20,6 @@ import {
   PlusIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
 
 import {
   AgendaDaysToShow,
@@ -45,6 +44,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toastManager } from "../ui/toast";
+import { de } from "date-fns/locale";
 
 export interface EventCalendarProps {
   events?: CalendarEvent[];
@@ -146,8 +147,6 @@ export function EventCalendar({
   };
 
   const handleEventCreate = (startTime: Date) => {
-    console.log("Creating new event at:", startTime); // Debug log
-
     // Snap to 15-minute intervals
     const minutes = startTime.getMinutes();
     const remainder = minutes % 15;
@@ -178,9 +177,11 @@ export function EventCalendar({
     if (event.id) {
       onEventUpdate?.(event);
       // Show toast notification when an event is updated
-      toast(`Event "${event.title}" updated`, {
-        description: format(new Date(event.start), "MMM d, yyyy"),
-        position: "bottom-left",
+
+      toastManager.add({
+        description: `Der Termin "${event.title}" wurde aktualisiert`,
+        title: format(new Date(event.start), "PPPP", { locale: de }),
+        type: "success",
       });
     } else {
       onEventAdd?.({
@@ -188,9 +189,10 @@ export function EventCalendar({
         // id: Math.random().toString(36).substring(2, 11),
       });
       // Show toast notification when an event is added
-      toast(`Event "${event.title}" added`, {
-        description: format(new Date(event.start), "MMM d, yyyy"),
-        position: "bottom-left",
+      toastManager.add({
+        description: `Der Termin "${event.title}" wurde hinzugefügt`,
+        title: format(new Date(event.start), "PPPP", { locale: de }),
+        type: "success",
       });
     }
     setIsEventDialogOpen(false);
@@ -205,9 +207,10 @@ export function EventCalendar({
 
     // Show toast notification when an event is deleted
     if (deletedEvent) {
-      toast(`Event "${deletedEvent.title}" deleted`, {
-        description: format(new Date(deletedEvent.start), "MMM d, yyyy"),
-        position: "bottom-left",
+      toastManager.add({
+        description: `Der Termin "${deletedEvent.title}" wurde  gelöscht`,
+        title: format(new Date(deletedEvent.start), "PPPP", { locale: de }),
+        type: "success",
       });
     }
   };
@@ -216,9 +219,10 @@ export function EventCalendar({
     onEventUpdate?.(updatedEvent);
 
     // Show toast notification when an event is updated via drag and drop
-    toast(`Event "${updatedEvent.title}" moved`, {
-      description: format(new Date(updatedEvent.start), "MMM d, yyyy"),
-      position: "bottom-left",
+    toastManager.add({
+      description: `Der Termin "${updatedEvent.title}" wurde  aktualisiert`,
+      title: format(new Date(updatedEvent.start), "PPPP", { locale: de }),
+      type: "success",
     });
   };
 
@@ -238,13 +242,13 @@ export function EventCalendar({
       return (
         <>
           <span aria-hidden="true" className="min-[480px]:hidden">
-            {format(currentDate, "MMM d, yyyy")}
+            {format(currentDate, "PPPP", { locale: de })}
           </span>
           <span aria-hidden="true" className="max-[479px]:hidden md:hidden">
-            {format(currentDate, "MMMM d, yyyy")}
+            {format(currentDate, "PPPP", { locale: de })}
           </span>
           <span className="max-md:hidden">
-            {format(currentDate, "EEE MMMM d, yyyy")}
+            {format(currentDate, "PPPP", { locale: de })}
           </span>
         </>
       );
@@ -288,7 +292,7 @@ export function EventCalendar({
                 className="min-[480px]:hidden"
                 size={16}
               />
-              <span className="max-[479px]:sr-only">Today</span>
+              <span className="max-[479px]:sr-only">Heute</span>
             </Button>
             <div className="flex items-center sm:gap-2">
               <Button
@@ -331,13 +335,13 @@ export function EventCalendar({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-32">
                 <DropdownMenuItem onClick={() => setView("month")}>
-                  Month <DropdownMenuShortcut>M</DropdownMenuShortcut>
+                  Monat <DropdownMenuShortcut>M</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setView("week")}>
-                  Week <DropdownMenuShortcut>W</DropdownMenuShortcut>
+                  Woche <DropdownMenuShortcut>W</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setView("day")}>
-                  Day <DropdownMenuShortcut>D</DropdownMenuShortcut>
+                  Tag <DropdownMenuShortcut>D</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setView("agenda")}>
                   Agenda <DropdownMenuShortcut>A</DropdownMenuShortcut>
@@ -356,7 +360,7 @@ export function EventCalendar({
                 className="sm:-ms-1 opacity-60"
                 size={16}
               />
-              <span className="max-sm:sr-only">New event</span>
+              <span className="max-sm:sr-only">Neuer Termin</span>
             </Button>
           </div>
         </div>

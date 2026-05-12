@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import * as React from "react";
@@ -6,6 +7,7 @@ import { toast } from "sonner";
 import { EventCalendar } from "@/components/event-calendar/event-calendar";
 import type { CalendarEvent } from "@/components/event-calendar/types";
 import { parseEventId } from "@/lib/event/recurrence";
+import { Loading } from "./loading-component";
 
 type Org = { id: string; name: string };
 
@@ -60,6 +62,15 @@ export default function EventCalendarComponent({
         organizationId: e.organizationId ?? null,
       }),
     });
+
+    // toastManager.add({
+    //   title: r.ok ? "Termin gespeichert" : "Fehler",
+    //   description: r.ok
+    //     ? "Der Termin wurde erfolgreich gespeichert."
+    //     : "Der Termin konnte nicht gespeichert werden.",
+    //   type: r.ok ? "success" : "error",
+    // });
+
     if (!r.ok) {
       const err = await r.json().catch(() => null);
       toast.error(err?.error ?? "Speichern fehlgeschlagen.");
@@ -86,6 +97,15 @@ export default function EventCalendarComponent({
         visibility: e.visibility,
       }),
     });
+
+    // toastManager.add({
+    //   title: r.ok ? "Termin aktualisiert" : "Fehler",
+    //   description: r.ok
+    //     ? "Der Termin wurde erfolgreich aktualisiert."
+    //     : "Der Termin konnte nicht aktualisiert werden.",
+    //   type: r.ok ? "success" : "error",
+    // });
+
     if (!r.ok) {
       const err = await r.json().catch(() => null);
       toast.error(err?.error ?? "Aktualisierung fehlgeschlagen.");
@@ -97,6 +117,15 @@ export default function EventCalendarComponent({
   async function handleDelete(id: string) {
     const { eventId } = parseEventId(id);
     const r = await fetch(`/api/events/${eventId}`, { method: "DELETE" });
+
+    // toastManager.add({
+    //   title: r.ok ? "Termin gelöscht" : "Fehler",
+    //   description: r.ok
+    //     ? "Der Termin wurde erfolgreich gelöscht."
+    //     : "Der Termin konnte nicht gelöscht werden.",
+    //   type: r.ok ? "success" : "error",
+    // });
+
     if (!r.ok) {
       toast.error("Löschen fehlgeschlagen.");
       return;
@@ -106,9 +135,7 @@ export default function EventCalendarComponent({
 
   return (
     <div className="px-2 py-4">
-      {loading && events.length === 0 ? (
-        <div className="text-sm text-muted-foreground p-4">Lade Termine…</div>
-      ) : null}
+      {loading && events.length === 0 ? <Loading /> : null}
       <EventCalendar
         events={events}
         onEventAdd={handleAdd}
