@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import * as React from "react";
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 
 import ResourcePicker, { type ResourceOption } from "./resource-picker";
+import { toastManager } from "../ui/toast";
 
 export type CaseDoctorForEdit = {
   id: string;
@@ -142,6 +144,17 @@ export default function CaseDoctorDialog({
     const data = await res.json().catch(() => null);
     setSaving(false);
 
+    toastManager.add({
+      title: res.ok
+        ? isEdit
+          ? "Zuweisung aktualisiert"
+          : "Zuweisung erstellt"
+        : "Fehler",
+      description:
+        "Arzt-Zuweisung " +
+        (res.ok ? "gespeichert." : "konnte nicht gespeichert werden."),
+      type: res.ok ? "success" : "error",
+    });
     if (!res.ok) {
       setError(data?.error ?? "Speichern fehlgeschlagen.");
       return;

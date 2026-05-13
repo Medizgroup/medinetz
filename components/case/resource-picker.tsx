@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, UserCircle2 } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -61,7 +61,6 @@ export default function ResourcePicker({
             aria-expanded={open}
             className="w-full justify-between font-normal">
             <span className="flex items-center gap-2 truncate">
-              <UserCircle2 className="size-4 opacity-60" />
               <span className="truncate">
                 {selected ? selected.name : placeholder}
               </span>
@@ -70,11 +69,11 @@ export default function ResourcePicker({
           </Button>
         }
       />
-      <PopoverPopup className="w-[280px] p-0" align="start">
+      <PopoverPopup className="p-0 max-w-sm max-h-96" align="start">
         <Command items={items}>
           <CommandInput placeholder="Suchen…" />
           <CommandEmpty>{emptyMessage}</CommandEmpty>
-          <CommandList>
+          <CommandList className={"max-h-80 overflow-y-auto"}>
             {(item: (typeof items)[number]) => (
               <CommandItem
                 key={item.id}
@@ -82,10 +81,14 @@ export default function ResourcePicker({
                 onClick={() => {
                   onChange(item.id);
                   setOpen(false);
-                }}>
+                }}
+                className={cn(
+                  "relative",
+                  value === item.id ? "bg-accent" : "",
+                )}>
                 <Check
                   className={cn(
-                    "size-4",
+                    "size-4 absolute right-1 top-2",
                     value === item.id ? "opacity-100" : "opacity-0",
                   )}
                 />

@@ -373,13 +373,13 @@ export default function CaseSidebar({
                     {cd.doctor.specialty}
                   </div>
                 ) : null}
-                {/* {cd.appointmentDate ? (
+                {cd.appointmentDate ? (
                   <div className="text-xs text-muted-foreground">
                     {format(new Date(cd.appointmentDate), "PPP", {
                       locale: de,
                     })}
                   </div>
-                ) : null} */}
+                ) : null}
                 {cd.invoiceReceived ? (
                   <div className="text-xs mt-1">
                     <Badge
