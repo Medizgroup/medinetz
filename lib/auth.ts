@@ -43,7 +43,18 @@ export const auth = betterAuth({
             },
           };
         },
+
         after: async (user) => {
+          // 1) User ist jetzt angelegt, firstName und lastName setzten
+          const firstName = user.name?.split(" ")[0] || "";
+          const lastName = user.name?.split(" ").slice(1).join(" ") || "";
+          const displayName = user.name || "";
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { firstName, lastName, displayName },
+          });
+
           // Default Org finden/erstellen
           const org = await prisma.organization.upsert({
             where: { slug: "routine" },
@@ -67,7 +78,7 @@ export const auth = betterAuth({
             create: {
               organizationId: org.id,
               userId: user.id,
-              role: UserRole.LIMITED,
+              role: UserRole.COORDINATOR,
             },
           });
 

@@ -14,6 +14,7 @@ import { Form } from "@/components/ui/form";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import Image from "next/image";
 import { Spinner } from "@/components/ui/spinner";
+import { toastManager } from "@/components/ui/toast";
 
 type Step = "email" | "profile" | "password";
 type Errors = Record<string, string | string[]>;
@@ -103,7 +104,10 @@ export default function SignUpPage() {
     return "Lege ein Passwort fest.";
   }, [step]);
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: {
+    preventDefault: () => void;
+    currentTarget: HTMLFormElement | undefined;
+  }) => {
     event.preventDefault();
     setServerError(null);
 
@@ -190,6 +194,12 @@ export default function SignUpPage() {
         return;
       }
 
+      toastManager.add({
+        title: "Willkommen!",
+        description: "Dein Konto wurde erfolgreich erstellt.",
+        type: "success",
+      });
+
       router.replace("/home");
     } catch (e) {
       setServerError(e instanceof Error ? e.message : "Unbekannter Fehler.");
@@ -209,15 +219,15 @@ export default function SignUpPage() {
                   <Image
                     src="/Logo/logo-light.svg"
                     alt="Logo"
-                    width={90}
-                    height={90}
+                    width={80}
+                    height={80}
                     className="inline dark:hidden"
                   />
                   <Image
                     src="/Logo/logo-dark.svg"
                     alt="Logo"
-                    width={90}
-                    height={90}
+                    width={80}
+                    height={80}
                     className="hidden dark:inline"
                   />
                 </div>
