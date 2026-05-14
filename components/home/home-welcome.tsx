@@ -99,8 +99,8 @@ export default function HomeWelcome({ user }: { user: User }) {
           as="p"
           className="text-sm text-muted-foreground"
           words={shuffledMessages}
-          typeSpeed={60}
-          deleteSpeed={10}
+          typeSpeed={150}
+          deleteSpeed={50}
           pauseDelay={10000}
           cursorStyle="underscore"
           startOnView

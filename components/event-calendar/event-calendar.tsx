@@ -228,15 +228,15 @@ export function EventCalendar({
 
   const viewTitle = useMemo(() => {
     if (view === "month") {
-      return format(currentDate, "MMMM yyyy");
+      return format(currentDate, "MMMM yyyy", { locale: de });
     }
     if (view === "week") {
       const start = startOfWeek(currentDate, { weekStartsOn: 0 });
       const end = endOfWeek(currentDate, { weekStartsOn: 0 });
       if (isSameMonth(start, end)) {
-        return format(start, "MMMM yyyy");
+        return format(start, "MMMM yyyy", { locale: de });
       }
-      return `${format(start, "MMM")} - ${format(end, "MMM yyyy")}`;
+      return `${format(start, "MMM", { locale: de })} - ${format(end, "MMM yyyy", { locale: de })}`;
     }
     if (view === "day") {
       return (
@@ -259,11 +259,11 @@ export function EventCalendar({
       const end = addDays(currentDate, AgendaDaysToShow - 1);
 
       if (isSameMonth(start, end)) {
-        return format(start, "MMMM yyyy");
+        return format(start, "MMMM yyyy", { locale: de });
       }
-      return `${format(start, "MMM")} - ${format(end, "MMM yyyy")}`;
+      return `${format(start, "MMM")} - ${format(end, "MMM yyyy", { locale: de })}`;
     }
-    return format(currentDate, "MMMM yyyy");
+    return format(currentDate, "MMMM yyyy", { locale: de });
   }, [currentDate, view]);
 
   return (
@@ -320,10 +320,23 @@ export function EventCalendar({
                 <Button className="gap-1.5 max-[479px]:h-8" variant="outline">
                   <span>
                     <span aria-hidden="true" className="min-[480px]:hidden">
-                      {view.charAt(0).toUpperCase()}
+                      {view === "month"
+                        ? "Monat"
+                        : view === "week"
+                          ? "Woche"
+                          : view === "day"
+                            ? "Tag"
+                            : "Agenda"}
                     </span>
                     <span className="max-[479px]:sr-only">
-                      {view.charAt(0).toUpperCase() + view.slice(1)}
+                      {view === "month"
+                        ? "Monat"
+                        : view === "week"
+                          ? "Woche"
+                          : view === "day"
+                            ? "Tag"
+                            : "Agenda"}
+                      {/* {view.charAt(0).toUpperCase() + view.slice(1)} */}
                     </span>
                   </span>
                   <ChevronDownIcon

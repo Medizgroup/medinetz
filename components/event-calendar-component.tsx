@@ -63,14 +63,6 @@ export default function EventCalendarComponent({
       }),
     });
 
-    // toastManager.add({
-    //   title: r.ok ? "Termin gespeichert" : "Fehler",
-    //   description: r.ok
-    //     ? "Der Termin wurde erfolgreich gespeichert."
-    //     : "Der Termin konnte nicht gespeichert werden.",
-    //   type: r.ok ? "success" : "error",
-    // });
-
     if (!r.ok) {
       const err = await r.json().catch(() => null);
       toast.error(err?.error ?? "Speichern fehlgeschlagen.");
@@ -98,14 +90,6 @@ export default function EventCalendarComponent({
       }),
     });
 
-    // toastManager.add({
-    //   title: r.ok ? "Termin aktualisiert" : "Fehler",
-    //   description: r.ok
-    //     ? "Der Termin wurde erfolgreich aktualisiert."
-    //     : "Der Termin konnte nicht aktualisiert werden.",
-    //   type: r.ok ? "success" : "error",
-    // });
-
     if (!r.ok) {
       const err = await r.json().catch(() => null);
       toast.error(err?.error ?? "Aktualisierung fehlgeschlagen.");
@@ -117,14 +101,6 @@ export default function EventCalendarComponent({
   async function handleDelete(id: string) {
     const { eventId } = parseEventId(id);
     const r = await fetch(`/api/events/${eventId}`, { method: "DELETE" });
-
-    // toastManager.add({
-    //   title: r.ok ? "Termin gelöscht" : "Fehler",
-    //   description: r.ok
-    //     ? "Der Termin wurde erfolgreich gelöscht."
-    //     : "Der Termin konnte nicht gelöscht werden.",
-    //   type: r.ok ? "success" : "error",
-    // });
 
     if (!r.ok) {
       toast.error("Löschen fehlgeschlagen.");
