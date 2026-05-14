@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/table";
 import {
   Select,
-  SelectContent,
   SelectItem,
   SelectPopup,
   SelectTrigger,
@@ -35,10 +34,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ChevronLeft, MoreHorizontal } from "lucide-react";
+import {
+  ChevronLeft,
+  GitPullRequestCreateArrow,
+  MoreHorizontal,
+} from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { NotProduct } from "@/components/not-product";
+import { Loading } from "@/components/loading-component";
+import Link from "next/link";
 
 const ROLE_LABELS: Record<string, string> = {
   LIMITED: "Eingeschränkt",
@@ -136,11 +141,7 @@ export default function OrgDetailPage() {
   }
 
   if (loading) {
-    return (
-      <div className="p-6 text-sm text-muted-foreground">
-        Lade Organisation...
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!org) {
@@ -149,17 +150,25 @@ export default function OrgDetailPage() {
 
   return (
     <div className="space-y-6 p-6">
-      <div className="flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push("/dashboard/organizations")}>
-          <ChevronLeft className="size-4" />
-        </Button>
-        <div>
-          <h1 className="text-xl font-semibold">{org.name}</h1>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/dashboard/organizations")}>
+            <ChevronLeft className="size-4" />
+          </Button>
+          <div>
+            <h1 className="text-xl font-semibold">{org.name}</h1>
+          </div>
+          {org.isArchived && <Badge variant="outline">Archiviert</Badge>}
         </div>
-        {org.isArchived && <Badge variant="outline">Archiviert</Badge>}
+        <Link href={`/dashboard/organizations/${org.id}/invitations`}>
+          <Button variant="ghost" size="sm">
+            <GitPullRequestCreateArrow className="size-4 mr-2" />
+            Beitrittsanfragen
+          </Button>
+        </Link>
       </div>
 
       <div>
