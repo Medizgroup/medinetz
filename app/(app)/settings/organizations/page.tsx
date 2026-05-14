@@ -10,22 +10,34 @@ export default async function OrganizationsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id || !session.user.email) redirect("/sign-in");
 
-  const [memberships, invites, joinRequests] = await Promise.all([
-    prisma.organizationMember.findMany({
-      where: { userId: session.user.id },
-      include: {
-        organization: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            type: true,
-            isArchived: true,
-          },
+  const memberships = await prisma.organizationMember.findMany({
+    where: { userId: session.user.id },
+    include: {
+      organization: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          type: true,
+          isArchived: true,
         },
       },
-      orderBy: { joinedAt: "desc" },
-    }),
+    },
+    orderBy: { joinedAt: "desc" },
+  });
+
+  // Beitrittsanfragen automatisch entfernen, wenn der User bereits Mitglied ist
+  const memberOrgIds = memberships.map((m) => m.organization.id);
+  if (memberOrgIds.length) {
+    await prisma.organizationJoinRequest.deleteMany({
+      where: {
+        userId: session.user.id,
+        organizationId: { in: memberOrgIds },
+      },
+    });
+  }
+
+  const [invites, joinRequests] = await Promise.all([
     prisma.organizationInvite.findMany({
       where: {
         email: session.user.email,

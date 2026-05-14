@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import * as React from "react";
@@ -15,6 +16,8 @@ import {
   acceptInviteAction,
   declineInviteAction,
   requestJoinAction,
+  searchOrganizationsAction,
+  type OrgSearchResult,
 } from "@/app/(app)/actions/users/organizations";
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "../ui/alert";
 import {
@@ -25,9 +28,11 @@ import {
   HeartPlus,
   Package2,
   SmilePlus,
+  Store,
 } from "lucide-react";
 import { LeaveOrgDialog } from "./leave-org-dialog-component";
 import { toastManager } from "../ui/toast";
+import { Spinner } from "../ui/spinner";
 
 type Props = {
   memberships: Array<{
@@ -84,6 +89,35 @@ export function OrganizationsComponent({
   );
   const [joinState, joinAct] = useActionState(requestJoinAction, initial);
 
+  const [query, setQuery] = React.useState("");
+  const [results, setResults] = React.useState<OrgSearchResult[]>([]);
+  const [searching, setSearching] = React.useState(false);
+  const [selectedOrg, setSelectedOrg] = React.useState<OrgSearchResult | null>(
+    null,
+  );
+
+  React.useEffect(() => {
+    if (selectedOrg) return; // nicht weitersuchen, wenn schon gewählt
+    const q = query.trim();
+    if (q.length < 2) {
+      setResults([]);
+      setSearching(false);
+      return;
+    }
+    let ignore = false;
+    setSearching(true);
+    const t = setTimeout(async () => {
+      const res = await searchOrganizationsAction(q);
+      if (ignore) return;
+      setResults(res.ok ? res.results : []);
+      setSearching(false);
+    }, 300);
+    return () => {
+      ignore = true;
+      clearTimeout(t);
+    };
+  }, [query, selectedOrg]);
+
   React.useEffect(() => {
     if (acceptState.ok || joinState.ok) {
       toastManager.add({
@@ -91,6 +125,11 @@ export function OrganizationsComponent({
         description: `${acceptState.ok ? "Du bist jetzt Mitglied der Organisation." : joinState.message}`,
         type: "success",
       });
+    }
+    if (joinState.ok) {
+      setSelectedOrg(null);
+      setQuery("");
+      setResults([]);
     }
     if (declineState.ok) {
       toastManager.add({
@@ -123,8 +162,10 @@ export function OrganizationsComponent({
                   <ArchiveX />
                 ) : m.organization.type === "ROUTINE" ? (
                   <Package2 />
+                ) : m.organization.type === "PREGNANCY" ? (
+                  <HeartPlus />
                 ) : (
-                  m.organization.type === "PREGNANCY" && <HeartPlus />
+                  <SmilePlus />
                 )}
                 <AlertTitle>{m.organization.name}</AlertTitle>
                 <AlertDescription className="flex-row">
@@ -226,24 +267,94 @@ export function OrganizationsComponent({
         <div>
           <h2 className="text-balance font-semibold">Organisation beitreten</h2>
           <p className="mt-1 text-sm leading-6 text-muted-foreground">
-            Du kannst per <code>slug</code> eine Beitrittsanfrage senden.
+            Suche eine Organisation und sende eine Beitrittsanfrage.
           </p>
         </div>
 
         <div className="md:col-span-2">
-          <Form
-            action={joinAct}
-            errors={joinState.errors}
-            className="grid grid-cols-1 gap-4 sm:grid-cols-6">
-            <div className="col-span-full sm:col-span-3">
-              <Field name="slug" className="gap-2">
-                <FieldLabel>Organisation ID </FieldLabel>
-                <Input name="slug" placeholder="routine" />
+          {!selectedOrg ? (
+            <div className="space-y-2">
+              <Field className="gap-2">
+                <FieldLabel>Organisation suchen</FieldLabel>
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Name oder ID der Organisation…"
+                />
+              </Field>
+
+              {query.trim().length >= 2 && (
+                <div className="rounded-xl border divide-y">
+                  {searching ? (
+                    <div className="p-3 text-xs text-muted-foreground flex items-center gap-2">
+                      <Spinner className="size-3.5 opacity-75" />
+                      Suche…
+                    </div>
+                  ) : results.length === 0 ? (
+                    <div className="p-3 text-sm text-muted-foreground">
+                      Keine Organisation gefunden.
+                    </div>
+                  ) : (
+                    results.map((org) => (
+                      <button
+                        key={org.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedOrg(org);
+                          setResults([]);
+                        }}
+                        className="flex w-full items-center gap-3 p-3 text-left hover:bg-muted">
+                        <OrgIcon type={org.type} />
+                        <div className="min-w-0">
+                          <div className="truncate text-sm font-medium">
+                            {org.name}
+                          </div>
+                          <div className="truncate text-xs text-muted-foreground">
+                            {org.slug}
+                          </div>
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <Form
+              action={joinAct}
+              errors={joinState.errors}
+              className="space-y-4">
+              <Field name="organizationId" className="gap-2">
+                <FieldLabel>Ausgewählte Organisation</FieldLabel>
+                <div className="flex items-center j w-full ustify-between gap-3 rounded-xl border p-3">
+                  <div className="flex min-w-0 w-full items-center gap-3">
+                    <OrgIcon type={selectedOrg.type} />
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-medium">
+                        {selectedOrg.name}
+                      </div>
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="xs"
+                    className="rounded-full"
+                    onClick={() => {
+                      setSelectedOrg(null);
+                      setQuery("");
+                    }}>
+                    Andere wählen
+                  </Button>
+                </div>
+                <input
+                  type="hidden"
+                  name="organizationId"
+                  value={selectedOrg.id}
+                />
                 <FieldError />
               </Field>
-            </div>
 
-            <div className="col-span-full">
               <Field name="message" className="gap-2">
                 <FieldLabel>Nachricht (optional)</FieldLabel>
                 <Textarea
@@ -253,21 +364,15 @@ export function OrganizationsComponent({
                 />
                 <FieldError />
               </Field>
-            </div>
 
-            <div className="col-span-full sm:col-span-2 flex items-end">
-              <Button
-                type="submit"
-                className="w-full rounded-full whitespace-nowrap">
+              <Button type="submit" className="rounded-full whitespace-nowrap">
                 Anfrage senden
               </Button>
-            </div>
-          </Form>
+            </Form>
+          )}
 
-          {joinState.message ? (
-            <p className="mt-3 text-sm text-muted-foreground">
-              {joinState.message}
-            </p>
+          {!joinState.ok && joinState.message ? (
+            <p className="mt-3 text-sm text-destructive">{joinState.message}</p>
           ) : null}
 
           {joinRequests.length ? (
@@ -315,4 +420,10 @@ export function OrganizationsComponent({
       </div>
     </div>
   );
+}
+
+function OrgIcon({ type }: { type: string }) {
+  if (type === "ROUTINE") return <Package2 className="size-4 shrink-0" />;
+  if (type === "PREGNANCY") return <HeartPlus className="size-4 shrink-0" />;
+  return <Store className="size-4 shrink-0" />;
 }

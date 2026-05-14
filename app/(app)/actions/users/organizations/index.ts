@@ -71,6 +71,14 @@ export async function acceptInviteAction(
       where: { id: invite.id },
       data: { acceptedAt: new Date() },
     });
+
+    // Falls noch eine Beitrittsanfrage für diese Org offen war: entfernen
+    await tx.organizationJoinRequest.deleteMany({
+      where: {
+        organizationId: invite.organizationId,
+        userId: session.user.id,
+      },
+    });
   });
 
   revalidatePath("/settings/organizations");
@@ -113,7 +121,7 @@ export async function declineInviteAction(
 }
 
 const joinRequestSchema = z.object({
-  slug: z.string().trim().min(2, "Bitte Org-Slug angeben.").max(80),
+  organizationId: z.string().min(1, "Bitte eine Organisation wählen."),
   message: z.string().trim().max(500).optional(),
 });
 
@@ -130,11 +138,12 @@ export async function requestJoinAction(
   }
 
   const org = await prisma.organization.findUnique({
-    where: { slug: parsed.data.slug },
+    where: { id: parsed.data.organizationId },
     select: { id: true, name: true, isArchived: true },
   });
-  if (!org) return bad({ slug: ["Organisation nicht gefunden."] });
-  if (org.isArchived) return bad({ slug: ["Organisation ist archiviert."] });
+  if (!org) return bad({ organizationId: ["Organisation nicht gefunden."] });
+  if (org.isArchived)
+    return bad({ organizationId: ["Organisation ist archiviert."] });
 
   const alreadyMember = await prisma.organizationMember.findUnique({
     where: {
@@ -144,9 +153,9 @@ export async function requestJoinAction(
       },
     },
   });
-  if (alreadyMember) return bad({ slug: ["Du bist bereits Mitglied."] });
+  if (alreadyMember)
+    return bad({ organizationId: ["Du bist bereits Mitglied."] });
 
-  // optional: wenn es eine offene Einladung gibt
   const existingInvite = await prisma.organizationInvite.findFirst({
     where: {
       organizationId: org.id,
@@ -158,10 +167,11 @@ export async function requestJoinAction(
   });
   if (existingInvite)
     return bad({
-      slug: ["Du hast bereits eine Einladung offen. Bitte nimm sie an."],
+      organizationId: [
+        "Du hast bereits eine Einladung offen. Bitte nimm sie an.",
+      ],
     });
 
-  // Join Request anlegen (Model muss existieren)
   await prisma.organizationJoinRequest.upsert({
     where: {
       organizationId_userId: {
@@ -221,4 +231,46 @@ export async function leaveOrganizationAction(
 
   revalidatePath("/settings/organizations");
   return { ok: true };
+}
+
+export type OrgSearchResult = {
+  id: string;
+  name: string;
+  slug: string;
+  type: string;
+};
+
+export async function searchOrganizationsAction(
+  query: string,
+): Promise<
+  { ok: true; results: OrgSearchResult[] } | { ok: false; error: string }
+> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) return { ok: false, error: "Unauthorized" };
+
+  const q = query.trim();
+  if (q.length < 2) return { ok: true, results: [] };
+
+  // Orgs ausschließen, in denen der User schon Mitglied ist
+  const memberOrgs = await prisma.organizationMember.findMany({
+    where: { userId: session.user.id },
+    select: { organizationId: true },
+  });
+  const excludeIds = memberOrgs.map((m) => m.organizationId);
+
+  const results = await prisma.organization.findMany({
+    where: {
+      isArchived: false,
+      id: excludeIds.length ? { notIn: excludeIds } : undefined,
+      OR: [
+        { name: { contains: q, mode: "insensitive" } },
+        { slug: { contains: q, mode: "insensitive" } },
+      ],
+    },
+    select: { id: true, name: true, slug: true, type: true },
+    take: 8,
+    orderBy: { name: "asc" },
+  });
+
+  return { ok: true, results };
 }
