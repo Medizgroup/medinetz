@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { AvatarConfig } from "@/lib/avatar/dicebear";
 
 export default async function Page() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -21,13 +22,19 @@ export default async function Page() {
       lastName: true,
       displayName: true,
       avatarUrl: true,
+      avatarConfig: true,
     },
   });
 
   if (!user) redirect("/sign-in");
   return (
     <div>
-      <ProfileComponent user={user} />
+      <ProfileComponent
+        user={{
+          ...user,
+          avatarConfig: user.avatarConfig as AvatarConfig | null,
+        }}
+      />
     </div>
   );
 }

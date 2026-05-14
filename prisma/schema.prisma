@@ -149,7 +149,9 @@ model User {
   firstName     String?  @map("first_name")
   lastName      String?  @map("last_name")
   displayName   String?  @map("display_name")
-  avatarUrl     String?  @map("avatar_url") @db.Text
+  avatarUrl     String?  @map("avatar_url")            // kurz: DiceBear-URL, kein @db.Text mehr
+  avatarConfig  Json?    @map("avatar_config")          // Quelle der Wahrheit für den Dialog
+
 
   isActive      Boolean  @default(false) @map("is_active")
   isInstanceAdmin Boolean @default(false) @map("is_instance_admin")  

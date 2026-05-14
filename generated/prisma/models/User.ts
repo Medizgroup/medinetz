@@ -68,6 +68,7 @@ export type UserCountAggregateOutputType = {
   lastName: number
   displayName: number
   avatarUrl: number
+  avatarConfig: number
   isActive: number
   isInstanceAdmin: number
   lastLoginAt: number
@@ -121,6 +122,7 @@ export type UserCountAggregateInputType = {
   lastName?: true
   displayName?: true
   avatarUrl?: true
+  avatarConfig?: true
   isActive?: true
   isInstanceAdmin?: true
   lastLoginAt?: true
@@ -211,6 +213,7 @@ export type UserGroupByOutputType = {
   lastName: string | null
   displayName: string | null
   avatarUrl: string | null
+  avatarConfig: runtime.JsonValue | null
   isActive: boolean
   isInstanceAdmin: boolean
   lastLoginAt: Date | null
@@ -249,6 +252,7 @@ export type UserWhereInput = {
   lastName?: Prisma.StringNullableFilter<"User"> | string | null
   displayName?: Prisma.StringNullableFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  avatarConfig?: Prisma.JsonNullableFilter<"User">
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isInstanceAdmin?: Prisma.BoolFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -296,6 +300,7 @@ export type UserOrderByWithRelationInput = {
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isInstanceAdmin?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -346,6 +351,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringNullableFilter<"User"> | string | null
   displayName?: Prisma.StringNullableFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  avatarConfig?: Prisma.JsonNullableFilter<"User">
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isInstanceAdmin?: Prisma.BoolFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -393,6 +399,7 @@ export type UserOrderByWithAggregationInput = {
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isInstanceAdmin?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -416,6 +423,7 @@ export type UserScalarWhereWithAggregatesInput = {
   lastName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   displayName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  avatarConfig?: Prisma.JsonNullableWithAggregatesFilter<"User">
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   isInstanceAdmin?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -433,6 +441,7 @@ export type UserCreateInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -480,6 +489,7 @@ export type UserUncheckedCreateInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -527,6 +537,7 @@ export type UserUpdateInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -574,6 +585,7 @@ export type UserUncheckedUpdateInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -621,6 +633,7 @@ export type UserCreateManyInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -638,6 +651,7 @@ export type UserUpdateManyMutationInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -655,6 +669,7 @@ export type UserUncheckedUpdateManyInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -672,6 +687,7 @@ export type UserCountOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  avatarConfig?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isInstanceAdmin?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -1183,6 +1199,7 @@ export type UserCreateWithoutSessionsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -1229,6 +1246,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -1291,6 +1309,7 @@ export type UserUpdateWithoutSessionsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1337,6 +1356,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1383,6 +1403,7 @@ export type UserCreateWithoutAccountsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -1429,6 +1450,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -1491,6 +1513,7 @@ export type UserUpdateWithoutAccountsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1537,6 +1560,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1583,6 +1607,7 @@ export type UserCreateWithoutOrganizationMembersInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -1629,6 +1654,7 @@ export type UserUncheckedCreateWithoutOrganizationMembersInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -1691,6 +1717,7 @@ export type UserUpdateWithoutOrganizationMembersInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1737,6 +1764,7 @@ export type UserUncheckedUpdateWithoutOrganizationMembersInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1783,6 +1811,7 @@ export type UserCreateWithoutOrganizationInvitesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -1829,6 +1858,7 @@ export type UserUncheckedCreateWithoutOrganizationInvitesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -1891,6 +1921,7 @@ export type UserUpdateWithoutOrganizationInvitesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1937,6 +1968,7 @@ export type UserUncheckedUpdateWithoutOrganizationInvitesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1983,6 +2015,7 @@ export type UserCreateWithoutOrganizationJoinRequestsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2029,6 +2062,7 @@ export type UserUncheckedCreateWithoutOrganizationJoinRequestsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2080,6 +2114,7 @@ export type UserCreateWithoutDecidedJoinRequestsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2126,6 +2161,7 @@ export type UserUncheckedCreateWithoutDecidedJoinRequestsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2188,6 +2224,7 @@ export type UserUpdateWithoutOrganizationJoinRequestsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2234,6 +2271,7 @@ export type UserUncheckedUpdateWithoutOrganizationJoinRequestsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2291,6 +2329,7 @@ export type UserUpdateWithoutDecidedJoinRequestsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2337,6 +2376,7 @@ export type UserUncheckedUpdateWithoutDecidedJoinRequestsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2383,6 +2423,7 @@ export type UserCreateWithoutPreferencesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2429,6 +2470,7 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2491,6 +2533,7 @@ export type UserUpdateWithoutPreferencesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2537,6 +2580,7 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2583,6 +2627,7 @@ export type UserCreateWithoutCreatedDoctorsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2629,6 +2674,7 @@ export type UserUncheckedCreateWithoutCreatedDoctorsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2691,6 +2737,7 @@ export type UserUpdateWithoutCreatedDoctorsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2737,6 +2784,7 @@ export type UserUncheckedUpdateWithoutCreatedDoctorsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2783,6 +2831,7 @@ export type UserCreateWithoutCreatedInterpretersInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2829,6 +2878,7 @@ export type UserUncheckedCreateWithoutCreatedInterpretersInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -2891,6 +2941,7 @@ export type UserUpdateWithoutCreatedInterpretersInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2937,6 +2988,7 @@ export type UserUncheckedUpdateWithoutCreatedInterpretersInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2983,6 +3035,7 @@ export type UserCreateWithoutCreatedCasesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3029,6 +3082,7 @@ export type UserUncheckedCreateWithoutCreatedCasesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3080,6 +3134,7 @@ export type UserCreateWithoutAssignedCasesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3126,6 +3181,7 @@ export type UserUncheckedCreateWithoutAssignedCasesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3177,6 +3233,7 @@ export type UserCreateWithoutClosedCasesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3223,6 +3280,7 @@ export type UserUncheckedCreateWithoutClosedCasesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3285,6 +3343,7 @@ export type UserUpdateWithoutCreatedCasesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3331,6 +3390,7 @@ export type UserUncheckedUpdateWithoutCreatedCasesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3388,6 +3448,7 @@ export type UserUpdateWithoutAssignedCasesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3434,6 +3495,7 @@ export type UserUncheckedUpdateWithoutAssignedCasesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3491,6 +3553,7 @@ export type UserUpdateWithoutClosedCasesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3537,6 +3600,7 @@ export type UserUncheckedUpdateWithoutClosedCasesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3583,6 +3647,7 @@ export type UserCreateWithoutCaseCommentsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3629,6 +3694,7 @@ export type UserUncheckedCreateWithoutCaseCommentsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3691,6 +3757,7 @@ export type UserUpdateWithoutCaseCommentsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3737,6 +3804,7 @@ export type UserUncheckedUpdateWithoutCaseCommentsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3783,6 +3851,7 @@ export type UserCreateWithoutCaseDoctorsCreatedInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3829,6 +3898,7 @@ export type UserUncheckedCreateWithoutCaseDoctorsCreatedInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -3891,6 +3961,7 @@ export type UserUpdateWithoutCaseDoctorsCreatedInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3937,6 +4008,7 @@ export type UserUncheckedUpdateWithoutCaseDoctorsCreatedInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3983,6 +4055,7 @@ export type UserCreateWithoutCaseInterpretersCreatedInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4029,6 +4102,7 @@ export type UserUncheckedCreateWithoutCaseInterpretersCreatedInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4091,6 +4165,7 @@ export type UserUpdateWithoutCaseInterpretersCreatedInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4137,6 +4212,7 @@ export type UserUncheckedUpdateWithoutCaseInterpretersCreatedInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4183,6 +4259,7 @@ export type UserCreateWithoutCaseCostsCreatedInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4229,6 +4306,7 @@ export type UserUncheckedCreateWithoutCaseCostsCreatedInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4291,6 +4369,7 @@ export type UserUpdateWithoutCaseCostsCreatedInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4337,6 +4416,7 @@ export type UserUncheckedUpdateWithoutCaseCostsCreatedInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4383,6 +4463,7 @@ export type UserCreateWithoutWatchedCasesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4429,6 +4510,7 @@ export type UserUncheckedCreateWithoutWatchedCasesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4491,6 +4573,7 @@ export type UserUpdateWithoutWatchedCasesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4537,6 +4620,7 @@ export type UserUncheckedUpdateWithoutWatchedCasesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4583,6 +4667,7 @@ export type UserCreateWithoutAttachmentUploadsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4629,6 +4714,7 @@ export type UserUncheckedCreateWithoutAttachmentUploadsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4691,6 +4777,7 @@ export type UserUpdateWithoutAttachmentUploadsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4737,6 +4824,7 @@ export type UserUncheckedUpdateWithoutAttachmentUploadsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4783,6 +4871,7 @@ export type UserCreateWithoutCreatedProtocolsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4829,6 +4918,7 @@ export type UserUncheckedCreateWithoutCreatedProtocolsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -4891,6 +4981,7 @@ export type UserUpdateWithoutCreatedProtocolsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4937,6 +5028,7 @@ export type UserUncheckedUpdateWithoutCreatedProtocolsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4983,6 +5075,7 @@ export type UserCreateWithoutProtocolCommentsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5029,6 +5122,7 @@ export type UserUncheckedCreateWithoutProtocolCommentsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5091,6 +5185,7 @@ export type UserUpdateWithoutProtocolCommentsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5137,6 +5232,7 @@ export type UserUncheckedUpdateWithoutProtocolCommentsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5183,6 +5279,7 @@ export type UserCreateWithoutCreatedDonationsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5229,6 +5326,7 @@ export type UserUncheckedCreateWithoutCreatedDonationsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5291,6 +5389,7 @@ export type UserUpdateWithoutCreatedDonationsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5337,6 +5436,7 @@ export type UserUncheckedUpdateWithoutCreatedDonationsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5383,6 +5483,7 @@ export type UserCreateWithoutGeneratedReportsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5429,6 +5530,7 @@ export type UserUncheckedCreateWithoutGeneratedReportsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5491,6 +5593,7 @@ export type UserUpdateWithoutGeneratedReportsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5537,6 +5640,7 @@ export type UserUncheckedUpdateWithoutGeneratedReportsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5583,6 +5687,7 @@ export type UserCreateWithoutActivitiesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5629,6 +5734,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5691,6 +5797,7 @@ export type UserUpdateWithoutActivitiesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5737,6 +5844,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5783,6 +5891,7 @@ export type UserCreateWithoutNotificationsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5829,6 +5938,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -5891,6 +6001,7 @@ export type UserUpdateWithoutNotificationsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5937,6 +6048,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5983,6 +6095,7 @@ export type UserCreateWithoutMentionsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6029,6 +6142,7 @@ export type UserUncheckedCreateWithoutMentionsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6080,6 +6194,7 @@ export type UserCreateWithoutMentioningInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6126,6 +6241,7 @@ export type UserUncheckedCreateWithoutMentioningInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6188,6 +6304,7 @@ export type UserUpdateWithoutMentionsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6234,6 +6351,7 @@ export type UserUncheckedUpdateWithoutMentionsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6291,6 +6409,7 @@ export type UserUpdateWithoutMentioningInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6337,6 +6456,7 @@ export type UserUncheckedUpdateWithoutMentioningInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6383,6 +6503,7 @@ export type UserCreateWithoutCreatedTodosInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6429,6 +6550,7 @@ export type UserUncheckedCreateWithoutCreatedTodosInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6480,6 +6602,7 @@ export type UserCreateWithoutAssignedTodosInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6526,6 +6649,7 @@ export type UserUncheckedCreateWithoutAssignedTodosInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6577,6 +6701,7 @@ export type UserCreateWithoutCompletedTodosInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6623,6 +6748,7 @@ export type UserUncheckedCreateWithoutCompletedTodosInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -6685,6 +6811,7 @@ export type UserUpdateWithoutCreatedTodosInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6731,6 +6858,7 @@ export type UserUncheckedUpdateWithoutCreatedTodosInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6788,6 +6916,7 @@ export type UserUpdateWithoutAssignedTodosInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6834,6 +6963,7 @@ export type UserUncheckedUpdateWithoutAssignedTodosInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6891,6 +7021,7 @@ export type UserUpdateWithoutCompletedTodosInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6937,6 +7068,7 @@ export type UserUncheckedUpdateWithoutCompletedTodosInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6983,6 +7115,7 @@ export type UserCreateWithoutCreatedEventsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -7029,6 +7162,7 @@ export type UserUncheckedCreateWithoutCreatedEventsInput = {
   lastName?: string | null
   displayName?: string | null
   avatarUrl?: string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: Date | string | null
@@ -7091,6 +7225,7 @@ export type UserUpdateWithoutCreatedEventsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7137,6 +7272,7 @@ export type UserUncheckedUpdateWithoutCreatedEventsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7466,6 +7602,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   lastName?: boolean
   displayName?: boolean
   avatarUrl?: boolean
+  avatarConfig?: boolean
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: boolean
@@ -7514,6 +7651,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastName?: boolean
   displayName?: boolean
   avatarUrl?: boolean
+  avatarConfig?: boolean
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: boolean
@@ -7531,6 +7669,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastName?: boolean
   displayName?: boolean
   avatarUrl?: boolean
+  avatarConfig?: boolean
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: boolean
@@ -7548,6 +7687,7 @@ export type UserSelectScalar = {
   lastName?: boolean
   displayName?: boolean
   avatarUrl?: boolean
+  avatarConfig?: boolean
   isActive?: boolean
   isInstanceAdmin?: boolean
   lastLoginAt?: boolean
@@ -7555,7 +7695,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "emailVerified" | "image" | "firstName" | "lastName" | "displayName" | "avatarUrl" | "isActive" | "isInstanceAdmin" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "emailVerified" | "image" | "firstName" | "lastName" | "displayName" | "avatarUrl" | "avatarConfig" | "isActive" | "isInstanceAdmin" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -7636,6 +7776,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     lastName: string | null
     displayName: string | null
     avatarUrl: string | null
+    avatarConfig: runtime.JsonValue | null
     isActive: boolean
     isInstanceAdmin: boolean
     lastLoginAt: Date | null
@@ -8103,6 +8244,7 @@ export interface UserFieldRefs {
   readonly lastName: Prisma.FieldRef<"User", 'String'>
   readonly displayName: Prisma.FieldRef<"User", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
+  readonly avatarConfig: Prisma.FieldRef<"User", 'Json'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly isInstanceAdmin: Prisma.FieldRef<"User", 'Boolean'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>

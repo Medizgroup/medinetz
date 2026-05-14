@@ -19,6 +19,8 @@ import { LoreleiAvatarDialog } from "@/components/avatar/lorelei-avatar-dialog";
 import { updateProfileAction } from "@/app/(app)/actions/users/profile";
 import { toastManager } from "../ui/toast";
 
+import { AvatarConfig } from "@/lib/avatar/dicebear";
+
 type UserDTO = {
   id: string;
   email: string;
@@ -29,6 +31,7 @@ type UserDTO = {
   lastName: string | null;
   displayName: string | null;
   avatarUrl: string | null;
+  avatarConfig: AvatarConfig | null;
 };
 
 type ActionState =
@@ -42,9 +45,11 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
     updateProfileAction,
     initialState,
   );
-
   const [avatarUrl, setAvatarUrl] = React.useState<string | null>(
     user.avatarUrl,
+  );
+  const [avatarConfig, setAvatarConfig] = React.useState<AvatarConfig | null>(
+    user.avatarConfig,
   );
 
   // Optional: Success Toast/Message
@@ -69,7 +74,11 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
           action={formAction}
           errors={!state.ok ? state.errors : {}}
           className="w-full max-w-7xl">
-          <input type="hidden" name="avatarUrl" value={avatarUrl ?? ""} />
+          <input
+            type="hidden"
+            name="avatarConfig"
+            value={avatarConfig ? JSON.stringify(avatarConfig) : ""}
+          />
 
           {/* AVATAR */}
           <div className="grid grid-cols-1">
@@ -97,9 +106,12 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
 
                 <div className="flex sm:flex-row flex-col gap-4">
                   <LoreleiAvatarDialog
-                    seed={user.name ?? user.id}
-                    value={avatarUrl}
-                    onPick={(url) => setAvatarUrl(url)}
+                    seed={user.id}
+                    config={avatarConfig}
+                    onPick={({ config, url }) => {
+                      setAvatarConfig(config);
+                      setAvatarUrl(url);
+                    }}
                   />
 
                   {avatarUrl && (
@@ -108,7 +120,10 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
                       variant="destructive-outline"
                       disabled={pending}
                       className="rounded-full"
-                      onClick={() => setAvatarUrl(null)}>
+                      onClick={() => {
+                        setAvatarUrl(null);
+                        setAvatarConfig(null);
+                      }}>
                       Avatar löschen
                     </Button>
                   )}
