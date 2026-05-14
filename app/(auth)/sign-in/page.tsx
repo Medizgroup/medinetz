@@ -183,22 +183,22 @@ export default function SignInPage() {
         <Card className="w-full max-w-sm rounded-4xl px-6 py-10 pt-14">
           <CardContent>
             <Form onSubmit={onSubmit} errors={errors}>
-              <div className="flex flex-col items-center space-y-8">
-                <div className="space-y-2 text-center">
-                  <div>
+              <div className="flex flex-col  items-center space-y-8">
+                <div className="space-y-2 text-center ">
+                  <div className="flex justify-center">
                     <Image
                       src="/Logo/logo-light.svg"
                       alt="Logo"
                       className="dark:hidden"
-                      width={90}
-                      height={90}
+                      width={80}
+                      height={80}
                     />
                     <Image
                       src="/Logo/logo-dark.svg"
                       alt="Logo Text"
                       className="hidden dark:inline "
-                      width={90}
-                      height={90}
+                      width={80}
+                      height={80}
                     />
                   </div>
                   <h1 className="text-balance text-3xl font-semibold text-foreground">
@@ -282,15 +282,6 @@ export default function SignInPage() {
 
                   {step === "email" && (
                     <>
-                      <Button
-                        type="button"
-                        variant="link"
-                        className="w-full text-sm text-muted-foreground"
-                        disabled={loading}
-                        onClick={() => router.push("/sign-up")}>
-                        Noch kein Konto? Registrieren
-                      </Button>
-
                       <div className="flex items-center gap-4 py-2">
                         <Separator className="flex-1" />
                         <span className="text-sm text-muted-foreground">
