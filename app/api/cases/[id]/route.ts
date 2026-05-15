@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 
@@ -253,7 +254,7 @@ export async function PATCH(
         | "REOPENED",
       targetType: "case",
       targetId: id,
-      metadata: a.metadata,
+      metadata: a.metadata as any,
     })),
   });
 

@@ -20,7 +20,7 @@ export async function GET(req: Request) {
   const pageSize = 30;
   const filterActive = searchParams.get("active"); // "true" | "false" | null
 
-  const where: Parameters<typeof prisma.user.findMany>[0]["where"] = {};
+  const where: Record<string, unknown> = {};
 
   if (search.trim()) {
     where.OR = [

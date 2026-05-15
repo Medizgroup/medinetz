@@ -28,9 +28,9 @@ export function NavProjects({
         {organizations.slice(0, 4).map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <Link href={`/settings/organizations text-foreground/80`}>
+              <Link href={`/settings/organizations`}>
                 <span
-                  className="w-2 h-2 rounded-full"
+                  className="w-3 h-3 rounded-md"
                   style={{ backgroundColor: item.color }}></span>
                 <span>{item.name}</span>
               </Link>

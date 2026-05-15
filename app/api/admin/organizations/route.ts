@@ -27,7 +27,7 @@ export async function GET(req: Request) {
   const page = Math.max(parseInt(searchParams.get("page") ?? "1", 10), 1);
   const pageSize = 30;
 
-  const where: Parameters<typeof prisma.organization.findMany>[0]["where"] = {};
+  const where: Record<string, unknown> = {};
   if (search.trim()) {
     where.OR = [
       { name: { contains: search, mode: "insensitive" } },

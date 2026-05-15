@@ -42,14 +42,13 @@ function Input({
         ) || undefined
       }
       data-size={size}
-      data-slot="input-control"
-    >
+      data-slot="input-control">
       {nativeInput ? (
         <input
           className={inputClassName}
           data-slot="input"
           size={typeof size === "number" ? size : undefined}
-          {...props}
+          {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
         />
       ) : (
         <InputPrimitive

@@ -39,7 +39,7 @@ export function NavMain({
                 href={item.url}
                 className="w-full flex items-center gap-2 justify-between">
                 <div className="flex items-center gap-2">
-                  <item.icon className="size-4.5" />
+                  <item.icon className="size-4.25" />
                   <span>{item.title}</span>
                 </div>
                 {item.count && (

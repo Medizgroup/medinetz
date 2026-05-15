@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import {
+  BellRing,
   BookOpen,
   CalendarIcon,
   CircleQuestionMark,
@@ -86,6 +87,11 @@ export function AppSidebar({
         title: "Aktivitäten",
         url: "/activities",
         icon: History,
+      },
+      {
+        title: "Benachrichtigungen",
+        url: "/notifications",
+        icon: BellRing,
       },
       {
         title: "Wikis",

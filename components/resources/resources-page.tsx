@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -250,7 +251,7 @@ export default function ResourcesPage({ canEdit }: Props) {
                   <li
                     key={r.id}
                     ref={(el) => {
-                      if (el) itemRefs.current.set(r.id, el);
+                      if (el) itemRefs.current.set(r.id, el as any);
                     }}>
                     <div
                       onClick={() => setSelectedId(r.id)}
