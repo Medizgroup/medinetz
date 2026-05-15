@@ -3,7 +3,6 @@
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { GalleryVerticalEnd, LayersPlus, ListTodo } from "lucide-react";
 import HomeTodo from "./home-todos";
 import { Case, CasePriority, CaseStatus } from "@/generated/prisma/client";
 import HomeCase from "./home-cases";

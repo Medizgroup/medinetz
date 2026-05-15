@@ -101,7 +101,7 @@ export default function HomeWelcome({ user }: { user: User }) {
           words={shuffledMessages}
           typeSpeed={70}
           deleteSpeed={50}
-          pauseDelay={10000}
+          pauseDelay={60000}
           cursorStyle="underscore"
           startOnView
           showCursor={false}

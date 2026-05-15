@@ -8,18 +8,6 @@ import { de } from "date-fns/locale";
 import Link from "next/link";
 
 import {
-  BookOpenIcon,
-  PlusIcon,
-  AtSign,
-  Paperclip,
-  CheckCircle2,
-  RotateCcw,
-  type LucideIcon,
-  RefreshCcw,
-  MessagesSquare,
-} from "lucide-react";
-
-import {
   Timeline,
   TimelineContent,
   TimelineHeader,

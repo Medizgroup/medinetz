@@ -1,5 +1,5 @@
 "use client";
-import { LogOut, MoonIcon, SunIcon } from "lucide-react";
+import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,9 +9,6 @@ import {
   MenuItem,
   MenuPopup,
   MenuSeparator,
-  MenuSub,
-  MenuSubPopup,
-  MenuSubTrigger,
   MenuTrigger,
 } from "@/components/ui/menu";
 
@@ -21,6 +18,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getInitials } from "@/lib/helper/user";
 import { Switch } from "../ui/switch";
+import { WalkingRound } from "@solar-icons/react-perf/category/style/LineDuotone";
 export default function UserBadge({
   user,
 }: {
@@ -29,6 +27,7 @@ export default function UserBadge({
     avatarUrl: string | null;
     id: string;
     displayName: string | null;
+    isInstanceAdmin: boolean;
   };
 }) {
   const { theme, setTheme } = useTheme();
@@ -51,7 +50,7 @@ export default function UserBadge({
           <Button
             size="icon-xl"
             variant="ghost"
-            className="rounded-full border "
+            className="rounded-full bg-muted"
           />
         }>
         <Avatar className="size-8 ">
@@ -84,7 +83,33 @@ export default function UserBadge({
 
         <MenuSeparator />
         {/* Admin Panel */}
-        <MenuGroup>
+
+        {user.isInstanceAdmin && (
+          <>
+            <MenuGroup>
+              <MenuGroupLabel>Admin</MenuGroupLabel>
+              <MenuItem render={<Link href="/dashboard" />}>Dashboard</MenuItem>
+              <MenuItem render={<Link href="/dashboard/organizations" />}>
+                Organisation
+              </MenuItem>
+              <MenuItem render={<Link href="/dashboard/users" />}>
+                Benutzer
+              </MenuItem>
+              <MenuItem render={<Link href="/dashboard/resources" />}>
+                Ressourcen
+              </MenuItem>
+              <MenuItem render={<Link href="/dashboard/organizations" />}>
+                Organisation
+              </MenuItem>
+              <MenuItem render={<Link href="/dashboard/finance" />}>
+                Finanzen
+              </MenuItem>
+            </MenuGroup>
+
+            <MenuSeparator />
+          </>
+        )}
+        {/* <MenuGroup>
           <MenuGroupLabel>Admin</MenuGroupLabel>
           <MenuItem render={<Link href="/dashboard" />}>Dashboard</MenuItem>
           <MenuItem render={<Link href="/dashboard/organizations" />}>
@@ -102,9 +127,9 @@ export default function UserBadge({
           <MenuItem render={<Link href="/dashboard/finance" />}>
             Finanzen
           </MenuItem>
-        </MenuGroup>
+        </MenuGroup> */}
 
-        <MenuSeparator />
+        {/* <MenuSeparator /> */}
         <MenuGroup>
           <MenuGroupLabel>preference</MenuGroupLabel>
           <MenuItem>Benachrichtigung</MenuItem>
@@ -137,9 +162,9 @@ export default function UserBadge({
           </div>
         </MenuGroup>
         <MenuSeparator />
-        <MenuItem variant="destructive" onClick={logOut}>
-          <LogOut aria-hidden="true" />
-          Sich abmelden
+        <MenuItem variant="destructive" className="" onClick={logOut}>
+          <WalkingRound className="size-5" aria-hidden="true" />
+          <span>Sich abmelden</span>
         </MenuItem>
       </MenuPopup>
     </Menu>

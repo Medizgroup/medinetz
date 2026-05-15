@@ -1,5 +1,3 @@
-import { GalleryVerticalEnd, ListTodo } from "lucide-react";
-
 import { Separator } from "@/components/ui/separator";
 import UserBadge from "./user-badge";
 import { auth } from "@/lib/auth";
@@ -8,6 +6,7 @@ import prisma from "@/lib/prisma";
 import NotificationsPopover from "@/components/notifications/notifications-popover";
 import Link from "next/link";
 import QuickAddTodo from "../header/quick-add-todo";
+import { Checklist, FolderOpen } from "@/lib/icons";
 
 async function HeadUser() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -24,6 +23,7 @@ async function HeadUser() {
         avatarUrl: true,
         email: true,
         id: true,
+        isInstanceAdmin: true,
       },
     }),
     prisma.case.count({
@@ -54,7 +54,7 @@ async function HeadUser() {
         href="/cases"
         className="flex items-center gap-1 transition-colors hover:text-foreground"
         title="Offene Fälle">
-        <GalleryVerticalEnd className="size-4.5" />
+        <FolderOpen className="size-5" />
         <span className="text-sm text-muted-foreground tabular-nums">
           {openCasesCount}
         </span>
@@ -64,7 +64,7 @@ async function HeadUser() {
         href="/todos"
         className="flex items-center gap-1 transition-colors hover:text-foreground"
         title="Offene Todos">
-        <ListTodo className="size-4.5" />
+        <Checklist className="size-5" />
         <span className="text-sm text-muted-foreground tabular-nums">
           {openTodosCount}
         </span>

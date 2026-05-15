@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, Check, CheckCheck } from "lucide-react";
+import { CheckCheck } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 
@@ -14,11 +15,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 
 import { notificationIcon } from "./notification-icon";
 import { notificationHref } from "@/lib/utils/notifications/notifications/links";
+import { Bell } from "@/lib/icons";
 
 type Notification = {
   id: string;
@@ -32,7 +32,7 @@ type Notification = {
   createdAt: string;
 };
 
-const POLL_INTERVAL_MS = 120_000;
+const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5 Minuten
 
 export default function NotificationsPopover() {
   const router = useRouter();
