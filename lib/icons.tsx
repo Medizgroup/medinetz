@@ -12,6 +12,7 @@ import {
   LayersMinimalistic as SolarLayersMinimalistic,
   QuestionCircle as SolarQuestionCircle,
   Plain3 as SolarPlain3,
+  WidgetAdd as SolarWidgetAdd,
 } from "@solar-icons/react-perf/LineDuotone";
 
 type SolarIconProps = SVGProps<SVGSVGElement> & {
@@ -39,3 +40,4 @@ export const Documents = adapt(SolarDocuments);
 export const Layers = adapt(SolarLayersMinimalistic);
 export const QuestionMark = adapt(SolarQuestionCircle);
 export const Plain = adapt(SolarPlain3);
+export const WidgetAdd = adapt(SolarWidgetAdd);

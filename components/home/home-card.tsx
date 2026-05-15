@@ -7,6 +7,7 @@ import { GalleryVerticalEnd, LayersPlus, ListTodo } from "lucide-react";
 import HomeTodo from "./home-todos";
 import { Case, CasePriority, CaseStatus } from "@/generated/prisma/client";
 import HomeCase from "./home-cases";
+import { Checklist, FolderOpen, WidgetAdd } from "@/lib/icons";
 
 type Props = {
   userId: string;
@@ -32,20 +33,20 @@ export default function HomeCard({ stats, todos, cases }: Props) {
     {
       name: "Todos",
       value: String(stats.todosOpen).padStart(2, "0"),
-      icon: ListTodo,
+      icon: Checklist,
       href: "/todos",
     },
     {
       name: "Fälle",
       value: String(stats.casesAssignedOpen).padStart(2, "0"),
-      icon: GalleryVerticalEnd,
+      icon: FolderOpen,
       href: "/cases",
     },
     {
       name: "Erstellt",
       value: String(stats.casesCreated).padStart(2, "0"),
-      icon: LayersPlus,
-      href: "/cases?filter=created",
+      icon: WidgetAdd,
+      href: "/cases",
     },
   ];
 
@@ -60,7 +61,7 @@ export default function HomeCard({ stats, todos, cases }: Props) {
                   {item.name}
                 </span>
                 <span className="flex items-center justify-center rounded-full bg-sidebar p-2">
-                  <item.icon className={cn("size-5 text-foreground")} />
+                  <item.icon className={cn("size-7 text-foreground")} />
                 </span>
               </dd>
               <dd className="tabular-nums mt-1 text-3xl font-semibold text-foreground">
@@ -71,7 +72,7 @@ export default function HomeCard({ stats, todos, cases }: Props) {
             <CardFooter className="flex justify-end border-t border-border p-0!">
               <a
                 href={item.href}
-                className="px-6 py-3 text-sm font-medium text-primary hover:text-primary/90">
+                className="px-6 py-3 text-sm font-medium text-muted-foreground hover:text-primary/90">
                 Alles ansehen &#8594;
               </a>
             </CardFooter>
