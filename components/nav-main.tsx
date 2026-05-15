@@ -6,9 +6,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LucideIcon } from "lucide-react";
+// import { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { ComponentType, SVGProps } from "react";
+
+export type IconComponent = ComponentType<
+  SVGProps<SVGSVGElement> & { size?: number | string; color?: string }
+>;
 
 export function NavMain({
   items,
@@ -16,7 +21,7 @@ export function NavMain({
   items: {
     title: string;
     url: string;
-    icon: LucideIcon;
+    icon: IconComponent;
     isActive?: boolean;
     items?: {
       title: string;
@@ -39,7 +44,7 @@ export function NavMain({
                 href={item.url}
                 className="w-full flex items-center gap-2 justify-between">
                 <div className="flex items-center gap-2">
-                  <item.icon className="size-4.25" />
+                  <item.icon className="size-4.5 " />
                   <span>{item.title}</span>
                 </div>
                 {item.count && (

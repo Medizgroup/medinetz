@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { IconComponent } from "./nav-main";
 
 export function NavRessources({
   ressources,
@@ -20,7 +21,7 @@ export function NavRessources({
   ressources: {
     name: string;
     url: string;
-    icon: LucideIcon;
+    icon: IconComponent;
     items?: {
       name: string;
       url: string;
@@ -35,7 +36,7 @@ export function NavRessources({
         {ressources.map((item) => (
           <SidebarMenuItem key={item.name}>
             <Collapsible>
-              <CollapsibleTrigger className="inline-flex items-center justify-between gap-2 text-sm data-panel-open:[&_svg]:rotate-180 w-full">
+              <CollapsibleTrigger className="inline-flex items-center justify-between gap-2 text-sm w-full">
                 {item.items && (
                   <span className="flex items-center gap-2">
                     <item.icon className="size-4 " />

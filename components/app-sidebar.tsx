@@ -1,20 +1,20 @@
 "use client";
 
 import * as React from "react";
+
 import {
-  BellRing,
-  BookOpen,
-  CalendarIcon,
-  CircleQuestionMark,
-  Folder,
-  Form,
-  Frame,
-  GalleryVerticalEnd,
-  History,
   Home,
-  ListTodo,
-  Send,
-} from "lucide-react";
+  Calendar,
+  FolderOpen,
+  DocumentAdd,
+  Bell,
+  History,
+  Checklist,
+  Documents,
+  Layers,
+  QuestionMark,
+  Plain,
+} from "@/lib/icons";
 
 import {
   Sidebar,
@@ -48,12 +48,6 @@ export function AppSidebar({
   const pathname = usePathname();
 
   const data = {
-    project: {
-      projectName: "Routine",
-      projectAvatar: "",
-      projectUrl: "/routine",
-      projectIcon: Frame,
-    },
     navMain: [
       {
         title: "Home",
@@ -63,24 +57,24 @@ export function AppSidebar({
       {
         title: "Kalender",
         url: "/events",
-        icon: CalendarIcon,
+        icon: Calendar,
         count: eventsCount,
       },
       {
         title: "Protokolle",
         url: "/protocols",
-        icon: Form,
+        icon: DocumentAdd,
       },
       {
         title: "Fälle",
         url: "/cases",
-        icon: GalleryVerticalEnd,
+        icon: FolderOpen,
         count: assignedCasesCount,
       },
       {
         title: "Todo's",
         url: "/todos",
-        icon: ListTodo,
+        icon: Checklist,
         count: openTodosCount,
       },
       {
@@ -91,24 +85,24 @@ export function AppSidebar({
       {
         title: "Benachrichtigungen",
         url: "/notifications",
-        icon: BellRing,
+        icon: Bell,
       },
       {
         title: "Wikis",
         url: "/wikis",
-        icon: BookOpen,
+        icon: Documents,
       },
     ],
     navSecondary: [
       {
         title: "Hilfe",
         url: "#",
-        icon: CircleQuestionMark,
+        icon: QuestionMark,
       },
       {
         title: "Feedback",
         url: "#",
-        icon: Send,
+        icon: Plain,
       },
     ],
     organizations: organizations,
@@ -116,7 +110,7 @@ export function AppSidebar({
       {
         name: "Ressourcen",
         url: "/resources",
-        icon: Folder,
+        icon: Layers,
       },
     ],
   };
