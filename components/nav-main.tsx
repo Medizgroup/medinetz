@@ -39,7 +39,7 @@ export function NavMain({
             <SidebarMenuButton
               asChild
               tooltip={item.title}
-              className={`${pathname === item.url ? "bg-accent text-foreground font-semibold" : "text-foreground/80 hover:text-foreground"} rounded-xl `}>
+              className={`${pathname === item.url || pathname.startsWith(item.url + "/") ? "bg-accent text-foreground font-semibold" : "text-foreground/80 hover:text-foreground"} rounded-xl `}>
               <Link
                 href={item.url}
                 className="w-full flex items-center gap-2 justify-between">
