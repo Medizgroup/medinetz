@@ -132,9 +132,8 @@ export default function UserBadge({
         {/* <MenuSeparator /> */}
         <MenuGroup>
           <MenuGroupLabel>preference</MenuGroupLabel>
-          <MenuItem>Benachrichtigung</MenuItem>
           <div
-            className="flex justify-between py-4 items-start gap-2 px-2"
+            className="flex justify-between py-4 items-start gap-2 px-2 text-sm"
             onClick={(e) => e.preventDefault()}>
             App Theme
             <div
