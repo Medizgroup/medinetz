@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${roboto.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange>
           <ToastProvider>
