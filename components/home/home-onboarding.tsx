@@ -2,16 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  CheckCircle2,
-  UserCircle,
-  Settings2,
-  Users,
-  FilePlus,
-  ClipboardPlus,
-  X,
-  type LucideIcon,
-} from "lucide-react";
+import { X, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -19,6 +10,15 @@ import {
   dismissOnboardingAction,
 } from "@/app/(app)/actions/onboarding";
 import type { OnboardingStepKey } from "@/lib/types/onboarding";
+import {
+  ArrowRightUp,
+  CheckCircle,
+  DocumentAdd,
+  FolderOpen,
+  Tuning2,
+  UsersGroupTwoRounded,
+  UserSpeak,
+} from "@solar-icons/react-perf/category/style/LineDuotone";
 
 type StepDef = {
   key: OnboardingStepKey;
@@ -43,7 +43,7 @@ function getStepDefs(isAdmin: boolean): StepDef[] {
       title: "Profil vervollständigen",
       description:
         "Lade ein Avatar hoch und ergänze deinen Namen, damit Kolleg:innen dich erkennen.",
-      icon: UserCircle,
+      icon: UserSpeak,
       actionLabel: "Zum Profil",
       href: "/settings/profile",
     },
@@ -52,7 +52,7 @@ function getStepDefs(isAdmin: boolean): StepDef[] {
       title: "Basis-Einstellungen setzen",
       description:
         "Sprache, Zeitzone und Benachrichtigungen an deine Bedürfnisse anpassen.",
-      icon: Settings2,
+      icon: Tuning2,
       actionLabel: "Einstellungen öffnen",
       href: "/settings/account",
     },
@@ -62,7 +62,7 @@ function getStepDefs(isAdmin: boolean): StepDef[] {
           title: "Team einladen",
           description:
             "Lade Kolleg:innen ein, damit ihr Fälle und Protokolle gemeinsam bearbeiten könnt.",
-          icon: Users,
+          icon: UsersGroupTwoRounded,
           actionLabel: "Mitglieder einladen",
           href: "/dashboard/users",
         }
@@ -71,16 +71,16 @@ function getStepDefs(isAdmin: boolean): StepDef[] {
           title: "Organisation beitreten",
           description:
             "Tritt einer Organisation bei, um Zugriff auf deren Fälle und Protokolle zu erhalten.",
-          icon: Users,
-          actionLabel: "Organisationen",
+          icon: UsersGroupTwoRounded,
+          actionLabel: "Zu Organisationen",
           href: "/settings/organizations",
         },
     {
       key: "firstCase",
       title: "Ersten Fall anlegen",
       description:
-        "Erfasse einen Fall mit Patient:in, Diagnose und benötigten Ressourcen.",
-      icon: FilePlus,
+        "Erfasse einen Fall mit Patient:in, Diagnose und benötigten Ressourcen. und bearbeite Sie danach gemeinsam mit deinem Team.",
+      icon: FolderOpen,
       actionLabel: "Fall erstellen",
       href: "/cases/new",
     },
@@ -89,7 +89,7 @@ function getStepDefs(isAdmin: boolean): StepDef[] {
       title: "Erstes Protokoll erstellen",
       description:
         "Halte Sitzungen und Entscheidungen strukturiert für dein Team fest.",
-      icon: ClipboardPlus,
+      icon: DocumentAdd,
       actionLabel: "Protokoll erstellen",
       href: "/protocols/new",
     },
@@ -120,7 +120,7 @@ function StepIndicator({
   if (isCompleted) {
     return (
       <div className="flex size-7 items-center justify-center">
-        <CheckCircle2 aria-hidden="true" className="size-7 text-emerald-500" />
+        <CheckCircle aria-hidden="true" className="size-7 text-emerald-500" />
       </div>
     );
   }
@@ -254,20 +254,28 @@ export default function HomeOnboarding({
                         {def.description}
                       </p>
                       {isActive && !isCompleted ? (
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <Button size="sm" render={<Link href={def.href} />}>
+                        <div className="mt-3 flex flex-wrap items-center gap-2 justify-between">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            render={<Link href={def.href} />}>
                             <Icon
                               aria-hidden="true"
                               className="-ml-0.5 size-4 shrink-0"
                             />
                             {def.actionLabel}
+                            <ArrowRightUp
+                              aria-hidden="true"
+                              className="size-3.5 "
+                            />
                           </Button>
                           <Button
                             disabled={pending}
+                            className="bg-accent hover:bg-accent/50! rounded-full"
                             onClick={() => handleMark(def.key)}
-                            size="sm"
+                            size="xs"
                             variant="ghost">
-                            Als erledigt markieren
+                            Überspringen
                           </Button>
                         </div>
                       ) : null}

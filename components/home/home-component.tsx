@@ -7,6 +7,7 @@ import HomeWelcome from "./home-welcome";
 import HomeCard from "./home-card";
 import HomeActivity from "./home-activity";
 import { Case, User } from "@/generated/prisma/client";
+import { getOnboardingStatus } from "@/lib/utils/onboarding";
 
 export default async function HomeComponent() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -31,6 +32,8 @@ export default async function HomeComponent() {
   });
 
   if (!user) return <div className="p-6">User not found</div>;
+
+  const onboarding = await getOnboardingStatus(userId);
 
   // 2) Orgas (Mitgliedschaften) -> orgIds für Feed
   const memberships = await prisma.organizationMember.findMany({
@@ -139,6 +142,7 @@ export default async function HomeComponent() {
             casesAssignedOpen: assignedCasesCount,
             casesCreated: createdCasesCount,
           }}
+          onboarding={onboarding}
           todos={todos}
           userId={userId}
           cases={cases as Case[]}

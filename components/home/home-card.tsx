@@ -7,6 +7,8 @@ import HomeTodo from "./home-todos";
 import { Case, CasePriority, CaseStatus } from "@/generated/prisma/client";
 import HomeCase from "./home-cases";
 import { Checklist, FolderOpen, WidgetAdd } from "@/lib/icons";
+import HomeOnboarding from "./home-onboarding";
+import { OnboardingStatus } from "@/lib/utils/onboarding";
 
 type Props = {
   userId: string;
@@ -25,9 +27,10 @@ type Props = {
     description: string | null;
   }[];
   cases: Case[];
+  onboarding: OnboardingStatus;
 };
 
-export default function HomeCard({ stats, todos, cases }: Props) {
+export default function HomeCard({ onboarding, stats, todos, cases }: Props) {
   const data = [
     {
       name: "Todos",
@@ -79,6 +82,16 @@ export default function HomeCard({ stats, todos, cases }: Props) {
         ))}
       </dl>
 
+      {!onboarding.dismissed && !onboarding.allDone ? (
+        <div className="">
+          <HomeOnboarding
+            completedCount={onboarding.completedCount}
+            isAdmin={onboarding.isAdmin}
+            steps={onboarding.steps}
+            totalCount={onboarding.totalCount}
+          />
+        </div>
+      ) : null}
       <HomeTodo todos={todos} />
       <HomeCase
         cases={
