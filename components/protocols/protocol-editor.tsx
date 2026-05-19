@@ -77,6 +77,9 @@ const agTable = () =>
 export const defaultTemplate: Value = [
   p("Anwesend: ", "#f59e0b"),
 
+  callout(
+    "`cmd` + `@` um einen Mitglied zu erwähnen und `cmd` + `#` für einen Fall.",
+  ),
   h2("1. Aktuelle Fälle"),
   p(" "),
   caseTable(),
@@ -85,6 +88,7 @@ export const defaultTemplate: Value = [
   p(" "),
   caseTable(),
 
+  blockquote("Tipp: Fälle können auch nachträglich hinzugefügt werden!"),
   h2("3. AG Schwangerenprojekt"),
   p(" "),
   blockquote("Nur den Protokoll-Link eingeben und die Bemerkungen.", "#f59e0b"),
@@ -118,8 +122,6 @@ export const defaultTemplate: Value = [
 
   h2("7. To-Dos bis nächstes Plenum"),
   p(""),
-
-  callout("cmd + T um eine Todo Liste zu erstellen!"),
 ] as Value;
 
 export default function ProtocolEditor({
