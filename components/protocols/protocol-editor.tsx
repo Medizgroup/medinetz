@@ -78,9 +78,7 @@ export const defaultTemplate: Value = [
   p("Anwesend: ", "#f59e0b"),
   p(" "),
   p(" "),
-  callout(
-    "`cmd` + `@` um einen Mitglied zu erwähnen und `cmd` + `#` für einen Fall.",
-  ),
+  callout("@ um einen Mitglied zu erwähnen und # für einen Fall."),
   p(" "),
   h2("1. Aktuelle Fälle"),
   p(" "),
