@@ -76,10 +76,12 @@ const agTable = () =>
 // Removed illegal call to useTheme. React hooks must be called inside a component or custom Hook.
 export const defaultTemplate: Value = [
   p("Anwesend: ", "#f59e0b"),
-
+  p(" "),
+  p(" "),
   callout(
     "`cmd` + `@` um einen Mitglied zu erwähnen und `cmd` + `#` für einen Fall.",
   ),
+  p(" "),
   h2("1. Aktuelle Fälle"),
   p(" "),
   caseTable(),
@@ -87,22 +89,23 @@ export const defaultTemplate: Value = [
   h2("2. Neue Anfragen"),
   p(" "),
   caseTable(),
-
+  p(" "),
   blockquote("Tipp: Fälle können auch nachträglich hinzugefügt werden!"),
+  p(" "),
   h2("3. AG Schwangerenprojekt"),
   p(" "),
   blockquote("Nur den Protokoll-Link eingeben und die Bemerkungen.", "#f59e0b"),
   p(" "),
   agTable(),
-
+  p(" "),
   h2("4. AG Clearingstelle Gießen Marburg"),
   p(" "),
   agTable(),
-
+  p(" "),
   h2("5. AG Öffentlichkeitsarbeit"),
   p(" "),
   agTable(),
-
+  p(" "),
   h2("6. Termine & Organisatorisches"),
   p(" "),
   p("Kommende Termine und Veranstaltungen:"),
@@ -119,7 +122,7 @@ export const defaultTemplate: Value = [
     ],
     [300, 600],
   ),
-
+  p(" "),
   h2("7. To-Dos bis nächstes Plenum"),
   p(""),
 ] as Value;
