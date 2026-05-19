@@ -87,7 +87,8 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
                 Avatar
               </h2>
               <p className="text-pretty my-1 text-sm leading-6 text-muted-foreground">
-                Du kannst dein Avatar bearbeiten oder entfernen.
+                Du kannst dein Avatar bearbeiten oder entfernen. Vergiss nicht
+                auf Speichern zu klicken, um die Änderungen zu übernehmen.
               </p>
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">

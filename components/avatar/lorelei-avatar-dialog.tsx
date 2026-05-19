@@ -43,6 +43,7 @@ import {
   EARRINGS,
 } from "@/lib/avatar/dicebear";
 import Image from "next/image";
+import { toastManager } from "../ui/toast";
 
 function svgToDataUri(svg: string) {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
@@ -145,7 +146,15 @@ export function LoreleiAvatarDialog(props: {
 
   const handleSave = () => {
     onPick({ config: cfg, url: buildAvatarUrl(cfg) });
+
     setOpen(false);
+
+    toastManager.add({
+      title: "Avatar aktualisiert",
+      description:
+        "Vergiss nicht auf Speichern zu klicken, um die Änderungen zu übernehmen.",
+      type: "info",
+    });
   };
 
   const handleRandomize = () => {
@@ -312,7 +321,7 @@ export function LoreleiAvatarDialog(props: {
               Abbrechen
             </Button>
             <Button type="button" onClick={handleSave} className="rounded-full">
-              Speichern
+              Übernehmen
             </Button>
           </div>
         </DialogFooter>
