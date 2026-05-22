@@ -75,3 +75,31 @@ export async function updateProfileAction(
   revalidatePath("/profile");
   return { ok: true };
 }
+
+/**
+ * Server Action: Speichert einen neuen Avatar-Link in der Datenbank.
+ * Erwartet ein Objekt { avatarUrl: string }
+ */
+export async function saveAvatarUrlAction(
+  avatarUrl: string,
+): Promise<{ ok: boolean; errors?: Record<string, string> }> {
+  if (typeof avatarUrl !== "string" || !avatarUrl.trim()) {
+    return { ok: false, errors: { avatarUrl: "Ungültige Avatar-URL." } };
+  }
+
+  // Authentifizieren
+  const session = await auth.api.getSession({ headers: await headers() });
+  const userId = session?.user?.id;
+  if (!userId) {
+    return { ok: false, errors: { auth: "Nicht authentifiziert." } };
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { avatarUrl },
+  });
+
+  revalidatePath("settings/profile");
+
+  return { ok: true };
+}

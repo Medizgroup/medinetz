@@ -4,7 +4,6 @@
 import * as React from "react";
 import { createAvatar } from "@dicebear/core";
 import { lorelei } from "@dicebear/collection";
-import { Repeat2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -44,6 +43,9 @@ import {
 } from "@/lib/avatar/dicebear";
 import Image from "next/image";
 import { toastManager } from "../ui/toast";
+import { Repeat } from "@solar-icons/react-perf/category/style/LineDuotone";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { saveAvatarUrlAction } from "@/app/(app)/actions/users/profile";
 
 function svgToDataUri(svg: string) {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
@@ -77,7 +79,9 @@ function AvatarSelect(props: {
         <SelectTrigger>
           <SelectValue placeholder={`${label} wählen`} />
         </SelectTrigger>
-        <SelectPopup>
+        <SelectPopup
+          alignItemWithTrigger={false}
+          className="max-h-48 overflow-auto">
           {allowNone && <SelectItem value="none">{noneLabel}</SelectItem>}
           {options.map((v) => (
             <SelectItem key={v} value={v}>
@@ -149,11 +153,16 @@ export function LoreleiAvatarDialog(props: {
 
     setOpen(false);
 
+    // Fehlerbehandlung: Fehler anzeigen oder ignorieren, Erfolg egal weil das Formular erst durch "Speichern" wirklich übernommen wird.
+    saveAvatarUrlAction(buildAvatarUrl(cfg)).catch(() => {
+      toastManager.add({
+        title: "Avatar konnte nicht gespeichert werden.",
+        type: "error",
+      });
+    });
     toastManager.add({
       title: "Avatar aktualisiert",
-      description:
-        "Vergiss nicht auf Speichern zu klicken, um die Änderungen zu übernehmen.",
-      type: "info",
+      type: "success",
     });
   };
 
@@ -190,123 +199,145 @@ export function LoreleiAvatarDialog(props: {
         </DialogHeader>
 
         <DialogPanel>
-          <div className="grid gap-6 md:grid-cols-[220px_1fr]">
-            <div className="flex flex-col items-center gap-3">
-              <Image
-                width={176}
-                height={176}
-                src={previewSrc}
-                alt="Avatar preview"
-                className="size-44"
+          <div className="flex flex-col items-center gap-3 h-80 pb-4">
+            <Image
+              width={276}
+              height={276}
+              src={previewSrc}
+              alt="Avatar preview"
+              className="size-62 overflow-hidden rounded-full "
+            />
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-xl"
+                  onClick={handleRandomize}
+                  className="rounded-full bg-accent">
+                  <Repeat className="" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Zufällig generieren </p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <div className="space-y-4">
+            <div className="grid gap-4 gap-y-6 sm:grid-cols-3">
+              <AvatarSelect
+                label="Kopf"
+                value={cfg.head}
+                options={HEAD}
+                onChange={(v) => set("head", v)}
               />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleRandomize}
-                className="rounded-full">
-                <Repeat2 className="me-2" />
-                Zufällig
-              </Button>
-            </div>
+              <AvatarSelect
+                label="Haare"
+                value={cfg.hair}
+                options={HAIR}
+                onChange={(v) => set("hair", v)}
+              />
+              <AvatarSelect
+                label="Haarschmuck"
+                value={cfg.hairAccessories}
+                options={HAIRACCESSORIES}
+                onChange={(v) => set("hairAccessories", v)}
+                allowNone
+              />
+              <AvatarSelect
+                label="Augen"
+                value={cfg.eyes}
+                options={EYES}
+                onChange={(v) => set("eyes", v)}
+              />
+              <AvatarSelect
+                label="Nase"
+                value={cfg.nose}
+                options={NOSE}
+                onChange={(v) => set("nose", v)}
+              />
+              <AvatarSelect
+                label="Mund"
+                value={cfg.mouth}
+                options={MOUTH}
+                onChange={(v) => set("mouth", v)}
+              />
+              <AvatarSelect
+                label="Sommersprossen"
+                value={cfg.freckles}
+                options={FRECKLES}
+                onChange={(v) => set("freckles", v)}
+                allowNone
+              />
+              <AvatarSelect
+                label="Brille"
+                value={cfg.glasses}
+                options={GLASSES}
+                onChange={(v) => set("glasses", v)}
+                allowNone
+              />
+              <AvatarSelect
+                label="Bart"
+                value={cfg.beard}
+                options={BEARD}
+                onChange={(v) => set("beard", v)}
+                allowNone
+                noneLabel="Keiner"
+              />
+              <AvatarSelect
+                label="Ohrringe"
+                value={cfg.earrings}
+                options={EARRINGS}
+                onChange={(v) => set("earrings", v)}
+                allowNone
+              />
 
-            <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <AvatarSelect
-                  label="Kopf"
-                  value={cfg.head}
-                  options={HEAD}
-                  onChange={(v) => set("head", v)}
-                />
-                <AvatarSelect
-                  label="Haare"
-                  value={cfg.hair}
-                  options={HAIR}
-                  onChange={(v) => set("hair", v)}
-                />
-                <AvatarSelect
-                  label="Hair Accessories"
-                  value={cfg.hairAccessories}
-                  options={HAIRACCESSORIES}
-                  onChange={(v) => set("hairAccessories", v)}
-                  allowNone
-                />
-                <AvatarSelect
-                  label="Augen"
-                  value={cfg.eyes}
-                  options={EYES}
-                  onChange={(v) => set("eyes", v)}
-                />
-                <AvatarSelect
-                  label="Nase"
-                  value={cfg.nose}
-                  options={NOSE}
-                  onChange={(v) => set("nose", v)}
-                />
-                <AvatarSelect
-                  label="Mund"
-                  value={cfg.mouth}
-                  options={MOUTH}
-                  onChange={(v) => set("mouth", v)}
-                />
-                <AvatarSelect
-                  label="Sommersprossen"
-                  value={cfg.freckles}
-                  options={FRECKLES}
-                  onChange={(v) => set("freckles", v)}
-                  allowNone
-                />
-                <AvatarSelect
-                  label="Brille"
-                  value={cfg.glasses}
-                  options={GLASSES}
-                  onChange={(v) => set("glasses", v)}
-                  allowNone
-                />
-                <AvatarSelect
-                  label="Bart"
-                  value={cfg.beard}
-                  options={BEARD}
-                  onChange={(v) => set("beard", v)}
-                  allowNone
-                  noneLabel="Keiner"
-                />
-                <AvatarSelect
-                  label="Ohrringe"
-                  value={cfg.earrings}
-                  options={EARRINGS}
-                  onChange={(v) => set("earrings", v)}
-                  allowNone
-                />
-
-                {/* Hintergrund mit Farb-Swatch bleibt eigenständig */}
-                <Field className="gap-2 sm:col-span-2">
-                  <FieldLabel>Hintergrund</FieldLabel>
-                  <Select
-                    value={cfg.backgroundColor}
-                    onValueChange={(v) =>
-                      typeof v === "string" && set("backgroundColor", v)
-                    }>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Farbe wählen" />
-                    </SelectTrigger>
-                    <SelectPopup>
-                      {BG.map((v) => (
-                        <SelectItem key={v} value={v}>
-                          <div className="flex items-center gap-2">
-                            <div className="h-4 w-4 rounded border bg-[linear-gradient(45deg,rgba(0,0,0,.06)_25%,transparent_25%,transparent_75%,rgba(0,0,0,.06)_75%,rgba(0,0,0,.06)),linear-gradient(45deg,rgba(0,0,0,.06)_25%,transparent_25%,transparent_75%,rgba(0,0,0,.06)_75%,rgba(0,0,0,.06))] bg-size-[6px_6px] bg-position-[0_0,3px_3px]">
-                              <div
+              {/* Hintergrund mit Farb-Swatch bleibt eigenständig */}
+              <Field className="gap-2 ">
+                <FieldLabel>Hintergrund</FieldLabel>
+                <Select
+                  value={cfg.backgroundColor}
+                  onValueChange={(v) =>
+                    typeof v === "string" && set("backgroundColor", v)
+                  }>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {(value: string | undefined) =>
+                        value ? (
+                          <span className="flex items-center gap-2">
+                            <span className="h-4 w-4 rounded border bg-[linear-gradient(45deg,rgba(0,0,0,.06)_25%,transparent_25%,transparent_75%,rgba(0,0,0,.06)_75%,rgba(0,0,0,.06)),linear-gradient(45deg,rgba(0,0,0,.06)_25%,transparent_25%,transparent_75%,rgba(0,0,0,.06)_75%,rgba(0,0,0,.06))] bg-size-[6px_6px] bg-position-[0_0,3px_3px] flex items-center justify-center">
+                              <span
                                 className="h-full w-full rounded"
-                                style={{ backgroundColor: `#${v}` }}
+                                style={{ backgroundColor: `#${value}` }}
                               />
-                            </div>
-                            <div>#{v}</div>
+                            </span>
+                            <span>#{value}</span>
+                          </span>
+                        ) : null
+                      }
+                    </SelectValue>
+                    {/* <SelectValue placeholder="Farbe wählen" /> */}
+                  </SelectTrigger>
+                  <SelectPopup
+                    alignItemWithTrigger={false}
+                    className="max-h-48 overflow-auto">
+                    {BG.map((v) => (
+                      <SelectItem key={v} value={v}>
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 rounded border bg-[linear-gradient(45deg,rgba(0,0,0,.06)_25%,transparent_25%,transparent_75%,rgba(0,0,0,.06)_75%,rgba(0,0,0,.06)),linear-gradient(45deg,rgba(0,0,0,.06)_25%,transparent_25%,transparent_75%,rgba(0,0,0,.06)_75%,rgba(0,0,0,.06))] bg-size-[6px_6px] bg-position-[0_0,3px_3px]">
+                            <div
+                              className="h-full w-full rounded"
+                              style={{ backgroundColor: `#${v}` }}
+                            />
                           </div>
-                        </SelectItem>
-                      ))}
-                    </SelectPopup>
-                  </Select>
-                </Field>
-              </div>
+                          <div>#{v}</div>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectPopup>
+                </Select>
+              </Field>
             </div>
           </div>
         </DialogPanel>
