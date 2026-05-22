@@ -20,6 +20,8 @@ import { updateProfileAction } from "@/app/(app)/actions/users/profile";
 import { toastManager } from "../ui/toast";
 
 import { AvatarConfig } from "@/lib/avatar/dicebear";
+import Image from "next/image";
+import { UserRounded } from "@solar-icons/react-perf/category/style/LineDuotone";
 
 type UserDTO = {
   id: string;
@@ -87,21 +89,23 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
                 Avatar
               </h2>
               <p className="text-pretty my-1 text-sm leading-6 text-muted-foreground">
-                Du kannst dein Avatar bearbeiten oder entfernen. Vergiss nicht
-                auf Speichern zu klicken, um die Änderungen zu übernehmen.
+                Du kannst dein Avatar bearbeiten oder entfernen.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
-                <div className="size-20 sm:size-44 overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full pt-4">
+                <div className="size-20 sm:size-44 overflow-hidden rounded-full">
                   {avatarUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
+                      width={176}
+                      height={176}
                       src={avatarUrl}
                       alt="Avatar"
                       className="size-20 sm:size-44"
                     />
                   ) : (
-                    <div className="size-20 sm:size-44 bg-muted rounded-3xl" />
+                    <div className="size-20 sm:size-44 bg-muted rounded-full flex items-center justify-center">
+                      <UserRounded className="size-32 text-muted-foreground" />
+                    </div>
                   )}
                 </div>
 
@@ -138,7 +142,7 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
             </div>
           </div>
 
-          <Separator className="my-8" />
+          <div className="my-8" />
 
           {/* DISPLAY NAME */}
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
@@ -147,7 +151,10 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
                 Anzeige Name
               </h2>
               <p className="text-pretty mt-1 text-sm leading-6 text-muted-foreground">
-                Das ist dein öffentlicher Name in der App.
+                Das ist dein öffentlicher Name in der App. Er wird in Fällen,
+                Protokollen und überall dort angezeigt, wo dein Name sichtbar
+                ist. Du kannst hier einen Spitznamen oder eine andere
+                Bezeichnung wählen, die dich am besten repräsentiert.
               </p>
             </div>
 
@@ -219,30 +226,8 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
                     <FieldLabel htmlFor="email">Email</FieldLabel>
                     <Input id="email" value={user.email} disabled readOnly />
                     <FieldDescription>
-                      Die Email kann nur bei Account geändert werden.
+                      Die Email kann nur bei Konto geändert werden.
                     </FieldDescription>
-                  </Field>
-                </div>
-
-                <div className="col-span-full sm:col-span-3">
-                  <Field className="gap-2">
-                    <FieldLabel>Status</FieldLabel>
-                    <Input
-                      value={user.isActive ? "Aktiv" : "Inaktiv"}
-                      disabled
-                      readOnly
-                    />
-                  </Field>
-                </div>
-
-                <div className="col-span-full sm:col-span-3">
-                  <Field className="gap-2">
-                    <FieldLabel>Email verifiziert</FieldLabel>
-                    <Input
-                      value={user.emailVerified ? "Ja" : "Nein"}
-                      disabled
-                      readOnly
-                    />
                   </Field>
                 </div>
               </div>
