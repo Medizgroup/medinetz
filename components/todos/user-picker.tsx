@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown, X, SearchIcon, Check, UserRoundX } from "lucide-react";
+import { ChevronsUpDown, X, Check } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,10 @@ import {
   InputGroupInput,
 } from "../ui/input-group";
 import { Spinner } from "../ui/spinner";
+import {
+  Magnifier,
+  UserCrossRounded,
+} from "@solar-icons/react-perf/category/style/LineDuotone";
 
 type User = {
   id: string;
@@ -148,7 +152,7 @@ export default function UserPicker({
           <Field className="">
             <InputGroup>
               <InputGroupAddon>
-                <SearchIcon className="text-muted-foreground size-4" />
+                <Magnifier className="text-muted-foreground size-4" />
               </InputGroupAddon>
               <InputGroupInput
                 value={query}
@@ -168,7 +172,7 @@ export default function UserPicker({
                       onChange(null);
                       setOpen(false);
                     }}>
-                    <UserRoundX className="size-3.5" />
+                    <UserCrossRounded className="size-5" />
                   </Button>
                 )}
               </InputGroupAddon>
