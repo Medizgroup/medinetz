@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { CalendarIcon, ChevronDown, ChevronUp } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { format, isPast, isToday } from "date-fns";
 import { de } from "date-fns/locale";
 
@@ -48,7 +48,7 @@ export default function TodosList({
   const [description, setDescription] = React.useState("");
   const [loading, setLoading] = React.useState(true);
 
-  const [view, setView] = React.useState<View>("mine");
+  const [view, setView] = React.useState<View>("all");
   const [filter, setFilter] = React.useState<"open" | "done" | "all">("open");
   const [priorityFilter, setPriorityFilter] = React.useState<string>("all");
 
@@ -59,11 +59,9 @@ export default function TodosList({
     currentUserId,
   );
   const [adding, setAdding] = React.useState(false);
-  const [showQuickAddDetails, setShowQuickAddDetails] = React.useState(false);
 
   const [editingTodo, setEditingTodo] = React.useState<Todo | null>(null);
   const [editOpen, setEditOpen] = React.useState(false);
-  const [showNewTodo, setShowNewTodo] = React.useState(false);
 
   const load = React.useCallback(async () => {
     setLoading(true);
@@ -111,7 +109,6 @@ export default function TodosList({
       setNewDueDate(undefined);
       setNewPriority(2);
       setNewAssigneeId(currentUserId);
-      setShowQuickAddDetails(false);
       window.dispatchEvent(new Event("todos:changed"));
       await load();
     } finally {
@@ -143,23 +140,8 @@ export default function TodosList({
 
   return (
     <div className="space-y-4">
-      <Button
-        onClick={() => setShowNewTodo((v) => !v)}
-        className="w-full md:w-auto">
-        {showNewTodo ? (
-          <>
-            <ChevronUp className="inline size-4" /> Neues Todo ausblenden
-          </>
-        ) : (
-          <>
-            <ChevronDown className="inline size-4" /> Neues Todo hinzufügen
-          </>
-        )}
-      </Button>
       {/* Quick-Add */}
-      <form
-        onSubmit={handleQuickAdd}
-        className={cn("space-y-2", !showNewTodo && "hidden")}>
+      <form onSubmit={handleQuickAdd} className={cn("space-y-2")}>
         <div className="grid gap-4">
           <Input
             value={newTitle}
@@ -167,6 +149,68 @@ export default function TodosList({
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Neues Todo…"
           />
+
+          <div className="grid gap-2 sm:grid-cols-3">
+            <Select
+              items={priorities_todos}
+              value={newPriority}
+              onValueChange={(v) => setNewPriority(v ?? 2)}>
+              <SelectTrigger className="text-xs">
+                <SelectValue>
+                  {(() => {
+                    const selectedPriority = priorities_todos.find(
+                      (p) => p.value === newPriority,
+                    );
+                    return selectedPriority ? (
+                      <span className="flex items-center gap-2">
+                        <Badge variant={selectedPriority.variant} size="sm">
+                          {selectedPriority.label}
+                        </Badge>
+                      </span>
+                    ) : null;
+                  })()}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectPopup alignItemWithTrigger={false} className="w-auto">
+                {priorities_todos.map((priority) => (
+                  <SelectItem key={priority.value} value={priority.value}>
+                    <span className="flex items-center gap-2">
+                      <Badge variant={priority.variant} size="sm">
+                        {priority.label}
+                      </Badge>
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectPopup>
+            </Select>
+            <Popover>
+              <PopoverTrigger
+                render={
+                  <Button className="w-full justify-start" variant="outline" />
+                }>
+                <CalendarIcon aria-hidden="true" />
+                {newDueDate
+                  ? format(newDueDate, "PPP", { locale: de })
+                  : "Datum auswählen"}
+              </PopoverTrigger>
+              <PopoverPopup>
+                <Calendar
+                  defaultMonth={newDueDate ? new Date(newDueDate) : undefined}
+                  mode="single"
+                  onSelect={setNewDueDate}
+                  selected={newDueDate}
+                />
+              </PopoverPopup>
+            </Popover>
+
+            <UserPicker
+              value={newAssigneeId}
+              onChange={setNewAssigneeId}
+              placeholder={
+                newAssigneeId ? "Default Benutzer" : "Für alle sichtbar"
+              }
+            />
+          </div>
           <Field className="w-full">
             <FieldLabel htmlFor="textarea-with-desc">Beschreibung</FieldLabel>
             <Textarea
@@ -177,92 +221,14 @@ export default function TodosList({
               rows={6}
             />
           </Field>
-          {/* <Button type="submit" disabled={!newTitle.trim() || adding}>
+          <Button type="submit" disabled={!newTitle.trim() || adding}>
             {adding ? <Loader2 className="size-4 animate-spin" /> : null}
             Hinzufügen
-          </Button> */}
+          </Button>
         </div>
-
-        <div className="grid gap-2 sm:grid-cols-3">
-          <Select
-            items={priorities_todos}
-            value={newPriority}
-            onValueChange={(v) => setNewPriority(v ?? 2)}>
-            <SelectTrigger className="text-xs">
-              <SelectValue>
-                {(() => {
-                  const selectedPriority = priorities_todos.find(
-                    (p) => p.value === newPriority,
-                  );
-                  return selectedPriority ? (
-                    <span className="flex items-center gap-2">
-                      <Badge variant={selectedPriority.variant} size="sm">
-                        {selectedPriority.label}
-                      </Badge>
-                    </span>
-                  ) : null;
-                })()}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectPopup alignItemWithTrigger={false} className="w-auto">
-              {priorities_todos.map((priority) => (
-                <SelectItem key={priority.value} value={priority.value}>
-                  <span className="flex items-center gap-2">
-                    <Badge variant={priority.variant} size="sm">
-                      {priority.label}
-                    </Badge>
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectPopup>
-          </Select>
-          <Popover>
-            <PopoverTrigger
-              render={
-                <Button className="w-full justify-start" variant="outline" />
-              }>
-              <CalendarIcon aria-hidden="true" />
-              {newDueDate
-                ? format(newDueDate, "PPP", { locale: de })
-                : "Datum auswählen"}
-            </PopoverTrigger>
-            <PopoverPopup>
-              <Calendar
-                defaultMonth={newDueDate ? new Date(newDueDate) : undefined}
-                mode="single"
-                onSelect={setNewDueDate}
-                selected={newDueDate}
-              />
-            </PopoverPopup>
-          </Popover>
-
-          <UserPicker
-            value={newAssigneeId}
-            onChange={setNewAssigneeId}
-            placeholder={
-              newAssigneeId ? "Default Benutzer" : "Für alle sichtbar"
-            }
-          />
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setShowQuickAddDetails((v) => !v)}
-          className="text-xs text-muted-foreground hover:text-foreground">
-          {showQuickAddDetails ? (
-            <>
-              <ChevronUp className="inline size-3" /> Details ausblenden
-            </>
-          ) : (
-            <>
-              <ChevronDown className="inline size-3" /> Priorität, Frist &
-              Zuweisung
-            </>
-          )}
-        </button>
       </form>
 
-      <Separator />
+      <Separator className="my-6" />
       {/* View-Tabs + Filter */}
       <div className="flex flex-wrap items-center gap-2">
         <Select
@@ -387,8 +353,8 @@ export default function TodosList({
               <li
                 key={t.id}
                 className={cn(
-                  "group flex items-start gap-3 px-4 py-3 transition-colors bg-muted/40 rounded-lg cursor-pointer hover:bg-muted",
-                  isOverdue && "bg-destructive/10 hover:bg-destructive/15",
+                  "group flex items-start gap-3 px-4 py-3 bg-accent rounded-lg cursor-pointer hover:shadow-sm transition-shadow",
+                  isOverdue && "",
                   t.done && "opacity-60",
                 )}>
                 <Checkbox
@@ -462,6 +428,8 @@ export default function TodosList({
                         {!isDueToday
                           ? format(due, "dd. MMM yyyy", { locale: de })
                           : null}
+                        {isDueToday ? " Heute fällig!!" : null}
+                        {isOverdue ? " Überfällig !!" : null}
                       </span>
                     ) : null}
                   </div>
