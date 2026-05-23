@@ -108,7 +108,7 @@ export function AppSidebar({
     organizations: organizations,
     ressources: [
       {
-        name: "Ressourcen",
+        name: "Ärzte & Dolmetscher",
         url: "/resources",
         icon: Layers,
       },
@@ -128,14 +128,14 @@ export function AppSidebar({
                   className="dark:hidden"
                   src="/Logo/Medizgroup-light.svg"
                   alt="Medizgroup Logo"
-                  width={200}
-                  height={80}
+                  width={180}
+                  height={75}
                 />
                 <Image
                   className="hidden dark:inline"
                   src="/Logo/Medizgroup-dark.svg"
                   alt="Medizgroup Logo"
-                  width={200}
+                  width={180}
                   height={80}
                 />
               </Link>

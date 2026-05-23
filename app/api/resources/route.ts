@@ -36,6 +36,25 @@ export async function GET() {
         longitude: true,
         createdAt: true,
         updatedAt: true,
+        caseDoctors: {
+          select: {
+            caseId: true,
+            appointmentDate: true,
+            invoiceAmount: true,
+            invoicePaid: true,
+            case: {
+              select: {
+                caseNumber: true,
+                status: true,
+                patient: {
+                  select: {
+                    pseudonym: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     }),
     prisma.interpreter.findMany({
@@ -56,6 +75,25 @@ export async function GET() {
         longitude: true,
         createdAt: true,
         updatedAt: true,
+        caseInterpreters: {
+          select: {
+            caseId: true,
+            appointmentDate: true,
+            cost: true,
+            invoicePaid: true,
+            case: {
+              select: {
+                caseNumber: true,
+                status: true,
+                patient: {
+                  select: {
+                    pseudonym: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     }),
   ]);

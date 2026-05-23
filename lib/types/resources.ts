@@ -17,6 +17,21 @@ export type DoctorRow = {
   tags: string[];
   latitude: number | null;
   longitude: number | null;
+  caseDoctors:
+    | {
+        caseId: string;
+        appointmentDate: Date | null;
+        invoiceAmount: number | null;
+        invoicePaid: boolean | null;
+        case: {
+          caseNumber: number;
+          status: string;
+          patient: {
+            pseudonym: string;
+          } | null;
+        };
+      }[]
+    | null;
 };
 
 export type InterpreterRow = {
@@ -34,6 +49,21 @@ export type InterpreterRow = {
   tags: string[];
   latitude: number | null;
   longitude: number | null;
+  caseInterpreters:
+    | {
+        caseId: string;
+        appointmentDate: Date | null;
+        cost: number | null;
+        invoicePaid: boolean | null;
+        case: {
+          caseNumber: number;
+          status: string;
+          patient: {
+            pseudonym: string;
+          } | null;
+        };
+      }[]
+    | null;
 };
 
 export type ResourceRow = DoctorRow | InterpreterRow;
