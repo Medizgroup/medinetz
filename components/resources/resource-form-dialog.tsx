@@ -191,7 +191,7 @@ export default function ResourceFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogPopup className="sm:max-w-[560px] z-10000">
+      <DialogPopup className=" z-10000">
         <DialogHeader>
           <DialogTitle>
             {isEdit

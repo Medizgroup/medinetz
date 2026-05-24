@@ -4,6 +4,7 @@ import * as React from "react";
 import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/input";
 
 type Props = {
   value: string[];
@@ -39,7 +40,7 @@ export function TagInput({ value, onChange, placeholder, className }: Props) {
   return (
     <div
       className={cn(
-        "flex flex-wrap gap-1.5 rounded-md border bg-background px-2 py-1.5 focus-within:ring-2 focus-within:ring-ring",
+        "flex flex-wrap gap-1.5 rounded-lg border bg-background px-2 py-1.5 focus-within:ring-2 focus-within:ring-ring",
         className,
       )}>
       {value.map((tag) => (
@@ -55,7 +56,7 @@ export function TagInput({ value, onChange, placeholder, className }: Props) {
           </button>
         </span>
       ))}
-      <input
+      <Input
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={onKeyDown}
