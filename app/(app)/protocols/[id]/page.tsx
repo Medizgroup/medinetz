@@ -41,6 +41,10 @@ import {
   STATUS_LABEL,
 } from "@/lib/utils/cases";
 import { cn } from "@/lib/utils";
+import {
+  Dislike,
+  Like,
+} from "@solar-icons/react-perf/category/style/LineDuotone";
 
 // function canEdit(role?: string) {
 //   return role === "COORDINATOR" || role === "ADMIN";
@@ -300,9 +304,12 @@ export default async function ProtocolDetailPage({
                   </TimelineHeader>
                   <TimelineContent className="mt-2 text-foreground">
                     <RichTextRenderer value={comment.content} />
-                    {/* <TimelineDate className="mt-1 mb-0 ">
-                      <ThumbsUp className="size-4! mt-3 ml-1 text-muted-foreground" />
-                    </TimelineDate> */}
+                    <TimelineDate className="mt-2 mb-0 flex items-center gap-1">
+                      <Button variant="ghost" className="rounded-full">
+                        <Like className="size-4! text-muted-foreground" />
+                      </Button>
+                      <span className="">0</span>
+                    </TimelineDate>
                   </TimelineContent>
                 </TimelineItem>
               );
