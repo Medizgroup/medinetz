@@ -41,10 +41,7 @@ import {
   STATUS_LABEL,
 } from "@/lib/utils/cases";
 import { cn } from "@/lib/utils";
-import {
-  Dislike,
-  Like,
-} from "@solar-icons/react-perf/category/style/LineDuotone";
+import { Like } from "@solar-icons/react-perf/category/style/LineDuotone";
 
 // function canEdit(role?: string) {
 //   return role === "COORDINATOR" || role === "ADMIN";
