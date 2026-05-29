@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
+import NotificationDigestToaster from "@/components/notifications/notification-digest-toaster";
 
 import { Separator } from "@/components/ui/separator";
 import {
@@ -110,6 +111,7 @@ export default async function AppLayout({
         }))}
       />
       <SidebarInset className="overflow-x-hidden!">
+        <NotificationDigestToaster />
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-2 px-4">
