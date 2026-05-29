@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import HeadUser from "@/components/user/headUser";
 import BreadcrumbComponent from "@/components/breadcrumb-component";
+import { getNews } from "@/lib/news/get-news";
 
 export default async function AppLayout({
   children,
@@ -91,12 +92,16 @@ export default async function AppLayout({
     orderBy: { organization: { createdAt: "asc" } },
   });
 
+  const { news, recentCount } = await getNews();
+
   return (
     <SidebarProvider>
       <AppSidebar
         openTodosCount={openTodosCount}
         assignedCasesCount={assignedCasesCount}
         eventsCount={eventsCount}
+        news={news}
+        newsCount={recentCount}
         organizations={organizations.map((org) => ({
           id: org.organization.id,
           name: org.organization.name,

@@ -166,3 +166,26 @@ export const InsuranceStatus = {
 } as const
 
 export type InsuranceStatus = (typeof InsuranceStatus)[keyof typeof InsuranceStatus]
+
+
+export const NewsCategory = {
+  RELEASE: 'RELEASE',
+  BUGFIX: 'BUGFIX',
+  UPDATE: 'UPDATE',
+  NEWS: 'NEWS',
+  ANNOUNCEMENT: 'ANNOUNCEMENT'
+} as const
+
+export type NewsCategory = (typeof NewsCategory)[keyof typeof NewsCategory]
+
+
+export const NewsBadge = {
+  UI: 'UI',
+  UX: 'UX',
+  ADMIN: 'ADMIN',
+  API: 'API',
+  SECURITY: 'SECURITY',
+  GENERAL: 'GENERAL'
+} as const
+
+export type NewsBadge = (typeof NewsBadge)[keyof typeof NewsBadge]
