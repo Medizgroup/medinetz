@@ -32,7 +32,7 @@ export default function ActivityLine({
               </Link>
             </TooltipTrigger>
             <TooltipContent className="flex items-center gap-2 p-2">
-              <Avatar>
+              <Avatar className="bg-neutral-600 dark:bg-neutral-300">
                 <AvatarImage
                   src={activity.user.avatarUrl ?? undefined}
                   alt={actor}
