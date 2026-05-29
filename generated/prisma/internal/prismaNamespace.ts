@@ -419,7 +419,8 @@ export const ModelName = {
   Patient: 'Patient',
   Diagnosis: 'Diagnosis',
   Medication: 'Medication',
-  PatientAccessLog: 'PatientAccessLog'
+  PatientAccessLog: 'PatientAccessLog',
+  News: 'News'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -435,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo" | "event" | "patient" | "diagnosis" | "medication" | "patientAccessLog"
+    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo" | "event" | "patient" | "diagnosis" | "medication" | "patientAccessLog" | "news"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3103,6 +3104,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    News: {
+      payload: Prisma.$NewsPayload<ExtArgs>
+      fields: Prisma.NewsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        findMany: {
+          args: Prisma.NewsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>[]
+        }
+        create: {
+          args: Prisma.NewsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        createMany: {
+          args: Prisma.NewsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        update: {
+          args: Prisma.NewsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNews>
+        }
+        groupBy: {
+          args: Prisma.NewsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3716,6 +3791,21 @@ export const PatientAccessLogScalarFieldEnum = {
 export type PatientAccessLogScalarFieldEnum = (typeof PatientAccessLogScalarFieldEnum)[keyof typeof PatientAccessLogScalarFieldEnum]
 
 
+export const NewsScalarFieldEnum = {
+  id: 'id',
+  category: 'category',
+  title: 'title',
+  description: 'description',
+  link: 'link',
+  badge: 'badge',
+  readMore: 'readMore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NewsScalarFieldEnum = (typeof NewsScalarFieldEnum)[keyof typeof NewsScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -4063,6 +4153,34 @@ export type EnumInsuranceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 export type ListEnumInsuranceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InsuranceStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'NewsCategory'
+ */
+export type EnumNewsCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'NewsCategory[]'
+ */
+export type ListEnumNewsCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsCategory[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NewsBadge'
+ */
+export type EnumNewsBadgeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsBadge'>
+    
+
+
+/**
+ * Reference to a field of type 'NewsBadge[]'
+ */
+export type ListEnumNewsBadgeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsBadge[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -4209,6 +4327,7 @@ export type GlobalOmitConfig = {
   diagnosis?: Prisma.DiagnosisOmit
   medication?: Prisma.MedicationOmit
   patientAccessLog?: Prisma.PatientAccessLogOmit
+  news?: Prisma.NewsOmit
 }
 
 /* Types for Logging */

@@ -589,6 +589,40 @@ export type EnumInsuranceStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel>
 }
 
+export type EnumNewsCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.NewsCategory | Prisma.EnumNewsCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.NewsCategory[] | Prisma.ListEnumNewsCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NewsCategory[] | Prisma.ListEnumNewsCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNewsCategoryFilter<$PrismaModel> | $Enums.NewsCategory
+}
+
+export type EnumNewsBadgeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.NewsBadge | Prisma.EnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.NewsBadge[] | Prisma.ListEnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.NewsBadge[] | Prisma.ListEnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumNewsBadgeNullableFilter<$PrismaModel> | $Enums.NewsBadge | null
+}
+
+export type EnumNewsCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NewsCategory | Prisma.EnumNewsCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.NewsCategory[] | Prisma.ListEnumNewsCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NewsCategory[] | Prisma.ListEnumNewsCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNewsCategoryWithAggregatesFilter<$PrismaModel> | $Enums.NewsCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsCategoryFilter<$PrismaModel>
+}
+
+export type EnumNewsBadgeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NewsBadge | Prisma.EnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.NewsBadge[] | Prisma.ListEnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.NewsBadge[] | Prisma.ListEnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumNewsBadgeNullableWithAggregatesFilter<$PrismaModel> | $Enums.NewsBadge | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsBadgeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsBadgeNullableFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1137,6 +1171,40 @@ export type NestedEnumInsuranceStatusWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumInsuranceStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumNewsCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.NewsCategory | Prisma.EnumNewsCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.NewsCategory[] | Prisma.ListEnumNewsCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NewsCategory[] | Prisma.ListEnumNewsCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNewsCategoryFilter<$PrismaModel> | $Enums.NewsCategory
+}
+
+export type NestedEnumNewsBadgeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.NewsBadge | Prisma.EnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.NewsBadge[] | Prisma.ListEnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.NewsBadge[] | Prisma.ListEnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumNewsBadgeNullableFilter<$PrismaModel> | $Enums.NewsBadge | null
+}
+
+export type NestedEnumNewsCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NewsCategory | Prisma.EnumNewsCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.NewsCategory[] | Prisma.ListEnumNewsCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NewsCategory[] | Prisma.ListEnumNewsCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNewsCategoryWithAggregatesFilter<$PrismaModel> | $Enums.NewsCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsCategoryFilter<$PrismaModel>
+}
+
+export type NestedEnumNewsBadgeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NewsBadge | Prisma.EnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.NewsBadge[] | Prisma.ListEnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.NewsBadge[] | Prisma.ListEnumNewsBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumNewsBadgeNullableWithAggregatesFilter<$PrismaModel> | $Enums.NewsBadge | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNewsBadgeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNewsBadgeNullableFilter<$PrismaModel>
 }
 
 

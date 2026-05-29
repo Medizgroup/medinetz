@@ -32,18 +32,24 @@ import { NavRessources } from "./nav-ressources";
 import { NavSettings } from "./settings/nav/nav-settings";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { Routing2 } from "@solar-icons/react-perf/category/style/LineDuotone";
+import { News } from "@/generated/prisma/client";
 
 export function AppSidebar({
   openTodosCount,
   assignedCasesCount,
   eventsCount,
   organizations,
+  news,
+  newsCount,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   openTodosCount: number;
   assignedCasesCount: number;
   eventsCount: number;
   organizations: { id: string; name: string; color: string; slug: string }[];
+  news: News[];
+  newsCount: number;
 }) {
   const pathname = usePathname();
 
@@ -95,6 +101,11 @@ export function AppSidebar({
     ],
     navSecondary: [
       {
+        title: "Was neu ist",
+        url: "/new",
+        icon: Routing2,
+      },
+      {
         title: "Hilfe",
         url: "#",
         icon: QuestionMark,
@@ -114,6 +125,7 @@ export function AppSidebar({
       },
     ],
   };
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -153,7 +165,12 @@ export function AppSidebar({
           <NavMain items={data.navMain} />
           <NavProjects organizations={data.organizations} />
           <NavRessources ressources={data.ressources} />
-          <NavSecondary items={data.navSecondary} className="mt-auto" />
+          <NavSecondary
+            items={data.navSecondary}
+            className="mt-auto"
+            news={news}
+            newsCount={newsCount}
+          />
         </SidebarContent>
       )}
     </Sidebar>

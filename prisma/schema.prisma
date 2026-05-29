@@ -132,6 +132,23 @@ enum InsuranceStatus {
   OTHER
 }
 
+enum NewsCategory {
+  RELEASE
+  BUGFIX
+  UPDATE
+  NEWS
+  ANNOUNCEMENT
+}
+
+enum NewsBadge {
+  UI
+  UX
+  ADMIN
+  API
+  SECURITY
+  GENERAL
+}
+
 // ============================================================
 //! 1. AUTH & USERS
 // ============================================================
@@ -1025,4 +1042,18 @@ model PatientAccessLog {
   @@index([patientId, createdAt(sort: Desc)])
   @@index([userId, createdAt(sort: Desc)])
   @@map("patient_access_logs")
+}
+
+model News {
+  id          String       @id @default(cuid())
+  category    NewsCategory
+  title       String
+  description String
+  link        String?      // Zielseite der Änderung, z.B. /protocols
+  badge       NewsBadge?
+  readMore    String?      // Changelog-Link für später
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([createdAt])
 }

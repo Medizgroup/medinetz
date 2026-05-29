@@ -221,3 +221,8 @@ export type Medication = Prisma.MedicationModel
  * 
  */
 export type PatientAccessLog = Prisma.PatientAccessLogModel
+/**
+ * Model News
+ * 
+ */
+export type News = Prisma.NewsModel

@@ -86,7 +86,8 @@ export const ModelName = {
   Patient: 'Patient',
   Diagnosis: 'Diagnosis',
   Medication: 'Medication',
-  PatientAccessLog: 'PatientAccessLog'
+  PatientAccessLog: 'PatientAccessLog',
+  News: 'News'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -677,6 +678,21 @@ export const PatientAccessLogScalarFieldEnum = {
 } as const
 
 export type PatientAccessLogScalarFieldEnum = (typeof PatientAccessLogScalarFieldEnum)[keyof typeof PatientAccessLogScalarFieldEnum]
+
+
+export const NewsScalarFieldEnum = {
+  id: 'id',
+  category: 'category',
+  title: 'title',
+  description: 'description',
+  link: 'link',
+  badge: 'badge',
+  readMore: 'readMore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NewsScalarFieldEnum = (typeof NewsScalarFieldEnum)[keyof typeof NewsScalarFieldEnum]
 
 
 export const SortOrder = {
