@@ -41,7 +41,6 @@ const blockquote = (text: string, color?: string) => ({
   type: "blockquote",
   children: [{ text, ...(color && { color }) }],
 });
-const callout = (text: string) => ({ type: "callout", children: [{ text }] });
 const th = (text: string) => ({ type: "td", children: [p(text)] });
 const td = (text = "") => ({ type: "td", children: [p(text)] });
 const tr = (cells: any[]) => ({ type: "tr", children: cells });
