@@ -1,3 +1,4 @@
+// app/(app)/protocols/[id]/page.tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -13,7 +14,7 @@ import { TElement } from "platejs";
 import ProtocolCommentForm from "@/components/protocols/protocol-comment-form";
 import EditProtocolForm from "@/components/protocols/edit-protocol-form";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, Circle, CircleCheck, Clock, Loader } from "lucide-react";
+import { Circle, CircleCheck, Clock, Loader } from "lucide-react";
 
 import {
   Timeline,
@@ -42,6 +43,7 @@ import {
 } from "@/lib/utils/cases";
 import { cn } from "@/lib/utils";
 import { Like } from "@solar-icons/react-perf/category/style/LineDuotone";
+import { ProtocolShell } from "@/components/protocols/protocol-shell";
 
 // function canEdit(role?: string) {
 //   return role === "COORDINATOR" || role === "ADMIN";
@@ -67,6 +69,7 @@ export default async function ProtocolDetailPage({
       id: true,
       title: true,
       protocolNumber: true,
+      version: true,
       date: true,
       description: true,
       descriptionText: true,
@@ -192,272 +195,260 @@ export default async function ProtocolDetailPage({
     `User ${protocol.creator.id.slice(0, 6)}`;
 
   return (
-    <div className="w-full grid grid-cols-9 gap-4">
-      <div className="mx-auto w-full max-w-6xl px-6 py-8 space-y-10 col-span-7 ">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <span
-                className={cn(
-                  "inline-flex h-6 w-6 items-center justify-center rounded-md border text-xs font-semibold",
-                  orgTypeBadge(protocol.organization.type).className,
-                )}
-                title={protocol.organization.type}>
-                {orgTypeBadge(protocol.organization.type).label}
-              </span>
-              <span className="text-sm text-muted-foreground">
-                {protocol.organization.name}
-              </span>
-            </div>
+    <ProtocolShell
+      sidebar={
+        <>
+          <section className="space-y-4">
+            <h2 className="text-lg font-semibold">Verknüpfte Fälle</h2>
 
-            <div>
-              <h1 className="text-2xl font-semibold">
-                #{protocol.protocolNumber} · {protocol.title}
-              </h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Erstellt von {creatorName} ·{" "}
-                {protocol.date.toLocaleDateString("de-DE")}
+            <div className="divide-y space-y-2">
+              {protocol.protocolCases.length === 0 ? (
+                <div className="p-4 text-sm text-muted-foreground">
+                  Noch keine Fälle verknüpft.
+                </div>
+              ) : (
+                protocol.protocolCases.map((entry) => (
+                  <Link
+                    href={`/cases/${entry.case.id}`}
+                    key={entry.id}
+                    className={`flex items-start justify-between gap-4 text-sm pb-2 ${entry.case.status === "CLOSED" ? "opacity-20" : ""}`}>
+                    <div className="min-w-0">
+                      <div
+                        className={`truncate ${entry.case.status === "CLOSED" ? "line-through" : ""}`}>
+                        <span className="font-medium">
+                          #{entry.case.caseNumber}{" "}
+                        </span>
+                        · {entry.case.title}
+                      </div>
+                      <div className="flex items-center gap-2 mt-1 text-muted-foreground">
+                        <Badge
+                          size="sm"
+                          variant={priorityVariant(entry.case.priority)}>
+                          {PRIORITY_LABEL[entry.case.priority]}
+                        </Badge>
+                        <span className="flex items-center gap-1 text-xs">
+                          {entry.case.status === "WAITING" ? (
+                            <Clock className="size-3 " />
+                          ) : entry.case.status === "CLOSED" ? (
+                            <CircleCheck className="size-3 text-blue-500" />
+                          ) : entry.case.status === "IN_PROGRESS" ? (
+                            <Loader className="size-3  text-amber-500" />
+                          ) : entry.case.status === "OPEN" ? (
+                            <Circle className="size-3 text-green-500" />
+                          ) : null}
+                          {STATUS_LABEL[entry.case.status]}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              )}
+            </div>
+          </section>
+
+          <section className="mt-8">
+            <h2 className="text-lg font-semibold">Erwähnt</h2>
+
+            {protocol.mentions.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Noch niemand erwähnt.
               </p>
-            </div>
+            ) : (
+              <div className="-space-x-3 flex mt-5">
+                {protocol.mentions.slice(0, 6).map((m) => {
+                  const u = m.mentionedUser;
+                  const name =
+                    u.displayName ?? u.name ?? `User ${u.id.slice(0, 6)}`;
+
+                  return (
+                    <Tooltip key={u.id}>
+                      <TooltipTrigger asChild>
+                        <Link
+                          href={`/m/${u.id}`}
+                          className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105">
+                          <Avatar className="size-10">
+                            <AvatarImage
+                              src={u.avatarUrl ?? undefined}
+                              alt={name}
+                            />
+                            <AvatarFallback>{getInitials(name)}</AvatarFallback>
+                          </Avatar>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>{name}</TooltipContent>
+                    </Tooltip>
+                  );
+                })}
+
+                {protocol.mentions.length > 6 ? (
+                  <span className="flex size-10 items-center justify-center rounded-full bg-secondary text-muted-foreground text-xs ring-2 ring-background">
+                    +{protocol.mentions.length - 6}
+                  </span>
+                ) : null}
+              </div>
+            )}
+          </section>
+        </>
+      }>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <span
+              className={cn(
+                "inline-flex h-6 w-6 items-center justify-center rounded-md border text-xs font-semibold",
+                orgTypeBadge(protocol.organization.type).className,
+              )}
+              title={protocol.organization.type}>
+              {orgTypeBadge(protocol.organization.type).label}
+            </span>
+            <span className="text-sm text-muted-foreground">
+              {protocol.organization.name}
+            </span>
           </div>
 
-          <div className="flex gap-2">
-            <Button
-              render={<Link href="/protocols" />}
-              variant="outline"
-              className="rounded-full">
-              <ChevronLeft className="size-4" /> Zurück
-            </Button>
+          <div>
+            <h1 className="text-2xl font-semibold">
+              #{protocol.protocolNumber} · {protocol.title}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Erstellt von {creatorName} ·{" "}
+              {protocol.date.toLocaleDateString("de-DE")}
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Bearbeiten</h2>
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold">Bearbeiten</h2>
 
-          <EditProtocolForm
-            protocol={{
-              id: protocol.id,
-              title: protocol.title,
-              date: protocol.date.toISOString().slice(0, 10),
-              description: (protocol.description as TElement[]) ?? [],
-              organizationId: protocol.organizationId,
-            }}
+        <EditProtocolForm
+          protocol={{
+            id: protocol.id,
+            title: protocol.title,
+            date: protocol.date.toISOString().slice(0, 10),
+            description: (protocol.description as TElement[]) ?? [],
+            organizationId: protocol.organizationId,
+            version: protocol.version,
+          }}
+        />
+      </div>
+
+      <Separator />
+
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">Kommentare</h2>
+
+        {commentable ? (
+          <ProtocolCommentForm
+            protocolId={protocol.id}
+            organizationId={protocol.organizationId}
           />
-        </div>
+        ) : null}
 
-        <Separator />
+        <Timeline>
+          {protocol.comments.map((comment, k) => {
+            const userName =
+              comment.user.displayName ||
+              comment.user.name ||
+              `User ${comment.user.id.slice(0, 6)}`;
 
-        {/* Kommentar Block */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Kommentare</h2>
-
-          {commentable ? (
-            <ProtocolCommentForm
-              protocolId={protocol.id}
-              organizationId={protocol.organizationId}
-            />
-          ) : null}
-
-          {/* Diskussion */}
-          <Timeline>
-            {protocol.comments.map((comment, k) => {
-              const userName =
-                comment.user.displayName ||
-                comment.user.name ||
-                `User ${comment.user.id.slice(0, 6)}`;
-
-              return (
-                <TimelineItem
-                  className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-8"
-                  key={comment.id}
-                  step={k}>
-                  <TimelineHeader>
-                    <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                    <TimelineTitle className="mt-0.5 flex items-center gap-2">
-                      {userName}
-                      <span className="text-muted-foreground text-xs font-light pb-px">
-                        {formatDistanceToNow(comment.createdAt, {
-                          addSuffix: true,
-                          locale: de,
-                        })}
-                      </span>
-                    </TimelineTitle>
-                    <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
-                      <Avatar>
-                        <AvatarImage
-                          alt={comment.user.avatarUrl ?? ""}
-                          className="size-6 rounded-full"
-                          src={comment.user.avatarUrl ?? undefined}
-                        />
-                        <AvatarFallback>
-                          {getInitials(
-                            comment.user.displayName ??
-                              comment.user.name ??
-                              "User",
-                          )}
-                        </AvatarFallback>
-                      </Avatar>
-                    </TimelineIndicator>
-                  </TimelineHeader>
-                  <TimelineContent className="mt-2 text-foreground">
-                    <RichTextRenderer value={comment.content} />
-                    <TimelineDate className="mt-2 mb-0 flex items-center gap-1">
-                      <Button variant="ghost" className="rounded-full">
-                        <Like className="size-4! text-muted-foreground" />
-                      </Button>
-                      <span className="">0</span>
-                    </TimelineDate>
-                  </TimelineContent>
-                </TimelineItem>
-              );
-            })}
-          </Timeline>
-        </section>
-
-        {/* Aktivitäten */}
-
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Aktivität</h2>
-          <Timeline defaultValue={activity.length}>
-            {activity.map((a, idx) => {
-              const step = activity.length - idx;
-              const Icon = detailedIcon({
-                action: a.action,
-                targetType: a.targetType,
-                targetId: a.targetId,
-                metadata: (a.metadata ?? {}) as any,
-                user: a.user,
-              });
-
-              return (
-                <TimelineItem
-                  key={a.id}
-                  step={step}
-                  className="group-data-[orientation=vertical]/timeline:ms-10">
-                  <TimelineHeader>
-                    <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                    <TimelineTitle className="mt-0.5 capitalize">
-                      {actionMeta(a.action).shortLabel}
-                    </TimelineTitle>
-                    <TimelineIndicator className="bg-primary/10 group-data-completed/timeline-item:bg-primary/10 group-data-completed/timeline-item:text-primary flex size-6 items-center justify-center border-none group-data-[orientation=vertical]/timeline:-left-7">
-                      <Icon className="size-3.5" />
-                    </TimelineIndicator>
-                  </TimelineHeader>
-                  <TimelineContent>
-                    <ActivityLine
-                      activity={{
-                        action: a.action,
-                        targetType: a.targetType,
-                        targetId: a.id,
-                        metadata: (a.metadata ?? {}) as any,
-                        user: a.user,
-                      }}
-                    />
-                    <TimelineDate className="mb-0 mt-1">
-                      {formatDistanceToNow(a.createdAt, {
+            return (
+              <TimelineItem
+                className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-8"
+                key={comment.id}
+                step={k}>
+                <TimelineHeader>
+                  <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                  <TimelineTitle className="mt-0.5 flex items-center gap-2">
+                    {userName}
+                    <span className="text-muted-foreground text-xs font-light pb-px">
+                      {formatDistanceToNow(comment.createdAt, {
                         addSuffix: true,
                         locale: de,
                       })}
-                    </TimelineDate>
-                  </TimelineContent>
-                </TimelineItem>
-              );
-            })}
-          </Timeline>
-        </section>
-      </div>
-      {/* Aktion */}
-      <div className="hidden md:block gap-4 mt-24  col-span-2 h-screen sticky top-10 px-4">
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Verknüpfte Fälle</h2>
+                    </span>
+                  </TimelineTitle>
+                  <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
+                    <Avatar>
+                      <AvatarImage
+                        alt={comment.user.avatarUrl ?? ""}
+                        className="size-6 rounded-full"
+                        src={comment.user.avatarUrl ?? undefined}
+                      />
+                      <AvatarFallback>
+                        {getInitials(
+                          comment.user.displayName ??
+                            comment.user.name ??
+                            "User",
+                        )}
+                      </AvatarFallback>
+                    </Avatar>
+                  </TimelineIndicator>
+                </TimelineHeader>
+                <TimelineContent className="mt-2 text-foreground">
+                  <RichTextRenderer value={comment.content} />
+                  <TimelineDate className="mt-2 mb-0 flex items-center gap-1">
+                    <Button variant="ghost" className="rounded-full">
+                      <Like className="size-4! text-muted-foreground" />
+                    </Button>
+                    <span className="">0</span>
+                  </TimelineDate>
+                </TimelineContent>
+              </TimelineItem>
+            );
+          })}
+        </Timeline>
+      </section>
 
-          <div className="divide-y space-y-2">
-            {protocol.protocolCases.length === 0 ? (
-              <div className="p-4 text-sm text-muted-foreground">
-                Noch keine Fälle verknüpft.
-              </div>
-            ) : (
-              protocol.protocolCases.map((entry) => (
-                <Link
-                  href={`/cases/${entry.case.id}`}
-                  key={entry.id}
-                  className={`flex items-start justify-between gap-4 text-sm pb-2 ${entry.case.status === "CLOSED" ? "opacity-70" : ""}`}>
-                  <div className="min-w-0">
-                    <div className="truncate">
-                      <span className="font-medium">
-                        #{entry.case.caseNumber}{" "}
-                      </span>
-                      · {entry.case.title}
-                    </div>
-                    <div className="flex items-center gap-2 mt-1 text-muted-foreground">
-                      <Badge
-                        size="sm"
-                        variant={priorityVariant(entry.case.priority)}>
-                        {PRIORITY_LABEL[entry.case.priority]}
-                      </Badge>
-                      <span className="flex items-center gap-1 text-xs">
-                        {entry.case.status === "WAITING" ? (
-                          <Clock className="size-3 " />
-                        ) : entry.case.status === "CLOSED" ? (
-                          <CircleCheck className="size-3 text-blue-500" />
-                        ) : entry.case.status === "IN_PROGRESS" ? (
-                          <Loader className="size-3  text-amber-500" />
-                        ) : entry.case.status === "OPEN" ? (
-                          <Circle className="size-3 text-green-500" />
-                        ) : null}
-                        {STATUS_LABEL[entry.case.status]}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))
-            )}
-          </div>
-        </section>
-        <section className="mt-8">
-          <h2 className="text-lg font-semibold">Erwähnt</h2>
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">Aktivität</h2>
+        <Timeline defaultValue={activity.length}>
+          {activity.map((a, idx) => {
+            const step = activity.length - idx;
+            const Icon = detailedIcon({
+              action: a.action,
+              targetType: a.targetType,
+              targetId: a.targetId,
+              metadata: (a.metadata ?? {}) as any,
+              user: a.user,
+            });
 
-          {protocol.mentions.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">
-              Noch niemand erwähnt.
-            </p>
-          ) : (
-            <div className="-space-x-3 flex mt-5">
-              {protocol.mentions.slice(0, 6).map((m) => {
-                const u = m.mentionedUser;
-                const name =
-                  u.displayName ?? u.name ?? `User ${u.id.slice(0, 6)}`;
-
-                return (
-                  <Tooltip key={u.id}>
-                    <TooltipTrigger asChild>
-                      <Link
-                        href={`/m/${u.id}`}
-                        className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105">
-                        <Avatar className="size-10">
-                          <AvatarImage
-                            src={u.avatarUrl ?? undefined}
-                            alt={name}
-                          />
-                          <AvatarFallback>{getInitials(name)}</AvatarFallback>
-                        </Avatar>
-                      </Link>
-                    </TooltipTrigger>
-
-                    <TooltipContent>{name}</TooltipContent>
-                  </Tooltip>
-                );
-              })}
-
-              {protocol.mentions.length > 6 ? (
-                <span className="flex size-10 items-center justify-center rounded-full bg-secondary text-muted-foreground text-xs ring-2 ring-background">
-                  +{protocol.mentions.length - 6}
-                </span>
-              ) : null}
-            </div>
-          )}
-        </section>
-      </div>
-    </div>
+            return (
+              <TimelineItem
+                key={a.id}
+                step={step}
+                className="group-data-[orientation=vertical]/timeline:ms-10">
+                <TimelineHeader>
+                  <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                  <TimelineTitle className="mt-0.5 capitalize">
+                    {actionMeta(a.action).shortLabel}
+                  </TimelineTitle>
+                  <TimelineIndicator className="bg-primary/10 group-data-completed/timeline-item:bg-primary/10 group-data-completed/timeline-item:text-primary flex size-6 items-center justify-center border-none group-data-[orientation=vertical]/timeline:-left-7">
+                    <Icon className="size-3.5" />
+                  </TimelineIndicator>
+                </TimelineHeader>
+                <TimelineContent>
+                  <ActivityLine
+                    activity={{
+                      action: a.action,
+                      targetType: a.targetType,
+                      targetId: a.id,
+                      metadata: (a.metadata ?? {}) as any,
+                      user: a.user,
+                    }}
+                  />
+                  <TimelineDate className="mb-0 mt-1">
+                    {formatDistanceToNow(a.createdAt, {
+                      addSuffix: true,
+                      locale: de,
+                    })}
+                  </TimelineDate>
+                </TimelineContent>
+              </TimelineItem>
+            );
+          })}
+        </Timeline>
+      </section>
+    </ProtocolShell>
   );
 }

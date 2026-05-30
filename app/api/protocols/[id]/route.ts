@@ -21,7 +21,6 @@ export async function PATCH(
   const { id } = await params;
 
   const session = await auth.api.getSession({ headers: await headers() });
-
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -31,14 +30,15 @@ export async function PATCH(
   const title = String(body?.title ?? "").trim();
   const date = String(body?.date ?? "").trim();
   const description = body?.description;
+  const version = Number(body?.version);
+
+  if (!Number.isInteger(version)) {
+    return NextResponse.json({ error: "Version fehlt." }, { status: 400 });
+  }
 
   const protocol = await prisma.protocol.findUnique({
     where: { id },
-    select: {
-      id: true,
-      organizationId: true,
-      title: true,
-    },
+    select: { id: true, organizationId: true },
   });
 
   if (!protocol) {
@@ -59,15 +59,33 @@ export async function PATCH(
     return NextResponse.json({ error: "Keine Berechtigung." }, { status: 403 });
   }
 
-  await prisma.protocol.update({
-    where: { id },
+  // Atomarer Update nur, wenn die Version unverändert ist
+  const result = await prisma.protocol.updateMany({
+    where: { id, version },
     data: {
       title,
       date: new Date(date),
       description,
       descriptionText: extractPlainTextFromNodes(description) || null,
+      version: { increment: 1 },
     },
   });
+
+  if (result.count === 0) {
+    const current = await prisma.protocol.findUnique({
+      where: { id },
+      select: { version: true },
+    });
+    return NextResponse.json(
+      {
+        error: "conflict",
+        message:
+          "Dieses Protokoll wurde zwischenzeitlich von einer anderen Person geändert.",
+        currentVersion: current?.version ?? null,
+      },
+      { status: 409 },
+    );
+  }
 
   const mentionedUserIds = extractMentionedUserIds(description);
   const caseIds = extractReferencedCaseIds(description);
@@ -78,12 +96,8 @@ export async function PATCH(
     mentioningUserId: session.user.id,
   });
 
-  await syncProtocolCases({
-    protocolId: id,
-    caseIds,
-  });
+  await syncProtocolCases({ protocolId: id, caseIds });
 
-  // Nur User benachrichtigen, die VORHER nicht erwähnt waren
   await createMentionNotifications({
     mentionedUserIds,
     mentioningUserId: session.user.id,
@@ -100,13 +114,9 @@ export async function PATCH(
       action: "UPDATED",
       targetType: "protocol",
       targetId: id,
-      metadata: {
-        title,
-        mentionedUserIds,
-        caseIds,
-      },
+      metadata: { title, mentionedUserIds, caseIds },
     },
   });
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, version: version + 1 });
 }

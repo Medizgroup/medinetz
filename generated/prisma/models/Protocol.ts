@@ -28,10 +28,12 @@ export type AggregateProtocol = {
 
 export type ProtocolAvgAggregateOutputType = {
   protocolNumber: number | null
+  version: number | null
 }
 
 export type ProtocolSumAggregateOutputType = {
   protocolNumber: number | null
+  version: number | null
 }
 
 export type ProtocolMinAggregateOutputType = {
@@ -41,6 +43,7 @@ export type ProtocolMinAggregateOutputType = {
   date: Date | null
   title: string | null
   descriptionText: string | null
+  version: number | null
   creatorId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +56,7 @@ export type ProtocolMaxAggregateOutputType = {
   date: Date | null
   title: string | null
   descriptionText: string | null
+  version: number | null
   creatorId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -66,6 +70,7 @@ export type ProtocolCountAggregateOutputType = {
   title: number
   description: number
   descriptionText: number
+  version: number
   creatorId: number
   createdAt: number
   updatedAt: number
@@ -75,10 +80,12 @@ export type ProtocolCountAggregateOutputType = {
 
 export type ProtocolAvgAggregateInputType = {
   protocolNumber?: true
+  version?: true
 }
 
 export type ProtocolSumAggregateInputType = {
   protocolNumber?: true
+  version?: true
 }
 
 export type ProtocolMinAggregateInputType = {
@@ -88,6 +95,7 @@ export type ProtocolMinAggregateInputType = {
   date?: true
   title?: true
   descriptionText?: true
+  version?: true
   creatorId?: true
   createdAt?: true
   updatedAt?: true
@@ -100,6 +108,7 @@ export type ProtocolMaxAggregateInputType = {
   date?: true
   title?: true
   descriptionText?: true
+  version?: true
   creatorId?: true
   createdAt?: true
   updatedAt?: true
@@ -113,6 +122,7 @@ export type ProtocolCountAggregateInputType = {
   title?: true
   description?: true
   descriptionText?: true
+  version?: true
   creatorId?: true
   createdAt?: true
   updatedAt?: true
@@ -213,6 +223,7 @@ export type ProtocolGroupByOutputType = {
   title: string
   description: runtime.JsonValue | null
   descriptionText: string | null
+  version: number
   creatorId: string
   createdAt: Date
   updatedAt: Date
@@ -249,9 +260,11 @@ export type ProtocolWhereInput = {
   title?: Prisma.StringFilter<"Protocol"> | string
   description?: Prisma.JsonNullableFilter<"Protocol">
   descriptionText?: Prisma.StringNullableFilter<"Protocol"> | string | null
+  version?: Prisma.IntFilter<"Protocol"> | number
   creatorId?: Prisma.StringFilter<"Protocol"> | string
   createdAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
+  presence?: Prisma.ProtocolPresenceListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   comments?: Prisma.ProtocolCommentListRelationFilter
@@ -267,9 +280,11 @@ export type ProtocolOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   descriptionText?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  presence?: Prisma.ProtocolPresenceOrderByRelationAggregateInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
   comments?: Prisma.ProtocolCommentOrderByRelationAggregateInput
@@ -289,9 +304,11 @@ export type ProtocolWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Protocol"> | string
   description?: Prisma.JsonNullableFilter<"Protocol">
   descriptionText?: Prisma.StringNullableFilter<"Protocol"> | string | null
+  version?: Prisma.IntFilter<"Protocol"> | number
   creatorId?: Prisma.StringFilter<"Protocol"> | string
   createdAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
+  presence?: Prisma.ProtocolPresenceListRelationFilter
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   comments?: Prisma.ProtocolCommentListRelationFilter
@@ -307,6 +324,7 @@ export type ProtocolOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   descriptionText?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -328,6 +346,7 @@ export type ProtocolScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Protocol"> | string
   description?: Prisma.JsonNullableWithAggregatesFilter<"Protocol">
   descriptionText?: Prisma.StringNullableWithAggregatesFilter<"Protocol"> | string | null
+  version?: Prisma.IntWithAggregatesFilter<"Protocol"> | number
   creatorId?: Prisma.StringWithAggregatesFilter<"Protocol"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Protocol"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Protocol"> | Date | string
@@ -340,8 +359,10 @@ export type ProtocolCreateInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceCreateNestedManyWithoutProtocolInput
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
   creator: Prisma.UserCreateNestedOneWithoutCreatedProtocolsInput
   comments?: Prisma.ProtocolCommentCreateNestedManyWithoutProtocolInput
@@ -357,9 +378,11 @@ export type ProtocolUncheckedCreateInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutProtocolInput
   comments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutProtocolInput
   protocolCases?: Prisma.ProtocolCaseUncheckedCreateNestedManyWithoutProtocolInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolInput
@@ -372,8 +395,10 @@ export type ProtocolUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUpdateManyWithoutProtocolNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedProtocolsNestedInput
   comments?: Prisma.ProtocolCommentUpdateManyWithoutProtocolNestedInput
@@ -389,9 +414,11 @@ export type ProtocolUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutProtocolNestedInput
   comments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutProtocolNestedInput
   protocolCases?: Prisma.ProtocolCaseUncheckedUpdateManyWithoutProtocolNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolNestedInput
@@ -405,6 +432,7 @@ export type ProtocolCreateManyInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -417,6 +445,7 @@ export type ProtocolUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -429,6 +458,7 @@ export type ProtocolUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -457,6 +487,7 @@ export type ProtocolCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   descriptionText?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -464,6 +495,7 @@ export type ProtocolCountOrderByAggregateInput = {
 
 export type ProtocolAvgOrderByAggregateInput = {
   protocolNumber?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ProtocolMaxOrderByAggregateInput = {
@@ -473,6 +505,7 @@ export type ProtocolMaxOrderByAggregateInput = {
   date?: Prisma.SortOrder
   title?: Prisma.SortOrder
   descriptionText?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -485,6 +518,7 @@ export type ProtocolMinOrderByAggregateInput = {
   date?: Prisma.SortOrder
   title?: Prisma.SortOrder
   descriptionText?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -492,6 +526,7 @@ export type ProtocolMinOrderByAggregateInput = {
 
 export type ProtocolSumOrderByAggregateInput = {
   protocolNumber?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ProtocolScalarRelationFilter = {
@@ -588,6 +623,20 @@ export type ProtocolUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.ProtocolScalarWhereInput | Prisma.ProtocolScalarWhereInput[]
 }
 
+export type ProtocolCreateNestedOneWithoutPresenceInput = {
+  create?: Prisma.XOR<Prisma.ProtocolCreateWithoutPresenceInput, Prisma.ProtocolUncheckedCreateWithoutPresenceInput>
+  connectOrCreate?: Prisma.ProtocolCreateOrConnectWithoutPresenceInput
+  connect?: Prisma.ProtocolWhereUniqueInput
+}
+
+export type ProtocolUpdateOneRequiredWithoutPresenceNestedInput = {
+  create?: Prisma.XOR<Prisma.ProtocolCreateWithoutPresenceInput, Prisma.ProtocolUncheckedCreateWithoutPresenceInput>
+  connectOrCreate?: Prisma.ProtocolCreateOrConnectWithoutPresenceInput
+  upsert?: Prisma.ProtocolUpsertWithoutPresenceInput
+  connect?: Prisma.ProtocolWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProtocolUpdateToOneWithWhereWithoutPresenceInput, Prisma.ProtocolUpdateWithoutPresenceInput>, Prisma.ProtocolUncheckedUpdateWithoutPresenceInput>
+}
+
 export type ProtocolCreateNestedOneWithoutCommentsInput = {
   create?: Prisma.XOR<Prisma.ProtocolCreateWithoutCommentsInput, Prisma.ProtocolUncheckedCreateWithoutCommentsInput>
   connectOrCreate?: Prisma.ProtocolCreateOrConnectWithoutCommentsInput
@@ -639,8 +688,10 @@ export type ProtocolCreateWithoutCreatorInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceCreateNestedManyWithoutProtocolInput
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
   comments?: Prisma.ProtocolCommentCreateNestedManyWithoutProtocolInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutProtocolInput
@@ -655,8 +706,10 @@ export type ProtocolUncheckedCreateWithoutCreatorInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutProtocolInput
   comments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutProtocolInput
   protocolCases?: Prisma.ProtocolCaseUncheckedCreateNestedManyWithoutProtocolInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolInput
@@ -699,6 +752,7 @@ export type ProtocolScalarWhereInput = {
   title?: Prisma.StringFilter<"Protocol"> | string
   description?: Prisma.JsonNullableFilter<"Protocol">
   descriptionText?: Prisma.StringNullableFilter<"Protocol"> | string | null
+  version?: Prisma.IntFilter<"Protocol"> | number
   creatorId?: Prisma.StringFilter<"Protocol"> | string
   createdAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Protocol"> | Date | string
@@ -711,8 +765,10 @@ export type ProtocolCreateWithoutOrganizationInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceCreateNestedManyWithoutProtocolInput
   creator: Prisma.UserCreateNestedOneWithoutCreatedProtocolsInput
   comments?: Prisma.ProtocolCommentCreateNestedManyWithoutProtocolInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutProtocolInput
@@ -726,9 +782,11 @@ export type ProtocolUncheckedCreateWithoutOrganizationInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutProtocolInput
   comments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutProtocolInput
   protocolCases?: Prisma.ProtocolCaseUncheckedCreateNestedManyWithoutProtocolInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolInput
@@ -760,6 +818,90 @@ export type ProtocolUpdateManyWithWhereWithoutOrganizationInput = {
   data: Prisma.XOR<Prisma.ProtocolUpdateManyMutationInput, Prisma.ProtocolUncheckedUpdateManyWithoutOrganizationInput>
 }
 
+export type ProtocolCreateWithoutPresenceInput = {
+  id?: string
+  protocolNumber: number
+  date: Date | string
+  title: string
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
+  creator: Prisma.UserCreateNestedOneWithoutCreatedProtocolsInput
+  comments?: Prisma.ProtocolCommentCreateNestedManyWithoutProtocolInput
+  protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutProtocolInput
+  mentions?: Prisma.MentionCreateNestedManyWithoutProtocolInput
+}
+
+export type ProtocolUncheckedCreateWithoutPresenceInput = {
+  id?: string
+  organizationId: string
+  protocolNumber: number
+  date: Date | string
+  title: string
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: string | null
+  version?: number
+  creatorId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  comments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutProtocolInput
+  protocolCases?: Prisma.ProtocolCaseUncheckedCreateNestedManyWithoutProtocolInput
+  mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolInput
+}
+
+export type ProtocolCreateOrConnectWithoutPresenceInput = {
+  where: Prisma.ProtocolWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProtocolCreateWithoutPresenceInput, Prisma.ProtocolUncheckedCreateWithoutPresenceInput>
+}
+
+export type ProtocolUpsertWithoutPresenceInput = {
+  update: Prisma.XOR<Prisma.ProtocolUpdateWithoutPresenceInput, Prisma.ProtocolUncheckedUpdateWithoutPresenceInput>
+  create: Prisma.XOR<Prisma.ProtocolCreateWithoutPresenceInput, Prisma.ProtocolUncheckedCreateWithoutPresenceInput>
+  where?: Prisma.ProtocolWhereInput
+}
+
+export type ProtocolUpdateToOneWithWhereWithoutPresenceInput = {
+  where?: Prisma.ProtocolWhereInput
+  data: Prisma.XOR<Prisma.ProtocolUpdateWithoutPresenceInput, Prisma.ProtocolUncheckedUpdateWithoutPresenceInput>
+}
+
+export type ProtocolUpdateWithoutPresenceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutCreatedProtocolsNestedInput
+  comments?: Prisma.ProtocolCommentUpdateManyWithoutProtocolNestedInput
+  protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutProtocolNestedInput
+  mentions?: Prisma.MentionUpdateManyWithoutProtocolNestedInput
+}
+
+export type ProtocolUncheckedUpdateWithoutPresenceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  comments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutProtocolNestedInput
+  protocolCases?: Prisma.ProtocolCaseUncheckedUpdateManyWithoutProtocolNestedInput
+  mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolNestedInput
+}
+
 export type ProtocolCreateWithoutCommentsInput = {
   id?: string
   protocolNumber: number
@@ -767,8 +909,10 @@ export type ProtocolCreateWithoutCommentsInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceCreateNestedManyWithoutProtocolInput
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
   creator: Prisma.UserCreateNestedOneWithoutCreatedProtocolsInput
   protocolCases?: Prisma.ProtocolCaseCreateNestedManyWithoutProtocolInput
@@ -783,9 +927,11 @@ export type ProtocolUncheckedCreateWithoutCommentsInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutProtocolInput
   protocolCases?: Prisma.ProtocolCaseUncheckedCreateNestedManyWithoutProtocolInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolInput
 }
@@ -813,8 +959,10 @@ export type ProtocolUpdateWithoutCommentsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUpdateManyWithoutProtocolNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedProtocolsNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutProtocolNestedInput
@@ -829,9 +977,11 @@ export type ProtocolUncheckedUpdateWithoutCommentsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutProtocolNestedInput
   protocolCases?: Prisma.ProtocolCaseUncheckedUpdateManyWithoutProtocolNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolNestedInput
 }
@@ -843,8 +993,10 @@ export type ProtocolCreateWithoutProtocolCasesInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceCreateNestedManyWithoutProtocolInput
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
   creator: Prisma.UserCreateNestedOneWithoutCreatedProtocolsInput
   comments?: Prisma.ProtocolCommentCreateNestedManyWithoutProtocolInput
@@ -859,9 +1011,11 @@ export type ProtocolUncheckedCreateWithoutProtocolCasesInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutProtocolInput
   comments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutProtocolInput
   mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutProtocolInput
 }
@@ -889,8 +1043,10 @@ export type ProtocolUpdateWithoutProtocolCasesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUpdateManyWithoutProtocolNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedProtocolsNestedInput
   comments?: Prisma.ProtocolCommentUpdateManyWithoutProtocolNestedInput
@@ -905,9 +1061,11 @@ export type ProtocolUncheckedUpdateWithoutProtocolCasesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutProtocolNestedInput
   comments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutProtocolNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolNestedInput
 }
@@ -919,8 +1077,10 @@ export type ProtocolCreateWithoutMentionsInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceCreateNestedManyWithoutProtocolInput
   organization: Prisma.OrganizationCreateNestedOneWithoutProtocolsInput
   creator: Prisma.UserCreateNestedOneWithoutCreatedProtocolsInput
   comments?: Prisma.ProtocolCommentCreateNestedManyWithoutProtocolInput
@@ -935,9 +1095,11 @@ export type ProtocolUncheckedCreateWithoutMentionsInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutProtocolInput
   comments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutProtocolInput
   protocolCases?: Prisma.ProtocolCaseUncheckedCreateNestedManyWithoutProtocolInput
 }
@@ -965,8 +1127,10 @@ export type ProtocolUpdateWithoutMentionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUpdateManyWithoutProtocolNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedProtocolsNestedInput
   comments?: Prisma.ProtocolCommentUpdateManyWithoutProtocolNestedInput
@@ -981,9 +1145,11 @@ export type ProtocolUncheckedUpdateWithoutMentionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutProtocolNestedInput
   comments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutProtocolNestedInput
   protocolCases?: Prisma.ProtocolCaseUncheckedUpdateManyWithoutProtocolNestedInput
 }
@@ -996,6 +1162,7 @@ export type ProtocolCreateManyCreatorInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1007,8 +1174,10 @@ export type ProtocolUpdateWithoutCreatorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUpdateManyWithoutProtocolNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutProtocolsNestedInput
   comments?: Prisma.ProtocolCommentUpdateManyWithoutProtocolNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutProtocolNestedInput
@@ -1023,8 +1192,10 @@ export type ProtocolUncheckedUpdateWithoutCreatorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutProtocolNestedInput
   comments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutProtocolNestedInput
   protocolCases?: Prisma.ProtocolCaseUncheckedUpdateManyWithoutProtocolNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolNestedInput
@@ -1038,6 +1209,7 @@ export type ProtocolUncheckedUpdateManyWithoutCreatorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1049,6 +1221,7 @@ export type ProtocolCreateManyOrganizationInput = {
   title: string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: string | null
+  version?: number
   creatorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1061,8 +1234,10 @@ export type ProtocolUpdateWithoutOrganizationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUpdateManyWithoutProtocolNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedProtocolsNestedInput
   comments?: Prisma.ProtocolCommentUpdateManyWithoutProtocolNestedInput
   protocolCases?: Prisma.ProtocolCaseUpdateManyWithoutProtocolNestedInput
@@ -1076,9 +1251,11 @@ export type ProtocolUncheckedUpdateWithoutOrganizationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  presence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutProtocolNestedInput
   comments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutProtocolNestedInput
   protocolCases?: Prisma.ProtocolCaseUncheckedUpdateManyWithoutProtocolNestedInput
   mentions?: Prisma.MentionUncheckedUpdateManyWithoutProtocolNestedInput
@@ -1091,6 +1268,7 @@ export type ProtocolUncheckedUpdateManyWithoutOrganizationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   descriptionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1102,12 +1280,14 @@ export type ProtocolUncheckedUpdateManyWithoutOrganizationInput = {
  */
 
 export type ProtocolCountOutputType = {
+  presence: number
   comments: number
   protocolCases: number
   mentions: number
 }
 
 export type ProtocolCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  presence?: boolean | ProtocolCountOutputTypeCountPresenceArgs
   comments?: boolean | ProtocolCountOutputTypeCountCommentsArgs
   protocolCases?: boolean | ProtocolCountOutputTypeCountProtocolCasesArgs
   mentions?: boolean | ProtocolCountOutputTypeCountMentionsArgs
@@ -1121,6 +1301,13 @@ export type ProtocolCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
    * Select specific fields to fetch from the ProtocolCountOutputType
    */
   select?: Prisma.ProtocolCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ProtocolCountOutputType without action
+ */
+export type ProtocolCountOutputTypeCountPresenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProtocolPresenceWhereInput
 }
 
 /**
@@ -1153,9 +1340,11 @@ export type ProtocolSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   title?: boolean
   description?: boolean
   descriptionText?: boolean
+  version?: boolean
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  presence?: boolean | Prisma.Protocol$presenceArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   comments?: boolean | Prisma.Protocol$commentsArgs<ExtArgs>
@@ -1172,6 +1361,7 @@ export type ProtocolSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   title?: boolean
   description?: boolean
   descriptionText?: boolean
+  version?: boolean
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1187,6 +1377,7 @@ export type ProtocolSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   title?: boolean
   description?: boolean
   descriptionText?: boolean
+  version?: boolean
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1202,13 +1393,15 @@ export type ProtocolSelectScalar = {
   title?: boolean
   description?: boolean
   descriptionText?: boolean
+  version?: boolean
   creatorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProtocolOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "protocolNumber" | "date" | "title" | "description" | "descriptionText" | "creatorId" | "createdAt" | "updatedAt", ExtArgs["result"]["protocol"]>
+export type ProtocolOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "protocolNumber" | "date" | "title" | "description" | "descriptionText" | "version" | "creatorId" | "createdAt" | "updatedAt", ExtArgs["result"]["protocol"]>
 export type ProtocolInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  presence?: boolean | Prisma.Protocol$presenceArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   comments?: boolean | Prisma.Protocol$commentsArgs<ExtArgs>
@@ -1228,6 +1421,7 @@ export type ProtocolIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $ProtocolPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Protocol"
   objects: {
+    presence: Prisma.$ProtocolPresencePayload<ExtArgs>[]
     organization: Prisma.$OrganizationPayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs>
     comments: Prisma.$ProtocolCommentPayload<ExtArgs>[]
@@ -1242,6 +1436,7 @@ export type $ProtocolPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     title: string
     description: runtime.JsonValue | null
     descriptionText: string | null
+    version: number
     creatorId: string
     createdAt: Date
     updatedAt: Date
@@ -1639,6 +1834,7 @@ readonly fields: ProtocolFieldRefs;
  */
 export interface Prisma__ProtocolClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  presence<T extends Prisma.Protocol$presenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Protocol$presenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProtocolPresencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   comments<T extends Prisma.Protocol$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Protocol$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProtocolCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1680,6 +1876,7 @@ export interface ProtocolFieldRefs {
   readonly title: Prisma.FieldRef<"Protocol", 'String'>
   readonly description: Prisma.FieldRef<"Protocol", 'Json'>
   readonly descriptionText: Prisma.FieldRef<"Protocol", 'String'>
+  readonly version: Prisma.FieldRef<"Protocol", 'Int'>
   readonly creatorId: Prisma.FieldRef<"Protocol", 'String'>
   readonly createdAt: Prisma.FieldRef<"Protocol", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Protocol", 'DateTime'>
@@ -2081,6 +2278,30 @@ export type ProtocolDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Protocols to delete.
    */
   limit?: number
+}
+
+/**
+ * Protocol.presence
+ */
+export type Protocol$presenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProtocolPresence
+   */
+  select?: Prisma.ProtocolPresenceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProtocolPresence
+   */
+  omit?: Prisma.ProtocolPresenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProtocolPresenceInclude<ExtArgs> | null
+  where?: Prisma.ProtocolPresenceWhereInput
+  orderBy?: Prisma.ProtocolPresenceOrderByWithRelationInput | Prisma.ProtocolPresenceOrderByWithRelationInput[]
+  cursor?: Prisma.ProtocolPresenceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProtocolPresenceScalarFieldEnum | Prisma.ProtocolPresenceScalarFieldEnum[]
 }
 
 /**

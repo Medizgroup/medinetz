@@ -137,7 +137,7 @@ export default function NotificationDigestToaster() {
               id: it.id, // stabile ID = Upsert statt Doppel-Stack
               title: meta.title,
               description: meta.description,
-              timeout: it.dedup === "once" ? 0 : 8000, //
+              timeout: it.dedup === "once" ? 18000 : 8000,
               type: meta.type,
               actionProps: {
                 children: meta.action,
