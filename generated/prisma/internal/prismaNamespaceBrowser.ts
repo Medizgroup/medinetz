@@ -72,6 +72,7 @@ export const ModelName = {
   CaseLabel: 'CaseLabel',
   CaseAttachment: 'CaseAttachment',
   Protocol: 'Protocol',
+  ProtocolPresence: 'ProtocolPresence',
   ProtocolComment: 'ProtocolComment',
   ProtocolCase: 'ProtocolCase',
   Donation: 'Donation',
@@ -434,12 +435,22 @@ export const ProtocolScalarFieldEnum = {
   title: 'title',
   description: 'description',
   descriptionText: 'descriptionText',
+  version: 'version',
   creatorId: 'creatorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ProtocolScalarFieldEnum = (typeof ProtocolScalarFieldEnum)[keyof typeof ProtocolScalarFieldEnum]
+
+
+export const ProtocolPresenceScalarFieldEnum = {
+  protocolId: 'protocolId',
+  userId: 'userId',
+  lastSeenAt: 'lastSeenAt'
+} as const
+
+export type ProtocolPresenceScalarFieldEnum = (typeof ProtocolPresenceScalarFieldEnum)[keyof typeof ProtocolPresenceScalarFieldEnum]
 
 
 export const ProtocolCommentScalarFieldEnum = {

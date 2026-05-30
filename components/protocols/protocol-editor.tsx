@@ -41,7 +41,6 @@ const blockquote = (text: string, color?: string) => ({
   type: "blockquote",
   children: [{ text, ...(color && { color }) }],
 });
-const callout = (text: string) => ({ type: "callout", children: [{ text }] });
 const th = (text: string) => ({ type: "td", children: [p(text)] });
 const td = (text = "") => ({ type: "td", children: [p(text)] });
 const tr = (cells: any[]) => ({ type: "tr", children: cells });
@@ -78,8 +77,6 @@ export const defaultTemplate: Value = [
   p("Anwesend: ", "#f59e0b"),
   p(" "),
   p(" "),
-  callout("@ um einen Mitglied zu erwähnen und # für einen Fall."),
-  p(" "),
   h2("1. Aktuelle Fälle"),
   p(" "),
   caseTable(),
@@ -92,7 +89,6 @@ export const defaultTemplate: Value = [
   p(" "),
   h2("3. AG Schwangerenprojekt"),
   p(" "),
-  blockquote("Nur den Protokoll-Link eingeben und die Bemerkungen.", "#f59e0b"),
   p(" "),
   agTable(),
   p(" "),
@@ -108,7 +104,6 @@ export const defaultTemplate: Value = [
   p(" "),
   p("Kommende Termine und Veranstaltungen:"),
   p(" "),
-  blockquote("Tipp: Kalender ansehen!"),
   table(
     [
       tr([th("Aufgaben"), th("Notizen")]),
@@ -121,8 +116,6 @@ export const defaultTemplate: Value = [
     [300, 600],
   ),
   p(" "),
-  h2("7. To-Dos bis nächstes Plenum"),
-  p(""),
 ] as Value;
 
 export default function ProtocolEditor({
@@ -170,7 +163,7 @@ export default function ProtocolEditor({
         onChange={({ value }) => {
           onChange(value);
         }}>
-        <EditorContainer className="min-h-[280px] rounded-xl">
+        <EditorContainer className="min-h-[280px] rounded-xl overflow-x-clip overflow-y-visible!">
           <Editor
             placeholder={placeholder}
             className="px-6!"

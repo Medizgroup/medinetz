@@ -110,7 +110,7 @@ export default async function AppLayout({
           slug: org.organization.slug,
         }))}
       />
-      <SidebarInset className="overflow-x-hidden!">
+      <SidebarInset className="overflow-x-clip">
         <NotificationDigestToaster />
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center justify-between w-full">

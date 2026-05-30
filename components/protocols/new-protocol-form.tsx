@@ -80,7 +80,7 @@ export default function NewProtocolForm({
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 py-8 space-y-8">
+    <div className="mx-auto max-w-6xl px-6 py-8 space-y-8 overflow-x-clip">
       <div>
         <h1 className="text-2xl font-semibold">Neues Protokoll</h1>
         <p className="mt-1 text-sm text-muted-foreground">
