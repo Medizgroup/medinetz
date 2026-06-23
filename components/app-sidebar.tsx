@@ -21,7 +21,6 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
@@ -34,6 +33,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Routing2 } from "@solar-icons/react-perf/category/style/LineDuotone";
 import { News } from "@/generated/prisma/client";
+import Avatar from "boring-avatars";
 
 export function AppSidebar({
   openTodosCount,
@@ -131,12 +131,16 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              asChild
-              className="px-0! hover:bg-transparent!">
-              <Link href="/" className="flex items-center">
-                <Image
+              <Link href="/" className="flex items-center gap-3 px-1">
+                <Avatar size={28} name="Mediznetz Medizgroup" variant="beam"/>
+                <div className="flex items-end">
+
+                <span className="text-xl font-semibold font-mono tracking-wide">Medizgroup</span>
+                <span className="size-1.5 bg-[#92a1c6] block rounded-full opacity-60"></span>
+           
+                </div>
+
+                {/* <Image
                   className="dark:hidden"
                   src="/Logo/Medizgroup-light.svg"
                   alt="Medizgroup Logo"
@@ -149,9 +153,8 @@ export function AppSidebar({
                   alt="Medizgroup Logo"
                   width={180}
                   height={80}
-                />
+                /> */}
               </Link>
-            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

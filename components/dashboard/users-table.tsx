@@ -51,6 +51,7 @@ import { ButtonGroup } from "../ui/group";
 import { DropdownMenuGroup, DropdownMenuLabel } from "../ui/menu";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "../ui/checkbox";
+import UserDefaultAvatar from "../user/user-default-avatar";
 
 type OrgMember = {
   role: string;
@@ -336,13 +337,10 @@ export default function UsersTable({
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
+                      {
+                        u.avatarUrl ?
                       <Avatar
-                        className={cn(
-                          "size-8 ",
-                          u.isInstanceAdmin
-                            ? "ring-destructive ring-offset-background size-8 ring-2 ring-offset-2"
-                            : "",
-                        )}>
+                        className="size-8 ">
                         <AvatarImage
                           src={u.avatarUrl ?? undefined}
                           alt={userName(u)}
@@ -351,9 +349,12 @@ export default function UsersTable({
                           {getInitials(userName(u))}
                         </AvatarFallback>
                       </Avatar>
+                      :
+                      <UserDefaultAvatar name= {getInitials(userName(u))} size={30} />
+                      }
                       <div>
                         <div className="flex items-center gap-1.5 font-medium text-sm">
-                          {userName(u)}
+                          {userName(u)}  {u.isInstanceAdmin && <Badge size="sm" variant="destructive"> Admin </Badge>}
                         </div>
                         <div className="text-xs text-muted-foreground">
                           {u.email}

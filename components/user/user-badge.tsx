@@ -19,6 +19,7 @@ import Link from "next/link";
 import { getInitials } from "@/lib/helper/user";
 import { Switch } from "../ui/switch";
 import { WalkingRound } from "@solar-icons/react-perf/category/style/LineDuotone";
+import UserDefaultAvatar from "./user-default-avatar";
 export default function UserBadge({
   user,
 }: {
@@ -47,11 +48,13 @@ export default function UserBadge({
     <Menu>
       <MenuTrigger
         render={
+          user.avatarUrl ?
           <Button
             size="icon-xl"
             variant="ghost"
             className="rounded-full bg-muted"
           />
+          :  <button className="cursor-pointer"><UserDefaultAvatar name={user.displayName ?? user.email ?? "User"} size={28} /></button> 
         }>
         <Avatar className="size-8 ">
           <AvatarImage src={user.avatarUrl ?? ""} />
@@ -109,27 +112,6 @@ export default function UserBadge({
             <MenuSeparator />
           </>
         )}
-        {/* <MenuGroup>
-          <MenuGroupLabel>Admin</MenuGroupLabel>
-          <MenuItem render={<Link href="/dashboard" />}>Dashboard</MenuItem>
-          <MenuItem render={<Link href="/dashboard/organizations" />}>
-            Organisation
-          </MenuItem>
-          <MenuItem render={<Link href="/dashboard/users" />}>
-            Benutzer
-          </MenuItem>
-          <MenuItem render={<Link href="/dashboard/resources" />}>
-            Ressourcen
-          </MenuItem>
-          <MenuItem render={<Link href="/dashboard/organizations" />}>
-            Organisation
-          </MenuItem>
-          <MenuItem render={<Link href="/dashboard/finance" />}>
-            Finanzen
-          </MenuItem>
-        </MenuGroup> */}
-
-        {/* <MenuSeparator /> */}
         <MenuGroup>
           <MenuGroupLabel>preference</MenuGroupLabel>
           <div
@@ -162,7 +144,6 @@ export default function UserBadge({
         </MenuGroup>
         <MenuSeparator />
         <MenuItem variant="destructive" className="" onClick={logOut}>
-          <WalkingRound className="size-5" aria-hidden="true" />
           <span>Sich abmelden</span>
         </MenuItem>
       </MenuPopup>

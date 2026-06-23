@@ -18,6 +18,7 @@ import { Spinner } from "../ui/spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/helper/user";
 import { Label } from "../ui/label";
+import UserDefaultAvatar from "../user/user-default-avatar";
 
 type ActiveEditor = { id: string; name: string; avatarUrl: string | null };
 
@@ -131,15 +132,23 @@ export default function EditProtocolForm({
   return (
     <form onSubmit={onSubmit} className="space-y-4 p-5">
       {activeEditors.length > 0 ? (
-        <div className="flex items-center gap-3 rounded-lg border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-800/20 px-4 py-2 text-sm text-amber-900 dark:text-amber-200">
+        <div className="flex items-center gap-3 rounded-lg border border-amber-100 dark:border-amber-900 bg-amber-50/40 dark:bg-amber-950/20 px-4 py-2 text-sm text-amber-900 dark:text-amber-200">
           <div className="-space-x-2 flex">
             {activeEditors.slice(0, 4).map((u) => (
+              <>
+              {
+                u.avatarUrl ? 
+
               <Avatar key={u.id} className="size-7 ring-2 ring-amber-50">
                 <AvatarImage src={u.avatarUrl ?? undefined} alt={u.name} />
                 <AvatarFallback className="text-xs">
                   {getInitials(u.name)}
                 </AvatarFallback>
               </Avatar>
+              :
+              <UserDefaultAvatar name={u.name} size={26} />
+              }
+              </>
             ))}
           </div>
           <span>

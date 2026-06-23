@@ -1,16 +1,7 @@
 import {
-  AtSign,
-  CircleCheck,
   Paperclip,
-  LayersPlus,
-  RefreshCcw,
-  RotateCcw,
-  MessagesSquare,
-  UserRoundPlus,
   Flag,
-  Calendar,
   ShieldAlert,
-  Edit3,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,6 +12,7 @@ import {
   PRIORITY_LABEL,
   SENSITIVITY_LABEL,
 } from "@/lib/utils/cases";
+import { CalendarAdd, CheckCircle, Dialog, MentionCircle, PenNewSquare, Refresh, RestartCircle, UserPlusRounded, WidgetAdd } from "@solar-icons/react-perf/category/style/LineDuotone";
 
 // ========== Typen ==========
 
@@ -97,23 +89,23 @@ export function actionMeta(action: ActivityAction): {
 } {
   switch (action) {
     case "CREATED":
-      return { Icon: LayersPlus, shortLabel: "Erstellen" };
+      return { Icon: WidgetAdd, shortLabel: "Erstellen" };
     case "UPDATED":
-      return { Icon: RefreshCcw, shortLabel: "aktualisiert" };
+      return { Icon: Refresh, shortLabel: "aktualisiert" };
     case "COMMENTED":
-      return { Icon: MessagesSquare, shortLabel: "Kommentar" };
+      return { Icon: Dialog, shortLabel: "Kommentar" };
     case "ASSIGNED":
-      return { Icon: UserRoundPlus, shortLabel: "Zuweisung" };
+      return { Icon: UserPlusRounded, shortLabel: "Zuweisung" };
     case "CLOSED":
-      return { Icon: CircleCheck, shortLabel: "Aktion" };
+      return { Icon: CheckCircle, shortLabel: "Aktion" };
     case "REOPENED":
-      return { Icon: RotateCcw, shortLabel: "wieder geöffnet" };
+      return { Icon: RestartCircle, shortLabel: "wieder geöffnet" };
     case "MENTIONED":
-      return { Icon: AtSign, shortLabel: "erwähnt" };
+      return { Icon: MentionCircle, shortLabel: "erwähnt" };
     case "ATTACHED":
       return { Icon: Paperclip, shortLabel: "Anhang hinzugefügt" };
     default:
-      return { Icon: Edit3, shortLabel: "Aktivität" };
+      return { Icon: PenNewSquare, shortLabel: "Aktivität" };
   }
 }
 
@@ -127,9 +119,9 @@ export function detailedIcon(activity: ActivityForDisplay): LucideIcon {
 
   if (action === "UPDATED" && field) {
     if (field === "priority") return Flag;
-    if (field === "dueDate") return Calendar;
+    if (field === "dueDate") return CalendarAdd;
     if (field === "sensitivityLevel") return ShieldAlert;
-    if (field === "status") return RefreshCcw;
+    if (field === "status") return Refresh;
   }
 
   return actionMeta(action).Icon;

@@ -42,8 +42,9 @@ import {
   STATUS_LABEL,
 } from "@/lib/utils/cases";
 import { cn } from "@/lib/utils";
-import { Like } from "@solar-icons/react-perf/category/style/LineDuotone";
+import { CheckCircle, ClockCircle, Like, RecordAudioCircle } from "@solar-icons/react-perf/category/style/LineDuotone";
 import { ProtocolShell } from "@/components/protocols/protocol-shell";
+import UserDefaultAvatar from "@/components/user/user-default-avatar";
 
 // function canEdit(role?: string) {
 //   return role === "COORDINATOR" || role === "ADMIN";
@@ -211,7 +212,7 @@ export default async function ProtocolDetailPage({
                   <Link
                     href={`/cases/${entry.case.id}`}
                     key={entry.id}
-                    className={`flex items-start justify-between gap-4 text-sm pb-2 ${entry.case.status === "CLOSED" ? "opacity-20" : ""}`}>
+                    className={`flex items-start justify-between gap-4 text-sm pb-2 ${entry.case.status === "CLOSED" ? "opacity-30" : ""}`}>
                     <div className="min-w-0">
                       <div
                         className={`truncate ${entry.case.status === "CLOSED" ? "line-through" : ""}`}>
@@ -221,20 +222,20 @@ export default async function ProtocolDetailPage({
                         · {entry.case.title}
                       </div>
                       <div className="flex items-center gap-2 mt-1 text-muted-foreground">
-                        <Badge
+                        {/* <Badge
                           size="sm"
                           variant={priorityVariant(entry.case.priority)}>
                           {PRIORITY_LABEL[entry.case.priority]}
-                        </Badge>
+                        </Badge> */}
                         <span className="flex items-center gap-1 text-xs">
                           {entry.case.status === "WAITING" ? (
-                            <Clock className="size-3 " />
+                            <ClockCircle className="size-3.5 " />
                           ) : entry.case.status === "CLOSED" ? (
-                            <CircleCheck className="size-3 text-blue-500" />
+                            <CheckCircle className="size-3.5 text-blue-500" />
                           ) : entry.case.status === "IN_PROGRESS" ? (
                             <Loader className="size-3  text-amber-500" />
                           ) : entry.case.status === "OPEN" ? (
-                            <Circle className="size-3 text-green-500" />
+                            <RecordAudioCircle className="size-3.5 text-green-500" />
                           ) : null}
                           {STATUS_LABEL[entry.case.status]}
                         </span>
@@ -266,6 +267,9 @@ export default async function ProtocolDetailPage({
                         <Link
                           href={`/m/${u.id}`}
                           className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105">
+                            {
+                              u.avatarUrl ? 
+
                           <Avatar className="size-10">
                             <AvatarImage
                               src={u.avatarUrl ?? undefined}
@@ -273,6 +277,9 @@ export default async function ProtocolDetailPage({
                             />
                             <AvatarFallback>{getInitials(name)}</AvatarFallback>
                           </Avatar>
+                          : 
+                          <UserDefaultAvatar name={name} size={32}/>
+                            }
                         </Link>
                       </TooltipTrigger>
                       <TooltipContent>{name}</TooltipContent>
@@ -387,12 +394,12 @@ export default async function ProtocolDetailPage({
                 </TimelineHeader>
                 <TimelineContent className="mt-2 text-foreground">
                   <RichTextRenderer value={comment.content} />
-                  <TimelineDate className="mt-2 mb-0 flex items-center gap-1">
+                  {/* <TimelineDate className="mt-2 mb-0 flex items-center gap-1">
                     <Button variant="ghost" className="rounded-full">
                       <Like className="size-4! text-muted-foreground" />
                     </Button>
                     <span className="">0</span>
-                  </TimelineDate>
+                  </TimelineDate> */}
                 </TimelineContent>
               </TimelineItem>
             );

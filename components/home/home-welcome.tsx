@@ -5,8 +5,10 @@ import { User } from "@/generated/prisma/client";
 import { getInitials } from "@/lib/helper/user";
 import { TypingAnimation } from "../ui/typing-animation";
 import { useEffect, useState } from "react";
+import UserDefaultAvatar from "../user/user-default-avatar";
 
 const welcomeMessages = [
+  "Just do it.",
   "Sei du selbst die Veränderung, die du dir wünschst für diese Welt. — Mahatma Gandhi",
   "Bereit, gemeinsam Gutes zu tun?",
   "Tue Gutes in deinem kleinen Rahmen; es sind diese vielen kleinen guten Taten, die zusammen die Welt verändern.",
@@ -157,24 +159,31 @@ export default function HomeWelcome({ user }: { user: User }) {
   const displayName = user.displayName ?? `${user.firstName} ${user.lastName}`;
   return (
     <div className="p-8 flex items-center ">
+      {
+        user.avatarUrl ? 
+
       <Avatar className="size-20">
         <AvatarImage alt="User" src={user.avatarUrl ?? ""} />
         <AvatarFallback className="text-2xl">
           {getInitials(user.displayName ?? user.email ?? "User")}{" "}
         </AvatarFallback>
       </Avatar>
+      :
+        
+        <UserDefaultAvatar name={user.displayName ?? user.email ?? "User"} size={80} />
+      }
       <div className="ml-4">
-        <h1 className="text-4xl font-bold">Hallo, {displayName} !</h1>
+        <h1 className="text-4xl font-bold">Hi, {displayName} !</h1>
         <TypingAnimation
           as="p"
           className="text-sm text-foreground"
           words={shuffledMessages}
-          typeSpeed={0}
-          deleteSpeed={0}
+          typeSpeed={25}
+          deleteSpeed={25}
           pauseDelay={120000}
           cursorStyle="underscore"
           startOnView
-          showCursor={false}
+          showCursor={true}
           loop
         />
       </div>

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Quicksand } from "next/font/google";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const roboto = Roboto({
+const quicksand = Quicksand({
   variable: "--font-roboto",
   subsets: ["latin"],
 });
@@ -22,13 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" suppressHydrationWarning>
-      <body className={`${roboto.variable} antialiased`}>
+      <body className={`${quicksand.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange>
-          <ToastProvider limit={10} position="top-right">
+          <ToastProvider limit={10} position="top-center">
             <AnchoredToastProvider>{children}</AnchoredToastProvider>
           </ToastProvider>
         </ThemeProvider>
