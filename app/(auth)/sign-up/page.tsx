@@ -14,6 +14,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import Image from "next/image";
 import { Spinner } from "@/components/ui/spinner";
 import { toastManager } from "@/components/ui/toast";
+import UserDefaultAvatar from "@/components/user/user-default-avatar";
 
 type Step = "email" | "profile" | "password";
 type Errors = Record<string, string | string[]>;
@@ -215,7 +216,8 @@ export default function SignUpPage() {
             <div className="flex flex-col items-center space-y-8">
               <div className="space-y-2 text-center">
                 <div className="flex items-center justify-center">
-                  <Image
+                <UserDefaultAvatar name="Mediznetz Medizgroup" size={80}/>
+                  {/* <Image
                     src="/Logo/logo-light.svg"
                     alt="Logo"
                     width={80}
@@ -228,7 +230,7 @@ export default function SignUpPage() {
                     width={80}
                     height={80}
                     className="hidden dark:inline"
-                  />
+                  /> */}
                 </div>
                 <h1 className="text-balance text-3xl font-semibold text-foreground">
                   Ein Konto erstellen
