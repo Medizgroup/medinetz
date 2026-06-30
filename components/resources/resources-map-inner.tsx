@@ -50,11 +50,11 @@ function computeInitialViewport(
   );
 
   if (withCoords.length === 0) {
-    return { center: FALLBACK_CENTER, zoom: 12 };
+    return { center: FALLBACK_CENTER, zoom: 16 };
   }
   if (withCoords.length === 1) {
     const r = withCoords[0];
-    return { center: [r.longitude!, r.latitude!], zoom: 14 };
+    return { center: [r.longitude!, r.latitude!], zoom: 18 };
   }
 
   const lats = withCoords.map((r) => r.latitude!);
@@ -63,7 +63,7 @@ function computeInitialViewport(
     (Math.min(...lngs) + Math.max(...lngs)) / 2,
     (Math.min(...lats) + Math.max(...lats)) / 2,
   ];
-  return { center, zoom: 15 };
+  return { center, zoom: 18 };
 }
 
 /**
@@ -85,7 +85,7 @@ function FlyToSelected({
 
     map.flyTo({
       center: [r.longitude, r.latitude],
-      zoom: Math.max(map.getZoom(), 14),
+      zoom: Math.max(map.getZoom(), 16),
       duration: 600,
     });
   }, [map, selectedId, resources]);
@@ -117,7 +117,7 @@ function FitBoundsOnMount({ resources }: { resources: ResourceRow[] }) {
         [Math.min(...lngs), Math.min(...lats)],
         [Math.max(...lngs), Math.max(...lats)],
       ],
-      { padding: 60, duration: 0 },
+      { padding: 60, duration: 0 , maxZoom: 13},
     );
     applied.current = true;
   }, [map, isLoaded, resources]);
@@ -152,9 +152,12 @@ export default function MapInner({
 
   return (
     <Map
-      viewport={initialViewport}
-      onViewportChange={() => {}}
-      zoom={initialViewport.zoom}
+      // viewport={initialViewport}
+      // onViewportChange={() => {}}
+      // zoom={initialViewport.zoom}
+      center={FALLBACK_CENTER}
+  zoom={13}
+
       minZoom={10}
       maxZoom={50}
       styles={
@@ -190,33 +193,21 @@ export default function MapInner({
           latitude={r.latitude!}
           onClick={() => onSelect(r)}>
           <MarkerContent>
-            <Button
-              size={selectedId === r.id ? "icon-xl" : "icon-sm"}
+            <button
               type="button"
-              variant="ghost"
-              className={` bg-accent rounded-full transition-transform   ${
+              className={` bg-accent rounded-full transition-transform size-4.5 text-xs font-bold ${
                 r.type === "DOCTOR"
-                  ? "text-white bg-blue-600 hover:bg-blue-500!"
-                  : "text-white bg-pink-600 hover:bg-pink-500!"
+                  ? "text-white bg-blue-500 hover:bg-blue-600!"
+                  : "text-white bg-rose-600 hover:bg-rose-500!"
               } ${
                 selectedId === r.id
-                  ? "ring ring-primary  scale-125"
+                  ? "ring-3 ring-white dark:ring-black  scale-125"
                   : "scale-100"
               }`}>
-              <Badge
-                size="sm"
-                className="absolute -top-1 -right-1 rounded-full px-1"
-                aria-hidden="true">
                 {r.type === "DOCTOR"
                   ? r.caseDoctors?.length
                   : r.caseInterpreters?.length}
-              </Badge>
-              {r.type === "DOCTOR" ? (
-                <Hospital />
-              ) : (
-                <SmileSquare className="size-5" />
-              )}
-            </Button>
+            </button>
           </MarkerContent>
 
           <MarkerPopup closeButton className="min-w-64">

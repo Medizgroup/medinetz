@@ -43,7 +43,7 @@ export default function ResourcesPage({ canEdit }: Props) {
   const [resources, setResources] = React.useState<ResourceRow[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = React.useState(true);
 
   // Filter
   const [search, setSearch] = React.useState("");
@@ -212,7 +212,7 @@ export default function ResourcesPage({ canEdit }: Props) {
       </div>
       <div
         className={cn(
-          "flex-col gap-3 overflow-hidden overflow-y-auto absolute h-[calc(100vh-8rem)] z-50 shadow rounded-xl max-w-sm p-4 transition-transform backdrop-blur-sm",
+          "flex-col gap-3 overflow-hidden overflow-y-auto absolute h-[calc(100vh-8rem)] z-50 shadow rounded-xl max-w-md p-4 transition-transform backdrop-blur-xl",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}>
         <div className="space-y-3">
