@@ -5,6 +5,10 @@ import * as React from "react";
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 import { de } from "date-fns/locale";
+import { CalendarIcon } from "lucide-react";
+import { DateRange } from "react-day-picker";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -79,8 +83,7 @@ export default function ActivitiesList() {
   const [orgFilter, setOrgFilter] = React.useState("all");
   const [actionFilter, setActionFilter] = React.useState("all");
   const [targetTypeFilter, setTargetTypeFilter] = React.useState("all");
-  const [fromDate, setFromDate] = React.useState("");
-  const [toDate, setToDate] = React.useState("");
+  const [dateRange, setDateRange] = React.useState<DateRange | undefined>();
   const [grouped, setGrouped] = React.useState(true);
 
   const pageSize = 30;
@@ -95,8 +98,13 @@ export default function ActivitiesList() {
       if (actionFilter !== "all") params.set("action", actionFilter);
       if (targetTypeFilter !== "all")
         params.set("targetType", targetTypeFilter);
-      if (fromDate) params.set("from", fromDate);
-      if (toDate) params.set("to", toDate);
+      if (dateRange?.from) {
+        params.set("from", format(dateRange.from, "yyyy-MM-dd"));
+      }
+      
+      if (dateRange?.to) {
+        params.set("to", format(dateRange.to, "yyyy-MM-dd"));
+      }
 
       const r = await fetch(`/api/activities?${params.toString()}`, {
         cache: "no-store",
@@ -109,7 +117,7 @@ export default function ActivitiesList() {
     } finally {
       setLoading(false);
     }
-  }, [page, orgFilter, actionFilter, targetTypeFilter, fromDate, toDate]);
+  }, [page, orgFilter, actionFilter, targetTypeFilter, dateRange]);
 
   React.useEffect(() => {
     load();
@@ -118,7 +126,7 @@ export default function ActivitiesList() {
   // Filter-Änderung resettet Seite
   React.useEffect(() => {
     setPage(1);
-  }, [orgFilter, actionFilter, targetTypeFilter, fromDate, toDate]);
+  }, [orgFilter, actionFilter, targetTypeFilter, dateRange]);
 
   const groups = React.useMemo(
     () => (grouped ? groupByDay(items) : null),
@@ -129,21 +137,20 @@ export default function ActivitiesList() {
     setOrgFilter("all");
     setActionFilter("all");
     setTargetTypeFilter("all");
-    setFromDate("");
-    setToDate("");
+    setDateRange(undefined);
   }
 
   const hasFilters =
     orgFilter !== "all" ||
     actionFilter !== "all" ||
     targetTypeFilter !== "all" ||
-    fromDate !== "" ||
-    toDate !== "";
+    dateRange?.from ||
+    dateRange?.to
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border bg-muted/20 p-3 space-y-3">
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-2">
+      <div className="space-y-3 py-3 sticky top-0 left-0 right-0 z-10 bg-white dark:bg-gray-900">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {orgs.length > 1 ? (
             <Select
               items={[
@@ -212,22 +219,36 @@ export default function ActivitiesList() {
             </SelectPopup>
           </Select>
 
-          <div className="flex gap-2">
-            <Input
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              placeholder="Von"
-              className="text-xs"
-            />
-            <Input
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              placeholder="Bis"
-              className="text-xs"
-            />
-          </div>
+          <Popover>
+  <PopoverTrigger render={<Button   variant="outline"
+      className="justify-start text-left font-normal" /> }>
+  
+      <CalendarIcon className="mr-2 h-4 w-4" />
+
+      {dateRange?.from ? (
+        dateRange.to ? (
+          <>
+            {format(dateRange.from, "dd.MM.yyyy")} -{" "}
+            {format(dateRange.to, "dd.MM.yyyy")}
+          </>
+        ) : (
+          format(dateRange.from, "dd.MM.yyyy")
+        )
+      ) : (
+        <span>Zeitraum auswählen</span>
+      )}
+  </PopoverTrigger>
+
+  <PopoverContent className="w-auto p-0" align="start">
+    <Calendar
+      mode="range"
+      selected={dateRange}
+      onSelect={setDateRange}
+      numberOfMonths={2}
+      initialFocus
+    />
+  </PopoverContent>
+</Popover>
         </div>
 
         <div className="flex items-center justify-between">
@@ -323,16 +344,11 @@ function ItemList({ items }: { items: ActivityItem[] }) {
           <li
             key={a.id}
             className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-muted/40">
-            <Avatar className="size-8 shrink-0">
-              <AvatarImage src={a.user.avatarUrl ?? undefined} alt={userName} />
-              <AvatarFallback className="text-xs">
-                {getInitials(userName)}
-              </AvatarFallback>
-            </Avatar>
+            <Icon className="mt-0.5 size-5.5 shrink-0 text-muted-foreground" />
 
             <div className="min-w-0 flex-1 space-y-1">
               <div className="flex items-start gap-2">
-                <Icon className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
+                
                 <div className="min-w-0 flex-1 text-sm">
                   <ActivityLine
                     activity={{
