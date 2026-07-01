@@ -49,7 +49,7 @@ export default async function CasesPage() {
       },
       organization: { select: { id: true, name: true } },
       creator: { select: { displayName: true, name: true } },
-      assignee: { select: { id: true, displayName: true, name: true } },
+      assignee: { select: { id: true, displayName: true, name: true, avatarUrl: true } },
       _count: { select: { comments: true } },
     },
   });
@@ -76,7 +76,7 @@ export default async function CasesPage() {
         {canCreate ? (
           <Button render={<Link href="/cases/new" />} className="rounded-full">
             <Plus className="size-4" />
-            Neuer Fall
+            Neuen Fall erstellen
           </Button>
         ) : null}
       </div>

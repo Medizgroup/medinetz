@@ -1,7 +1,4 @@
 import {
-  Circle,
-  CircleCheck,
-  Clock,
   Loader,
   ShieldAlert,
   ShieldCheck,
@@ -9,6 +6,8 @@ import {
 } from "lucide-react";
 import type { CasePriority, CaseStatus } from "@/generated/prisma/client";
 import { OrgOption } from "@/components/protocols/protocols-table";
+import { RecordAudioCircle, StopCircle , 
+  CheckCircle} from "@solar-icons/react-perf/category/style/LineDuotone";
 
 export const STATUS_LABEL: Record<CaseStatus, string> = {
   OPEN: "Offen",
@@ -33,13 +32,13 @@ export const SENSITIVITY_LABEL: Record<number, string> = {
 export function statusIcon(status: CaseStatus) {
   switch (status) {
     case "OPEN":
-      return Circle;
+      return RecordAudioCircle;
     case "IN_PROGRESS":
       return Loader;
     case "WAITING":
-      return Clock;
+      return StopCircle;
     case "CLOSED":
-      return CircleCheck;
+      return CheckCircle;
   }
 }
 

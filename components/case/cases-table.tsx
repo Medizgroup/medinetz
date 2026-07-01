@@ -54,6 +54,10 @@ import {
 } from "@/lib/utils/cases";
 import type { CasePriority, CaseStatus } from "@/generated/prisma/client";
 import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getInitials } from "@/lib/helper/user";
+import UserDefaultAvatar from "../user/user-default-avatar";
+import { SortFromBottomToTop, SortFromTopToBottom, SortVertical } from "@solar-icons/react-perf/category/style/LineDuotone";
 
 type CaseRow = {
   id: string;
@@ -70,6 +74,7 @@ type CaseRow = {
     id: string;
     displayName: string | null;
     name: string | null;
+    avatarUrl: string | null;
   } | null;
   _count: { comments: number };
 };
@@ -91,7 +96,7 @@ export default function CasesTable({
   );
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 15,
+    pageSize: 25,
   });
   const [search, setSearch] = React.useState("");
 
@@ -122,7 +127,7 @@ export default function CasesTable({
         header: "Nr.",
         cell: ({ row }) => (
           <div
-            className={`tabular-nums ${row.original.status === "CLOSED" ? "line-through" : ""}`}>
+            className={`tabular-nums `}>
             #{row.original.caseNumber}
           </div>
         ),
@@ -139,8 +144,8 @@ export default function CasesTable({
         cell: ({ row }) => (
           <Link
             href={`/cases/${row.original.id}`}
-            className={`hover:text-muted-foreground ${row.original.status === "CLOSED" ? "line-through" : ""}`}>
-            {row.original.title}
+            className={`hover:text-muted-foreground `}>
+            {row.original.title} ({row.original.status === "CLOSED" ? "Abgeschlossen" : ""})
           </Link>
         ),
       },
@@ -154,6 +159,41 @@ export default function CasesTable({
             {row.original.patient?.pseudonym ?? "—"}
           </span>
         ),
+      },
+      {
+        id: "assignee",
+        accessorFn: (row) => row.assignee?.id ?? "__none__",
+        header: "Zugewiesen",
+        filterFn: (row, _id, value) => {
+          if (!value || value === "all") return true;
+          if (value === "unassigned") return !row.original.assignee;
+          return row.original.assignee?.id === value;
+        },
+        cell: ({ row }) =>
+          row.original.assignee ? (
+            <Link
+              href={`/m/${row.original.assignee.id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="text-sm text-muted-foreground hover:text-primary hover:underline flex items-center gap-2">
+                {
+                  row.original.assignee.avatarUrl ? (
+                    <Avatar className="size-6">
+                      <AvatarImage src={row.original.assignee.avatarUrl ?? undefined} alt={row.original.assignee.displayName ?? row.original.assignee.name ?? ""} />
+                      <AvatarFallback>
+                        {getInitials(row.original.assignee.displayName ?? row.original.assignee.name ?? "")}
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <UserDefaultAvatar name={row.original.assignee.displayName ?? row.original.assignee.name ?? ""} />
+                  )
+                }
+                {row.original.assignee.displayName ??
+                row.original.assignee.name ??
+                "-"}
+            </Link>
+          ) : (
+            <span className="text-sm text-muted-foreground">Nicht zugewiesen</span>
+          ),
       },
       {
         accessorKey: "status",
@@ -203,38 +243,16 @@ export default function CasesTable({
           </span>
         ),
       },
-      {
-        id: "assignee",
-        accessorFn: (row) => row.assignee?.id ?? "__none__",
-        header: "Zugewiesen",
-        filterFn: (row, _id, value) => {
-          if (!value || value === "all") return true;
-          if (value === "unassigned") return !row.original.assignee;
-          return row.original.assignee?.id === value;
-        },
-        cell: ({ row }) =>
-          row.original.assignee ? (
-            <Link
-              href={`/m/${row.original.assignee.id}`}
-              onClick={(e) => e.stopPropagation()}
-              className="text-sm text-muted-foreground hover:text-primary hover:underline">
-              {row.original.assignee.displayName ??
-                row.original.assignee.name ??
-                "—"}
-            </Link>
-          ) : (
-            <span className="text-sm text-muted-foreground">—</span>
-          ),
-      },
-      {
-        accessorKey: "updatedAt",
-        header: "Aktualisiert",
-        cell: ({ row }) => (
-          <span className="text-sm text-muted-foreground">
-            {format(row.original.updatedAt, "dd.MM.yyyy", { locale: de })}
-          </span>
-        ),
-      },
+     
+      // {
+      //   accessorKey: "updatedAt",
+      //   header: "Aktualisiert",
+      //   cell: ({ row }) => (
+      //     <span className="text-sm text-muted-foreground">
+      //       {format(row.original.updatedAt, "dd.MM.yyyy", { locale: de })}
+      //     </span>
+      //   ),
+      // },
     ],
     [],
   );
@@ -347,13 +365,13 @@ export default function CasesTable({
         />
       </div>
 
-      <div className="rounded-2xl border">
+      <div className=" rounded-2xl  ">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted/60 rounded-2xl!">
             {table.getHeaderGroups().map((hg) => (
               <TableRow key={hg.id}>
                 {hg.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} >
                     {header.column.getCanSort() ? (
                       <button
                         className="inline-flex items-center gap-1"
@@ -363,10 +381,10 @@ export default function CasesTable({
                           header.getContext(),
                         )}
                         {header.column.getIsSorted() === "asc" ? (
-                          <ChevronUpIcon size={14} className="opacity-60" />
+                          <SortFromBottomToTop className="size-4 " />
                         ) : header.column.getIsSorted() === "desc" ? (
-                          <ChevronDownIcon size={14} className="opacity-60" />
-                        ) : null}
+                          <SortFromTopToBottom className="size-4 " />
+                        ) : <SortVertical className="size-5 " />}
                       </button>
                     ) : (
                       flexRender(
@@ -384,7 +402,7 @@ export default function CasesTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className="cursor-pointer hover:bg-muted/40"
+                  className={cn("cursor-pointer hover:bg-muted/40", row.original.status === "CLOSED" ? "opacity-40" : "")}
                   onClick={() =>
                     (window.location.href = `/cases/${row.original.id}`)
                   }>
