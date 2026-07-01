@@ -28,7 +28,7 @@ export default function RootLayout({
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange>
-          <ToastProvider limit={10} position="top-center">
+          <ToastProvider limit={3} position="top-center">
             <AnchoredToastProvider>{children}</AnchoredToastProvider>
           </ToastProvider>
         </ThemeProvider>

@@ -19,6 +19,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/helper/user";
 import { Label } from "../ui/label";
 import UserDefaultAvatar from "../user/user-default-avatar";
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "../ui/alert";
+import { DangerCircle } from "@solar-icons/react-perf/category/style/LineDuotone";
 
 type ActiveEditor = { id: string; name: string; avatarUrl: string | null };
 
@@ -132,7 +134,9 @@ export default function EditProtocolForm({
   return (
     <form onSubmit={onSubmit} className="space-y-4 p-5">
       {activeEditors.length > 0 ? (
-        <div className="flex items-center gap-3 rounded-lg border border-amber-100 dark:border-amber-900 bg-amber-50/40 dark:bg-amber-950/20 px-4 py-2 text-sm text-amber-900 dark:text-amber-200">
+        <Alert variant="info">
+         
+          <AlertTitle className="flex flex-row items-center gap-2">
           <div className="-space-x-2 flex">
             {activeEditors.slice(0, 4).map((u) => (
               <>
@@ -146,36 +150,40 @@ export default function EditProtocolForm({
                 </AvatarFallback>
               </Avatar>
               :
-              <UserDefaultAvatar name={u.name} size={26} />
+              <UserDefaultAvatar name={u.name} size={30} />
               }
               </>
             ))}
           </div>
-          <span>
-            {activeEditors.length === 1
+          {activeEditors.length === 1
               ? `${activeEditors[0].name} bearbeitet dieses Protokoll gerade.`
               : activeEditors.length === 2
                 ? `${activeEditors[0].name} und ${activeEditors[1].name} bearbeiten dieses Protokoll gerade.`
                 : `${activeEditors[0].name}, ${activeEditors[1].name} und ${activeEditors.length - 2} andere Personen bearbeiten dieses Protokoll gerade.`}
-          </span>
-        </div>
+          
+          </AlertTitle>
+        </Alert>
       ) : null}
 
       {conflict ? (
-        <div className="flex items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
-          <span>
+        <Alert variant="warning">
+          <DangerCircle className="size-4.5!" />
+          <AlertTitle>Konflikt</AlertTitle> 
+          <AlertDescription>
             Dieses Protokoll wurde zwischenzeitlich geändert. Lade neu, um die
             aktuelle Version zu sehen – ungespeicherte Änderungen gehen dabei
             verloren.
-          </span>
-          <Button
-            type="button"
-            variant="outline"
-            className="shrink-0 rounded-full"
-            onClick={() => window.location.reload()}>
-            <RefreshCw className="size-4" /> Neu laden
-          </Button>
-        </div>
+          </AlertDescription>
+          <AlertAction>
+            <Button
+              type="button"
+              variant="outline"
+              className="shrink-0 rounded-full"
+              onClick={() => window.location.reload()}>
+              <RefreshCw className="size-4" /> Neu laden
+            </Button>
+          </AlertAction>
+        </Alert>
       ) : null}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
