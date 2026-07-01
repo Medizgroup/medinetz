@@ -1,28 +1,23 @@
+import { CalendarMark, Dialog, MentionCircle, RecordAudioCircle, Refresh, SquareTopUp, UserPlusRounded } from "@solar-icons/react-perf/category/style/LineDuotone";
 import {
-  AtSign,
-  CalendarCheck,
-  CircleDot,
-  MessageSquare,
-  RefreshCcw,
-  SmilePlus,
   type LucideIcon,
 } from "lucide-react";
 
 export function notificationIcon(type: string): LucideIcon {
   switch (type) {
     case "MENTION":
-      return AtSign;
+      return MentionCircle;
     case "ASSIGNMENT":
-      return SmilePlus;
+      return UserPlusRounded;
     case "COMMENT":
-      return MessageSquare;
+      return Dialog;
     case "CASE_UPDATE":
-      return RefreshCcw;
+      return Refresh;
     case "PROTOCOL_UPDATE":
-      return RefreshCcw;
+      return SquareTopUp;
     case "EVENT_INVITE":
-      return CalendarCheck;
+      return CalendarMark;
     default:
-      return CircleDot;
+      return RecordAudioCircle;
   }
 }

@@ -149,7 +149,7 @@ export default function ActivitiesList() {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-3 py-3 sticky top-0 left-0 right-0 z-10 bg-white dark:bg-gray-900">
+      <div className="space-y-3 py-3 sticky top-0 left-0 right-0 z-10 bg-white dark:bg-background">
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {orgs.length > 1 ? (
             <Select

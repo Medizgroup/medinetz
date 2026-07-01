@@ -13,6 +13,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -134,34 +135,48 @@ export default function NotificationsList() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 sticky top-0 left-0 right-0 z-10 bg-background py-3">
+        <div className="flex flex-row items-center gap-2">
+
         <Select
+          items={[
+            { label: "Alle", value: "all" },
+            { label: "Ungelesen", value: "unread" },
+          ]}
           value={filter}
           onValueChange={(v) => setFilter((v ?? "all") as "all" | "unread")}>
-          <SelectTrigger className="w-[160px]">
-            <SelectValue />
+          <SelectTrigger>
+            <SelectValue placeholder="Alle" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectPopup alignItemWithTrigger={false}>
             <SelectItem value="all">Alle</SelectItem>
             <SelectItem value="unread">Ungelesen</SelectItem>
-          </SelectContent>
+          </SelectPopup>
         </Select>
 
         <Select
+          items={[
+            { label: "Alle Typen", value: "all" },
+            ...Object.entries(TYPE_LABELS).map(([k, v]) => ({
+              label: v,
+              value: k,
+            })),
+          ]}
           value={typeFilter}
           onValueChange={(v) => setTypeFilter(v ?? "all")}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger>
             <SelectValue placeholder="Alle Typen" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectPopup alignItemWithTrigger={false}>
             <SelectItem value="all">Alle Typen</SelectItem>
             {Object.entries(TYPE_LABELS).map(([k, v]) => (
               <SelectItem key={k} value={k}>
                 {v}
               </SelectItem>
             ))}
-          </SelectContent>
+          </SelectPopup>
         </Select>
+        </div>
 
         <button
           type="button"
@@ -256,7 +271,7 @@ function ItemList({
               <Icon
                 className={cn(
                   "size-4",
-                  n.read ? "text-muted-foreground" : "text-primary",
+                  n.read ? "text-foreground" : "text-primary",
                 )}
               />
             </div>
@@ -283,7 +298,7 @@ function ItemList({
             {!n.read ? (
               <span
                 aria-label="Ungelesen"
-                className="mt-2 size-2 shrink-0 rounded-full bg-primary"
+                className="mt-2 size-2 shrink-0 rounded-full bg-emerald-500"
               />
             ) : null}
           </div>
