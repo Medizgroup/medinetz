@@ -9,6 +9,7 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -16,9 +17,6 @@ import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  GalleryVerticalEnd,
   MessagesSquare,
   Plus,
   SearchIcon,
@@ -43,6 +41,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { orgTypeBadge } from "@/lib/utils/cases";
+import { SortVertical } from "@solar-icons/react-perf/category/arrows/LineDuotone/SortVertical";
+import { Dialog, Library, SortFromBottomToTop, SortFromTopToBottom } from "@solar-icons/react-perf/category/style/LineDuotone";
 
 type ProtocolRow = {
   id: string;
@@ -78,6 +78,10 @@ export default function ProtocolsTable({
     { id: "date", desc: true },
   ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 25,
+  });
 
   const columns = useMemo<ColumnDef<ProtocolRow>[]>(
     () => [
@@ -91,10 +95,19 @@ export default function ProtocolsTable({
       {
         accessorKey: "title",
         header: "Titel",
+        filterFn: (row, _id, value: string) => {
+          const v = value.toLowerCase().trim();
+
+          return (
+            row.original.title.toLowerCase().includes(v) ||
+            row.original.protocolNumber.toString().includes(v)
+          );
+        },
         cell: ({ row }) => (
           <Link
             href={`/protocols/${row.original.id}`}
-            className="font-medium hover:underline">
+            className="font-medium hover:underline"
+          >
             {row.original.title}
           </Link>
         ),
@@ -132,7 +145,7 @@ export default function ProtocolsTable({
         header: "Kommentare",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-muted-foreground">
-            <MessagesSquare className="size-4 text-amber-500" />
+            <Dialog className="size-4 text-amber-500" />
             <span>{row.original._count.comments}</span>
           </div>
         ),
@@ -143,7 +156,7 @@ export default function ProtocolsTable({
         header: "Fälle",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-muted-foreground">
-            <GalleryVerticalEnd className="size-4" />
+            <Library className="size-4" />
             <span>{row.original._count.protocolCases}</span>
           </div>
         ),
@@ -164,12 +177,17 @@ export default function ProtocolsTable({
     state: {
       sorting,
       columnFilters,
+      pagination,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
+
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+
     enableSortingRemoval: false,
   });
 
@@ -189,7 +207,7 @@ export default function ProtocolsTable({
                     titleColumn.setFilterValue(e.target.value);
                   }}
                   placeholder="Nach Titel suchen"
-                  className="ps-9"
+                  className="ps-6"
                 />
                 <div className="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-3 text-muted-foreground">
                   <SearchIcon size={16} />
@@ -197,6 +215,7 @@ export default function ProtocolsTable({
               </div>
             </div>
           )}
+
 
           {orgColumn && (
             <div className="w-full sm:w-56">
@@ -231,16 +250,15 @@ export default function ProtocolsTable({
 
         <Button
           className="rounded-full"
-          variant="outline"
           render={
             <Link href="/protocols/new">
               <Plus className="me-2 size-4" />
-              Neues Protokoll
+              Neues Protokoll erstellen
             </Link>
           }></Button>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border">
+      <div className="overflow-hidden ">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -257,10 +275,10 @@ export default function ProtocolsTable({
                           header.getContext(),
                         )}
                         {header.column.getIsSorted() === "asc" ? (
-                          <ChevronUpIcon size={16} className="opacity-60" />
+                          <SortFromBottomToTop size={16} className="opacity-60" />
                         ) : header.column.getIsSorted() === "desc" ? (
-                          <ChevronDownIcon size={16} className="opacity-60" />
-                        ) : null}
+                          <SortFromTopToBottom size={16} className="opacity-60" />
+                        ) : <SortVertical className="size-5 " />}
                       </button>
                     ) : (
                       flexRender(
@@ -304,6 +322,49 @@ export default function ProtocolsTable({
             )}
           </TableBody>
         </Table>
+        <div className="flex items-center justify-between pt-3 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+
+            <span>
+                pro Seite 
+            </span>
+            <Select
+              value={String(table.getState().pagination.pageSize)}
+              onValueChange={(value) => table.setPageSize(Number(value))}
+            >
+              <SelectTrigger className="w-5">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectPopup>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="25">25</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+                <SelectItem value="100">100</SelectItem>
+              </SelectPopup>
+            </Select>
+          </div>
+
+
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Zurück
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Weiter
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -26,6 +26,7 @@ import ActivityLine from "@/components/activity/activity-line";
 import { NotProduct } from "@/components/not-product";
 import Image from "next/image";
 import HomeCase from "@/components/home/home-cases";
+import UserDefaultAvatar from "@/components/user/user-default-avatar";
 
 // --- helpers ---
 function toISODate(date: Date): string {
@@ -190,7 +191,7 @@ export default async function Page({
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="h-full w-full" />
+              <UserDefaultAvatar name={display} size={176} />
             )}
           </div>
 

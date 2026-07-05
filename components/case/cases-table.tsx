@@ -131,10 +131,13 @@ export default function CasesTable({
         accessorKey: "title",
         header: "Titel",
         filterFn: (row, _id, value: string) => {
-          const v = value.toLowerCase();
-          return row.original.title.toLowerCase().includes(v);
-          // ||
-          // row.original.patient.pseudonym.toLowerCase().includes(v)
+          const v = value.toLowerCase().trim();
+        
+          return (
+            row.original.title.toLowerCase().includes(v) ||
+            (row.original.patient?.pseudonym ?? "").toLowerCase().includes(v) ||
+            row.original.caseNumber.toString().includes(v)
+          );
         },
         cell: ({ row }) => (
           <Link
@@ -237,17 +240,7 @@ export default function CasesTable({
             {row.original.organization.name}
           </span>
         ),
-      },
-     
-      // {
-      //   accessorKey: "updatedAt",
-      //   header: "Aktualisiert",
-      //   cell: ({ row }) => (
-      //     <span className="text-sm text-muted-foreground">
-      //       {format(row.original.updatedAt, "dd.MM.yyyy", { locale: de })}
-      //     </span>
-      //   ),
-      // },
+      }
     ],
     [],
   );
