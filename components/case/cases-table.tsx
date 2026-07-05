@@ -84,7 +84,7 @@ export default function CasesTable({
   orgOptions: OrgOption[];
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([
-    { id: "updatedAt", desc: true },
+    { id: "caseNumber", desc: true },
   ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
