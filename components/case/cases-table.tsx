@@ -14,14 +14,9 @@ import {
   useReactTable,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { format } from "date-fns";
-import { de } from "date-fns/locale";
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
-  ChevronRight,
   ChevronRightIcon,
-  ChevronUpIcon,
   SearchIcon,
 } from "lucide-react";
 import AssigneeFilter, { type AssigneeOption } from "./assignee-filter";
@@ -145,7 +140,7 @@ export default function CasesTable({
           <Link
             href={`/cases/${row.original.id}`}
             className={`hover:text-muted-foreground `}>
-            {row.original.title} ({row.original.status === "CLOSED" ? "Abgeschlossen" : ""})
+            {row.original.title} {row.original.status === "CLOSED" ? "(Abgeschlossen)" : ""}
           </Link>
         ),
       },
