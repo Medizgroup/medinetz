@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${quicksand.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="default"
           enableSystem
           disableTransitionOnChange>
           <ToastProvider limit={3} position="top-center">

@@ -207,6 +207,11 @@ export type Todo = Prisma.TodoModel
  */
 export type Event = Prisma.EventModel
 /**
+ * Model EventException
+ * 
+ */
+export type EventException = Prisma.EventExceptionModel
+/**
  * Model Patient
  * 
  */

@@ -88,9 +88,11 @@ enum JoinRequestStatus {
 
 enum EventRecurrence {
   NONE
+  DAILY
   WEEKLY
   BIWEEKLY
   MONTHLY
+  YEARLY
 }
 
 enum EventVisibility {
@@ -967,11 +969,43 @@ model Event {
   caseDoctor      CaseDoctor?      @relation(fields: [caseDoctorId], references: [id], onDelete: Cascade)
   caseInterpreter CaseInterpreter? @relation(fields: [caseInterpreterId], references: [id], onDelete: Cascade)
 
+  exceptions EventException[]
+
   @@index([organizationId, startsAt])
   @@index([startsAt])
   @@index([recurrence])
   @@index([creatorId])
   @@map("events")
+}
+
+// Ausnahme/Override für ein einzelnes Vorkommen einer wiederkehrenden Event-Serie.
+// originalStartsAt identifiziert das Vorkommen (Start-Zeitpunkt, wie er ohne
+// Override berechnet worden wäre). isCancelled=true blendet das Vorkommen aus,
+// ansonsten überschreiben gesetzte Felder die Serien-Standardwerte nur für
+// dieses eine Vorkommen ("nur dieses Ereignis" bearbeiten).
+model EventException {
+  id               String    @id @default(uuid())
+  eventId          String    @map("event_id")
+  originalStartsAt DateTime  @map("original_starts_at")
+
+  isCancelled Boolean @default(false) @map("is_cancelled")
+
+  title       String?
+  description String? @db.Text
+  location    String?
+  startsAt    DateTime? @map("starts_at")
+  endsAt      DateTime? @map("ends_at")
+  allDay      Boolean?  @map("all_day")
+  color       EventColor?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, originalStartsAt])
+  @@index([eventId])
+  @@map("event_exceptions")
 }
 
 model Patient {

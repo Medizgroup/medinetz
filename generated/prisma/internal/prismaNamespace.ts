@@ -417,6 +417,7 @@ export const ModelName = {
   Mention: 'Mention',
   Todo: 'Todo',
   Event: 'Event',
+  EventException: 'EventException',
   Patient: 'Patient',
   Diagnosis: 'Diagnosis',
   Medication: 'Medication',
@@ -437,7 +438,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolPresence" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo" | "event" | "patient" | "diagnosis" | "medication" | "patientAccessLog" | "news"
+    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolPresence" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo" | "event" | "eventException" | "patient" | "diagnosis" | "medication" | "patientAccessLog" | "news"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2883,6 +2884,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EventException: {
+      payload: Prisma.$EventExceptionPayload<ExtArgs>
+      fields: Prisma.EventExceptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EventExceptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EventExceptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>
+        }
+        findFirst: {
+          args: Prisma.EventExceptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EventExceptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>
+        }
+        findMany: {
+          args: Prisma.EventExceptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>[]
+        }
+        create: {
+          args: Prisma.EventExceptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>
+        }
+        createMany: {
+          args: Prisma.EventExceptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EventExceptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>[]
+        }
+        delete: {
+          args: Prisma.EventExceptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>
+        }
+        update: {
+          args: Prisma.EventExceptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.EventExceptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EventExceptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EventExceptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.EventExceptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventExceptionPayload>
+        }
+        aggregate: {
+          args: Prisma.EventExceptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEventException>
+        }
+        groupBy: {
+          args: Prisma.EventExceptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventExceptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EventExceptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventExceptionCountAggregateOutputType> | number
+        }
+      }
+    }
     Patient: {
       payload: Prisma.$PatientPayload<ExtArgs>
       fields: Prisma.PatientFieldRefs
@@ -3814,6 +3889,25 @@ export const EventScalarFieldEnum = {
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
+export const EventExceptionScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  originalStartsAt: 'originalStartsAt',
+  isCancelled: 'isCancelled',
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  allDay: 'allDay',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventExceptionScalarFieldEnum = (typeof EventExceptionScalarFieldEnum)[keyof typeof EventExceptionScalarFieldEnum]
+
+
 export const PatientScalarFieldEnum = {
   id: 'id',
   pseudonym: 'pseudonym',
@@ -4409,6 +4503,7 @@ export type GlobalOmitConfig = {
   mention?: Prisma.MentionOmit
   todo?: Prisma.TodoOmit
   event?: Prisma.EventOmit
+  eventException?: Prisma.EventExceptionOmit
   patient?: Prisma.PatientOmit
   diagnosis?: Prisma.DiagnosisOmit
   medication?: Prisma.MedicationOmit

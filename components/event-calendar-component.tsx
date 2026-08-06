@@ -1,11 +1,13 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import * as React from "react";
 import { toast } from "sonner";
 
 import { EventCalendar } from "@/components/event-calendar/event-calendar";
-import type { CalendarEvent } from "@/components/event-calendar/types";
+import type {
+  CalendarEvent,
+  EditScope,
+} from "@/components/event-calendar/types";
 import { parseEventId } from "@/lib/event/recurrence";
 import { Loading } from "./loading-component";
 
@@ -18,11 +20,26 @@ export default function EventCalendarComponent({
 }) {
   const [events, setEvents] = React.useState<CalendarEvent[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const rangeRef = React.useRef<{ start: Date; end: Date } | null>(null);
+  const abortRef = React.useRef<AbortController | null>(null);
 
-  const reload = React.useCallback(async () => {
+  const reload = React.useCallback(async (range?: { start: Date; end: Date }) => {
+    const activeRange = range ?? rangeRef.current;
+    if (!activeRange) return;
+
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     try {
-      const r = await fetch("/api/events");
+      const params = new URLSearchParams({
+        from: activeRange.start.toISOString(),
+        to: activeRange.end.toISOString(),
+      });
+      const r = await fetch(`/api/events?${params.toString()}`, {
+        signal: controller.signal,
+      });
       if (!r.ok) throw new Error();
       const data: CalendarEvent[] = await r.json();
       // Server-Datums kommen als ISO-Strings → Date-Objekte
@@ -33,16 +50,21 @@ export default function EventCalendarComponent({
           end: new Date(e.end),
         })),
       );
-    } catch {
+    } catch (err) {
+      if ((err as Error)?.name === "AbortError") return;
       toast.error("Termine konnten nicht geladen werden.");
     } finally {
-      setLoading(false);
+      if (abortRef.current === controller) setLoading(false);
     }
   }, []);
 
-  React.useEffect(() => {
-    reload();
-  }, [reload]);
+  const handleRangeChange = React.useCallback(
+    (range: { start: Date; end: Date }) => {
+      rangeRef.current = range;
+      reload(range);
+    },
+    [reload],
+  );
 
   async function handleAdd(e: CalendarEvent) {
     const r = await fetch("/api/events", {
@@ -71,7 +93,7 @@ export default function EventCalendarComponent({
     await reload();
   }
 
-  async function handleUpdate(e: CalendarEvent) {
+  async function handleUpdate(e: CalendarEvent, scope: EditScope) {
     const { eventId } = parseEventId(e.id);
     const r = await fetch(`/api/events/${eventId}`, {
       method: "PATCH",
@@ -87,6 +109,7 @@ export default function EventCalendarComponent({
         recurrence: e.recurrence,
         recurrenceEndDate: e.recurrenceEndDate ?? null,
         visibility: e.visibility,
+        scope,
       }),
     });
 
@@ -98,9 +121,13 @@ export default function EventCalendarComponent({
     await reload();
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(id: string, scope: EditScope) {
     const { eventId } = parseEventId(id);
-    const r = await fetch(`/api/events/${eventId}`, { method: "DELETE" });
+    const r = await fetch(`/api/events/${eventId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ scope }),
+    });
 
     if (!r.ok) {
       toast.error("Löschen fehlgeschlagen.");
@@ -117,6 +144,7 @@ export default function EventCalendarComponent({
         onEventAdd={handleAdd}
         onEventUpdate={handleUpdate}
         onEventDelete={handleDelete}
+        onRangeChange={handleRangeChange}
         availableOrgs={initialOrgs}
       />
     </div>

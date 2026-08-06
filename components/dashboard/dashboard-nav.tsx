@@ -69,11 +69,11 @@ export default function DashboardNav({ isAdmin }: { isAdmin: boolean }) {
               className={cn(
                 "inline-flex items-center gap-2 rounded-2xl px-4 py-1.5 text-sm transition-colors ease-in",
                 active
-                  ? "bg-accent text-orange-500 font-medium "
-                  : "text-foreground hover:bg-accent hover:text-orange-500",
+                  ? "bg-accent text-emerald-500 font-medium "
+                  : "text-foreground hover:bg-accent hover:text-emerald-500",
               )}>
               <Icon
-                className={cn("size-5 ", active ? "fill-orange-500/10" : "")}
+                className={cn("size-5 ", active ? "fill-emerald-500/10" : "")}
               />
               {item.label}
             </Link>

@@ -3,7 +3,11 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { buildOccurrenceId, expandOccurrences } from "@/lib/event/recurrence";
+import {
+  buildOccurrenceId,
+  expandOccurrences,
+  VALID_RECURRENCE,
+} from "@/lib/event/recurrence";
 import { colorToDb, colorToUI } from "@/lib/event/colors";
 import { formatEventDate, recurrenceText } from "@/lib/helper/event";
 
@@ -64,6 +68,27 @@ export async function GET(req: Request) {
     orderBy: { startsAt: "asc" },
   });
 
+  const recurringIds = events
+    .filter((e) => e.recurrence !== "NONE")
+    .map((e) => e.id);
+  const nonRecurringIds = events
+    .filter((e) => e.recurrence === "NONE")
+    .map((e) => e.id);
+
+  const exceptions =
+    recurringIds.length > 0 || nonRecurringIds.length > 0
+      ? await prisma.eventException.findMany({
+          where: { eventId: { in: [...recurringIds, ...nonRecurringIds] } },
+        })
+      : [];
+
+  const exceptionsByEvent = new Map<string, typeof exceptions>();
+  for (const ex of exceptions) {
+    const list = exceptionsByEvent.get(ex.eventId) ?? [];
+    list.push(ex);
+    exceptionsByEvent.set(ex.eventId, list);
+  }
+
   // Expandieren
   const expanded = events.flatMap((e) => {
     const occurrences = expandOccurrences(
@@ -75,18 +100,25 @@ export async function GET(req: Request) {
       },
       windowStart,
       windowEnd,
+      exceptionsByEvent.get(e.id) ?? [],
     );
 
     return occurrences.map((occ) => ({
       id:
-        e.recurrence === "NONE" ? e.id : buildOccurrenceId(e.id, occ.startsAt),
-      title: e.title,
-      description: e.description,
-      location: e.location,
+        e.recurrence === "NONE"
+          ? e.id
+          : buildOccurrenceId(e.id, occ.originalStartsAt),
+      title: occ.titleOverride ?? e.title,
+      description: occ.descriptionOverride ?? e.description,
+      location: occ.locationOverride ?? e.location,
       start: occ.startsAt,
       end: occ.endsAt,
-      allDay: e.allDay,
-      color: colorToUI(e.color),
+      allDay: occ.allDayOverride ?? e.allDay,
+      color: colorToUI((occ.colorOverride as typeof e.color) ?? e.color),
+      recurrence: e.recurrence,
+      recurrenceEndDate: e.recurrenceEndDate,
+      visibility: e.visibility,
+      organizationId: e.organizationId,
     }));
   });
 
@@ -174,9 +206,7 @@ export async function POST(req: Request) {
     }
   }
 
-  const recurrence = ["NONE", "WEEKLY", "BIWEEKLY", "MONTHLY"].includes(
-    body.recurrence,
-  )
+  const recurrence = VALID_RECURRENCE.includes(body.recurrence)
     ? body.recurrence
     : "NONE";
   const recurrenceEndDate =

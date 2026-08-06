@@ -107,9 +107,11 @@ export type JoinRequestStatus = (typeof JoinRequestStatus)[keyof typeof JoinRequ
 
 export const EventRecurrence = {
   NONE: 'NONE',
+  DAILY: 'DAILY',
   WEEKLY: 'WEEKLY',
   BIWEEKLY: 'BIWEEKLY',
-  MONTHLY: 'MONTHLY'
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
 } as const
 
 export type EventRecurrence = (typeof EventRecurrence)[keyof typeof EventRecurrence]

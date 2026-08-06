@@ -28,9 +28,9 @@ import {
   WeekCellsHeight,
 } from "./constants";
 import { AgendaView } from "./agenda-view";
-import { addHoursToDate } from "./utils";
+import { addHoursToDate, getVisibleRange } from "./utils";
 import { CalendarDndProvider } from "./calendar-dnd-context";
-import type { CalendarEvent, CalendarView } from "./types";
+import type { CalendarEvent, CalendarView, EditScope } from "./types";
 import { DayView } from "./day-view";
 import { EventDialog } from "./event-dialog";
 import { MonthView } from "./month-view";
@@ -50,8 +50,9 @@ import { de } from "date-fns/locale";
 export interface EventCalendarProps {
   events?: CalendarEvent[];
   onEventAdd?: (event: CalendarEvent) => void;
-  onEventUpdate?: (event: CalendarEvent) => void;
-  onEventDelete?: (eventId: string) => void;
+  onEventUpdate?: (event: CalendarEvent, scope: EditScope) => void;
+  onEventDelete?: (eventId: string, scope: EditScope) => void;
+  onRangeChange?: (range: { start: Date; end: Date }) => void;
   className?: string;
   initialView?: CalendarView;
   availableOrgs?: { id: string; name: string }[];
@@ -62,6 +63,7 @@ export function EventCalendar({
   onEventAdd,
   onEventUpdate,
   onEventDelete,
+  onRangeChange,
   className,
   initialView = "month",
   availableOrgs,
@@ -72,6 +74,13 @@ export function EventCalendar({
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null,
   );
+
+  // Sichtbaren Zeitraum an den Elternteil melden, damit dort genau das nachgeladen
+  // wird, was auch angezeigt werden soll (Grundlage für "echtes Endlos").
+  // onRangeChange muss vom Aufrufer mit useCallback stabil gehalten werden.
+  useEffect(() => {
+    onRangeChange?.(getVisibleRange(view, currentDate));
+  }, [view, currentDate, onRangeChange]);
 
   // Add keyboard shortcuts for view switching
   useEffect(() => {
@@ -141,7 +150,6 @@ export function EventCalendar({
   };
 
   const handleEventSelect = (event: CalendarEvent) => {
-    console.log("Event selected:", event); // Debug log
     setSelectedEvent(event);
     setIsEventDialogOpen(true);
   };
@@ -173,9 +181,9 @@ export function EventCalendar({
     setIsEventDialogOpen(true);
   };
 
-  const handleEventSave = (event: CalendarEvent) => {
+  const handleEventSave = (event: CalendarEvent, scope: EditScope) => {
     if (event.id) {
-      onEventUpdate?.(event);
+      onEventUpdate?.(event, scope);
       // Show toast notification when an event is updated
 
       toastManager.add({
@@ -199,9 +207,9 @@ export function EventCalendar({
     setSelectedEvent(null);
   };
 
-  const handleEventDelete = (eventId: string) => {
+  const handleEventDelete = (eventId: string, scope: EditScope) => {
     const deletedEvent = events.find((e) => e.id === eventId);
-    onEventDelete?.(eventId);
+    onEventDelete?.(eventId, scope);
     setIsEventDialogOpen(false);
     setSelectedEvent(null);
 
@@ -216,7 +224,8 @@ export function EventCalendar({
   };
 
   const handleEventUpdate = (updatedEvent: CalendarEvent) => {
-    onEventUpdate?.(updatedEvent);
+    // Drag & Drop verschiebt immer nur das angefasste (sichtbare) Vorkommen.
+    onEventUpdate?.(updatedEvent, "single");
 
     // Show toast notification when an event is updated via drag and drop
     toastManager.add({

@@ -538,6 +538,36 @@ export type EnumEventRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
 }
 
+export type BoolNullableFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
+}
+
+export type EnumEventColorNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventColor | Prisma.EnumEventColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEventColorNullableFilter<$PrismaModel> | $Enums.EventColor | null
+}
+
+export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type EnumEventColorNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventColor | Prisma.EnumEventColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEventColorNullableWithAggregatesFilter<$PrismaModel> | $Enums.EventColor | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventColorNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventColorNullableFilter<$PrismaModel>
+}
+
 export type EnumGenderFilter<$PrismaModel = never> = {
   equals?: $Enums.Gender | Prisma.EnumGenderFieldRefInput<$PrismaModel>
   in?: $Enums.Gender[] | Prisma.ListEnumGenderFieldRefInput<$PrismaModel>
@@ -1120,6 +1150,36 @@ export type NestedEnumEventRecurrenceWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEventRecurrenceFilter<$PrismaModel>
+}
+
+export type NestedBoolNullableFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
+}
+
+export type NestedEnumEventColorNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventColor | Prisma.EnumEventColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEventColorNullableFilter<$PrismaModel> | $Enums.EventColor | null
+}
+
+export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumEventColorNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EventColor | Prisma.EnumEventColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EventColor[] | Prisma.ListEnumEventColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEventColorNullableWithAggregatesFilter<$PrismaModel> | $Enums.EventColor | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEventColorNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEventColorNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumGenderFilter<$PrismaModel = never> = {

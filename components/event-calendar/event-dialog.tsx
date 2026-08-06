@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type {
   CalendarEvent,
+  EditScope,
   EventColor,
   EventRecurrence,
   EventVisibility,
@@ -18,6 +19,14 @@ import {
   StartHour,
 } from "./constants";
 import { cn } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogPopup,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -54,10 +63,14 @@ interface EventDialogProps {
   event: CalendarEvent | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (event: CalendarEvent) => void;
-  onDelete: (eventId: string) => void;
+  onSave: (event: CalendarEvent, scope: EditScope) => void;
+  onDelete: (eventId: string, scope: EditScope) => void;
   availableOrgs: { id: string; name: string }[];
 }
+
+type PendingAction =
+  | { type: "save"; event: CalendarEvent }
+  | { type: "delete"; eventId: string };
 
 export function EventDialog({
   event,
@@ -71,8 +84,12 @@ export function EventDialog({
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
-  const [startTime, setStartTime] = useState(`${DefaultStartHour}:00`);
-  const [endTime, setEndTime] = useState(`${DefaultEndHour}:00`);
+  const [startTime, setStartTime] = useState(
+    `${String(DefaultStartHour).padStart(2, "0")}:00`,
+  );
+  const [endTime, setEndTime] = useState(
+    `${String(DefaultEndHour).padStart(2, "0")}:00`,
+  );
   const [allDay, setAllDay] = useState(false);
   const [location, setLocation] = useState("");
   const [color, setColor] = useState<EventColor>("sky");
@@ -85,8 +102,13 @@ export function EventDialog({
   const [recurrenceEndDate, setRecurrenceEndDate] = useState<Date | undefined>(
     undefined,
   );
-  const [organizationId, setOrganizationId] = useState<string>("");
+  const [organizationId, setOrganizationId] = useState<string>(
+    () => availableOrgs[0]?.id ?? "",
+  );
   const [visibility, setVisibility] = useState<EventVisibility>("ORGANIZATION");
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(
+    null,
+  );
 
   const formatTimeForInput = useCallback((date: Date) => {
     const hours = date.getHours().toString().padStart(2, "0");
@@ -99,8 +121,8 @@ export function EventDialog({
     setDescription("");
     setStartDate(new Date());
     setEndDate(new Date());
-    setStartTime(`${DefaultStartHour}:00`);
-    setEndTime(`${DefaultEndHour}:00`);
+    setStartTime(`${String(DefaultStartHour).padStart(2, "0")}:00`);
+    setEndTime(`${String(DefaultEndHour).padStart(2, "0")}:00`);
     setAllDay(false);
     setLocation("");
     setColor("sky");
@@ -197,7 +219,7 @@ export function EventDialog({
 
     const eventTitle = title.trim() ? title : "(no title)";
 
-    onSave({
+    const builtEvent: CalendarEvent = {
       ...event,
       allDay,
       color,
@@ -212,11 +234,36 @@ export function EventDialog({
         recurrence !== "NONE" && recurrenceEndDate ? recurrenceEndDate : null,
       organizationId: visibility === "ORGANIZATION" ? organizationId : null,
       visibility,
-    });
+    };
+
+    // Wird ein Vorkommen einer bereits bestehenden wiederkehrenden Serie bearbeitet,
+    // muss zuerst geklärt werden, ob nur dieses Vorkommen, alle folgenden oder die
+    // ganze Serie betroffen sein soll.
+    if (event?.id && event.recurrence && event.recurrence !== "NONE") {
+      setPendingAction({ type: "save", event: builtEvent });
+      return;
+    }
+
+    onSave(builtEvent, "all");
   };
 
   const handleDelete = () => {
-    if (event?.id) onDelete(event.id);
+    if (!event?.id) return;
+    if (event.recurrence && event.recurrence !== "NONE") {
+      setPendingAction({ type: "delete", eventId: event.id });
+      return;
+    }
+    onDelete(event.id, "all");
+  };
+
+  const resolveScope = (scope: EditScope) => {
+    if (!pendingAction) return;
+    if (pendingAction.type === "save") {
+      onSave(pendingAction.event, scope);
+    } else {
+      onDelete(pendingAction.eventId, scope);
+    }
+    setPendingAction(null);
   };
 
   const colorOptions: Array<{
@@ -376,9 +423,11 @@ export function EventDialog({
                 <Select
                   items={[
                     { label: "Einmalig", value: "NONE" },
+                    { label: "Täglich", value: "DAILY" },
                     { label: "Wöchentlich", value: "WEEKLY" },
                     { label: "Alle 2 Wochen", value: "BIWEEKLY" },
                     { label: "Monatlich", value: "MONTHLY" },
+                    { label: "Jährlich", value: "YEARLY" },
                   ]}
                   value={recurrence}
                   onValueChange={(v) => setRecurrence(v as EventRecurrence)}>
@@ -387,9 +436,11 @@ export function EventDialog({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="NONE">Einmalig</SelectItem>
+                    <SelectItem value="DAILY">Täglich</SelectItem>
                     <SelectItem value="WEEKLY">Wöchentlich</SelectItem>
                     <SelectItem value="BIWEEKLY">Alle 2 Wochen</SelectItem>
                     <SelectItem value="MONTHLY">Monatlich</SelectItem>
+                    <SelectItem value="YEARLY">Jährlich</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -644,6 +695,51 @@ export function EventDialog({
           </div>
         </DialogFooter>
       </DialogPopup>
+
+      <AlertDialog
+        onOpenChange={(open) => !open && setPendingAction(null)}
+        open={pendingAction !== null}>
+        <AlertDialogPopup>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {pendingAction?.type === "delete"
+                ? "Termin löschen"
+                : "Termin bearbeiten"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Dieser Termin wiederholt sich. Was soll{" "}
+              {pendingAction?.type === "delete" ? "gelöscht" : "geändert"}{" "}
+              werden?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col sm:flex-col">
+            <Button
+              className="w-full justify-start"
+              onClick={() => resolveScope("single")}
+              variant="outline">
+              Nur dieses Ereignis
+            </Button>
+            <Button
+              className="w-full justify-start"
+              onClick={() => resolveScope("following")}
+              variant="outline">
+              Dieses und folgende Ereignisse
+            </Button>
+            <Button
+              className="w-full justify-start"
+              onClick={() => resolveScope("all")}
+              variant="outline">
+              Alle Ereignisse
+            </Button>
+            <Button
+              className="w-full"
+              onClick={() => setPendingAction(null)}
+              variant="ghost">
+              Abbrechen
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogPopup>
+      </AlertDialog>
     </Dialog>
   );
 }

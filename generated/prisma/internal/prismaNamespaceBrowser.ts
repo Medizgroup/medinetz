@@ -84,6 +84,7 @@ export const ModelName = {
   Mention: 'Mention',
   Todo: 'Todo',
   Event: 'Event',
+  EventException: 'EventException',
   Patient: 'Patient',
   Diagnosis: 'Diagnosis',
   Medication: 'Medication',
@@ -627,6 +628,25 @@ export const EventScalarFieldEnum = {
 } as const
 
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+export const EventExceptionScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  originalStartsAt: 'originalStartsAt',
+  isCancelled: 'isCancelled',
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  allDay: 'allDay',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventExceptionScalarFieldEnum = (typeof EventExceptionScalarFieldEnum)[keyof typeof EventExceptionScalarFieldEnum]
 
 
 export const PatientScalarFieldEnum = {

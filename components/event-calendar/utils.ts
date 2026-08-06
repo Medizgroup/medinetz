@@ -1,6 +1,16 @@
-import { isSameDay } from "date-fns";
+import {
+  addDays,
+  endOfDay,
+  endOfMonth,
+  endOfWeek,
+  isSameDay,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+} from "date-fns";
 
-import type { CalendarEvent, EventColor } from "./types";
+import type { CalendarEvent, CalendarView, EventColor } from "./types";
+import { AgendaDaysToShow } from "./constants";
 
 /**
  * Get CSS classes for event colors
@@ -150,4 +160,40 @@ export function addHoursToDate(date: Date, hours: number): Date {
   const result = new Date(date);
   result.setHours(result.getHours() + hours);
   return result;
+}
+
+/**
+ * Berechnet den tatsächlich sichtbaren Datumsbereich für eine Kalender-Ansicht.
+ * Wird genutzt, um beim Navigieren (Monat/Woche/Tag/Agenda) genau den Zeitraum
+ * nachzuladen, der auch angezeigt wird — Grundlage für "echtes Endlos" bei
+ * wiederkehrenden Terminen (kein künstliches Vorschau-Limit mehr).
+ */
+export function getVisibleRange(
+  view: CalendarView,
+  currentDate: Date,
+): { start: Date; end: Date } {
+  switch (view) {
+    case "month": {
+      const monthStart = startOfMonth(currentDate);
+      const monthEnd = endOfMonth(currentDate);
+      return {
+        start: startOfWeek(monthStart, { weekStartsOn: 0 }),
+        end: endOfWeek(monthEnd, { weekStartsOn: 0 }),
+      };
+    }
+    case "week":
+      return {
+        start: startOfWeek(currentDate, { weekStartsOn: 0 }),
+        end: endOfWeek(currentDate, { weekStartsOn: 0 }),
+      };
+    case "day":
+      return { start: startOfDay(currentDate), end: endOfDay(currentDate) };
+    case "agenda":
+      return {
+        start: startOfDay(currentDate),
+        end: endOfDay(addDays(currentDate, AgendaDaysToShow - 1)),
+      };
+    default:
+      return { start: startOfDay(currentDate), end: endOfDay(currentDate) };
+  }
 }
