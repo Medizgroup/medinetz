@@ -39,7 +39,7 @@ export default function NewProtocolForm({
 }) {
   const router = useRouter();
 
-  const [title, setTitle] = React.useState("");
+  const [title, setTitle] = React.useState(() => format(new Date(), "dd.MM.yyyy"));
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [organizationId, setOrganizationId] = React.useState(
     memberships[0]?.organization.id ?? "",

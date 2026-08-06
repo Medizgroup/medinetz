@@ -1,15 +1,21 @@
 import prisma from "@/lib/prisma";
 
 /**
- * Synchronisiert Mentions für einen Protocol-Body.
+ * Synchronisiert Mentions für einen Protocol-Body — volle Reconciliation,
+ * nicht auf einen einzelnen Autor beschränkt. Bei Live-Kollaboration (Yjs)
+ * gibt es keinen einzelnen "Autor pro Speichervorgang" mehr, an dessen
+ * bisherige Mentions man anknüpfen könnte — deshalb wird hier immer der
+ * komplette Mentions-Stand des Protokolls durch den aktuell extrahierten
+ * Stand ersetzt. `actingUserId` dient nur der Zuschreibung in der
+ * Benachrichtigung ("X hat dich erwähnt"), nicht der Lösch-Auswahl.
  * Return die User-IDs, die NEU erwähnt wurden (für Notifications).
  */
 export async function syncProtocolMentions(params: {
   protocolId: string;
   mentionedUserIds: string[];
-  mentioningUserId: string;
+  actingUserId: string;
 }): Promise<{ newlyMentionedUserIds: string[] }> {
-  const { protocolId, mentionedUserIds, mentioningUserId } = params;
+  const { protocolId, mentionedUserIds, actingUserId } = params;
 
   const existing = await prisma.mention.findMany({
     where: {
@@ -24,12 +30,10 @@ export async function syncProtocolMentions(params: {
     (id) => !existingIds.has(id),
   );
 
-  // Alte Mentions dieses Users für dieses Protocol entfernen (er hat den Body editiert)
   await prisma.mention.deleteMany({
     where: {
       targetType: "protocol",
       protocolId,
-      mentioningUserId,
     },
   });
 
@@ -40,7 +44,7 @@ export async function syncProtocolMentions(params: {
   await prisma.mention.createMany({
     data: mentionedUserIds.map((mentionedUserId) => ({
       mentionedUserId,
-      mentioningUserId,
+      mentioningUserId: actingUserId,
       targetType: "protocol",
       targetId: protocolId,
       protocolId,

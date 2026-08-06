@@ -1,5 +1,10 @@
 'use client';
 
+import {
+  BulletedListRules,
+  OrderedListRules,
+  TaskListRules,
+} from '@platejs/list';
 import { ListPlugin } from '@platejs/list/react';
 import { KEYS } from 'platejs';
 
@@ -22,5 +27,11 @@ export const ListKit = [
     render: {
       belowNodes: BlockList,
     },
+    // "- "/"* " -> Aufzählung, "1. " -> nummerierte Liste, "[] " -> Checkliste
+    inputRules: [
+      BulletedListRules.markdown(),
+      OrderedListRules.markdown(),
+      TaskListRules.markdown(),
+    ],
   }),
 ];

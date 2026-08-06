@@ -5,12 +5,12 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { createCollabToken } from "@/lib/collab/token";
 
 import RichTextRenderer from "@/components/protocols/rich-text-renderer";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { TElement } from "platejs";
 import ProtocolCommentForm from "@/components/protocols/protocol-comment-form";
 import EditProtocolForm from "@/components/protocols/edit-protocol-form";
 import { Badge } from "@/components/ui/badge";
@@ -46,9 +46,9 @@ import { CheckCircle, ClockCircle, Like, RecordAudioCircle } from "@solar-icons/
 import { ProtocolShell } from "@/components/protocols/protocol-shell";
 import UserDefaultAvatar from "@/components/user/user-default-avatar";
 
-// function canEdit(role?: string) {
-//   return role === "COORDINATOR" || role === "ADMIN";
-// }
+function canEdit(role?: string) {
+  return role === "COORDINATOR" || role === "ADMIN";
+}
 
 function canComment(role?: string) {
   return role === "VIEWER" || role === "COORDINATOR" || role === "ADMIN";
@@ -70,10 +70,7 @@ export default async function ProtocolDetailPage({
       id: true,
       title: true,
       protocolNumber: true,
-      version: true,
       date: true,
-      description: true,
-      descriptionText: true,
       createdAt: true,
       updatedAt: true,
       organizationId: true,
@@ -161,8 +158,17 @@ export default async function ProtocolDetailPage({
 
   if (!membership) return NotProduct();
 
-  // const editable = canEdit(membership.role);
+  const editable = canEdit(membership.role);
   const commentable = canComment(membership.role);
+
+  const currentUser = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { displayName: true, name: true },
+  });
+  const currentUserName =
+    currentUser?.displayName ||
+    currentUser?.name ||
+    `User ${session.user.id.slice(0, 6)}`;
 
   const activity = await prisma.activity.findMany({
     where: {
@@ -326,16 +332,23 @@ export default async function ProtocolDetailPage({
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Bearbeiten</h2>
+        <h2 className="text-lg font-semibold">
+          {editable ? "Bearbeiten" : "Inhalt"}
+        </h2>
 
         <EditProtocolForm
+          canEdit={editable}
+          collab={{
+            protocolId: protocol.id,
+            token: createCollabToken(session.user.id, protocol.id),
+            userId: session.user.id,
+            userName: currentUserName,
+          }}
           protocol={{
             id: protocol.id,
             title: protocol.title,
             date: protocol.date.toISOString().slice(0, 10),
-            description: (protocol.description as TElement[]) ?? [],
             organizationId: protocol.organizationId,
-            version: protocol.version,
           }}
         />
       </div>

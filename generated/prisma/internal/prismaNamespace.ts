@@ -405,7 +405,6 @@ export const ModelName = {
   CaseLabel: 'CaseLabel',
   CaseAttachment: 'CaseAttachment',
   Protocol: 'Protocol',
-  ProtocolPresence: 'ProtocolPresence',
   ProtocolComment: 'ProtocolComment',
   ProtocolCase: 'ProtocolCase',
   Donation: 'Donation',
@@ -438,7 +437,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolPresence" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo" | "event" | "eventException" | "patient" | "diagnosis" | "medication" | "patientAccessLog" | "news"
+    modelProps: "user" | "session" | "account" | "verification" | "organization" | "organizationMember" | "organizationInvite" | "organizationJoinRequest" | "userPreference" | "doctor" | "interpreter" | "resourceTag" | "case" | "caseComment" | "caseDoctor" | "caseInterpreter" | "caseCost" | "caseWatcher" | "caseLabel" | "caseAttachment" | "protocol" | "protocolComment" | "protocolCase" | "donation" | "expense" | "budget" | "financialReport" | "activity" | "notification" | "mention" | "todo" | "event" | "eventException" | "patient" | "diagnosis" | "medication" | "patientAccessLog" | "news"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1993,80 +1992,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProtocolCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProtocolCountAggregateOutputType> | number
-        }
-      }
-    }
-    ProtocolPresence: {
-      payload: Prisma.$ProtocolPresencePayload<ExtArgs>
-      fields: Prisma.ProtocolPresenceFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ProtocolPresenceFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ProtocolPresenceFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>
-        }
-        findFirst: {
-          args: Prisma.ProtocolPresenceFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ProtocolPresenceFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>
-        }
-        findMany: {
-          args: Prisma.ProtocolPresenceFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>[]
-        }
-        create: {
-          args: Prisma.ProtocolPresenceCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>
-        }
-        createMany: {
-          args: Prisma.ProtocolPresenceCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ProtocolPresenceCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>[]
-        }
-        delete: {
-          args: Prisma.ProtocolPresenceDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>
-        }
-        update: {
-          args: Prisma.ProtocolPresenceUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>
-        }
-        deleteMany: {
-          args: Prisma.ProtocolPresenceDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ProtocolPresenceUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ProtocolPresenceUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>[]
-        }
-        upsert: {
-          args: Prisma.ProtocolPresenceUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProtocolPresencePayload>
-        }
-        aggregate: {
-          args: Prisma.ProtocolPresenceAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateProtocolPresence>
-        }
-        groupBy: {
-          args: Prisma.ProtocolPresenceGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ProtocolPresenceGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ProtocolPresenceCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ProtocolPresenceCountAggregateOutputType> | number
         }
       }
     }
@@ -3695,6 +3620,7 @@ export const ProtocolScalarFieldEnum = {
   title: 'title',
   description: 'description',
   descriptionText: 'descriptionText',
+  ydocState: 'ydocState',
   version: 'version',
   creatorId: 'creatorId',
   createdAt: 'createdAt',
@@ -3702,15 +3628,6 @@ export const ProtocolScalarFieldEnum = {
 } as const
 
 export type ProtocolScalarFieldEnum = (typeof ProtocolScalarFieldEnum)[keyof typeof ProtocolScalarFieldEnum]
-
-
-export const ProtocolPresenceScalarFieldEnum = {
-  protocolId: 'protocolId',
-  userId: 'userId',
-  lastSeenAt: 'lastSeenAt'
-} as const
-
-export type ProtocolPresenceScalarFieldEnum = (typeof ProtocolPresenceScalarFieldEnum)[keyof typeof ProtocolPresenceScalarFieldEnum]
 
 
 export const ProtocolCommentScalarFieldEnum = {
@@ -4222,6 +4139,20 @@ export type ListEnumExpenseCategoryFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
+ * Reference to a field of type 'Bytes'
+ */
+export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+/**
+ * Reference to a field of type 'Bytes[]'
+ */
+export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
+
+/**
  * Reference to a field of type 'ActivityAction'
  */
 export type EnumActivityActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActivityAction'>
@@ -4491,7 +4422,6 @@ export type GlobalOmitConfig = {
   caseLabel?: Prisma.CaseLabelOmit
   caseAttachment?: Prisma.CaseAttachmentOmit
   protocol?: Prisma.ProtocolOmit
-  protocolPresence?: Prisma.ProtocolPresenceOmit
   protocolComment?: Prisma.ProtocolCommentOmit
   protocolCase?: Prisma.ProtocolCaseOmit
   donation?: Prisma.DonationOmit

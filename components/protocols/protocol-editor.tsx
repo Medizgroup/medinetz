@@ -4,6 +4,7 @@
 import * as React from "react";
 import type { Value } from "platejs";
 import { Plate, usePlateEditor } from "platejs/react";
+import { YjsPlugin } from "@platejs/yjs/react";
 
 import { Editor, EditorContainer } from "@/components/ui/editor";
 
@@ -30,146 +31,224 @@ import { FloatingToolbarKit } from "../editor/plugins/floating-toolbar-kit";
 import { CursorOverlayKit } from "../editor/plugins/cursor-overlay-kit";
 import { AutoformatKit } from "../editor/plugins/autoformat-kit";
 import { LinkKit } from "../editor/plugins/link-kit";
+import { DateKit } from "../editor/plugins/date-kit";
+import { TodoReferenceKit } from "../editor/plugins/todo-reference-kit";
+import { EventReferenceKit } from "../editor/plugins/event-reference-kit";
+import { TocPlugin } from "@platejs/toc/react";
+import { ProtocolTocSidebar } from "./protocol-toc-sidebar";
+import { RemoteCursorOverlay } from "../ui/remote-cursor-overlay";
+import { userColorFromId } from "@/lib/utils/user-color";
 
-// Helper functions
-const p = (text = "", color?: string) => ({
-  type: "p",
-  children: [{ text, ...(color && { color }) }],
-});
-const h2 = (text: string) => ({ type: "h2", children: [{ text }] });
-const blockquote = (text: string, color?: string) => ({
-  type: "blockquote",
-  children: [{ text, ...(color && { color }) }],
-});
-const th = (text: string) => ({ type: "td", children: [p(text)] });
-const td = (text = "") => ({ type: "td", children: [p(text)] });
-const tr = (cells: any[]) => ({ type: "tr", children: cells });
-const table = (rows: any[], colSizes?: number[]) => ({
-  type: "table",
-  colSizes,
-  children: rows,
-});
+import { defaultTemplate } from "@/lib/utils/protocols/default-template";
 
-const caseTable = () =>
-  table(
-    [
-      tr([
-        th("Fall"),
-        th("Betreuer"),
-        th("Termine"),
-        th("Status"),
-        th("Bemerkung"),
-      ]),
-      tr([td(), td(), td(), td(), td()]),
-      tr([td(), td(), td(), td(), td()]),
-    ],
-    [100, 200, 200, 150, 400],
-  );
+export { defaultTemplate };
 
-const agTable = () =>
-  table(
-    [tr([th("Protokoll Link"), th("Bemerkungen")]), tr([td(), td()])],
-    [300, 550],
-  );
+export type AccessStatus = "editor" | "waiting" | "viewer" | null;
 
-// Removed illegal call to useTheme. React hooks must be called inside a component or custom Hook.
-export const defaultTemplate: Value = [
-  p("Anwesend: ", "#f59e0b"),
-  p(" "),
-  p(" "),
-  h2("1. Aktuelle Fälle"),
-  p(" "),
-  caseTable(),
+export type CollabConfig = {
+  protocolId: string;
+  token: string;
+  userId: string;
+  userName: string;
+};
 
-  h2("2. Neue Anfragen"),
-  p(" "),
-  caseTable(),
-  p(" "),
-  blockquote("Tipp: Fälle können auch nachträglich hinzugefügt werden!"),
-  p(" "),
-  h2("3. AG Schwangerenprojekt"),
-  p(" "),
-  p(" "),
-  agTable(),
-  p(" "),
-  h2("4. AG Clearingstelle Gießen Marburg"),
-  p(" "),
-  agTable(),
-  p(" "),
-  h2("5. AG Öffentlichkeitsarbeit"),
-  p(" "),
-  agTable(),
-  p(" "),
-  h2("6. Termine & Organisatorisches"),
-  p(" "),
-  p("Kommende Termine und Veranstaltungen:"),
-  p(" "),
-  table(
-    [
-      tr([th("Aufgaben"), th("Notizen")]),
-      tr([td("📅 Termine / Veranstaltungen"), td()]),
-      tr([td("☎️ Handy"), td()]),
-      tr([td("📪 Mails"), td()]),
-      tr([td("💰 Finanzen / Rechnungen"), td()]),
-      tr([td("🏛️ Politische Arbeit / ABSH"), td()]),
-    ],
-    [300, 600],
-  ),
-  p(" "),
-] as Value;
+const COLLAB_WS_URL =
+  process.env.NEXT_PUBLIC_COLLAB_WS_URL || "ws://localhost:1234";
 
 export default function ProtocolEditor({
   value,
   onChange,
   organizationId,
   placeholder = "Schreibe dein Protokoll…",
+  canEdit = true,
+  collab,
+  onAccessChange,
 }: {
   value?: Value;
-  onChange: (value: Value) => void;
+  onChange?: (value: Value) => void;
   organizationId: string;
   placeholder?: string;
+  /** false = reine:r Betrachter:in: Editor startet gesperrt, Umschalter ausgeblendet. */
+  canEdit?: boolean;
+  /** Wenn gesetzt: Live-Kollaboration über Yjs/Hocuspocus statt lokalem State. */
+  collab?: CollabConfig;
+  /** Wird aufgerufen, sobald der Collab-Server mitteilt, ob dieser Client
+   * gerade einen der 3 Editier-Plätze hat, wartet, oder reine:r Betrachter:in ist. */
+  onAccessChange?: (status: AccessStatus, waitingPosition?: number) => void;
 }) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const isLive = Boolean(collab);
+  // Optimistischer Startwert (Rolle), bis der Collab-Server den tatsächlichen
+  // Slot-Status meldet (Editor / Warteschlange / reine:r Betrachter:in).
+  const [accessStatus, setAccessStatus] = React.useState<AccessStatus>(
+    canEdit ? "editor" : "viewer",
+  );
+  // PlateContent rendert `null`, solange editor.children leer ist (Slate
+  // selbst mountet dann gar nicht erst -> keine React-Bindung, die auf
+  // spätere Mutationen reagieren könnte). yjs.init() füllt editor.children
+  // zwar imperativ, das allein löst aber KEIN Re-Render aus — ohne diesen
+  // State bliebe die Komponente für immer bei `null` hängen, selbst nachdem
+  // der Yjs-Sync längst abgeschlossen ist.
+  const [yjsReady, setYjsReady] = React.useState(false);
+
+  // Wichtig: onStateless braucht Zugriff auf den Editor, um readOnly zu
+  // setzen — dafür einen Ref statt einer direkten Closure über `editor`
+  // verwenden, damit dieses Objekt NICHT von `editor` abhängt (sonst
+  // zirkuläre Abhängigkeit: editor -> plugins -> onStateless -> editor).
+  const editorRef = React.useRef<any>(null);
+  const onAccessChangeRef = React.useRef(onAccessChange);
+  onAccessChangeRef.current = onAccessChange;
+
+  // KRITISCH: Dieses Array darf sich über die Lebensdauer der Komponente
+  // NICHT ändern (stabil per useMemo mit leeren Deps). Würde es bei jedem
+  // Render neu erzeugt, könnte usePlateEditor eine neue Editor-Instanz
+  // erzeugen, während der yjs-Verbindungsaufbau (im useEffect unten, der
+  // nur einmal läuft) noch an der ALTEN Instanz hängt — die tatsächlich
+  // gerenderte Instanz bekäme dann nie eine echte Yjs-Verbindung
+  // (leeres Dokument, verwaister WebSocket, "remove event handler that
+  // doesn't exist"). Da collab/canEdit sich während einer Sitzung nicht
+  // ändern, ist das unbedenklich.
+  const plugins = React.useMemo(
+    () =>
+      [
+        ...BasicNodesKit,
+        ...MentionKit,
+        ...CaseReferenceKit,
+        ...SlashKit,
+        ...ListKit,
+        ...BlockSelectionKit,
+        ...AlignKit,
+        ...FontKit,
+        ...DndKit,
+        ...CalloutKit,
+        ...IndentKit,
+        ...AutoformatKit,
+        ...TableKit,
+        ...MediaKit,
+        ...BlockPlaceholderKit,
+        ...ExitBreakKit,
+        ...EmojiKit,
+        ...FixedToolbarKit,
+        ...FloatingToolbarKit,
+        ...CursorOverlayKit,
+        ...LinkKit,
+        ...DateKit,
+        ...TodoReferenceKit,
+        ...EventReferenceKit,
+        TocPlugin,
+        ...(collab
+          ? [
+              YjsPlugin.configure({
+                options: {
+                  cursors: {
+                    data: {
+                      name: collab.userName,
+                      color: userColorFromId(collab.userId),
+                    },
+                  },
+                  onError: (p: any) =>
+                    console.error("[collab] Verbindung zum Collab-Server fehlgeschlagen:", p),
+                  providers: [
+                    {
+                      type: "hocuspocus",
+                      options: {
+                        name: `protocol-${collab.protocolId}`,
+                        url: COLLAB_WS_URL,
+                        token: collab.token,
+                        onStateless: ({ payload }: { payload: string }) => {
+                          try {
+                            const msg = JSON.parse(payload);
+                            if (msg.type === "access") {
+                              setAccessStatus(msg.status);
+                              onAccessChangeRef.current?.(msg.status, msg.waitingPosition);
+                              (editorRef.current?.store as any)?.setReadOnly(
+                                msg.status !== "editor",
+                              );
+                            }
+                          } catch {
+                            // Ignoriere unbekannte Stateless-Payloads
+                          }
+                        },
+                      },
+                    },
+                  ],
+                },
+                render: { afterEditable: () => <RemoteCursorOverlay containerRef={containerRef} /> },
+              }),
+            ]
+          : []),
+      ] as any,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   const editor = usePlateEditor({
-    plugins: [
-      ...BasicNodesKit,
-      ...MentionKit,
-      ...CaseReferenceKit,
-      ...SlashKit,
-      ...ListKit,
-      ...BlockSelectionKit,
-      ...AlignKit,
-      ...FontKit,
-      ...DndKit,
-      ...CalloutKit,
-      ...IndentKit,
-      ...AutoformatKit,
-      ...TableKit,
-      ...MediaKit,
-      ...BlockPlaceholderKit,
-      ...ExitBreakKit,
-      ...EmojiKit,
-      ...FixedToolbarKit,
-      ...FloatingToolbarKit,
-      ...CursorOverlayKit,
-      ...LinkKit,
-    ],
-    value: value && value.length > 0 ? value : defaultTemplate,
+    plugins,
+    skipInitialization: isLive,
+    value: isLive ? undefined : (value && value.length > 0 ? value : defaultTemplate),
   });
+  editorRef.current = editor;
+
+  React.useEffect(() => {
+    if (!isLive) return;
+
+    // StrictMode-sicher: React (dev) mountet Effekte doppelt (mount ->
+    // cleanup -> mount). yjs.init() ist async — ohne diese Absicherung kann
+    // destroy() mitten in einer noch laufenden Verbindung feuern. Falls die
+    // Verbindung erst NACH dem Cleanup fertig aufgebaut wird, sofort wieder
+    // trennen statt eine verwaiste Verbindung offen zu lassen.
+    let cancelled = false;
+
+    editor
+      .getApi(YjsPlugin)
+      .yjs.init({
+        id: `protocol-${collab!.protocolId}`,
+        value: value && value.length > 0 ? value : defaultTemplate,
+      })
+      .then(() => {
+        if (cancelled) {
+          editor.getApi(YjsPlugin).yjs.destroy();
+        } else {
+          setYjsReady(true);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      editor.getApi(YjsPlugin).yjs.destroy();
+    };
+    // Nur beim Mount verbinden — collab/value ändern sich nicht während einer Sitzung.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (isLive) return;
+    if (!canEdit) (editor.store as any).setReadOnly(true);
+    // Nur beim Mount anwenden — canEdit ändert sich während einer Sitzung nicht.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const effectiveCanEdit = isLive ? accessStatus === "editor" : canEdit;
 
   return (
-    <ProtocolEditorProvider organizationId={organizationId}>
+    <ProtocolEditorProvider organizationId={organizationId} canEdit={effectiveCanEdit}>
       <Plate
         editor={editor}
         onChange={({ value }) => {
-          onChange(value);
+          if (!isLive) onChange?.(value);
         }}>
-        <EditorContainer className="min-h-[280px] rounded-xl overflow-x-clip overflow-y-visible!">
-          <Editor
-            placeholder={placeholder}
-            className="px-6!"
-            variant="fullWidth"
-          />
-        </EditorContainer>
+        <div className="flex items-start gap-4">
+          <EditorContainer
+            ref={containerRef}
+            className="min-h-[280px] flex-1 rounded-xl overflow-x-clip overflow-y-visible!">
+            <Editor
+              placeholder={placeholder}
+              className="px-6!"
+              variant="fullWidth"
+            />
+          </EditorContainer>
+          <ProtocolTocSidebar />
+        </div>
       </Plate>
     </ProtocolEditorProvider>
   );

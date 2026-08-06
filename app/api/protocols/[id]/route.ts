@@ -3,17 +3,12 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import {
-  extractMentionedUserIds,
-  extractPlainTextFromNodes,
-  extractReferencedCaseIds,
-} from "@/lib/utils/protocols/extract";
-import {
-  syncProtocolCases,
-  syncProtocolMentions,
-} from "@/lib/utils/protocols/sync";
-import { createMentionNotifications } from "@/lib/utils/notifications";
 
+// Der Protokoll-Inhalt (description) läuft seit der Live-Kollaboration nicht
+// mehr über diese Route, sondern wird vom Collab-Server (Yjs/Hocuspocus)
+// persistiert (siehe collab-server/index.ts). Diese Route bearbeitet nur noch
+// die Metadaten Titel + Datum — beide werden im Editor direkt beim Verlassen
+// des Felds gespeichert (kein "Speichern"-Button mehr nötig).
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -26,21 +21,14 @@ export async function PATCH(
   }
 
   const body = await req.json().catch(() => null);
-
-  const title = String(body?.title ?? "").trim();
-  const date = String(body?.date ?? "").trim();
-  const description = body?.description;
-  const version = Number(body?.version);
-
-  if (!Number.isInteger(version)) {
-    return NextResponse.json({ error: "Version fehlt." }, { status: 400 });
+  if (!body) {
+    return NextResponse.json({ error: "Ungültige Daten." }, { status: 400 });
   }
 
   const protocol = await prisma.protocol.findUnique({
     where: { id },
-    select: { id: true, organizationId: true },
+    select: { id: true, organizationId: true, title: true },
   });
-
   if (!protocol) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -59,53 +47,21 @@ export async function PATCH(
     return NextResponse.json({ error: "Keine Berechtigung." }, { status: 403 });
   }
 
-  // Atomarer Update nur, wenn die Version unverändert ist
-  const result = await prisma.protocol.updateMany({
-    where: { id, version },
-    data: {
-      title,
-      date: new Date(date),
-      description,
-      descriptionText: extractPlainTextFromNodes(description) || null,
-      version: { increment: 1 },
-    },
-  });
+  const data: { title?: string; date?: Date } = {};
 
-  if (result.count === 0) {
-    const current = await prisma.protocol.findUnique({
-      where: { id },
-      select: { version: true },
-    });
-    return NextResponse.json(
-      {
-        error: "conflict",
-        message:
-          "Dieses Protokoll wurde zwischenzeitlich von einer anderen Person geändert.",
-        currentVersion: current?.version ?? null,
-      },
-      { status: 409 },
-    );
+  if (typeof body.title === "string" && body.title.trim()) {
+    data.title = body.title.trim();
+  }
+  if (typeof body.date === "string" && body.date.trim()) {
+    const date = new Date(body.date);
+    if (!isNaN(date.getTime())) data.date = date;
   }
 
-  const mentionedUserIds = extractMentionedUserIds(description);
-  const caseIds = extractReferencedCaseIds(description);
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ ok: true, unchanged: true });
+  }
 
-  const { newlyMentionedUserIds } = await syncProtocolMentions({
-    protocolId: id,
-    mentionedUserIds,
-    mentioningUserId: session.user.id,
-  });
-
-  await syncProtocolCases({ protocolId: id, caseIds });
-
-  await createMentionNotifications({
-    mentionedUserIds,
-    mentioningUserId: session.user.id,
-    targetType: "protocol",
-    targetId: id,
-    title: `Du wurdest in Protokoll „${title}“ erwähnt`,
-    notifyOnlyUserIds: newlyMentionedUserIds,
-  });
+  await prisma.protocol.update({ where: { id }, data });
 
   await prisma.activity.create({
     data: {
@@ -114,9 +70,9 @@ export async function PATCH(
       action: "UPDATED",
       targetType: "protocol",
       targetId: id,
-      metadata: { title, mentionedUserIds, caseIds },
+      metadata: { fields: Object.keys(data), title: data.title ?? protocol.title },
     },
   });
 
-  return NextResponse.json({ ok: true, version: version + 1 });
+  return NextResponse.json({ ok: true });
 }

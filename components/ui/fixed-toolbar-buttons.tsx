@@ -114,9 +114,10 @@ export function FixedToolbarButtons() {
 
           <ToolbarGroup>
             <MediaToolbarButton nodeType={KEYS.img} />
+            <MediaToolbarButton nodeType={KEYS.file} />
+            {/* Video/Audio bewusst deaktiviert (Phase-B-Scope: nur Bilder + Dateien) */}
             {/* <MediaToolbarButton nodeType={KEYS.video} />
-            <MediaToolbarButton nodeType={KEYS.audio} />
-            <MediaToolbarButton nodeType={KEYS.file} /> */}
+            <MediaToolbarButton nodeType={KEYS.audio} /> */}
           </ToolbarGroup>
 
           <ToolbarGroup>

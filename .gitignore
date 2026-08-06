@@ -44,3 +44,8 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+
+# lokale Datei-Uploads (Phase-B-Ersatz für Uploadthing) — in Docker als
+# persistentes Volume mounten, sonst gehen Uploads beim Neustart verloren
+/public/uploads/*
+!/public/uploads/.gitkeep

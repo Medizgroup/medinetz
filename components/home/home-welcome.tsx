@@ -176,14 +176,13 @@ export default function HomeWelcome({ user }: { user: User }) {
         <h1 className="text-4xl font-bold">Hi, {displayName} !</h1>
         <TypingAnimation
           as="p"
-          className="text-sm text-foreground"
+          className="text-sm text-muted-foreground font-medium"
           words={shuffledMessages}
           typeSpeed={25}
           deleteSpeed={25}
           pauseDelay={120000}
-          cursorStyle="underscore"
           startOnView
-          showCursor={true}
+          showCursor={false}
           loop
         />
       </div>

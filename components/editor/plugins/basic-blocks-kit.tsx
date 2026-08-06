@@ -1,5 +1,6 @@
 "use client";
 
+import { BlockquoteRules, HeadingRules } from "@platejs/basic-nodes";
 import {
   BlockquotePlugin,
   H1Plugin,
@@ -40,6 +41,8 @@ export const BasicBlocksKit = [
       break: { empty: "reset" },
     },
     shortcuts: { toggle: { keys: "mod+alt+1" } },
+    // "# ", "## ", "### " etc. beim Tippen -> passende Überschrift (gilt für alle Ebenen)
+    inputRules: [HeadingRules.markdown()],
   }),
   H2Plugin.configure({
     node: {
@@ -89,6 +92,7 @@ export const BasicBlocksKit = [
   BlockquotePlugin.configure({
     node: { component: BlockquoteElement },
     shortcuts: { toggle: { keys: "mod+shift+period" } },
+    inputRules: [BlockquoteRules.markdown()],
   }),
   HorizontalRulePlugin.withComponent(HrElement),
   FontSizePlugin,

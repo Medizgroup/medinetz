@@ -79,7 +79,7 @@ export async function POST(req: Request) {
   const { newlyMentionedUserIds } = await syncProtocolMentions({
     protocolId: protocol.id,
     mentionedUserIds,
-    mentioningUserId: session.user.id,
+    actingUserId: session.user.id,
   });
 
   // 2) Cases verlinken (Phase B)

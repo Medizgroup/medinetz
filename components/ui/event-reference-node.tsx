@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { PlusCircle } from "lucide-react";
+import { CalendarDays, PlusCircle } from "lucide-react";
+import { format } from "date-fns";
+import { de } from "date-fns/locale";
 
 import type { TComboboxInputElement, TElement } from "platejs";
 import type { PlateElementProps } from "platejs/react";
@@ -27,45 +29,35 @@ import {
 } from "./inline-combobox";
 import { getMentionOnSelectItem } from "@platejs/mention";
 import { Spinner } from "./spinner";
-import { Circle, CircleCheck, Clock, Loader } from "lucide-react";
 
-type CaseSearchResult = {
+type EventSearchResult = {
   id: string;
-  caseNumber: number;
   title: string;
-  status: string;
-  priority: string;
-  patientPseudonym: string;
+  startsAt: string;
+  allDay: boolean;
 };
 
-/**
- * Statisches Element, sobald eine Case-Referenz im Editor steckt.
- */
 const onSelectItem = getMentionOnSelectItem();
 
-export function CaseReferenceElement(
-  props: PlateElementProps<
-    TElement & { value?: string; caseId?: string; caseStatus?: string }
-  >,
+export function EventReferenceElement(
+  props: PlateElementProps<TElement & { value?: string; eventId?: string }>,
 ) {
   const { element } = props;
   const selected = useSelected();
   const focused = useFocused();
   const readOnly = useReadOnly();
-  const caseId = (element as any).caseId as string | undefined;
-  const isClosed = (element as any).caseStatus === "CLOSED";
+  const eventId = (element as any).eventId as string | undefined;
   const label = element.value ?? "";
 
   const inner = (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-md bg-blue-100 px-1.5 py-0.5 align-baseline text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+        "inline-flex items-center gap-1 rounded-md bg-emerald-100 px-1.5 py-0.5 align-baseline text-sm font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300",
         !readOnly && "cursor-pointer",
         selected && focused && "ring-2 ring-ring",
-        isClosed && "opacity-50",
       )}>
+      <CalendarDays className="size-3.5" />
       {label}
-      {isClosed ? " (abgeschlossen)" : ""}
     </span>
   );
 
@@ -77,11 +69,11 @@ export function CaseReferenceElement(
         ...props.attributes,
         contentEditable: false,
         "data-slate-value": label,
-        "data-case-id": caseId,
+        "data-event-id": eventId,
         draggable: true,
       }}>
-      {caseId ? (
-        <Link href={`/cases/${caseId}`} target="_blank" rel="noopener">
+      {eventId ? (
+        <Link href="/events" target="_blank" rel="noopener">
           {inner}
         </Link>
       ) : (
@@ -92,33 +84,28 @@ export function CaseReferenceElement(
   );
 }
 
-/**
- * Eingabe-UI, während der User "#…" tippt.
- */
-export function CaseReferenceInputElement(
+export function EventReferenceInputElement(
   props: PlateElementProps<TComboboxInputElement>,
 ) {
   const { editor, element } = props;
   const [search, setSearch] = React.useState("");
   const debouncedSearch = useDebounce(search, 200);
-  const [results, setResults] = React.useState<CaseSearchResult[]>([]);
+  const [results, setResults] = React.useState<EventSearchResult[]>([]);
   const [loading, setLoading] = React.useState(false);
 
   const { organizationId } = useProtocolEditorContext();
 
   React.useEffect(() => {
-    if (!organizationId) return;
-
     let cancelled = false;
     setLoading(true);
 
     const params = new URLSearchParams();
     params.set("q", debouncedSearch);
-    params.set("organizationId", organizationId);
+    if (organizationId) params.set("organizationId", organizationId);
 
-    fetch(`/api/cases/search?${params.toString()}`)
+    fetch(`/api/events/search?${params.toString()}`)
       .then((r) => (r.ok ? r.json() : []))
-      .then((data: CaseSearchResult[]) => {
+      .then((data: EventSearchResult[]) => {
         if (!cancelled) setResults(Array.isArray(data) ? data : []);
       })
       .catch(() => {
@@ -133,19 +120,15 @@ export function CaseReferenceInputElement(
     };
   }, [debouncedSearch, organizationId]);
 
-  const insertCase = React.useCallback(
-    (c: CaseSearchResult) => {
-      const label = `#${c.caseNumber}`;
+  const insertEvent = React.useCallback(
+    (e: EventSearchResult) => {
+      onSelectItem(editor, { key: e.id, text: e.title }, search);
 
-      // 1) Lass Plate einen normalen mention-Node einfügen (clean)
-      onSelectItem(editor, { key: c.id, text: label }, search);
-
-      // 2) Den eben eingefügten Node finden und zu case_reference umtypen
       const matches = [
         ...editor.api.nodes<any>({
           at: [],
           match: (n: any) =>
-            n.type === "mention" && n.value === label && !n.caseId,
+            n.type === "mention" && n.value === e.title && !n.eventId,
         }),
       ];
 
@@ -153,10 +136,8 @@ export function CaseReferenceInputElement(
         const [, foundPath] = matches[matches.length - 1];
         editor.tf.setNodes(
           {
-            type: "case_reference",
-            caseId: c.id,
-            caseTitle: c.title,
-            caseStatus: c.status,
+            type: "event_reference",
+            eventId: e.id,
           } as any,
           { at: foundPath, match: (n: any) => n.type === "mention" },
         );
@@ -172,13 +153,13 @@ export function CaseReferenceInputElement(
         element={element}
         setValue={setSearch}
         showTrigger={false}
-        trigger="#"
+        trigger="$"
         filter={false}>
         <span className="inline-block rounded-md bg-muted px-1.5 py-0.5 align-baseline text-sm ring-ring focus-within:ring-2">
           <InlineComboboxInput />
         </span>
 
-        <InlineComboboxContent className="my-1.5 w-[360px]">
+        <InlineComboboxContent className="my-1.5 w-[320px]">
           <button
             type="button"
             // Normale <a>/<Link>-Navigation wird hier vom Slate-Editor abgefangen
@@ -187,52 +168,40 @@ export function CaseReferenceInputElement(
             // Fokus im Such-Input behalten, sonst schließt der Blur den
             // Combobox-Node im Editor, bevor der Klick verarbeitet wird.
             onMouseDown={(e) => e.preventDefault()}
-            onClick={() => window.open("/cases/new", "_blank", "noopener")}
+            onClick={() => window.open("/events", "_blank", "noopener")}
             className="flex w-full items-center gap-2 rounded-sm px-2 py-2 text-left text-primary text-sm hover:bg-accent">
             <PlusCircle className="size-4" />
-            Neuen Fall anlegen
+            Neuen Termin anlegen
           </button>
 
           <InlineComboboxEmpty>
             {loading ? (
               <Spinner className="size-4 text-muted-foreground" />
             ) : (
-              "Keine Fälle gefunden"
+              "Keine Termine gefunden"
             )}
           </InlineComboboxEmpty>
 
           <InlineComboboxGroup>
-            {results.map((c) => {
-              const isClosed = c.status === "CLOSED";
-              return (
-                <InlineComboboxItem
-                  key={c.id}
-                  value={`${c.caseNumber} ${c.title} ${c.patientPseudonym}`}
-                  onClick={() => insertCase(c)}
-                  className={cn("my-2 h-10", isClosed && "opacity-50")}>
-                  <div className="flex w-full items-center  gap-2 py-4 truncate min-w-0">
-                    <span>
-                      {c.status === "WAITING" ? (
-                        <Clock className="size-4 text-muted-foreground/80" />
-                      ) : c.status === "CLOSED" ? (
-                        <CircleCheck className="size-4 text-blue-500" />
-                      ) : c.status === "IN_PROGRESS" ? (
-                        <Loader className="size-4  text-amber-500" />
-                      ) : c.status === "OPEN" ? (
-                        <Circle className="size-4 text-green-500" />
-                      ) : null}
-                    </span>
-                    <span className="text-foreground tabular-nums pt-0.5">
-                      #{c.caseNumber}{" "}
-                      <span className="text-muted-foreground ">
-                        {c.title}
-                        {isClosed ? " (abgeschlossen)" : ""}
-                      </span>
-                    </span>
-                  </div>
-                </InlineComboboxItem>
-              );
-            })}
+            {results.map((e) => (
+              <InlineComboboxItem
+                key={e.id}
+                value={e.title}
+                onClick={() => insertEvent(e)}
+                className="my-2 h-10">
+                <div className="flex w-full items-center gap-2 py-4 truncate min-w-0">
+                  <CalendarDays className="size-4 text-muted-foreground/80" />
+                  <span className="text-foreground truncate">{e.title}</span>
+                  <span className="text-muted-foreground text-xs shrink-0">
+                    {e.allDay
+                      ? format(new Date(e.startsAt), "d. MMM", { locale: de })
+                      : format(new Date(e.startsAt), "d. MMM, HH:mm", {
+                          locale: de,
+                        })}
+                  </span>
+                </div>
+              </InlineComboboxItem>
+            ))}
           </InlineComboboxGroup>
         </InlineComboboxContent>
       </InlineCombobox>

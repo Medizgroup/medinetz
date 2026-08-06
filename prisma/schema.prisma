@@ -198,7 +198,6 @@ model User {
   // Protocols
   createdProtocols      Protocol[]           @relation("ProtocolCreator")
   protocolComments      ProtocolComment[]
-  protocolPresence ProtocolPresence[]
   // Resources
   createdDoctors        Doctor[]             @relation("DoctorCreator")
   createdInterpreters   Interpreter[]        @relation("InterpreterCreator")
@@ -660,42 +659,33 @@ model Protocol {
   id             String   @id @default(uuid())
   organizationId String   @map("organization_id")
   protocolNumber Int      @map("protocol_number") // #1, #2, #3...
-  
+
   date           DateTime @db.Date // Plenum date
   title          String
   description    Json?    @map("description") @db.Json
   descriptionText String? @map("description_text") @db.Text
-  version        Int      @default(0) 
+  // Autoritativer Yjs-Dokumentzustand für Live-Kollaboration (bin-kodiertes
+  // Y.Doc-Update). `description`/`descriptionText` bleiben als lesbarer
+  // Snapshot bestehen (Liste, Suche, Mentions/Fall-Verknüpfung, Export) und
+  // werden bei jedem Yjs-Persist-Zyklus daraus neu materialisiert.
+  ydocState      Bytes?   @map("ydoc_state")
+  version        Int      @default(0)
   creatorId      String   @map("creator_id")
-  
+
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  presence       ProtocolPresence[] 
   organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   creator        User              @relation("ProtocolCreator", fields: [creatorId], references: [id])
   comments       ProtocolComment[]
   protocolCases  ProtocolCase[]
-  mentions       Mention[]  
+  mentions       Mention[]
 
   @@unique([organizationId, protocolNumber])
   @@index([organizationId])
   @@index([date(sort: Desc)])
   @@index([creatorId])
   @@map("protocols")
-}
-
-model ProtocolPresence {
-  protocolId String   @map("protocol_id")
-  userId     String   @map("user_id")
-  lastSeenAt DateTime @default(now()) @map("last_seen_at")
-
-  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([protocolId, userId])
-  @@index([protocolId])
-  @@map("protocol_presence")
 }
 
 

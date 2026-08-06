@@ -147,11 +147,6 @@ export type CaseAttachment = Prisma.CaseAttachmentModel
  */
 export type Protocol = Prisma.ProtocolModel
 /**
- * Model ProtocolPresence
- * 
- */
-export type ProtocolPresence = Prisma.ProtocolPresenceModel
-/**
  * Model ProtocolComment
  * 
  */

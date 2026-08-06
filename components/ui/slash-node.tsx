@@ -6,6 +6,7 @@ import * as React from "react";
 import type { PlateEditor, PlateElementProps } from "platejs/react";
 
 import {
+  CalendarIcon,
   Columns3Icon,
   Heading1Icon,
   Heading2Icon,
@@ -162,6 +163,15 @@ const groups: Group[] = [
         icon: <Minus />,
         keywords: ["divider", "hr", "trenner", "linie"],
         onSelect: (editor) => insertBlock(editor, KEYS.hr, { upsert: true }),
+      },
+      {
+        value: "date",
+        label: "Datum",
+        icon: <CalendarIcon />,
+        keywords: ["date", "datum", "termin", "heute"],
+        onSelect: (editor) => {
+          (editor.tf as any).insert.date();
+        },
       },
     ],
   },

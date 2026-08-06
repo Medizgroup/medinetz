@@ -272,7 +272,6 @@ export type UserWhereInput = {
   watchedCases?: Prisma.CaseWatcherListRelationFilter
   createdProtocols?: Prisma.ProtocolListRelationFilter
   protocolComments?: Prisma.ProtocolCommentListRelationFilter
-  protocolPresence?: Prisma.ProtocolPresenceListRelationFilter
   createdDoctors?: Prisma.DoctorListRelationFilter
   createdInterpreters?: Prisma.InterpreterListRelationFilter
   caseDoctorsCreated?: Prisma.CaseDoctorListRelationFilter
@@ -321,7 +320,6 @@ export type UserOrderByWithRelationInput = {
   watchedCases?: Prisma.CaseWatcherOrderByRelationAggregateInput
   createdProtocols?: Prisma.ProtocolOrderByRelationAggregateInput
   protocolComments?: Prisma.ProtocolCommentOrderByRelationAggregateInput
-  protocolPresence?: Prisma.ProtocolPresenceOrderByRelationAggregateInput
   createdDoctors?: Prisma.DoctorOrderByRelationAggregateInput
   createdInterpreters?: Prisma.InterpreterOrderByRelationAggregateInput
   caseDoctorsCreated?: Prisma.CaseDoctorOrderByRelationAggregateInput
@@ -373,7 +371,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   watchedCases?: Prisma.CaseWatcherListRelationFilter
   createdProtocols?: Prisma.ProtocolListRelationFilter
   protocolComments?: Prisma.ProtocolCommentListRelationFilter
-  protocolPresence?: Prisma.ProtocolPresenceListRelationFilter
   createdDoctors?: Prisma.DoctorListRelationFilter
   createdInterpreters?: Prisma.InterpreterListRelationFilter
   caseDoctorsCreated?: Prisma.CaseDoctorListRelationFilter
@@ -464,7 +461,6 @@ export type UserCreateInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -513,7 +509,6 @@ export type UserUncheckedCreateInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -562,7 +557,6 @@ export type UserUpdateInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -611,7 +605,6 @@ export type UserUncheckedUpdateInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -1038,20 +1031,6 @@ export type UserUpdateOneRequiredWithoutCreatedProtocolsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedProtocolsInput, Prisma.UserUpdateWithoutCreatedProtocolsInput>, Prisma.UserUncheckedUpdateWithoutCreatedProtocolsInput>
 }
 
-export type UserCreateNestedOneWithoutProtocolPresenceInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutProtocolPresenceInput, Prisma.UserUncheckedCreateWithoutProtocolPresenceInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProtocolPresenceInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutProtocolPresenceNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutProtocolPresenceInput, Prisma.UserUncheckedCreateWithoutProtocolPresenceInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProtocolPresenceInput
-  upsert?: Prisma.UserUpsertWithoutProtocolPresenceInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProtocolPresenceInput, Prisma.UserUpdateWithoutProtocolPresenceInput>, Prisma.UserUncheckedUpdateWithoutProtocolPresenceInput>
-}
-
 export type UserCreateNestedOneWithoutProtocolCommentsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutProtocolCommentsInput, Prisma.UserUncheckedCreateWithoutProtocolCommentsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutProtocolCommentsInput
@@ -1239,7 +1218,6 @@ export type UserCreateWithoutSessionsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -1287,7 +1265,6 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -1351,7 +1328,6 @@ export type UserUpdateWithoutSessionsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -1399,7 +1375,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -1447,7 +1422,6 @@ export type UserCreateWithoutAccountsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -1495,7 +1469,6 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -1559,7 +1532,6 @@ export type UserUpdateWithoutAccountsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -1607,7 +1579,6 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -1655,7 +1626,6 @@ export type UserCreateWithoutOrganizationMembersInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -1703,7 +1673,6 @@ export type UserUncheckedCreateWithoutOrganizationMembersInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -1767,7 +1736,6 @@ export type UserUpdateWithoutOrganizationMembersInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -1815,7 +1783,6 @@ export type UserUncheckedUpdateWithoutOrganizationMembersInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -1863,7 +1830,6 @@ export type UserCreateWithoutOrganizationInvitesInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -1911,7 +1877,6 @@ export type UserUncheckedCreateWithoutOrganizationInvitesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -1975,7 +1940,6 @@ export type UserUpdateWithoutOrganizationInvitesInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -2023,7 +1987,6 @@ export type UserUncheckedUpdateWithoutOrganizationInvitesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -2071,7 +2034,6 @@ export type UserCreateWithoutOrganizationJoinRequestsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -2119,7 +2081,6 @@ export type UserUncheckedCreateWithoutOrganizationJoinRequestsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -2172,7 +2133,6 @@ export type UserCreateWithoutDecidedJoinRequestsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -2220,7 +2180,6 @@ export type UserUncheckedCreateWithoutDecidedJoinRequestsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -2284,7 +2243,6 @@ export type UserUpdateWithoutOrganizationJoinRequestsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -2332,7 +2290,6 @@ export type UserUncheckedUpdateWithoutOrganizationJoinRequestsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -2391,7 +2348,6 @@ export type UserUpdateWithoutDecidedJoinRequestsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -2439,7 +2395,6 @@ export type UserUncheckedUpdateWithoutDecidedJoinRequestsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -2487,7 +2442,6 @@ export type UserCreateWithoutPreferencesInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -2535,7 +2489,6 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -2599,7 +2552,6 @@ export type UserUpdateWithoutPreferencesInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -2647,7 +2599,6 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -2696,7 +2647,6 @@ export type UserCreateWithoutCreatedDoctorsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
   caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
@@ -2744,7 +2694,6 @@ export type UserUncheckedCreateWithoutCreatedDoctorsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
@@ -2808,7 +2757,6 @@ export type UserUpdateWithoutCreatedDoctorsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
@@ -2856,7 +2804,6 @@ export type UserUncheckedUpdateWithoutCreatedDoctorsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
@@ -2904,7 +2851,6 @@ export type UserCreateWithoutCreatedInterpretersInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
   caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
@@ -2952,7 +2898,6 @@ export type UserUncheckedCreateWithoutCreatedInterpretersInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
@@ -3016,7 +2961,6 @@ export type UserUpdateWithoutCreatedInterpretersInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
@@ -3064,7 +3008,6 @@ export type UserUncheckedUpdateWithoutCreatedInterpretersInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
@@ -3111,7 +3054,6 @@ export type UserCreateWithoutCreatedCasesInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -3159,7 +3101,6 @@ export type UserUncheckedCreateWithoutCreatedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -3212,7 +3153,6 @@ export type UserCreateWithoutAssignedCasesInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -3260,7 +3200,6 @@ export type UserUncheckedCreateWithoutAssignedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -3313,7 +3252,6 @@ export type UserCreateWithoutClosedCasesInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -3361,7 +3299,6 @@ export type UserUncheckedCreateWithoutClosedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -3425,7 +3362,6 @@ export type UserUpdateWithoutCreatedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -3473,7 +3409,6 @@ export type UserUncheckedUpdateWithoutCreatedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -3532,7 +3467,6 @@ export type UserUpdateWithoutAssignedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -3580,7 +3514,6 @@ export type UserUncheckedUpdateWithoutAssignedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -3639,7 +3572,6 @@ export type UserUpdateWithoutClosedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -3687,7 +3619,6 @@ export type UserUncheckedUpdateWithoutClosedCasesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -3735,7 +3666,6 @@ export type UserCreateWithoutCaseCommentsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -3783,7 +3713,6 @@ export type UserUncheckedCreateWithoutCaseCommentsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -3847,7 +3776,6 @@ export type UserUpdateWithoutCaseCommentsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -3895,7 +3823,6 @@ export type UserUncheckedUpdateWithoutCaseCommentsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -3944,7 +3871,6 @@ export type UserCreateWithoutCaseDoctorsCreatedInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
@@ -3992,7 +3918,6 @@ export type UserUncheckedCreateWithoutCaseDoctorsCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
@@ -4056,7 +3981,6 @@ export type UserUpdateWithoutCaseDoctorsCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
@@ -4104,7 +4028,6 @@ export type UserUncheckedUpdateWithoutCaseDoctorsCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
@@ -4152,7 +4075,6 @@ export type UserCreateWithoutCaseInterpretersCreatedInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -4200,7 +4122,6 @@ export type UserUncheckedCreateWithoutCaseInterpretersCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -4264,7 +4185,6 @@ export type UserUpdateWithoutCaseInterpretersCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -4312,7 +4232,6 @@ export type UserUncheckedUpdateWithoutCaseInterpretersCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -4360,7 +4279,6 @@ export type UserCreateWithoutCaseCostsCreatedInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -4408,7 +4326,6 @@ export type UserUncheckedCreateWithoutCaseCostsCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -4472,7 +4389,6 @@ export type UserUpdateWithoutCaseCostsCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -4520,7 +4436,6 @@ export type UserUncheckedUpdateWithoutCaseCostsCreatedInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -4567,7 +4482,6 @@ export type UserCreateWithoutWatchedCasesInput = {
   caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -4615,7 +4529,6 @@ export type UserUncheckedCreateWithoutWatchedCasesInput = {
   caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -4679,7 +4592,6 @@ export type UserUpdateWithoutWatchedCasesInput = {
   caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -4727,7 +4639,6 @@ export type UserUncheckedUpdateWithoutWatchedCasesInput = {
   caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -4776,7 +4687,6 @@ export type UserCreateWithoutAttachmentUploadsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -4824,7 +4734,6 @@ export type UserUncheckedCreateWithoutAttachmentUploadsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -4888,7 +4797,6 @@ export type UserUpdateWithoutAttachmentUploadsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -4936,7 +4844,6 @@ export type UserUncheckedUpdateWithoutAttachmentUploadsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -4983,7 +4890,6 @@ export type UserCreateWithoutCreatedProtocolsInput = {
   caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -5031,7 +4937,6 @@ export type UserUncheckedCreateWithoutCreatedProtocolsInput = {
   caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -5095,7 +5000,6 @@ export type UserUpdateWithoutCreatedProtocolsInput = {
   caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -5142,215 +5046,6 @@ export type UserUncheckedUpdateWithoutCreatedProtocolsInput = {
   closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
   caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
-  protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
-  createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
-  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
-  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedUpdateManyWithoutCreatorNestedInput
-  caseCostsCreated?: Prisma.CaseCostUncheckedUpdateManyWithoutCreatorNestedInput
-  createdDonations?: Prisma.DonationUncheckedUpdateManyWithoutCreatorNestedInput
-  generatedReports?: Prisma.FinancialReportUncheckedUpdateManyWithoutGeneratorNestedInput
-  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
-  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  mentions?: Prisma.MentionUncheckedUpdateManyWithoutMentionedUserNestedInput
-  mentioning?: Prisma.MentionUncheckedUpdateManyWithoutMentioningUserNestedInput
-  createdTodos?: Prisma.TodoUncheckedUpdateManyWithoutCreatorNestedInput
-  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
-  completedTodos?: Prisma.TodoUncheckedUpdateManyWithoutCompleterNestedInput
-  attachmentUploads?: Prisma.CaseAttachmentUncheckedUpdateManyWithoutUploaderNestedInput
-}
-
-export type UserCreateWithoutProtocolPresenceInput = {
-  id?: string
-  email: string
-  name?: string | null
-  emailVerified?: boolean
-  image?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  displayName?: string | null
-  avatarUrl?: string | null
-  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  isActive?: boolean
-  isInstanceAdmin?: boolean
-  lastLoginAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  organizationMembers?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
-  organizationInvites?: Prisma.OrganizationInviteCreateNestedManyWithoutInviterInput
-  preferences?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  organizationJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutUserInput
-  decidedJoinRequests?: Prisma.OrganizationJoinRequestCreateNestedManyWithoutDeciderInput
-  createdCases?: Prisma.CaseCreateNestedManyWithoutCreatorInput
-  assignedCases?: Prisma.CaseCreateNestedManyWithoutAssigneeInput
-  closedCases?: Prisma.CaseCreateNestedManyWithoutClosedByUserInput
-  caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
-  watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
-  createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
-  protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
-  createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
-  caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
-  caseInterpretersCreated?: Prisma.CaseInterpreterCreateNestedManyWithoutCreatorInput
-  caseCostsCreated?: Prisma.CaseCostCreateNestedManyWithoutCreatorInput
-  createdDonations?: Prisma.DonationCreateNestedManyWithoutCreatorInput
-  generatedReports?: Prisma.FinancialReportCreateNestedManyWithoutGeneratorInput
-  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatorInput
-  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  mentions?: Prisma.MentionCreateNestedManyWithoutMentionedUserInput
-  mentioning?: Prisma.MentionCreateNestedManyWithoutMentioningUserInput
-  createdTodos?: Prisma.TodoCreateNestedManyWithoutCreatorInput
-  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
-  completedTodos?: Prisma.TodoCreateNestedManyWithoutCompleterInput
-  attachmentUploads?: Prisma.CaseAttachmentCreateNestedManyWithoutUploaderInput
-}
-
-export type UserUncheckedCreateWithoutProtocolPresenceInput = {
-  id?: string
-  email: string
-  name?: string | null
-  emailVerified?: boolean
-  image?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  displayName?: string | null
-  avatarUrl?: string | null
-  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  isActive?: boolean
-  isInstanceAdmin?: boolean
-  lastLoginAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  organizationMembers?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
-  organizationInvites?: Prisma.OrganizationInviteUncheckedCreateNestedManyWithoutInviterInput
-  preferences?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutUserInput
-  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedCreateNestedManyWithoutDeciderInput
-  createdCases?: Prisma.CaseUncheckedCreateNestedManyWithoutCreatorInput
-  assignedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutAssigneeInput
-  closedCases?: Prisma.CaseUncheckedCreateNestedManyWithoutClosedByUserInput
-  caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
-  watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
-  createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
-  protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
-  createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
-  caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
-  caseInterpretersCreated?: Prisma.CaseInterpreterUncheckedCreateNestedManyWithoutCreatorInput
-  caseCostsCreated?: Prisma.CaseCostUncheckedCreateNestedManyWithoutCreatorInput
-  createdDonations?: Prisma.DonationUncheckedCreateNestedManyWithoutCreatorInput
-  generatedReports?: Prisma.FinancialReportUncheckedCreateNestedManyWithoutGeneratorInput
-  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
-  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  mentions?: Prisma.MentionUncheckedCreateNestedManyWithoutMentionedUserInput
-  mentioning?: Prisma.MentionUncheckedCreateNestedManyWithoutMentioningUserInput
-  createdTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCreatorInput
-  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
-  completedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutCompleterInput
-  attachmentUploads?: Prisma.CaseAttachmentUncheckedCreateNestedManyWithoutUploaderInput
-}
-
-export type UserCreateOrConnectWithoutProtocolPresenceInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutProtocolPresenceInput, Prisma.UserUncheckedCreateWithoutProtocolPresenceInput>
-}
-
-export type UserUpsertWithoutProtocolPresenceInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutProtocolPresenceInput, Prisma.UserUncheckedUpdateWithoutProtocolPresenceInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutProtocolPresenceInput, Prisma.UserUncheckedCreateWithoutProtocolPresenceInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutProtocolPresenceInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutProtocolPresenceInput, Prisma.UserUncheckedUpdateWithoutProtocolPresenceInput>
-}
-
-export type UserUpdateWithoutProtocolPresenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  organizationMembers?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
-  organizationInvites?: Prisma.OrganizationInviteUpdateManyWithoutInviterNestedInput
-  preferences?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  organizationJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutUserNestedInput
-  decidedJoinRequests?: Prisma.OrganizationJoinRequestUpdateManyWithoutDeciderNestedInput
-  createdCases?: Prisma.CaseUpdateManyWithoutCreatorNestedInput
-  assignedCases?: Prisma.CaseUpdateManyWithoutAssigneeNestedInput
-  closedCases?: Prisma.CaseUpdateManyWithoutClosedByUserNestedInput
-  caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
-  watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
-  createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
-  protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
-  createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
-  caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
-  caseInterpretersCreated?: Prisma.CaseInterpreterUpdateManyWithoutCreatorNestedInput
-  caseCostsCreated?: Prisma.CaseCostUpdateManyWithoutCreatorNestedInput
-  createdDonations?: Prisma.DonationUpdateManyWithoutCreatorNestedInput
-  generatedReports?: Prisma.FinancialReportUpdateManyWithoutGeneratorNestedInput
-  createdEvents?: Prisma.EventUpdateManyWithoutCreatorNestedInput
-  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  mentions?: Prisma.MentionUpdateManyWithoutMentionedUserNestedInput
-  mentioning?: Prisma.MentionUpdateManyWithoutMentioningUserNestedInput
-  createdTodos?: Prisma.TodoUpdateManyWithoutCreatorNestedInput
-  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
-  completedTodos?: Prisma.TodoUpdateManyWithoutCompleterNestedInput
-  attachmentUploads?: Prisma.CaseAttachmentUpdateManyWithoutUploaderNestedInput
-}
-
-export type UserUncheckedUpdateWithoutProtocolPresenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isInstanceAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  organizationMembers?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
-  organizationInvites?: Prisma.OrganizationInviteUncheckedUpdateManyWithoutInviterNestedInput
-  preferences?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  organizationJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutUserNestedInput
-  decidedJoinRequests?: Prisma.OrganizationJoinRequestUncheckedUpdateManyWithoutDeciderNestedInput
-  createdCases?: Prisma.CaseUncheckedUpdateManyWithoutCreatorNestedInput
-  assignedCases?: Prisma.CaseUncheckedUpdateManyWithoutAssigneeNestedInput
-  closedCases?: Prisma.CaseUncheckedUpdateManyWithoutClosedByUserNestedInput
-  caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
-  watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
-  createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
@@ -5399,7 +5094,6 @@ export type UserCreateWithoutProtocolCommentsInput = {
   caseComments?: Prisma.CaseCommentCreateNestedManyWithoutUserInput
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -5447,7 +5141,6 @@ export type UserUncheckedCreateWithoutProtocolCommentsInput = {
   caseComments?: Prisma.CaseCommentUncheckedCreateNestedManyWithoutUserInput
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -5511,7 +5204,6 @@ export type UserUpdateWithoutProtocolCommentsInput = {
   caseComments?: Prisma.CaseCommentUpdateManyWithoutUserNestedInput
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -5559,7 +5251,6 @@ export type UserUncheckedUpdateWithoutProtocolCommentsInput = {
   caseComments?: Prisma.CaseCommentUncheckedUpdateManyWithoutUserNestedInput
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -5608,7 +5299,6 @@ export type UserCreateWithoutCreatedDonationsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -5656,7 +5346,6 @@ export type UserUncheckedCreateWithoutCreatedDonationsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -5720,7 +5409,6 @@ export type UserUpdateWithoutCreatedDonationsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -5768,7 +5456,6 @@ export type UserUncheckedUpdateWithoutCreatedDonationsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -5816,7 +5503,6 @@ export type UserCreateWithoutGeneratedReportsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -5864,7 +5550,6 @@ export type UserUncheckedCreateWithoutGeneratedReportsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -5928,7 +5613,6 @@ export type UserUpdateWithoutGeneratedReportsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -5976,7 +5660,6 @@ export type UserUncheckedUpdateWithoutGeneratedReportsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -6024,7 +5707,6 @@ export type UserCreateWithoutActivitiesInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -6072,7 +5754,6 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -6136,7 +5817,6 @@ export type UserUpdateWithoutActivitiesInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -6184,7 +5864,6 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -6232,7 +5911,6 @@ export type UserCreateWithoutNotificationsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -6280,7 +5958,6 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -6344,7 +6021,6 @@ export type UserUpdateWithoutNotificationsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -6392,7 +6068,6 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -6440,7 +6115,6 @@ export type UserCreateWithoutMentionsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -6488,7 +6162,6 @@ export type UserUncheckedCreateWithoutMentionsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -6541,7 +6214,6 @@ export type UserCreateWithoutMentioningInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -6589,7 +6261,6 @@ export type UserUncheckedCreateWithoutMentioningInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -6653,7 +6324,6 @@ export type UserUpdateWithoutMentionsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -6701,7 +6371,6 @@ export type UserUncheckedUpdateWithoutMentionsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -6760,7 +6429,6 @@ export type UserUpdateWithoutMentioningInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -6808,7 +6476,6 @@ export type UserUncheckedUpdateWithoutMentioningInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -6856,7 +6523,6 @@ export type UserCreateWithoutCreatedTodosInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -6904,7 +6570,6 @@ export type UserUncheckedCreateWithoutCreatedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -6957,7 +6622,6 @@ export type UserCreateWithoutAssignedTodosInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -7005,7 +6669,6 @@ export type UserUncheckedCreateWithoutAssignedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -7058,7 +6721,6 @@ export type UserCreateWithoutCompletedTodosInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -7106,7 +6768,6 @@ export type UserUncheckedCreateWithoutCompletedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -7170,7 +6831,6 @@ export type UserUpdateWithoutCreatedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -7218,7 +6878,6 @@ export type UserUncheckedUpdateWithoutCreatedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -7277,7 +6936,6 @@ export type UserUpdateWithoutAssignedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -7325,7 +6983,6 @@ export type UserUncheckedUpdateWithoutAssignedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -7384,7 +7041,6 @@ export type UserUpdateWithoutCompletedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -7432,7 +7088,6 @@ export type UserUncheckedUpdateWithoutCompletedTodosInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -7480,7 +7135,6 @@ export type UserCreateWithoutCreatedEventsInput = {
   watchedCases?: Prisma.CaseWatcherCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorCreateNestedManyWithoutCreatorInput
@@ -7528,7 +7182,6 @@ export type UserUncheckedCreateWithoutCreatedEventsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedCreateNestedManyWithoutUserInput
   createdProtocols?: Prisma.ProtocolUncheckedCreateNestedManyWithoutCreatorInput
   protocolComments?: Prisma.ProtocolCommentUncheckedCreateNestedManyWithoutUserInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedCreateNestedManyWithoutUserInput
   createdDoctors?: Prisma.DoctorUncheckedCreateNestedManyWithoutCreatorInput
   createdInterpreters?: Prisma.InterpreterUncheckedCreateNestedManyWithoutCreatorInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedCreateNestedManyWithoutCreatorInput
@@ -7592,7 +7245,6 @@ export type UserUpdateWithoutCreatedEventsInput = {
   watchedCases?: Prisma.CaseWatcherUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUpdateManyWithoutCreatorNestedInput
@@ -7640,7 +7292,6 @@ export type UserUncheckedUpdateWithoutCreatedEventsInput = {
   watchedCases?: Prisma.CaseWatcherUncheckedUpdateManyWithoutUserNestedInput
   createdProtocols?: Prisma.ProtocolUncheckedUpdateManyWithoutCreatorNestedInput
   protocolComments?: Prisma.ProtocolCommentUncheckedUpdateManyWithoutUserNestedInput
-  protocolPresence?: Prisma.ProtocolPresenceUncheckedUpdateManyWithoutUserNestedInput
   createdDoctors?: Prisma.DoctorUncheckedUpdateManyWithoutCreatorNestedInput
   createdInterpreters?: Prisma.InterpreterUncheckedUpdateManyWithoutCreatorNestedInput
   caseDoctorsCreated?: Prisma.CaseDoctorUncheckedUpdateManyWithoutCreatorNestedInput
@@ -7677,7 +7328,6 @@ export type UserCountOutputType = {
   watchedCases: number
   createdProtocols: number
   protocolComments: number
-  protocolPresence: number
   createdDoctors: number
   createdInterpreters: number
   caseDoctorsCreated: number
@@ -7710,7 +7360,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   watchedCases?: boolean | UserCountOutputTypeCountWatchedCasesArgs
   createdProtocols?: boolean | UserCountOutputTypeCountCreatedProtocolsArgs
   protocolComments?: boolean | UserCountOutputTypeCountProtocolCommentsArgs
-  protocolPresence?: boolean | UserCountOutputTypeCountProtocolPresenceArgs
   createdDoctors?: boolean | UserCountOutputTypeCountCreatedDoctorsArgs
   createdInterpreters?: boolean | UserCountOutputTypeCountCreatedInterpretersArgs
   caseDoctorsCreated?: boolean | UserCountOutputTypeCountCaseDoctorsCreatedArgs
@@ -7828,13 +7477,6 @@ export type UserCountOutputTypeCountCreatedProtocolsArgs<ExtArgs extends runtime
  */
 export type UserCountOutputTypeCountProtocolCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ProtocolCommentWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountProtocolPresenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ProtocolPresenceWhereInput
 }
 
 /**
@@ -7980,7 +7622,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   watchedCases?: boolean | Prisma.User$watchedCasesArgs<ExtArgs>
   createdProtocols?: boolean | Prisma.User$createdProtocolsArgs<ExtArgs>
   protocolComments?: boolean | Prisma.User$protocolCommentsArgs<ExtArgs>
-  protocolPresence?: boolean | Prisma.User$protocolPresenceArgs<ExtArgs>
   createdDoctors?: boolean | Prisma.User$createdDoctorsArgs<ExtArgs>
   createdInterpreters?: boolean | Prisma.User$createdInterpretersArgs<ExtArgs>
   caseDoctorsCreated?: boolean | Prisma.User$caseDoctorsCreatedArgs<ExtArgs>
@@ -8070,7 +7711,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   watchedCases?: boolean | Prisma.User$watchedCasesArgs<ExtArgs>
   createdProtocols?: boolean | Prisma.User$createdProtocolsArgs<ExtArgs>
   protocolComments?: boolean | Prisma.User$protocolCommentsArgs<ExtArgs>
-  protocolPresence?: boolean | Prisma.User$protocolPresenceArgs<ExtArgs>
   createdDoctors?: boolean | Prisma.User$createdDoctorsArgs<ExtArgs>
   createdInterpreters?: boolean | Prisma.User$createdInterpretersArgs<ExtArgs>
   caseDoctorsCreated?: boolean | Prisma.User$caseDoctorsCreatedArgs<ExtArgs>
@@ -8109,7 +7749,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     watchedCases: Prisma.$CaseWatcherPayload<ExtArgs>[]
     createdProtocols: Prisma.$ProtocolPayload<ExtArgs>[]
     protocolComments: Prisma.$ProtocolCommentPayload<ExtArgs>[]
-    protocolPresence: Prisma.$ProtocolPresencePayload<ExtArgs>[]
     createdDoctors: Prisma.$DoctorPayload<ExtArgs>[]
     createdInterpreters: Prisma.$InterpreterPayload<ExtArgs>[]
     caseDoctorsCreated: Prisma.$CaseDoctorPayload<ExtArgs>[]
@@ -8551,7 +8190,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   watchedCases<T extends Prisma.User$watchedCasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$watchedCasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CaseWatcherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdProtocols<T extends Prisma.User$createdProtocolsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdProtocolsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProtocolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   protocolComments<T extends Prisma.User$protocolCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$protocolCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProtocolCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  protocolPresence<T extends Prisma.User$protocolPresenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$protocolPresenceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProtocolPresencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdDoctors<T extends Prisma.User$createdDoctorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdDoctorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DoctorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdInterpreters<T extends Prisma.User$createdInterpretersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdInterpretersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterpreterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   caseDoctorsCreated<T extends Prisma.User$caseDoctorsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$caseDoctorsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CaseDoctorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9333,30 +8971,6 @@ export type User$protocolCommentsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.ProtocolCommentScalarFieldEnum | Prisma.ProtocolCommentScalarFieldEnum[]
-}
-
-/**
- * User.protocolPresence
- */
-export type User$protocolPresenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ProtocolPresence
-   */
-  select?: Prisma.ProtocolPresenceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ProtocolPresence
-   */
-  omit?: Prisma.ProtocolPresenceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProtocolPresenceInclude<ExtArgs> | null
-  where?: Prisma.ProtocolPresenceWhereInput
-  orderBy?: Prisma.ProtocolPresenceOrderByWithRelationInput | Prisma.ProtocolPresenceOrderByWithRelationInput[]
-  cursor?: Prisma.ProtocolPresenceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ProtocolPresenceScalarFieldEnum | Prisma.ProtocolPresenceScalarFieldEnum[]
 }
 
 /**

@@ -2,17 +2,12 @@
 
 import * as React from 'react';
 
-import { SuggestionPlugin } from '@platejs/suggestion/react';
 import {
   type DropdownMenuProps,
   DropdownMenuItemIndicator,
 } from '@radix-ui/react-dropdown-menu';
-import { CheckIcon, EyeIcon, PencilLineIcon, PenIcon } from 'lucide-react';
-import {
-  useEditorReadOnly,
-  useEditorRef,
-  usePluginOption,
-} from 'platejs/react';
+import { CheckIcon, EyeIcon, PenIcon } from 'lucide-react';
+import { useEditorReadOnly, useEditorRef } from 'platejs/react';
 
 import {
   DropdownMenu,
@@ -21,36 +16,39 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useProtocolEditorContext } from '@/components/protocols/protocol-editor-context';
 
 import { ToolbarButton } from './toolbar';
 
 export function ModeToolbarButton(props: DropdownMenuProps) {
   const editor = useEditorRef();
   const readOnly = useEditorReadOnly();
+  const { canEdit } = useProtocolEditorContext();
   const [open, setOpen] = React.useState(false);
 
-  const isSuggesting = usePluginOption(SuggestionPlugin, 'isSuggesting');
-
-  let value = 'editing';
-
-  if (readOnly) value = 'viewing';
-
-  if (isSuggesting) value = 'suggestion';
+  const value = readOnly ? 'viewing' : 'editing';
 
   const item: Record<string, { icon: React.ReactNode; label: string }> = {
     editing: {
       icon: <PenIcon />,
       label: 'Editing',
     },
-    suggestion: {
-      icon: <PencilLineIcon />,
-      label: 'Suggestion',
-    },
     viewing: {
       icon: <EyeIcon />,
       label: 'Viewing',
     },
   };
+
+  // Reine Betrachter:innen dürfen nicht in den Editing-Modus wechseln — kein
+  // Umschalter, nur eine gesperrte Anzeige, was gerade aktiv ist.
+  if (!canEdit) {
+    return (
+      <ToolbarButton disabled tooltip="Nur Lesezugriff">
+        <EyeIcon />
+        <span className="hidden lg:inline">Viewing</span>
+      </ToolbarButton>
+    );
+  }
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
@@ -64,24 +62,10 @@ export function ModeToolbarButton(props: DropdownMenuProps) {
       <DropdownMenuContent align="start" className="min-w-[180px]">
         <DropdownMenuRadioGroup
           onValueChange={(newValue) => {
-            if (newValue === 'viewing') {
-              editor.store.setReadOnly(true);
-
-              return;
-            }
-            editor.store.setReadOnly(false);
-
-            if (newValue === 'suggestion') {
-              editor.setOption(SuggestionPlugin, 'isSuggesting', true);
-
-              return;
-            }
-            editor.setOption(SuggestionPlugin, 'isSuggesting', false);
+            editor.store.setReadOnly(newValue === 'viewing');
 
             if (newValue === 'editing') {
               editor.tf.focus();
-
-              return;
             }
           }}
           value={value}
@@ -102,15 +86,6 @@ export function ModeToolbarButton(props: DropdownMenuProps) {
             <Indicator />
             {item.viewing.icon}
             {item.viewing.label}
-          </DropdownMenuRadioItem>
-
-          <DropdownMenuRadioItem
-            className="pl-2 *:first:[span]:hidden *:[svg]:text-muted-foreground"
-            value="suggestion"
-          >
-            <Indicator />
-            {item.suggestion.icon}
-            {item.suggestion.label}
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>

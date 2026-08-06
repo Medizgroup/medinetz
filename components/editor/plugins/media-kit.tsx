@@ -3,7 +3,7 @@
 import { CaptionPlugin } from "@platejs/caption/react";
 import {
   // AudioPlugin,
-  // FilePlugin,
+  FilePlugin,
   ImagePlugin,
   // MediaEmbedPlugin,
   PlaceholderPlugin,
@@ -13,13 +13,15 @@ import { KEYS } from "platejs";
 
 // import { AudioElement } from '@/components/ui/media-audio-node';
 // import { MediaEmbedElement } from '@/components/ui/media-embed-node';
-// import { FileElement } from '@/components/ui/media-file-node';
+import { FileElement } from "@/components/ui/media-file-node";
 import { ImageElement } from "@/components/ui/media-image-node";
 import { PlaceholderElement } from "@/components/ui/media-placeholder-node";
 import { MediaPreviewDialog } from "@/components/ui/media-preview-dialog";
 import { MediaUploadToast } from "@/components/ui/media-upload-toast";
 // import { VideoElement } from '@/components/ui/media-video-node';
 
+// Video/Audio/Embed bleiben bewusst deaktiviert (Phase-B-Scope: nur Bilder +
+// Dateien über den kostenlosen lokalen Upload, siehe app/api/uploads).
 export const MediaKit = [
   ImagePlugin.configure({
     options: { disableUploadInsert: true },
@@ -28,7 +30,7 @@ export const MediaKit = [
   // MediaEmbedPlugin.withComponent(MediaEmbedElement),
   // VideoPlugin.withComponent(VideoElement),
   // AudioPlugin.withComponent(AudioElement),
-  // FilePlugin.withComponent(FileElement),
+  FilePlugin.withComponent(FileElement),
   PlaceholderPlugin.configure({
     options: { disableEmptyPlaceholder: true },
     render: { afterEditable: MediaUploadToast, node: PlaceholderElement },
@@ -36,7 +38,7 @@ export const MediaKit = [
   CaptionPlugin.configure({
     options: {
       query: {
-        allow: [KEYS.img],
+        allow: [KEYS.img, KEYS.file],
       },
     },
   }),
