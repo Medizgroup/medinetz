@@ -163,7 +163,7 @@ export default async function ProtocolDetailPage({
 
   const currentUser = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { displayName: true, name: true },
+    select: { displayName: true, name: true, avatarUrl: true },
   });
   const currentUserName =
     currentUser?.displayName ||
@@ -182,7 +182,7 @@ export default async function ProtocolDetailPage({
       ],
     },
     orderBy: { createdAt: "desc" },
-    take: 10,
+    take: 5,
     select: {
       id: true,
       action: true,
@@ -253,7 +253,7 @@ export default async function ProtocolDetailPage({
             </div>
           </section>
 
-          <section className="mt-8">
+          <section>
             <h2 className="text-lg font-semibold">Erwähnt</h2>
 
             {protocol.mentions.length === 0 ? (
@@ -270,23 +270,27 @@ export default async function ProtocolDetailPage({
                   return (
                     <Tooltip key={u.id}>
                       <TooltipTrigger asChild>
+                        {
+                          u.avatarUrl ? 
                         <Link
                           href={`/m/${u.id}`}
                           className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105">
-                            {
-                              u.avatarUrl ? 
 
-                          <Avatar className="size-10">
+                          <Avatar className="size-8">
                             <AvatarImage
                               src={u.avatarUrl ?? undefined}
                               alt={name}
                             />
                             <AvatarFallback>{getInitials(name)}</AvatarFallback>
                           </Avatar>
-                          : 
-                          <UserDefaultAvatar name={name} size={32}/>
-                            }
                         </Link>
+                        :
+                        <Link
+                          href={`/m/${u.id}`} 
+                          className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105">
+                            <UserDefaultAvatar name={name} size={32}/>
+                          </Link>
+                }
                       </TooltipTrigger>
                       <TooltipContent>{name}</TooltipContent>
                     </Tooltip>
@@ -300,6 +304,71 @@ export default async function ProtocolDetailPage({
                 ) : null}
               </div>
             )}
+          </section>
+
+          <section className="space-y-4 border-t pt-8">
+            <h2 className="text-lg font-semibold">Kommentare</h2>
+
+            {commentable ? (
+              <ProtocolCommentForm
+                protocolId={protocol.id}
+                organizationId={protocol.organizationId}
+              />
+            ) : null}
+
+            <Timeline>
+              {protocol.comments.map((comment, k) => {
+                const userName =
+                  comment.user.displayName ||
+                  comment.user.name ||
+                  `User ${comment.user.id.slice(0, 6)}`;
+
+                return (
+                  <TimelineItem
+                    className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-8"
+                    key={comment.id}
+                    step={k}>
+                    <TimelineHeader>
+                      <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                      <TimelineTitle className="mt-0.5 flex items-center gap-2">
+                        {userName}
+                        <span className="text-muted-foreground text-xs font-light pb-px">
+                          {formatDistanceToNow(comment.createdAt, {
+                            addSuffix: true,
+                            locale: de,
+                          })}
+                        </span>
+                      </TimelineTitle>
+                      <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
+                        <Avatar>
+                          <AvatarImage
+                            alt={comment.user.avatarUrl ?? ""}
+                            className="size-6 rounded-full"
+                            src={comment.user.avatarUrl ?? undefined}
+                          />
+                          <AvatarFallback>
+                            {getInitials(
+                              comment.user.displayName ??
+                                comment.user.name ??
+                                "User",
+                            )}
+                          </AvatarFallback>
+                        </Avatar>
+                      </TimelineIndicator>
+                    </TimelineHeader>
+                    <TimelineContent className="mt-2 text-foreground">
+                      <RichTextRenderer value={comment.content} />
+                      {/* <TimelineDate className="mt-2 mb-0 flex items-center gap-1">
+                        <Button variant="ghost" className="rounded-full">
+                          <Like className="size-4! text-muted-foreground" />
+                        </Button>
+                        <span className="">0</span>
+                      </TimelineDate> */}
+                    </TimelineContent>
+                  </TimelineItem>
+                );
+              })}
+            </Timeline>
           </section>
         </>
       }>
@@ -343,6 +412,7 @@ export default async function ProtocolDetailPage({
             token: createCollabToken(session.user.id, protocol.id),
             userId: session.user.id,
             userName: currentUserName,
+            avatarUrl: currentUser?.avatarUrl ?? null,
           }}
           protocol={{
             id: protocol.id,
@@ -355,70 +425,7 @@ export default async function ProtocolDetailPage({
 
       <Separator />
 
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Kommentare</h2>
 
-        {commentable ? (
-          <ProtocolCommentForm
-            protocolId={protocol.id}
-            organizationId={protocol.organizationId}
-          />
-        ) : null}
-
-        <Timeline>
-          {protocol.comments.map((comment, k) => {
-            const userName =
-              comment.user.displayName ||
-              comment.user.name ||
-              `User ${comment.user.id.slice(0, 6)}`;
-
-            return (
-              <TimelineItem
-                className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-8"
-                key={comment.id}
-                step={k}>
-                <TimelineHeader>
-                  <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                  <TimelineTitle className="mt-0.5 flex items-center gap-2">
-                    {userName}
-                    <span className="text-muted-foreground text-xs font-light pb-px">
-                      {formatDistanceToNow(comment.createdAt, {
-                        addSuffix: true,
-                        locale: de,
-                      })}
-                    </span>
-                  </TimelineTitle>
-                  <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
-                    <Avatar>
-                      <AvatarImage
-                        alt={comment.user.avatarUrl ?? ""}
-                        className="size-6 rounded-full"
-                        src={comment.user.avatarUrl ?? undefined}
-                      />
-                      <AvatarFallback>
-                        {getInitials(
-                          comment.user.displayName ??
-                            comment.user.name ??
-                            "User",
-                        )}
-                      </AvatarFallback>
-                    </Avatar>
-                  </TimelineIndicator>
-                </TimelineHeader>
-                <TimelineContent className="mt-2 text-foreground">
-                  <RichTextRenderer value={comment.content} />
-                  {/* <TimelineDate className="mt-2 mb-0 flex items-center gap-1">
-                    <Button variant="ghost" className="rounded-full">
-                      <Like className="size-4! text-muted-foreground" />
-                    </Button>
-                    <span className="">0</span>
-                  </TimelineDate> */}
-                </TimelineContent>
-              </TimelineItem>
-            );
-          })}
-        </Timeline>
-      </section>
 
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">Aktivität</h2>

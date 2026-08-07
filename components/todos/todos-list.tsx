@@ -140,95 +140,8 @@ export default function TodosList({
 
   return (
     <div className="space-y-4">
-      {/* Quick-Add */}
-      <form onSubmit={handleQuickAdd} className={cn("space-y-2")}>
-        <div className="grid gap-4">
-          <Input
-            value={newTitle}
-            size="lg"
-            onChange={(e) => setNewTitle(e.target.value)}
-            placeholder="Neues Todo…"
-          />
+      
 
-          <div className="grid gap-2 sm:grid-cols-3">
-            <Select
-              items={priorities_todos}
-              value={newPriority}
-              onValueChange={(v) => setNewPriority(v ?? 2)}>
-              <SelectTrigger className="text-xs">
-                <SelectValue>
-                  {(() => {
-                    const selectedPriority = priorities_todos.find(
-                      (p) => p.value === newPriority,
-                    );
-                    return selectedPriority ? (
-                      <span className="flex items-center gap-2">
-                        <Badge variant={selectedPriority.variant} size="sm">
-                          {selectedPriority.label}
-                        </Badge>
-                      </span>
-                    ) : null;
-                  })()}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectPopup alignItemWithTrigger={false} className="w-auto">
-                {priorities_todos.map((priority) => (
-                  <SelectItem key={priority.value} value={priority.value}>
-                    <span className="flex items-center gap-2">
-                      <Badge variant={priority.variant} size="sm">
-                        {priority.label}
-                      </Badge>
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
-            <Popover>
-              <PopoverTrigger
-                render={
-                  <Button className="w-full justify-start" variant="outline" />
-                }>
-                <CalendarIcon aria-hidden="true" />
-                {newDueDate
-                  ? format(newDueDate, "PPP", { locale: de })
-                  : "Datum auswählen"}
-              </PopoverTrigger>
-              <PopoverPopup>
-                <Calendar
-                  defaultMonth={newDueDate ? new Date(newDueDate) : undefined}
-                  mode="single"
-                  onSelect={setNewDueDate}
-                  selected={newDueDate}
-                />
-              </PopoverPopup>
-            </Popover>
-
-            <UserPicker
-              value={newAssigneeId}
-              onChange={setNewAssigneeId}
-              placeholder={
-                newAssigneeId ? "Default Benutzer" : "Für alle sichtbar"
-              }
-            />
-          </div>
-          <Field className="w-full">
-            <FieldLabel htmlFor="textarea-with-desc">Beschreibung</FieldLabel>
-            <Textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              id="textarea-with-desc"
-              placeholder="Worum geht es bei dieser Aufgabe?"
-              rows={6}
-            />
-          </Field>
-          <Button type="submit" disabled={!newTitle.trim() || adding}>
-            {adding ? <Loader2 className="size-4 animate-spin" /> : null}
-            Hinzufügen
-          </Button>
-        </div>
-      </form>
-
-      <Separator className="my-6" />
       {/* View-Tabs + Filter */}
       <div className="flex flex-wrap items-center gap-2">
         <Select
@@ -334,7 +247,7 @@ export default function TodosList({
           <Spinner className="size-4" /> Loading...
         </div>
       ) : items.length === 0 ? (
-        <div className="rounded-lg border p-12 text-center text-sm text-muted-foreground">
+        <div className="rounded-lg  p-12 text-center text-sm text-muted-foreground">
           {filter === "done"
             ? "Noch nichts erledigt."
             : view === "unassigned"
@@ -467,6 +380,96 @@ export default function TodosList({
           onSaved={load}
         />
       ) : null}
+
+      <Separator className="my-6" />
+      {/* Quick-Add */}
+      <form onSubmit={handleQuickAdd} className={cn("space-y-2")}>
+        <div className="grid gap-4">
+          <Input
+            value={newTitle}
+            size="lg"
+            onChange={(e) => setNewTitle(e.target.value)}
+            placeholder="Neues Todo…"
+          />
+
+          <div className="grid gap-2 sm:grid-cols-3">
+            <Select
+              items={priorities_todos}
+              value={newPriority}
+              onValueChange={(v) => setNewPriority(v ?? 2)}>
+              <SelectTrigger className="text-xs">
+                <SelectValue>
+                  {(() => {
+                    const selectedPriority = priorities_todos.find(
+                      (p) => p.value === newPriority,
+                    );
+                    return selectedPriority ? (
+                      <span className="flex items-center gap-2">
+                        <Badge variant={selectedPriority.variant} size="sm">
+                          {selectedPriority.label}
+                        </Badge>
+                      </span>
+                    ) : null;
+                  })()}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectPopup alignItemWithTrigger={false} className="w-auto">
+                {priorities_todos.map((priority) => (
+                  <SelectItem key={priority.value} value={priority.value}>
+                    <span className="flex items-center gap-2">
+                      <Badge variant={priority.variant} size="sm">
+                        {priority.label}
+                      </Badge>
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectPopup>
+            </Select>
+            <Popover>
+              <PopoverTrigger
+                render={
+                  <Button className="w-full justify-start" variant="outline" />
+                }>
+                <CalendarIcon aria-hidden="true" />
+                {newDueDate
+                  ? format(newDueDate, "PPP", { locale: de })
+                  : "Datum auswählen"}
+              </PopoverTrigger>
+              <PopoverPopup>
+                <Calendar
+                  defaultMonth={newDueDate ? new Date(newDueDate) : undefined}
+                  mode="single"
+                  onSelect={setNewDueDate}
+                  selected={newDueDate}
+                />
+              </PopoverPopup>
+            </Popover>
+
+            <UserPicker
+              value={newAssigneeId}
+              onChange={setNewAssigneeId}
+              placeholder={
+                newAssigneeId ? "Default Benutzer" : "Für alle sichtbar"
+              }
+            />
+          </div>
+          <Field className="w-full">
+            <FieldLabel htmlFor="textarea-with-desc">Beschreibung</FieldLabel>
+            <Textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              id="textarea-with-desc"
+              placeholder="Worum geht es bei dieser Aufgabe?"
+              rows={6}
+            />
+          </Field>
+          <Button type="submit" disabled={!newTitle.trim() || adding}>
+            {adding ? <Loader2 className="size-4 animate-spin" /> : null}
+            Hinzufügen
+          </Button>
+        </div>
+      </form>
+
     </div>
   );
 }

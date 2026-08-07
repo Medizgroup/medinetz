@@ -47,7 +47,7 @@ export function NavMain({
                   <item.icon className="size-4.5 " />
                   <span>{item.title}</span>
                 </div>
-                {item.count && (
+                {item.count! > 0 && (
                   <span className="text-xs text-foreground font-semibold pr-2">
                     {item.count}
                   </span>

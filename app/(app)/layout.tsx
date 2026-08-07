@@ -103,12 +103,12 @@ export default async function AppLayout({
         eventsCount={eventsCount}
         news={news}
         newsCount={recentCount}
-        organizations={organizations.map((org) => ({
-          id: org.organization.id,
-          name: org.organization.name,
-          color: org.organization.color ?? "#cccccc",
-          slug: org.organization.slug,
-        }))}
+        // organizations={organizations.map((org) => ({
+        //   id: org.organization.id,
+        //   name: org.organization.name,
+        //   color: org.organization.color ?? "#cccccc",
+        //   slug: org.organization.slug,
+        // }))}
       />
       <SidebarInset className="overflow-x-clip">
         <NotificationDigestToaster />

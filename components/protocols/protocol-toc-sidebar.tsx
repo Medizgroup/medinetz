@@ -19,7 +19,7 @@ export function ProtocolTocSidebar() {
     <nav
       {...navProps}
       contentEditable={false}
-      className="sticky top-20 hidden max-h-[70vh] w-48 shrink-0 overflow-y-auto border-l pl-4 text-sm xl:block">
+      className="sticky top-20 hidden max-h-[70vh] w-44 shrink-0 overflow-y-auto rounded-xl border bg-muted/40 p-2 text-xs xl:block">
       <p className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wide">
         Inhalt
       </p>

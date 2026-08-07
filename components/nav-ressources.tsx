@@ -30,8 +30,8 @@ export function NavRessources({
   const pathname = usePathname();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Ressourcen</SidebarGroupLabel>
-      <SidebarMenu className="pt-2 px-2">
+      {/* <SidebarGroupLabel>Ressourcen</SidebarGroupLabel> */}
+      <SidebarMenu className="pt-2 ">
         {ressources.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton

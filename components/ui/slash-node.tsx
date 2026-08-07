@@ -8,12 +8,14 @@ import type { PlateEditor, PlateElementProps } from "platejs/react";
 import {
   CalendarIcon,
   Columns3Icon,
+  FileUpIcon,
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
   ImageIcon,
   ImageUpIcon,
   LightbulbIcon,
+  LinkIcon,
   ListIcon,
   ListOrdered,
   Minus,
@@ -22,10 +24,28 @@ import {
   Square,
   Table,
 } from "lucide-react";
+import { PlaceholderPlugin } from "@platejs/media/react";
 import { type TComboboxInputElement, KEYS } from "platejs";
 import { PlateElement } from "platejs/react";
 
 import { insertBlock } from "@/components/editor/transforms";
+
+/** Öffnet den nativen Dateiauswahl-Dialog des Betriebssystems (lokaler
+ * Upload) — analog zum Klick auf den Bild-/Datei-Button in der Toolbar,
+ * aber ohne React-Hook, da onSelect hier außerhalb eines Komponenten-Renders
+ * läuft. */
+function openLocalFilePicker(editor: PlateEditor, accept: string) {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = accept;
+  input.multiple = true;
+  input.onchange = () => {
+    if (input.files?.length) {
+      editor.getTransforms(PlaceholderPlugin).insert.media(input.files);
+    }
+  };
+  input.click();
+}
 
 import {
   InlineCombobox,
@@ -140,10 +160,17 @@ const groups: Group[] = [
     group: "Blöcke",
     items: [
       {
-        value: "img",
-        label: "Bild",
+        value: "img-upload",
+        label: "Bild hochladen",
+        icon: <ImageUpIcon />,
+        keywords: ["image", "bild", "foto", "picture", "upload"],
+        onSelect: (editor) => openLocalFilePicker(editor, "image/*"),
+      },
+      {
+        value: "img-link",
+        label: "Bild verlinken",
         icon: <ImageIcon />,
-        keywords: ["image", "bild", "foto", "picture"],
+        keywords: ["image", "bild", "foto", "picture", "url", "link"],
         onSelect: (editor) => {
           const url = window.prompt("Bild-URL eingeben:");
           if (!url?.trim()) return;
@@ -151,6 +178,32 @@ const groups: Group[] = [
             {
               type: KEYS.img,
               url: url.trim(),
+              children: [{ text: "" }],
+            } as any,
+            { select: true },
+          );
+        },
+      },
+      {
+        value: "file-upload",
+        label: "Datei hochladen",
+        icon: <FileUpIcon />,
+        keywords: ["file", "datei", "dokument", "upload", "pdf"],
+        onSelect: (editor) => openLocalFilePicker(editor, "*"),
+      },
+      {
+        value: "file-link",
+        label: "Datei verlinken",
+        icon: <LinkIcon />,
+        keywords: ["file", "datei", "dokument", "url", "link"],
+        onSelect: (editor) => {
+          const url = window.prompt("Datei-URL eingeben:");
+          if (!url?.trim()) return;
+          editor.tf.insertNodes(
+            {
+              type: KEYS.file,
+              url: url.trim(),
+              name: url.trim().split("/").pop(),
               children: [{ text: "" }],
             } as any,
             { select: true },

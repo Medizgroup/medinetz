@@ -85,6 +85,6 @@ export async function POST(req: Request) {
     name: file.name || safeName,
     size: file.size,
     type: file.type,
-    url: `/uploads/${storedName}`,
+    url: `/api/uploads/${storedName}`,
   });
 }

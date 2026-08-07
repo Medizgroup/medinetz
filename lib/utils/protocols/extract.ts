@@ -70,8 +70,9 @@ export function extractReferencedCaseIds(nodes: unknown): string[] {
 
 /**
  * Alle lokal hochgeladenen Datei-URLs (Bilder/Dateien) in einem Protokoll-Body.
- * Nur `/uploads/...`-URLs zählen (unser lokaler Storage, siehe app/api/uploads) —
- * extern eingebettete Bilder/Links sollen beim Aufräumen nicht angefasst werden.
+ * Nur `/api/uploads/...`-URLs zählen (unser lokaler Storage, siehe
+ * app/api/uploads/[filename]) — extern eingebettete Bilder/Links sollen beim
+ * Aufräumen nicht angefasst werden.
  */
 export function extractUploadedFileUrls(nodes: unknown): string[] {
   const urls = new Set<string>();
@@ -80,7 +81,7 @@ export function extractUploadedFileUrls(nodes: unknown): string[] {
     if (
       (node.type === "img" || node.type === "file") &&
       typeof node.url === "string" &&
-      node.url.startsWith("/uploads/")
+      node.url.startsWith("/api/uploads/")
     ) {
       urls.add(node.url);
     }

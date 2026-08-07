@@ -50,6 +50,14 @@ export type CollabConfig = {
   token: string;
   userId: string;
   userName: string;
+  avatarUrl?: string | null;
+};
+
+export type PresenceUser = {
+  userId: string;
+  userName: string;
+  avatarUrl?: string | null;
+  color: string;
 };
 
 const COLLAB_WS_URL =
@@ -63,6 +71,7 @@ export default function ProtocolEditor({
   canEdit = true,
   collab,
   onAccessChange,
+  onPresenceChange,
 }: {
   value?: Value;
   onChange?: (value: Value) => void;
@@ -75,6 +84,9 @@ export default function ProtocolEditor({
   /** Wird aufgerufen, sobald der Collab-Server mitteilt, ob dieser Client
    * gerade einen der 3 Editier-Plätze hat, wartet, oder reine:r Betrachter:in ist. */
   onAccessChange?: (status: AccessStatus, waitingPosition?: number) => void;
+  /** Wird mit der Liste aller gerade live anwesenden Nutzer:innen aufgerufen
+   * (Editor:innen UND reine Betrachter:innen), basierend auf der Yjs-Awareness. */
+  onPresenceChange?: (users: PresenceUser[]) => void;
 }) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const isLive = Boolean(collab);
@@ -98,6 +110,8 @@ export default function ProtocolEditor({
   const editorRef = React.useRef<any>(null);
   const onAccessChangeRef = React.useRef(onAccessChange);
   onAccessChangeRef.current = onAccessChange;
+  const onPresenceChangeRef = React.useRef(onPresenceChange);
+  onPresenceChangeRef.current = onPresenceChange;
 
   // KRITISCH: Dieses Array darf sich über die Lebensdauer der Komponente
   // NICHT ändern (stabil per useMemo mit leeren Deps). Würde es bei jedem
@@ -142,7 +156,9 @@ export default function ProtocolEditor({
                 options: {
                   cursors: {
                     data: {
+                      userId: collab.userId,
                       name: collab.userName,
+                      avatarUrl: collab.avatarUrl ?? null,
                       color: userColorFromId(collab.userId),
                     },
                   },
@@ -198,6 +214,22 @@ export default function ProtocolEditor({
     // Verbindung erst NACH dem Cleanup fertig aufgebaut wird, sofort wieder
     // trennen statt eine verwaiste Verbindung offen zu lassen.
     let cancelled = false;
+    let awareness: any = null;
+    const handleAwarenessChange = () => {
+      const states: Map<number, any> = awareness.getStates();
+      const byUserId = new Map<string, PresenceUser>();
+      for (const state of states.values()) {
+        const data = state?.data;
+        if (!data?.userId) continue;
+        byUserId.set(data.userId, {
+          userId: data.userId,
+          userName: data.name ?? "?",
+          avatarUrl: data.avatarUrl ?? null,
+          color: data.color ?? "hsl(0, 0%, 60%)",
+        });
+      }
+      onPresenceChangeRef.current?.(Array.from(byUserId.values()));
+    };
 
     editor
       .getApi(YjsPlugin)
@@ -210,11 +242,16 @@ export default function ProtocolEditor({
           editor.getApi(YjsPlugin).yjs.destroy();
         } else {
           setYjsReady(true);
+          awareness = editor.getOptions(YjsPlugin).awareness;
+          awareness?.on("change", handleAwarenessChange);
+          handleAwarenessChange();
         }
       });
 
     return () => {
       cancelled = true;
+      awareness?.off("change", handleAwarenessChange);
+      onPresenceChangeRef.current?.([]);
       editor.getApi(YjsPlugin).yjs.destroy();
     };
     // Nur beim Mount verbinden — collab/value ändern sich nicht während einer Sitzung.
@@ -240,7 +277,7 @@ export default function ProtocolEditor({
         <div className="flex items-start gap-4">
           <EditorContainer
             ref={containerRef}
-            className="min-h-[280px] flex-1 rounded-xl overflow-x-clip overflow-y-visible!">
+            className="min-h-70 min-w-0 flex-1 rounded-xl overflow-x-clip overflow-y-visible!">
             <Editor
               placeholder={placeholder}
               className="px-6!"

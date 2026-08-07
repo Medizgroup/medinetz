@@ -27,11 +27,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { CaptionButton } from "./caption";
-import {
-  Popover,
-  PopoverAnchor,
-  PopoverContent,
-} from "@radix-ui/react-popover";
 
 const inputVariants = cva(
   "flex h-[28px] w-full rounded-md border-none bg-transparent px-1.5 py-1 text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent md:text-sm",
@@ -72,45 +67,52 @@ export function MediaToolbar({
   const { props: buttonProps } = useRemoveNodeButton({ element });
 
   return (
-    <Popover open={open} modal={false}>
-      <PopoverAnchor>{children}</PopoverAnchor>
+    <div className="relative">
+      {open && (
+        // position: sticky statt eines Radix-Popovers: Bei sehr hohen Bildern
+        // (höher als der Viewport) hätte ein am Anker fest positioniertes
+        // Popover keine gültige On-Screen-Position mehr (weder oberhalb noch
+        // unterhalb des Bildes ist dann Platz im sichtbaren Bereich) — die
+        // Buttons waren sichtbar, aber nicht klickbar. Sticky bleibt dagegen
+        // immer im Viewport, solange irgendein Teil des Bildes sichtbar ist.
+        <div
+          contentEditable={false}
+          className="sticky top-2 z-50 -mb-10 flex w-fit items-center rounded-lg border bg-popover p-1 shadow-md">
+          {isEditing ? (
+            <div className="flex w-82.5 flex-col">
+              <div className="flex items-center">
+                <div className="flex items-center pr-1 pl-2 text-muted-foreground">
+                  <Link className="size-4" />
+                </div>
 
-      <PopoverContent
-        className="w-auto p-1"
-        onOpenAutoFocus={(e) => e.preventDefault()}>
-        {isEditing ? (
-          <div className="flex w-[330px] flex-col">
-            <div className="flex items-center">
-              <div className="flex items-center pr-1 pl-2 text-muted-foreground">
-                <Link className="size-4" />
+                <FloatingMediaPrimitive.UrlInput
+                  className={inputVariants()}
+                  placeholder="Paste the embed link..."
+                  options={{ plugin }}
+                />
               </div>
-
-              <FloatingMediaPrimitive.UrlInput
-                className={inputVariants()}
-                placeholder="Paste the embed link..."
-                options={{ plugin }}
-              />
             </div>
-          </div>
-        ) : (
-          <div className="box-content flex items-center">
-            <FloatingMediaPrimitive.EditButton
-              className={buttonVariants({ size: "sm", variant: "ghost" })}>
-              Link bearbeiten
-            </FloatingMediaPrimitive.EditButton>
+          ) : (
+            <div className="box-content flex items-center">
+              <FloatingMediaPrimitive.EditButton
+                className={buttonVariants({ size: "sm", variant: "ghost" })}>
+                Link bearbeiten
+              </FloatingMediaPrimitive.EditButton>
 
-            <CaptionButton size="sm" variant="ghost">
-              Caption
-            </CaptionButton>
+              <CaptionButton size="sm" variant="ghost">
+                Caption
+              </CaptionButton>
 
-            <Separator orientation="vertical" className="mx-1 h-6" />
+              <Separator orientation="vertical" className="mx-1 h-6" />
 
-            <Button size="sm" variant="ghost" {...buttonProps}>
-              <Trash2Icon />
-            </Button>
-          </div>
-        )}
-      </PopoverContent>
-    </Popover>
+              <Button size="sm" variant="ghost" {...buttonProps}>
+                <Trash2Icon />
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+      {children}
+    </div>
   );
 }

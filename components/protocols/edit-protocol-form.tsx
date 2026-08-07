@@ -2,7 +2,10 @@
 
 import * as React from "react";
 
-import ProtocolEditor, { type CollabConfig } from "@/components/protocols/protocol-editor";
+import ProtocolEditor, {
+  type CollabConfig,
+  type PresenceUser,
+} from "@/components/protocols/protocol-editor";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -14,6 +17,12 @@ import { de } from "date-fns/locale";
 import { toastManager } from "../ui/toast";
 import { Label } from "../ui/label";
 import { Alert, AlertTitle } from "../ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getInitials } from "@/lib/helper/user";
+import { UsersGroupRounded, UsersGroupTwoRounded } from "@solar-icons/react-perf/category/style/LineDuotone";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import UserDefaultAvatar from "../user/user-default-avatar";
+import Link from "next/link";
 
 export default function EditProtocolForm({
   protocol,
@@ -36,6 +45,7 @@ export default function EditProtocolForm({
     protocol.date ? new Date(protocol.date) : undefined,
   );
   const [waitingPosition, setWaitingPosition] = React.useState<number | null>(null);
+  const [presence, setPresence] = React.useState<PresenceUser[]>([]);
 
   async function saveMeta(patch: { title?: string; date?: Date }) {
     const res = await fetch(`/api/protocols/${protocol.id}`, {
@@ -61,18 +71,17 @@ export default function EditProtocolForm({
     <div className="space-y-4 p-5">
       {waitingPosition !== null ? (
         <Alert variant="info">
-          <Users className="size-4.5!" />
+          <UsersGroupTwoRounded className="size-4.5!" />
           <AlertTitle>
             Gerade bearbeiten bereits 3 Personen dieses Protokoll. Du bist Position{" "}
-            {waitingPosition} in der Warteschlange und siehst live mit — sobald ein
-            Platz frei wird, kannst du automatisch mitschreiben.
+            {waitingPosition} in der Warteschlange und siehst live mit.
           </AlertTitle>
         </Alert>
       ) : null}
 
       {canEdit ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Field className="gap-2">
+        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+          <Field className="min-w-0 gap-2">
             <FieldLabel>Titel</FieldLabel>
             <Input
               value={title}
@@ -83,7 +92,7 @@ export default function EditProtocolForm({
             />
           </Field>
 
-          <Field className="gap-2">
+          <Field className="min-w-0 gap-2">
             <FieldLabel>Datum</FieldLabel>
             <Popover>
               <PopoverTrigger
@@ -112,6 +121,41 @@ export default function EditProtocolForm({
               </PopoverPopup>
             </Popover>
           </Field>
+
+          {presence.length > 0 ? (
+            <div className="flex items-center -space-x-2 pb-1.5" title="Gerade live dabei">
+              {presence.map((user) => (
+                <Tooltip key={user.userId}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105"
+                      href={`/m/${user.userId}`}>
+
+                      {user.avatarUrl
+                        ?
+                        <Avatar
+                          key={user.userId}
+                          className="size-7 border-2 border-background"
+                          style={{ backgroundColor: user.color }}
+                          title={user.userName}>
+                          <AvatarImage src={user.avatarUrl ?? ""} />
+                          <AvatarFallback
+                            className="text-[10px] text-white"
+                            style={{ backgroundColor: user.color }}>
+                            {getInitials(user.userName)}
+                          </AvatarFallback>
+                        </Avatar>
+                        :
+                        <UserDefaultAvatar name={user.userName} size={26} />
+                      }
+                    </Link>
+
+                  </TooltipTrigger>
+                  <TooltipContent>{user.userName}</TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+          ) : null}
         </div>
       ) : null}
 
@@ -123,6 +167,7 @@ export default function EditProtocolForm({
         onAccessChange={(status, position) =>
           setWaitingPosition(status === "waiting" ? (position ?? 0) : null)
         }
+        onPresenceChange={setPresence}
       />
     </div>
   );

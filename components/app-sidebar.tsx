@@ -40,7 +40,7 @@ export function AppSidebar({
   openTodosCount,
   assignedCasesCount,
   eventsCount,
-  organizations,
+  // organizations,
   news,
   newsCount,
   ...props
@@ -48,7 +48,7 @@ export function AppSidebar({
   openTodosCount: number;
   assignedCasesCount: number;
   eventsCount: number;
-  organizations: { id: string; name: string; color: string; slug: string }[];
+  // organizations: { id: string; name: string; color: string; slug: string }[];
   news: News[];
   newsCount: number;
 }) {
@@ -65,7 +65,7 @@ export function AppSidebar({
         title: "Kalender",
         url: "/events",
         icon: Calendar,
-        count: eventsCount,
+        // count: eventsCount,
       },
       {
         title: "Protokolle",
@@ -117,7 +117,7 @@ export function AppSidebar({
         icon: Plain,
       },
     ],
-    organizations: organizations,
+    // organizations: organizations,
     ressources: [
       {
         name: "Ärzte & Dolmetscher",
@@ -167,7 +167,7 @@ export function AppSidebar({
       ) : (
         <SidebarContent>
           <NavMain items={data.navMain} />
-          <NavProjects organizations={data.organizations} />
+          {/* <NavProjects organizations={data.organizations} /> */}
           <NavRessources ressources={data.ressources} />
           <NavSecondary
             items={data.navSecondary}

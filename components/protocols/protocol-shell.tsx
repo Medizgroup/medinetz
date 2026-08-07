@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Sidebar } from "@solar-icons/react-perf/category/style/LineDuotone";
 
 export const STORAGE_KEY = "protocol-sidebar-open";
@@ -33,29 +32,25 @@ export function ProtocolShell({
   }, [open, hydrated]);
 
   return (
-    <div className="w-full">
-      <div className="hidden md:flex justify-end px-6 pt-4 sticky -top-2">
+    <div className="w-full max-w-full">
+      <div className="flex justify-end px-4 pt-4 sm:px-6 lg:sticky lg:-top-2">
         <Button
           variant="ghost"
           size="xl"
           className="rounded-full text-muted-foreground"
           onClick={() => setOpen((o) => !o)}>
           <Sidebar className="size-5" />
-          {open ? "Seitenleiste ausblenden" : "einblenden"}
+          <span className="hidden sm:inline">
+            {open ? "Seitenleiste ausblenden" : "Seitenleiste einblenden"}
+          </span>
         </Button>
       </div>
 
-      <div className={cn("grid gap-4", open ? "grid-cols-9" : "grid-cols-10")}>
-        <div
-          className={cn(
-            "mx-auto w-full max-w-6xl px-6 py-8 pt-1 space-y-10",
-            open ? "col-span-7" : "col-span-9",
-          )}>
-          {children}
-        </div>
+      <div className="mx-auto flex w-full max-w-500 flex-col gap-8 px-4 pt-1 pb-8 sm:px-6 lg:flex-row lg:items-start">
+        <div className="min-w-0 flex-1 space-y-10">{children}</div>
 
         {open ? (
-          <aside className="hidden md:block  h-96 col-span-2 mt-12 sticky top-16 px-4 space-y-8">
+          <aside className="w-full shrink-0 space-y-8 border-t pt-8 lg:sticky lg:top-16 lg:w-80 lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto lg:border-t-0 lg:pt-0 xl:w-120 px-4">
             {sidebar}
           </aside>
         ) : null}
