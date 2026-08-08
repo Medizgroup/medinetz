@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
+  KeyRound,
   Loader2,
   MoreHorizontal,
   MoreHorizontalIcon,
@@ -47,6 +48,7 @@ import {
 
 import { getInitials } from "@/lib/helper/user";
 import InviteUserDialog from "./invite-user-dialog";
+import ResetPasswordDialog from "./reset-password-dialog";
 import { ButtonGroup } from "../ui/group";
 import { DropdownMenuGroup, DropdownMenuLabel } from "../ui/menu";
 import { cn } from "@/lib/utils";
@@ -97,6 +99,9 @@ export default function UsersTable({
   const [activeFilter, setActiveFilter] = React.useState<string>("all");
 
   const [inviteOpen, setInviteOpen] = React.useState(false);
+  const [resetPasswordUser, setResetPasswordUser] = React.useState<User | null>(
+    null,
+  );
 
   const pageSize = 30;
   const totalPages = Math.max(Math.ceil(total / pageSize), 1);
@@ -424,6 +429,11 @@ export default function UsersTable({
                               ? "Admin-Status entziehen"
                               : "Zum Admin machen"}
                           </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => setResetPasswordUser(u)}>
+                            <KeyRound className="size-4" />
+                            Passwort zurücksetzen
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             className="text-destructive"
@@ -481,6 +491,18 @@ export default function UsersTable({
         onOpenChange={setInviteOpen}
         availableOrgs={availableOrgs}
         onInvited={load}
+      />
+
+      <ResetPasswordDialog
+        open={resetPasswordUser !== null}
+        onOpenChange={(open) => {
+          if (!open) setResetPasswordUser(null);
+        }}
+        user={
+          resetPasswordUser
+            ? { id: resetPasswordUser.id, name: userName(resetPasswordUser) }
+            : null
+        }
       />
     </div>
   );

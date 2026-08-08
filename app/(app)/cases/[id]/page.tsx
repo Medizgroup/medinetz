@@ -25,7 +25,7 @@ import { de } from "date-fns/locale";
 
 import RichTextRenderer from "@/components/protocols/rich-text-renderer";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import {
   STATUS_LABEL,
@@ -42,9 +42,9 @@ import EditCaseForm from "@/components/case/edit-case-form";
 import ActivityLine from "@/components/activity/activity-line";
 import CaseCommentForm from "@/components/case/case-comment-form";
 import CaseSidebar from "@/components/case/case-sidebar";
-import { ChevronLeft, ThumbsUp } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { NotProduct } from "@/components/not-product";
-import { getInitials } from "@/lib/helper/user";
+import UserDefaultAvatar from "@/components/user/user-default-avatar";
 
 export default async function CaseDetailPage({
   params,
@@ -149,6 +149,7 @@ export default async function CaseDetailPage({
           displayName: true,
           name: true,
           email: true,
+          avatarUrl: true,
         },
       },
     },
@@ -159,6 +160,7 @@ export default async function CaseDetailPage({
     id: m.user.id,
     displayName: m.user.displayName || m.user.name || m.user.email,
     email: m.user.email,
+    avatarUrl: m.user.avatarUrl,
   }));
 
   // Activity feed
@@ -361,27 +363,21 @@ export default async function CaseDetailPage({
                         </span>
                       </TimelineTitle>
                       <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
+                      {comment.user.avatarUrl ? (
                         <Avatar>
                           <AvatarImage
                             alt={userName}
                             className="size-6 rounded-full"
-                            src={comment.user.avatarUrl ?? undefined}
+                            src={comment.user.avatarUrl}
                           />
-                          <AvatarFallback>
-                            {getInitials(
-                              comment.user.displayName ??
-                                comment.user.name ??
-                                "User",
-                            )}
-                          </AvatarFallback>
                         </Avatar>
+                      ) : ( 
+                        <UserDefaultAvatar name={userName} size={24} />
+                      )}
                       </TimelineIndicator>
                     </TimelineHeader>
                     <TimelineContent className="mt-2 text-foreground">
                       <RichTextRenderer value={comment.content} />
-                      <TimelineDate className="mt-1 mb-0 ">
-                        <ThumbsUp className="size-4! mt-3 ml-1 text-muted-foreground" />
-                      </TimelineDate>
                     </TimelineContent>
                   </TimelineItem>
                 );

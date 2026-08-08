@@ -21,7 +21,7 @@ import {
 import { CircleAlertIcon } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import Image from "next/image";
-import UserDefaultAvatar from "@/components/user/user-default-avatar";
+import InstitutLogo from "@/components/institut-logo";
 type Step = "email" | "password";
 type Errors = Record<string, string | string[]>;
 
@@ -187,7 +187,7 @@ export default function SignInPage() {
               <div className="flex flex-col  items-center space-y-8">
                 <div className="space-y-2 text-center ">
                   <div className="flex justify-center">
-                    <UserDefaultAvatar name="Mediznetz Medizgroup" size={80}/>
+                    <InstitutLogo size={80}/>
                     {/* <Image
                       src="/Logo/logo-light.svg"
                       alt="Logo"

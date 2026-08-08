@@ -3,12 +3,7 @@
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldItem,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -16,20 +11,15 @@ import { Separator } from "@/components/ui/separator";
 import {
   changeEmailAction,
   changePasswordAction,
-  accountSettingsAction,
 } from "@/app/(app)/actions/users/account";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardPanel,
   CardTitle,
 } from "../ui/card";
-import { Fieldset, FieldsetLegend } from "../ui/fieldset";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Switch } from "../ui/switch";
 import { toastManager } from "../ui/toast";
 
 type Errors = Record<string, string | string[]>;
@@ -49,28 +39,17 @@ export default function AccountComponent({
     changePasswordAction,
     initialState,
   );
-  const [prefState, prefAction] = React.useActionState(
-    accountSettingsAction,
-    initialState,
-  );
 
   React.useEffect(() => {
-    if (emailState.ok || pwState.ok || prefState.ok) {
+    if (emailState.ok || pwState.ok) {
       toastManager.add({
         description: "Deine Änderungen wurden gespeichert.",
         title: "Success!",
         type: "success",
       });
     }
-  }, [emailState.ok, pwState.ok, prefState.ok]);
+  }, [emailState.ok, pwState.ok]);
 
-  const defaultLanguage = "de";
-  const defaultTimezone = "Europe/Berlin";
-  const defaultEmailNotifications = true;
-
-  const [emailNotifications, setEmailNotifications] = React.useState(
-    defaultEmailNotifications,
-  );
   return (
     <div className="flex items-center justify-center p-10">
       <div className="w-full max-w-7xl">
@@ -156,98 +135,6 @@ export default function AccountComponent({
             <CardFooter className="justify-end space-x-4">
               <Button type="submit" className="rounded-full">
                 Passwort speichern
-              </Button>
-            </CardFooter>
-          </Card>
-        </Form>
-
-        <Separator className="my-10" />
-
-        {/* 3) Basis-Account Settings (UserPreference) */}
-        <Form errors={prefState.errors} action={prefAction}>
-          <Card className="max-w-5xl">
-            <CardHeader>
-              <CardTitle>Basis Einstellungen</CardTitle>
-              <CardDescription>
-                Ändere deine Sprache, Zeitzone oder
-                Benachrichtigungspräferenzen.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 gap-6">
-              <Field
-                name="language"
-                className="gap-4"
-                render={(fieldProps) => <Fieldset {...fieldProps} />}>
-                <FieldsetLegend className="text-sm font-medium">
-                  Sprache
-                </FieldsetLegend>
-
-                <RadioGroup name="language" defaultValue={defaultLanguage}>
-                  <FieldItem>
-                    <FieldLabel className="font-normal flex items-center gap-2">
-                      <RadioGroupItem value="de" /> Deutsch
-                    </FieldLabel>
-                  </FieldItem>
-                  <FieldItem>
-                    <FieldLabel className="font-normal flex items-center gap-2">
-                      <RadioGroupItem value="en" /> English
-                    </FieldLabel>
-                  </FieldItem>
-                </RadioGroup>
-
-                <FieldError />
-              </Field>
-              <Field
-                name="timezone"
-                className="gap-4"
-                render={(fieldProps) => <Fieldset {...fieldProps} />}>
-                <FieldsetLegend className="text-sm font-medium">
-                  Zeitzone
-                </FieldsetLegend>
-
-                <RadioGroup name="timezone" defaultValue={defaultTimezone}>
-                  <FieldItem>
-                    <FieldLabel className="font-normal flex items-center gap-2">
-                      <RadioGroupItem value="Europe/Berlin" /> Europe/Berlin
-                    </FieldLabel>
-                  </FieldItem>
-                  <FieldItem>
-                    <FieldLabel className="font-normal flex items-center gap-2">
-                      <RadioGroupItem value="Europe/Vienna" /> Europe/Vienna
-                    </FieldLabel>
-                  </FieldItem>
-                  <FieldItem>
-                    <FieldLabel className="font-normal flex items-center gap-2">
-                      <RadioGroupItem value="Europe/Zurich" /> Europe/Zurich
-                    </FieldLabel>
-                  </FieldItem>
-                </RadioGroup>
-
-                <FieldError />
-              </Field>
-
-              <Field name="emailNotifications" className="gap-2">
-                <FieldLabel className="flex items-center justify-between gap-4">
-                  <span>Email Benachrichtigungen</span>
-
-                  {/* Hidden input -> Server Action bekommt "true"/"false" */}
-                  <input
-                    type="hidden"
-                    name="emailNotifications"
-                    value={emailNotifications ? "true" : "false"}
-                  />
-
-                  <Switch
-                    checked={emailNotifications}
-                    onCheckedChange={(v) => setEmailNotifications(Boolean(v))}
-                  />
-                </FieldLabel>
-                <FieldError />
-              </Field>
-            </CardContent>
-            <CardFooter className="justify-end">
-              <Button type="submit" className=" rounded-full whitespace-nowrap">
-                Speichern
               </Button>
             </CardFooter>
           </Card>

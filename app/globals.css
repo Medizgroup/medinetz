@@ -68,7 +68,20 @@
   0%, 49% {
     opacity: 1;}
   50%, 100% {
-    opacity: 0;}}}
+    opacity: 0;}}
+  --animate-logo-eye-blink: logo-eye-blink 5.5s ease-in-out infinite;
+  @keyframes logo-eye-blink {
+    0%, 92%, 100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.05);
+    }
+    97% {
+      transform: scaleY(1);
+    }
+  }
+}
 
 :root {
   --radius: 0.625rem;

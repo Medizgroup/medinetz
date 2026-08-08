@@ -174,7 +174,8 @@ model User {
 
 
   isActive      Boolean  @default(false) @map("is_active")
-  isInstanceAdmin Boolean @default(false) @map("is_instance_admin")  
+  isInstanceAdmin Boolean @default(false) @map("is_instance_admin")
+  mustChangePassword Boolean @default(false) @map("must_change_password")
   lastLoginAt   DateTime? @map("last_login_at")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")

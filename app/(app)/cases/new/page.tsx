@@ -15,7 +15,7 @@ export default async function NewCasePage() {
       role: { in: ["COORDINATOR", "ADMIN"] },
     },
     select: {
-      organization: { select: { id: true, name: true } },
+      organization: { select: { id: true, name: true, type: true } },
     },
     orderBy: { organization: { name: "asc" } },
   });

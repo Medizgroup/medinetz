@@ -3,7 +3,10 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { canUserEditCase } from "@/lib/utils/cases/permissions";
+import {
+  canUserEditCase,
+  canUserViewCase,
+} from "@/lib/utils/cases/permissions";
 import { recalculateCaseTotal } from "@/lib/utils/cases/totals";
 import { syncCaseInterpreterEvent } from "@/lib/event/sync-resource-events";
 
@@ -15,6 +18,9 @@ export async function GET(
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!(await canUserViewCase(id, session.user.id))) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
   const items = await prisma.caseInterpreter.findMany({

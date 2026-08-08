@@ -16,7 +16,11 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
 import { LoreleiAvatarDialog } from "@/components/avatar/lorelei-avatar-dialog";
-import { updateProfileAction } from "@/app/(app)/actions/users/profile";
+import { AvatarUploadButton } from "@/components/avatar/avatar-upload-button";
+import {
+  removeAvatarAction,
+  updateProfileAction,
+} from "@/app/(app)/actions/users/profile";
 import { toastManager } from "../ui/toast";
 
 import { AvatarConfig } from "@/lib/avatar/dicebear";
@@ -53,6 +57,23 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
   const [avatarConfig, setAvatarConfig] = React.useState<AvatarConfig | null>(
     user.avatarConfig,
   );
+  const [removingAvatar, setRemovingAvatar] = React.useState(false);
+
+  async function handleRemoveAvatar() {
+    setRemovingAvatar(true);
+    const res = await removeAvatarAction();
+    setRemovingAvatar(false);
+
+    if (!res.ok) {
+      toastManager.add({
+        title: "Avatar konnte nicht entfernt werden.",
+        type: "error",
+      });
+      return;
+    }
+    setAvatarUrl(null);
+    setAvatarConfig(null);
+  }
 
   // Optional: Success Toast/Message
   React.useEffect(() => {
@@ -80,6 +101,11 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
             type="hidden"
             name="avatarConfig"
             value={avatarConfig ? JSON.stringify(avatarConfig) : ""}
+          />
+          <input
+            type="hidden"
+            name="avatarUrl"
+            value={!avatarConfig && avatarUrl ? avatarUrl : ""}
           />
 
           {/* AVATAR */}
@@ -119,17 +145,22 @@ export default function ProfileForm({ user }: { user: UserDTO }) {
                     }}
                   />
 
+                  <AvatarUploadButton
+                    disabled={pending}
+                    onUploaded={(url) => {
+                      setAvatarConfig(null);
+                      setAvatarUrl(url);
+                    }}
+                  />
+
                   {avatarUrl && (
                     <Button
                       type="button"
                       variant="destructive-outline"
-                      disabled={pending}
+                      disabled={pending || removingAvatar}
                       className="rounded-full"
-                      onClick={() => {
-                        setAvatarUrl(null);
-                        setAvatarConfig(null);
-                      }}>
-                      Avatar löschen
+                      onClick={handleRemoveAvatar}>
+                      {removingAvatar ? "Entferne…" : "Avatar löschen"}
                     </Button>
                   )}
                 </div>

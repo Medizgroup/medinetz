@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import * as React from "react";
@@ -23,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { languages } from "@/lib/languages";
 
 export type PatientForEdit = {
   id: string;
@@ -83,6 +85,19 @@ export default function PatientEditDialog({
 
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+
+  // Falls der gespeicherte Wert (Altdaten) nicht in der Sprachliste vorkommt,
+  // trotzdem als Option anzeigen statt ihn stillschweigend zu verwerfen.
+  const languageItems = React.useMemo(() => {
+    const base = languages.map((l) => ({ value: l.label, label: l.label }));
+    if (
+      primaryLanguage &&
+      !base.some((l) => l.value === primaryLanguage)
+    ) {
+      return [{ value: primaryLanguage, label: primaryLanguage }, ...base];
+    }
+    return base;
+  }, [primaryLanguage]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -198,10 +213,21 @@ export default function PatientEditDialog({
               </Field>
               <Field className="gap-2">
                 <FieldLabel>Sprache</FieldLabel>
-                <Input
-                  value={primaryLanguage}
-                  onChange={(e) => setPrimaryLanguage(e.target.value)}
-                />
+                <Select
+                  value={primaryLanguage || null}
+                  items={languageItems}
+                  onValueChange={(v) => setPrimaryLanguage(v ?? "")}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sprache wählen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {languageItems.map((l) => (
+                      <SelectItem key={l.value} value={l.value}>
+                        {l.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </Field>
             </div>
 

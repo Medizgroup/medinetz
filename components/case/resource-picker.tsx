@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, type LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,16 @@ type Props = {
   onChange: (value: string | null) => void;
   placeholder?: string;
   emptyMessage?: string;
+  icon?: LucideIcon;
 };
+
+function initialsOf(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  return parts
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("");
+}
 
 export default function ResourcePicker({
   options,
@@ -34,6 +43,7 @@ export default function ResourcePicker({
   onChange,
   placeholder = "Auswählen…",
   emptyMessage = "Keine Treffer.",
+  icon: Icon,
 }: Props) {
   const [open, setOpen] = React.useState(false);
 
@@ -60,7 +70,14 @@ export default function ResourcePicker({
             role="combobox"
             aria-expanded={open}
             className="w-full justify-between font-normal">
-            <span className="flex items-center gap-2 truncate">
+            <span className="flex min-w-0 items-center gap-2">
+              {selected ? (
+                <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-medium text-accent-foreground">
+                  {initialsOf(selected.name)}
+                </span>
+              ) : Icon ? (
+                <Icon className="size-4 shrink-0 text-muted-foreground" />
+              ) : null}
               <span className="truncate">
                 {selected ? selected.name : placeholder}
               </span>
@@ -83,23 +100,28 @@ export default function ResourcePicker({
                   setOpen(false);
                 }}
                 className={cn(
-                  "relative",
+                  "flex items-center justify-between gap-2",
                   value === item.id ? "bg-accent" : "",
                 )}>
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-medium text-muted-foreground">
+                    {initialsOf(item.name)}
+                  </span>
+                  <div className="flex min-w-0 flex-col">
+                    <span className="truncate">{item.name}</span>
+                    {item.subtitle ? (
+                      <span className="truncate text-xs text-muted-foreground">
+                        {item.subtitle}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
                 <Check
                   className={cn(
-                    "size-4 absolute right-1 top-2",
+                    "size-4 shrink-0",
                     value === item.id ? "opacity-100" : "opacity-0",
                   )}
                 />
-                <div className="flex flex-col">
-                  <span>{item.name}</span>
-                  {item.subtitle ? (
-                    <span className="text-xs text-muted-foreground">
-                      {item.subtitle}
-                    </span>
-                  ) : null}
-                </div>
               </CommandItem>
             )}
           </CommandList>

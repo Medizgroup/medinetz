@@ -55,12 +55,6 @@ export const changePasswordSchema = z
     path: ["confirmPassword"],
   });
 
-export const settingsSchema = z.object({
-  emailNotifications: z.enum(["true", "false"]).transform((v) => v === "true"),
-  timezone: z.string().trim().min(1).optional(),
-  language: z.string().trim().min(1).optional(),
-});
-
 export type ActionState =
   | { ok: true }
   | { ok: false; errors: FormErrors; message?: string };

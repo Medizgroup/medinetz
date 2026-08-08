@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Edit2, Languages, Plus, UserRoundPen } from "lucide-react";
+import { Edit2, Languages, Plus, Receipt, UserRoundPen } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -24,11 +24,20 @@ import CaseDoctorDialog, { CaseDoctorForEdit } from "./case-doctor-dialog";
 import CaseInterpreterDialog, {
   CaseInterpreterForEdit,
 } from "./case-interpreter-dialog";
+import CaseCostDialog, {
+  CASE_COST_CATEGORY_LABEL,
+  type CaseCostForEdit,
+} from "./case-cost-dialog";
 import { Spinner } from "../ui/spinner";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 
-type Member = { id: string; displayName: string; email: string };
+type Member = {
+  id: string;
+  displayName: string;
+  email: string;
+  avatarUrl: string | null;
+};
 
 type PatientFull = PatientForEdit & {
   diagnoses: DiagnosisForEdit[];
@@ -112,6 +121,12 @@ export default function CaseSidebar({
   const [editingCaseInterpreter, setEditingCaseInterpreter] =
     React.useState<CaseInterpreterForEdit | null>(null);
 
+  const [caseCosts, setCaseCosts] = React.useState<CaseCostForEdit[]>([]);
+  const [costDialogOpen, setCostDialogOpen] = React.useState(false);
+  const [editingCost, setEditingCost] = React.useState<CaseCostForEdit | null>(
+    null,
+  );
+
   const reloadDoctors = React.useCallback(async () => {
     const r = await fetch(`/api/cases/${caseId}/doctors`);
     if (!r.ok) return;
@@ -126,14 +141,28 @@ export default function CaseSidebar({
     setCaseInterpreters(data.items);
   }, [caseId]);
 
+  const reloadCosts = React.useCallback(async () => {
+    const r = await fetch(`/api/cases/${caseId}/costs`);
+    if (!r.ok) return;
+    const data = await r.json();
+    setCaseCosts(data.items);
+  }, [caseId]);
+
   React.useEffect(() => {
     reloadDoctors();
     reloadInterpreters();
-  }, [reloadDoctors, reloadInterpreters]);
+    reloadCosts();
+  }, [reloadDoctors, reloadInterpreters, reloadCosts]);
 
   const onCaseResourceSaved = () => {
     reloadDoctors();
     reloadInterpreters();
+    reloadCosts(); // Rechnungen können totalCosts über CaseCost-Aggregation beeinflussen
+    router.refresh(); // damit totalCosts aktualisiert wird
+  };
+
+  const onCostSaved = () => {
+    reloadCosts();
     router.refresh(); // damit totalCosts aktualisiert wird
   };
 
@@ -485,16 +514,77 @@ export default function CaseSidebar({
       <Separator />
 
       {/* KOSTEN */}
-      <SectionHeader title="Kosten" />
-      <div className="space-y-1 text-sm">
+      <SectionHeader
+        title="Kosten"
+        action={
+          canEditCase ? (
+            <Button
+              size="icon-sm"
+              variant="outline"
+              className="rounded-full"
+              onClick={() => {
+                setEditingCost(null);
+                setCostDialogOpen(true);
+              }}>
+              <Plus className="size-4" />
+            </Button>
+          ) : null
+        }
+      />
+
+      {caseCosts.length === 0 ? (
+        <div className="text-xs text-muted-foreground">
+          Keine direkten Kosten erfasst.
+        </div>
+      ) : (
+        <ul className="space-y-1.5 text-sm">
+          {caseCosts.map((cc) => (
+            <li
+              key={cc.id}
+              className="group flex items-center justify-between gap-2 p-2">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <Receipt className="size-3.5 shrink-0 text-muted-foreground" />
+                  <span className="truncate">{cc.description}</span>
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {CASE_COST_CATEGORY_LABEL[cc.category]}
+                </div>
+                <div className="text-xs mt-1">
+                  <Badge
+                    variant={cc.invoicePaid ? "info" : "warning"}
+                    className="text-[10px]">
+                    {cc.amount.toFixed(2)} €
+                  </Badge>
+                </div>
+              </div>
+              {canEditCase ? (
+                <Button
+                  type="button"
+                  size="icon-sm"
+                  variant="outline"
+                  onClick={() => {
+                    setEditingCost(cc);
+                    setCostDialogOpen(true);
+                  }}
+                  className="shrink-0 opacity-0 group-hover:opacity-100">
+                  <Edit2 className="size-3 text-muted-foreground" />
+                </Button>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="space-y-1 text-sm pt-1">
         <div className="flex justify-between">
           <span className="text-muted-foreground">Geschätzt</span>
           <span className="tabular-nums">
             {estimatedCosts ? `${estimatedCosts.toFixed(2)} €` : "—"}
           </span>
         </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Bisher</span>
+        <div className="flex justify-between font-medium">
+          <span className="text-muted-foreground font-normal">Bisher</span>
           <span className="tabular-nums">{totalCosts.toFixed(2)} €</span>
         </div>
       </div>
@@ -547,6 +637,13 @@ export default function CaseSidebar({
             interpreterOptions={interpreterOptions}
             caseInterpreter={editingCaseInterpreter}
             onSaved={onCaseResourceSaved}
+          />
+          <CaseCostDialog
+            open={costDialogOpen}
+            onOpenChange={setCostDialogOpen}
+            caseId={caseId}
+            cost={editingCost}
+            onSaved={onCostSaved}
           />
         </>
       ) : null}

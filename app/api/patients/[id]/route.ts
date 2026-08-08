@@ -77,7 +77,7 @@ export async function PATCH(
 
   const access = await canAccessPatient(id, session.user.id);
   if (!access.ok || !canEditPatient(access.role)) {
-    return NextResponse.json({ error: "Keine Berechtigung." }, { status: 403 });
+    return NextResponse.json({ error: "Keine Berechtigung für diesen Patienten." }, { status: 403 });
   }
 
   const body = await req.json().catch(() => null);

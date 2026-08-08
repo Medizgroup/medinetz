@@ -21,12 +21,16 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Popover, PopoverPopup, PopoverTrigger } from "@/components/ui/popover";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import UserDefaultAvatar from "@/components/user/user-default-avatar";
+import { UserIcon } from "lucide-react";
 import { CASE_STATUS_OPTIONS } from "@/lib/constant";
 
 type Member = {
   id: string;
   displayName: string;
   email: string;
+  avatarUrl: string | null;
 };
 
 export default function CaseStatusControls({
@@ -163,25 +167,37 @@ function AssigneeCombobox({
             role="combobox"
             aria-expanded={open}
             disabled={disabled}
-            className="w-full justify-between font-normal">
-            <span className="flex items-center gap-2 truncate">
+            size="sm"
+            className="w-fit max-w-full rounded-full px-2.5 font-normal">
+            <span className="flex min-w-0 items-center gap-1.5">
+              {selected ? (
+                selected.avatarUrl ? (
+                  <Avatar className="size-5">
+                    <AvatarImage
+                      alt={selected.displayName}
+                      src={selected.avatarUrl}
+                    />
+                  </Avatar>
+                ) : (
+                  <UserDefaultAvatar name={selected.displayName} size={20} />
+                )
+              ) : (
+                <UserIcon className="size-4 shrink-0 text-muted-foreground" />
+              )}
               <span className="truncate">
                 {selected ? selected.displayName : "Niemand zugewiesen"}
               </span>
             </span>
-            <ChevronDown className="ml-1 size-3.5 shrink-0" />
+            <ChevronDown className="ml-1 size-3.5 shrink-0 text-muted-foreground" />
           </Button>
         }
       />
-      <PopoverPopup className="min-w-[260px] w-full" align="start">
+      <PopoverPopup className="min-w-65 w-full p-0 max-h-96" align="start">
         <Command items={searchableItems}>
-          <CommandInput
-            placeholder="Suchen…"
-            className="border! border-border! w-full"
-          />
+          <CommandInput placeholder="Suchen…" className="w-full" />
           <CommandEmpty>Niemand gefunden.</CommandEmpty>
 
-          <CommandList>
+          <CommandList className="max-h-80 overflow-y-auto">
             {(item: (typeof searchableItems)[number]) => (
               <CommandItem
                 key={item.value}
@@ -191,10 +207,25 @@ function AssigneeCombobox({
                   setOpen(false);
                 }}>
                 <div className="flex items-center gap-2 justify-between w-full">
-                  <span>{item.member.displayName}</span>
+                  <span className="flex min-w-0 items-center gap-2">
+                    {item.member.avatarUrl ? (
+                      <Avatar className="size-5">
+                        <AvatarImage
+                          alt={item.member.displayName}
+                          src={item.member.avatarUrl}
+                        />
+                      </Avatar>
+                    ) : (
+                      <UserDefaultAvatar
+                        name={item.member.displayName}
+                        size={20}
+                      />
+                    )}
+                    <span className="truncate">{item.member.displayName}</span>
+                  </span>
                   <Check
                     className={cn(
-                      "size-4",
+                      "size-4 shrink-0",
                       assigneeId === item.member.id
                         ? "opacity-100"
                         : "opacity-0",

@@ -1,9 +1,10 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { institutName } from "@/lib/config";
 
 export const metadata = {
-  title: "Anmelden | Medizgroup",
+  title: `Anmelden | ${institutName}`,
 };
 
 export default async function AuthLayout({

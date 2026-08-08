@@ -116,6 +116,36 @@ export async function getKpis(params: StatsParams) {
   });
   const patientsLastMonth = patientsLastMonthRaw.length;
 
+  // Fallkosten (direkt in Fällen erfasst: Arzt-/Dolmetscher-Rechnungen + Direktkosten)
+  const [caseCostsAgg, caseCostsThisMonth, caseCostsLastMonth] =
+    await Promise.all([
+      prisma.case.aggregate({
+        where: {
+          organizationId: { in: orgIds },
+          ...(dateBetween ? { createdAt: dateBetween } : {}),
+        },
+        _sum: { totalCosts: true },
+      }),
+      prisma.case.aggregate({
+        where: {
+          organizationId: { in: orgIds },
+          createdAt: { gte: thisMonthStart, lte: now },
+        },
+        _sum: { totalCosts: true },
+      }),
+      prisma.case.aggregate({
+        where: {
+          organizationId: { in: orgIds },
+          createdAt: { gte: lastMonthStart, lte: lastMonthEnd },
+        },
+        _sum: { totalCosts: true },
+      }),
+    ]);
+
+  const totalCaseCosts = Number(caseCostsAgg._sum.totalCosts ?? 0);
+  const caseCostsThisMonthVal = Number(caseCostsThisMonth._sum.totalCosts ?? 0);
+  const caseCostsLastMonthVal = Number(caseCostsLastMonth._sum.totalCosts ?? 0);
+
   // Donations & Expenses
   const [donationsAgg, expensesAgg, donationsThisMonth, donationsLastMonth] =
     await Promise.all([
@@ -178,6 +208,9 @@ export async function getKpis(params: StatsParams) {
       available: totalDonations - totalExpenses,
       donationsThisMonth: donationsThisMonthVal,
       donationsLastMonth: donationsLastMonthVal,
+      totalCaseCosts,
+      caseCostsThisMonth: caseCostsThisMonthVal,
+      caseCostsLastMonth: caseCostsLastMonthVal,
     },
     resources: {
       activeDoctors,

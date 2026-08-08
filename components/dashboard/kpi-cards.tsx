@@ -48,6 +48,9 @@ type Kpis = {
     available: number;
     donationsThisMonth: number;
     donationsLastMonth: number;
+    totalCaseCosts: number;
+    caseCostsThisMonth: number;
+    caseCostsLastMonth: number;
   };
   resources: { activeDoctors: number; activeInterpreters: number };
 };
@@ -95,10 +98,25 @@ export default function KpiCards({ kpis }: { kpis: Kpis }) {
         />
       ),
     },
+    {
+      label: "Fallkosten",
+      value: kpis.finance.totalCaseCosts.toLocaleString("de-DE", {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0,
+      }),
+      sublabel: "aus Arzt-, Dolmetscher- & Direktkosten",
+      change: (
+        <ChangeBadge
+          current={kpis.finance.caseCostsThisMonth}
+          previous={kpis.finance.caseCostsLastMonth}
+        />
+      ),
+    },
   ];
 
   return (
-    <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {items.map((item, i) => (
         <Card key={i} className="p-6 py-4 shadow-2xs">
           <CardContent className="p-0">

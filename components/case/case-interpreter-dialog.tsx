@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Loader2 } from "lucide-react";
+import { Languages, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -188,6 +188,7 @@ export default function CaseInterpreterDialog({
                   value={interpreterId}
                   onChange={setInterpreterId}
                   placeholder="Dolmetscher:in auswählen…"
+                  icon={Languages}
                 />
               )}
             </Field>

@@ -14,7 +14,8 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import Image from "next/image";
 import { Spinner } from "@/components/ui/spinner";
 import { toastManager } from "@/components/ui/toast";
-import UserDefaultAvatar from "@/components/user/user-default-avatar";
+import InstitutLogo from "@/components/institut-logo";
+import { institutName } from "@/lib/config";
 
 type Step = "email" | "profile" | "password";
 type Errors = Record<string, string | string[]>;
@@ -216,27 +217,13 @@ export default function SignUpPage() {
             <div className="flex flex-col items-center space-y-8">
               <div className="space-y-2 text-center">
                 <div className="flex items-center justify-center">
-                <UserDefaultAvatar name="Mediznetz Medizgroup" size={80}/>
-                  {/* <Image
-                    src="/Logo/logo-light.svg"
-                    alt="Logo"
-                    width={80}
-                    height={80}
-                    className="inline dark:hidden"
-                  />
-                  <Image
-                    src="/Logo/logo-dark.svg"
-                    alt="Logo"
-                    width={80}
-                    height={80}
-                    className="hidden dark:inline"
-                  /> */}
+                <InstitutLogo size={80}/>
                 </div>
                 <h1 className="text-balance text-3xl font-semibold text-foreground">
-                  Ein Konto erstellen
+                  {institutName}
                 </h1>
                 <p className="text-pretty text-foreground/80 text-sm">
-                  {subtitle}
+                erstelle dein Konto um deinen Mediznetz-Arbeitsplatz zu nutzen.
                 </p>
               </div>
 
@@ -254,7 +241,7 @@ export default function SignUpPage() {
                       name="email"
                       type="email"
                       size="lg"
-                      className="w-full rounded-xl"
+                      className="w-full rounded-full"
                       defaultValue={draft.email}
                       disabled={loading}
                       autoComplete="email"
@@ -355,7 +342,7 @@ export default function SignUpPage() {
 
                 <Button
                   type="submit"
-                  className="w-full rounded-xl"
+                  className="w-full rounded-full"
                   size="lg"
                   disabled={loading}>
                   {step === "password" ? (

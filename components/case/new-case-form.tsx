@@ -32,9 +32,10 @@ import {
   type PatientPseudonymValue,
 } from "./patient-pseudonym-input";
 import { toastManager } from "../ui/toast";
+import { languages } from "@/lib/languages";
 
 type Membership = {
-  organization: { id: string; name: string };
+  organization: { id: string; name: string; type: string };
 };
 
 export default function NewCaseForm({
@@ -44,9 +45,15 @@ export default function NewCaseForm({
 }) {
   const router = useRouter();
 
+  const defaultOrganizationId =
+    memberships.find((m) => m.organization.type === "ROUTINE")?.organization
+      .id ??
+    memberships[0]?.organization.id ??
+    "";
+
   const [title, setTitle] = React.useState("");
   const [organizationId, setOrganizationId] = React.useState(
-    memberships[0]?.organization.id ?? "",
+    defaultOrganizationId,
   );
   const [patientValue, setPatientValue] =
     React.useState<PatientPseudonymValue | null>(null);
@@ -195,11 +202,21 @@ export default function NewCaseForm({
 
         <Field className="gap-2">
           <FieldLabel>Sprache</FieldLabel>
-          <Input
+          <Select
             value={patientLanguage}
-            onChange={(e) => setPatientLanguage(e.target.value)}
-            placeholder="z.B. Arabisch, Tigrinya"
-          />
+            items={languages.map((l) => ({ value: l.label, label: l.label }))}
+            onValueChange={(v) => setPatientLanguage(v ?? "")}>
+            <SelectTrigger>
+              <SelectValue placeholder="Sprache wählen" />
+            </SelectTrigger>
+            <SelectPopup alignItemWithTrigger={false}>
+              {languages.map((l) => (
+                <SelectItem key={l.code} value={l.label}>
+                  {l.label}
+                </SelectItem>
+              ))}
+            </SelectPopup>
+          </Select>
           <FieldDescription>
             Welche Sprache spricht der Patient
           </FieldDescription>

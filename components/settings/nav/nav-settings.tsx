@@ -7,7 +7,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
-  Bell,
   Building2,
   Settings2,
   Undo,
@@ -42,11 +41,6 @@ const items = [
     title: "Personalisierung",
     url: "/settings/appearance",
     icon: Wallpaper,
-  },
-  {
-    title: "Benachrichtigungen",
-    url: "/settings/notifications",
-    icon: Bell,
   },
 ];
 export function NavSettings() {

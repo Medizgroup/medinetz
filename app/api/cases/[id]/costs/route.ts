@@ -3,9 +3,20 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { canUserEditCase, canUserViewCase } from "@/lib/utils/cases/permissions";
+import {
+  canUserEditCase,
+  canUserViewCase,
+} from "@/lib/utils/cases/permissions";
 import { recalculateCaseTotal } from "@/lib/utils/cases/totals";
-import { syncCaseDoctorEvent } from "@/lib/event/sync-resource-events";
+import type { ExpenseCategory } from "@/generated/prisma/client";
+
+const VALID_CATEGORIES: ExpenseCategory[] = [
+  "DOCTOR",
+  "INTERPRETER",
+  "MEDICATION",
+  "LAB",
+  "OTHER",
+];
 
 export async function GET(
   _req: Request,
@@ -20,36 +31,23 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const items = await prisma.caseDoctor.findMany({
+  const items = await prisma.caseCost.findMany({
     where: { caseId: id },
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
-      appointmentDate: true,
-      appointmentNotes: true,
-      invoiceReceived: true,
-      invoiceAmount: true,
+      category: true,
+      description: true,
+      amount: true,
       invoiceDate: true,
       invoicePaid: true,
-      diagnosis: true,
       notes: true,
       createdAt: true,
-      doctor: {
-        select: {
-          id: true,
-          name: true,
-          specialty: true,
-          practiceName: true,
-        },
-      },
     },
   });
 
   return NextResponse.json({
-    items: items.map((i) => ({
-      ...i,
-      invoiceAmount: i.invoiceAmount ? Number(i.invoiceAmount) : null,
-    })),
+    items: items.map((i) => ({ ...i, amount: Number(i.amount) })),
   });
 }
 
@@ -67,42 +65,40 @@ export async function POST(
   }
 
   const body = await req.json().catch(() => null);
-  const doctorId = String(body?.doctorId ?? "").trim();
-  if (!doctorId) {
-    return NextResponse.json({ error: "doctorId fehlt." }, { status: 400 });
+  const description = String(body?.description ?? "").trim();
+  const category = VALID_CATEGORIES.includes(body?.category)
+    ? (body.category as ExpenseCategory)
+    : "OTHER";
+  const amount = Number(body?.amount);
+
+  if (!description) {
+    return NextResponse.json(
+      { error: "Beschreibung ist erforderlich." },
+      { status: 400 },
+    );
+  }
+  if (!Number.isFinite(amount) || amount < 0) {
+    return NextResponse.json(
+      { error: "Ungültiger Betrag." },
+      { status: 400 },
+    );
   }
 
-  const created = await prisma.caseDoctor.create({
+  const created = await prisma.caseCost.create({
     data: {
       caseId: id,
-      doctorId,
-      appointmentDate: body?.appointmentDate
-        ? new Date(body.appointmentDate)
-        : null,
-      appointmentNotes: body?.appointmentNotes
-        ? String(body.appointmentNotes).trim()
-        : null,
-      diagnosis: body?.diagnosis ? String(body.diagnosis).trim() : null,
-      notes: body?.notes ? String(body.notes).trim() : null,
-      invoiceReceived: Boolean(body?.invoiceReceived),
-      invoiceAmount:
-        body?.invoiceAmount === null ||
-        body?.invoiceAmount === undefined ||
-        body?.invoiceAmount === ""
-          ? undefined
-          : Number(body.invoiceAmount),
+      category,
+      description,
+      amount,
       invoiceDate: body?.invoiceDate ? new Date(body.invoiceDate) : null,
       invoicePaid: Boolean(body?.invoicePaid),
+      notes: body?.notes ? String(body.notes).trim() : null,
       createdBy: session.user.id,
     },
     select: { id: true, caseId: true },
   });
 
-  await syncCaseDoctorEvent(created.id);
-
-  if (Boolean(body?.invoiceReceived)) {
-    await recalculateCaseTotal(created.caseId);
-  }
+  await recalculateCaseTotal(created.caseId);
 
   return NextResponse.json({ id: created.id });
 }

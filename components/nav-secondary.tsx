@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { News } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
+import { institutName } from "@/lib/config";
 
 const categoryLabels: Record<News["category"], string> = {
   RELEASE: "Veröffentlichung",
@@ -71,7 +72,7 @@ export function NavSecondary({
                   <SheetContent>
                     <SheetHeader>
                       <SheetTitle>
-                        Was ist neu bei Medinetz&#39;s App
+                        Was ist neu bei {institutName}
                       </SheetTitle>
                     </SheetHeader>
 

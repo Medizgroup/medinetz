@@ -3,6 +3,7 @@ import { Quicksand } from "next/font/google";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { institutName, institutSubtitle } from "@/lib/config";
 
 const quicksand = Quicksand({
   variable: "--font-roboto",
@@ -10,9 +11,8 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: "Medizgroup",
-  description:
-    "Medizgroup is a platform for managing medical records and patient data",
+  title: institutName,
+  description: institutSubtitle,
 };
 
 export default function RootLayout({

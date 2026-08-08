@@ -14,6 +14,7 @@ import {
 import HeadUser from "@/components/user/headUser";
 import BreadcrumbComponent from "@/components/breadcrumb-component";
 import { getNews } from "@/lib/news/get-news";
+import ForcePasswordChangeDialog from "@/components/auth/force-password-change-dialog";
 
 export default async function AppLayout({
   children,
@@ -31,7 +32,7 @@ export default async function AppLayout({
   // DB-Check: aktiv?
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { isActive: true },
+    select: { isActive: true, mustChangePassword: true },
   });
 
   if (!user?.isActive) {
@@ -97,6 +98,7 @@ export default async function AppLayout({
 
   return (
     <SidebarProvider>
+      {user.mustChangePassword ? <ForcePasswordChangeDialog /> : null}
       <AppSidebar
         openTodosCount={openTodosCount}
         assignedCasesCount={assignedCasesCount}

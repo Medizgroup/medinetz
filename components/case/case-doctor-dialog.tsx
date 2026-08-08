@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Stethoscope } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -211,6 +211,7 @@ export default function CaseDoctorDialog({
                   value={doctorId}
                   onChange={setDoctorId}
                   placeholder="Arzt/Ärztin auswählen…"
+                  icon={Stethoscope}
                 />
               )}
             </Field>

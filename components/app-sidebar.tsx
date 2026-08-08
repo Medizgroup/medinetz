@@ -34,7 +34,8 @@ import Image from "next/image";
 import { Routing2 } from "@solar-icons/react-perf/category/style/LineDuotone";
 import { News } from "@/generated/prisma/client";
 import Avatar from "boring-avatars";
-import UserDefaultAvatar from "./user/user-default-avatar";
+import InstitutLogo from "./institut-logo";
+import { institutName } from "@/lib/config";
 
 export function AppSidebar({
   openTodosCount,
@@ -133,10 +134,10 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
               <Link href="/" className="flex items-center gap-3 px-1">
-              <UserDefaultAvatar name="Mediznetz Medizgroup" size={28}/>
+              <InstitutLogo size={28}/>
                 <div className="flex items-end">
 
-                <span className="text-xl font-semibold font-mono tracking-wide">Medizgroup</span>
+                <span className="text-xl font-semibold font-mono tracking-wide">{institutName}</span>
                 <span className="size-1.5 bg-[#86efac] block rounded-full opacity-60"></span>
            
                 </div>

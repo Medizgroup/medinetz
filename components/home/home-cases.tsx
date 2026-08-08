@@ -104,7 +104,7 @@ export default function HomeCase({ cases }: Props) {
               </Badge>
             </AlertDescription>
             <AlertAction>
-              <Button size="xs">
+              <Button size="xs" className="rounded-full">
                 <Link href={`/cases/${c.id}`}>Ansehen</Link>
               </Button>
             </AlertAction>
