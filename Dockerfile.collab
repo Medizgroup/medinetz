@@ -7,12 +7,17 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+# Version an das lokal genutzte pnpm angleichen (siehe pnpm -v) — sonst
+# interpretiert eine ältere pnpm-Version pnpm-workspace.yaml falsch, weil
+# `allowBuilds` erst in neueren pnpm-Releases unterstützt wird.
+RUN corepack enable && corepack prepare pnpm@11.8.0 --activate
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
 ENV NODE_ENV=production
 EXPOSE 1234
 
-CMD ["npx", "tsx", "collab-server/index.ts"]
+CMD ["pnpm", "exec", "tsx", "collab-server/index.ts"]
