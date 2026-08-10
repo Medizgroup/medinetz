@@ -1,0 +1,18 @@
+# Collab-Server (Yjs/Hocuspocus) als eigener, dauerhaft laufender Prozess.
+# Siehe DEPLOYMENT.md — dieser Container braucht dieselbe DATABASE_URL und
+# denselben BETTER_AUTH_SECRET wie die Next.js-App, sonst schlägt jede
+# Collab-Verbindung mit "Nicht autorisiert" fehl.
+
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+
+ENV NODE_ENV=production
+EXPOSE 1234
+
+CMD ["npx", "tsx", "collab-server/index.ts"]
