@@ -12,10 +12,11 @@ WORKDIR /app
 # `allowBuilds` erst in neueren pnpm-Releases unterstützt wird.
 RUN corepack enable && corepack prepare pnpm@11.8.0 --activate
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile
-
+# Alles kopieren, bevor pnpm install läuft: der postinstall-Hook
+# (`prisma generate`) braucht prisma/schema.prisma bereits im Image,
+# sonst schlägt die Installation fehl, obwohl das Schema im Repo liegt.
 COPY . .
+RUN pnpm install --frozen-lockfile
 
 ENV NODE_ENV=production
 EXPOSE 1234
