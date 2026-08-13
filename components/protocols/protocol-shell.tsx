@@ -13,7 +13,7 @@ export function ProtocolShell({
   children: React.ReactNode;
   sidebar: React.ReactNode;
 }) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [hydrated, setHydrated] = React.useState(false);
 
   React.useEffect(() => {
