@@ -57,7 +57,8 @@ export const ActivityAction = {
   CLOSED: 'CLOSED',
   REOPENED: 'REOPENED',
   MENTIONED: 'MENTIONED',
-  ATTACHED: 'ATTACHED'
+  ATTACHED: 'ATTACHED',
+  DELETED: 'DELETED'
 } as const
 
 export type ActivityAction = (typeof ActivityAction)[keyof typeof ActivityAction]

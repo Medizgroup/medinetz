@@ -136,6 +136,7 @@ const welcomeMessages = [
   "Nicht weil es schwer ist, wagen wir es nicht, sondern weil wir es nicht wagen, ist es schwer. — Seneca",
   "Das Glück entsteht oft durch Aufmerksamkeit in kleinen Dingen. — Wilhelm Busch",
   "Die beste Zeit für einen Neuanfang ist jetzt. — Unbekannt",
+  "Wir sind alle in diesem zusammen. — Nelson Mandela",
 ];
 export default function HomeWelcome({ user }: { user: User }) {
   const [shuffledMessages, setShuffledMessages] = useState<string[]>([]);
@@ -176,7 +177,7 @@ export default function HomeWelcome({ user }: { user: User }) {
         <h1 className="text-4xl font-bold">Hi, {displayName} !</h1>
         <TypingAnimation
           as="p"
-          className="text-sm text-muted-foreground font-medium"
+          className="text-sm text-foreground/80"
           words={shuffledMessages}
           typeSpeed={25}
           deleteSpeed={25}

@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -17,8 +18,11 @@ import {
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  MoreHorizontal,
   SearchIcon,
+  Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
 import AssigneeFilter, { type AssigneeOption } from "./assignee-filter";
 
 import { cn } from "@/lib/utils";
@@ -39,6 +43,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import {
   STATUS_LABEL,
@@ -79,10 +97,16 @@ type OrgOption = { id: string; name: string };
 export default function CasesTable({
   data,
   orgOptions,
+  adminOrgIds = [],
+  canDeleteAll = false,
 }: {
   data: CaseRow[];
   orgOptions: OrgOption[];
+  adminOrgIds?: string[];
+  canDeleteAll?: boolean;
 }) {
+  const router = useRouter();
+  const [rows, setRows] = React.useState(data);
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: "caseNumber", desc: true },
   ]);
@@ -94,6 +118,37 @@ export default function CasesTable({
     pageSize: 25,
   });
   const [search, setSearch] = React.useState("");
+  const [deleteTarget, setDeleteTarget] = React.useState<CaseRow | null>(null);
+  const [deleting, setDeleting] = React.useState(false);
+
+  React.useEffect(() => {
+    setRows(data);
+  }, [data]);
+
+  function canDelete(organizationId: string) {
+    return canDeleteAll || adminOrgIds.includes(organizationId);
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/cases/${deleteTarget.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        toast.error(body?.error ?? "Fall konnte nicht gelöscht werden.");
+        return;
+      }
+      setRows((prev) => prev.filter((r) => r.id !== deleteTarget.id));
+      toast.success("Fall gelöscht.");
+      setDeleteTarget(null);
+      router.refresh();
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   const assigneeOptions = React.useMemo<AssigneeOption[]>(() => {
     const map = new Map<string, AssigneeOption>();
@@ -240,13 +295,43 @@ export default function CasesTable({
             {row.original.organization.name}
           </span>
         ),
-      }
+      },
+      {
+        id: "actions",
+        header: "",
+        cell: ({ row }) =>
+          canDelete(row.original.organization.id) ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-7"
+                  onClick={(e) => e.stopPropagation()}>
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDeleteTarget(row.original);
+                  }}>
+                  <Trash2 className="size-4" />
+                  Löschen
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null,
+      },
     ],
-    [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [adminOrgIds, canDeleteAll],
   );
 
   const table = useReactTable({
-    data,
+    data: rows,
     columns,
     state: { sorting, columnFilters, pagination },
     onSortingChange: setSorting,
@@ -442,6 +527,37 @@ export default function CasesTable({
           </Button>
         </div>
       </div>
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(o) => !o && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Fall löschen?</AlertDialogTitle>
+            <AlertDialogDescription>
+              „{deleteTarget?.title}&quot; wird unwiderruflich gelöscht,
+              inklusive
+              aller Kommentare, Kosten, Anhänge und Zuordnungen. Dies kann
+              nicht rückgängig gemacht werden.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button
+              variant="destructive-outline"
+              onClick={() => setDeleteTarget(null)}
+              disabled={deleting}>
+              Abbrechen
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Löschen
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

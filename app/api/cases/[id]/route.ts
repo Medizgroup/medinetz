@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { canEditCase } from "@/lib/utils/cases";
+import { isInstanceAdmin } from "@/lib/utils/admin/permissions";
 import type { CasePriority, CaseStatus } from "@/generated/prisma/client";
 
 const PRIORITY_VALUES: CasePriority[] = ["LOW", "MEDIUM", "HIGH", "URGENT"];
@@ -270,6 +271,64 @@ export async function PATCH(
       },
     });
   }
+
+  return NextResponse.json({ ok: true });
+}
+
+// Löschen ist strenger als canEditCase() oben (die auch die/den Ersteller:in
+// erlaubt): nur Org-ADMIN oder Instance-Admin dürfen einen Fall unwiderruflich
+// entfernen. Wird als DELETED-Activity protokolliert, damit der Löschvorgang
+// trotz gelöschtem Ziel im Aktivitäts-Feed sichtbar bleibt (Activity.targetId
+// hat bewusst keine FK auf Case).
+export async function DELETE(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const existing = await prisma.case.findUnique({
+    where: { id },
+    select: { id: true, organizationId: true, title: true, caseNumber: true },
+  });
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const [membership, instanceAdmin] = await Promise.all([
+    prisma.organizationMember.findUnique({
+      where: {
+        organizationId_userId: {
+          organizationId: existing.organizationId,
+          userId: session.user.id,
+        },
+      },
+      select: { role: true },
+    }),
+    isInstanceAdmin(session.user.id),
+  ]);
+
+  if (!instanceAdmin && membership?.role !== "ADMIN") {
+    return NextResponse.json({ error: "Keine Berechtigung." }, { status: 403 });
+  }
+
+  await prisma.$transaction([
+    prisma.case.delete({ where: { id } }),
+    prisma.activity.create({
+      data: {
+        organizationId: existing.organizationId,
+        userId: session.user.id,
+        action: "DELETED",
+        targetType: "case",
+        targetId: id,
+        metadata: { title: existing.title, caseNumber: existing.caseNumber },
+      },
+    }),
+  ]);
 
   return NextResponse.json({ ok: true });
 }

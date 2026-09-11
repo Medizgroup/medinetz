@@ -2,6 +2,7 @@ import {
   Paperclip,
   Flag,
   ShieldAlert,
+  Trash2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -104,6 +105,8 @@ export function actionMeta(action: ActivityAction): {
       return { Icon: MentionCircle, shortLabel: "erwähnt" };
     case "ATTACHED":
       return { Icon: Paperclip, shortLabel: "Anhang hinzugefügt" };
+    case "DELETED":
+      return { Icon: Trash2, shortLabel: "gelöscht" };
     default:
       return { Icon: PenNewSquare, shortLabel: "Aktivität" };
   }
@@ -312,6 +315,15 @@ export function describeActivity(
         { type: "text", value: " bearbeitet" },
       ];
     }
+
+    case "DELETED":
+      return [
+        { type: "text", value: `hat einen ${targetTypeLabel(targetType)} ` },
+        ...(meta.title
+          ? ([{ type: "strong", value: `„${meta.title}"` }] as DescriptionPiece[])
+          : []),
+        { type: "text", value: " gelöscht" },
+      ];
 
     case "MENTIONED":
       return [

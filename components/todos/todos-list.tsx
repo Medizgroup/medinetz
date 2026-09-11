@@ -206,7 +206,7 @@ export default function TodosList({
             { value: "all", label: "Alle" },
           ]}
           onValueChange={(v) => setFilter((v ?? "open") as typeof filter)}>
-          <SelectTrigger className="w-[150px]">
+          <SelectTrigger className="w-37.5">
             <SelectValue />
           </SelectTrigger>
           <SelectPopup alignItemWithTrigger={false} className="w-auto">
@@ -229,7 +229,7 @@ export default function TodosList({
             { value: "1", label: "Niedrig" },
           ]}
           onValueChange={(v) => setPriorityFilter(v ?? "all")}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-40">
             <SelectValue placeholder="Alle Prioritäten" />
           </SelectTrigger>
           <SelectPopup alignItemWithTrigger={false} className="w-auto">
@@ -350,6 +350,7 @@ export default function TodosList({
 
                 {/* Assignee-Avatar */}
                 {t.assignee ? (
+                
                   <Avatar
                     className="size-6 shrink-0"
                     title={
@@ -381,9 +382,9 @@ export default function TodosList({
         />
       ) : null}
 
-      <Separator className="my-6" />
+      <Separator className="my-6 hidden" />
       {/* Quick-Add */}
-      <form onSubmit={handleQuickAdd} className={cn("space-y-2")}>
+      <form onSubmit={handleQuickAdd} className={cn("space-y-2 hidden")}>
         <div className="grid gap-4">
           <Input
             value={newTitle}

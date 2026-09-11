@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import CasesTable from "@/components/case/cases-table";
+import { isInstanceAdmin } from "@/lib/utils/admin/permissions";
 
 export default async function CasesPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -21,6 +22,10 @@ export default async function CasesPage() {
   const canCreate = memberships.some(
     (m) => m.role === "COORDINATOR" || m.role === "ADMIN",
   );
+  const adminOrgIds = memberships
+    .filter((m) => m.role === "ADMIN")
+    .map((m) => m.organizationId);
+  const canDeleteAll = await isInstanceAdmin(session.user.id);
 
   if (orgIds.length === 0) {
     return (
@@ -81,7 +86,12 @@ export default async function CasesPage() {
         ) : null}
       </div>
 
-      <CasesTable data={cases} orgOptions={orgOptions} />
+      <CasesTable
+        data={cases}
+        orgOptions={orgOptions}
+        adminOrgIds={adminOrgIds}
+        canDeleteAll={canDeleteAll}
+      />
     </div>
   );
 }

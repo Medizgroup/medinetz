@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import ProtocolsTable from "@/components/protocols/protocols-table";
+import { isInstanceAdmin } from "@/lib/utils/admin/permissions";
 
 export default async function ProtocolsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -18,10 +19,15 @@ export default async function ProtocolsPage() {
     where: { userId },
     select: {
       organizationId: true,
+      role: true,
     },
   });
 
   const organizationIds = memberships.map((m) => m.organizationId);
+  const adminOrgIds = memberships
+    .filter((m) => m.role === "ADMIN")
+    .map((m) => m.organizationId);
+  const canDeleteAll = await isInstanceAdmin(userId);
 
   if (organizationIds.length === 0) {
     return (
@@ -85,7 +91,12 @@ export default async function ProtocolsPage() {
         </p>
       </div>
 
-      <ProtocolsTable data={protocols} orgOptions={orgOptions} />
+      <ProtocolsTable
+        data={protocols}
+        orgOptions={orgOptions}
+        adminOrgIds={adminOrgIds}
+        canDeleteAll={canDeleteAll}
+      />
     </div>
   );
 }

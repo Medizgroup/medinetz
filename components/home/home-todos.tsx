@@ -56,11 +56,11 @@ export default function HomeTodo({ todos }: Props) {
 
   return (
     <div className="w-full space-y-3">
-      <div className="text-sm font-medium text-muted-foreground dark:text-foreground/80">
+      <div className="text-sm font-medium text-foreground dark:text-foreground/80">
         Zu erledigende Aufgaben
       </div>
 
-      <Card className="rounded-2xl">
+      <Card className="rounded-2xl shadow-none!">
         <CardContent className="p-4 space-y-5">
           {todos.length === 0 ? (
             <div className="text-sm text-muted-foreground">
@@ -71,12 +71,12 @@ export default function HomeTodo({ todos }: Props) {
               <div key={t.id} className="flex items-start gap-3">
                 <div className="flex items-center gap-2">
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="icon-xs"
                     onClick={() => {
                       toggleDone(t as Todo);
                     }}
-                    className="bg-accent size-4 sm:size-5">
+                    className="bg-accent size-4 sm:size-5 shadow-none!">
                     {hasClicked === t.id ? (
                       <CheckIcon className="size-4 text-foreground" />
                     ) : null}
@@ -93,6 +93,7 @@ export default function HomeTodo({ todos }: Props) {
                       hasClicked === t.id ? "line-through opacity-30" : "",
                     )}>
                     <Badge
+                      size="sm"
                       variant={
                         t.priority === 1
                           ? "info"
@@ -109,7 +110,7 @@ export default function HomeTodo({ todos }: Props) {
                     {t.description && (
                       <div
                         className={cn(
-                          "text-xs text-muted-foreground ml-1 inline-flex",
+                          "text-sm text-muted-foreground ml-1 inline-flex",
                           hasClicked === t.id ? "line-through" : "",
                         )}>
                         {t.description}

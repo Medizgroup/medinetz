@@ -46,7 +46,7 @@ export default function HomeCase({ cases }: Props) {
   return (
     <div className="w-full space-y-3">
       {isHomePage ? (
-        <div className="text-sm font-medium text-muted-foreground dark:text-foreground/80">
+        <div className="text-sm font-medium text-foreground dark:text-foreground/80">
           Wo du deine Aufmerksamkeit schenken solltest
         </div>
       ) : null}
@@ -77,38 +77,39 @@ export default function HomeCase({ cases }: Props) {
         </div>
       ) : (
         cases.map((c) => (
-          <Alert
-            key={c.id}
-            variant={
-              c.status === "OPEN"
-                ? "success"
-                : c.status === "IN_PROGRESS"
-                  ? "warning"
-                  : c.status === "CLOSED"
-                    ? "info"
-                    : "default"
-            }>
-            {(() => {
-              const Icon = statusIcon(c.status);
-              return <Icon />;
-            })()}
+          <Link href={`/cases/${c.id}`} key={c.id} className="w-full block">
+            <Alert
+              variant={
+                c.status === "OPEN"
+                  ? "success"
+                  : c.status === "IN_PROGRESS"
+                    ? "warning"
+                    : c.status === "CLOSED"
+                      ? "info"
+                      : "default"
+              }>
+              {(() => {
+                const Icon = statusIcon(c.status);
+                return <Icon />;
+              })()}
 
-            <AlertTitle>Fall #{c.caseNumber}</AlertTitle>
-            <AlertDescription className="flex-row items-center gap-2">
-              {c.title}
+              <AlertTitle>Fall #{c.caseNumber}</AlertTitle>
+              <AlertDescription className="flex-row items-center gap-2">
+                {c.title}
 
-              <Badge
-                className="inline-flex items-center gap-1"
-                variant={priorityVariant(c.priority as CasePriority)}>
-                {PRIORITY_LABEL[c.priority]}
-              </Badge>
-            </AlertDescription>
-            <AlertAction>
-              <Button size="xs" className="rounded-full">
-                <Link href={`/cases/${c.id}`}>Ansehen</Link>
-              </Button>
-            </AlertAction>
-          </Alert>
+                <Badge
+                  className="inline-flex items-center gap-1"
+                  variant={priorityVariant(c.priority as CasePriority)}>
+                  {PRIORITY_LABEL[c.priority]}
+                </Badge>
+              </AlertDescription>
+              {/* <AlertAction>
+                <Button size="xs" className="rounded-full">
+                  <Link href={`/cases/${c.id}`}>Ansehen</Link>
+                </Button>
+              </AlertAction> */}
+            </Alert>
+          </Link>
         ))
       )}
 

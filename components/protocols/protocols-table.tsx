@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -13,14 +14,16 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import {
-  MessagesSquare,
+  MoreHorizontal,
   Plus,
   SearchIcon,
+  Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -40,6 +43,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { orgTypeBadge } from "@/lib/utils/cases";
 import { SortVertical } from "@solar-icons/react-perf/category/arrows/LineDuotone/SortVertical";
 import { Dialog, Library, SortFromBottomToTop, SortFromTopToBottom } from "@solar-icons/react-perf/category/style/LineDuotone";
@@ -70,10 +87,16 @@ export type OrgOption = {
 export default function ProtocolsTable({
   data,
   orgOptions,
+  adminOrgIds = [],
+  canDeleteAll = false,
 }: {
   data: ProtocolRow[];
   orgOptions: OrgOption[];
+  adminOrgIds?: string[];
+  canDeleteAll?: boolean;
 }) {
+  const router = useRouter();
+  const [rows, setRows] = useState(data);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
   ]);
@@ -82,6 +105,37 @@ export default function ProtocolsTable({
     pageIndex: 0,
     pageSize: 25,
   });
+  const [deleteTarget, setDeleteTarget] = useState<ProtocolRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    setRows(data);
+  }, [data]);
+
+  function canDelete(organizationId: string) {
+    return canDeleteAll || adminOrgIds.includes(organizationId);
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/protocols/${deleteTarget.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        toast.error(body?.error ?? "Protokoll konnte nicht gelöscht werden.");
+        return;
+      }
+      setRows((prev) => prev.filter((r) => r.id !== deleteTarget.id));
+      toast.success("Protokoll gelöscht.");
+      setDeleteTarget(null);
+      router.refresh();
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   const columns = useMemo<ColumnDef<ProtocolRow>[]>(
     () => [
@@ -167,12 +221,42 @@ export default function ProtocolsTable({
         cell: ({ row }) =>
           format(new Date(row.original.date), "dd.MM.yyyy", { locale: de }),
       },
+      {
+        id: "actions",
+        header: "",
+        cell: ({ row }) =>
+          canDelete(row.original.organization.id) ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-7"
+                  onClick={(e) => e.stopPropagation()}>
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDeleteTarget(row.original);
+                  }}>
+                  <Trash2 className="size-4" />
+                  Löschen
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null,
+      },
     ],
-    [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [adminOrgIds, canDeleteAll],
   );
 
   const table = useReactTable({
-    data,
+    data: rows,
     columns,
     state: {
       sorting,
@@ -366,6 +450,37 @@ export default function ProtocolsTable({
           </div>
         </div>
       </div>
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(o) => !o && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Protokoll löschen?</AlertDialogTitle>
+            <AlertDialogDescription>
+              „{deleteTarget?.title}&quot; wird unwiderruflich gelöscht,
+              inklusive
+              aller Kommentare und Fall-Verknüpfungen. Dies kann nicht
+              rückgängig gemacht werden.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button
+              variant="destructive-outline"
+              onClick={() => setDeleteTarget(null)}
+              disabled={deleting}>
+              Abbrechen
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Löschen
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
