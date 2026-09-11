@@ -36,7 +36,9 @@ import { createMentionNotifications } from "../lib/utils/notifications";
 import { cleanupRemovedUploads } from "../lib/utils/protocols/upload-cleanup";
 import { defaultTemplate } from "../lib/utils/protocols/default-template";
 
-const PORT = Number(process.env.COLLAB_PORT || 1234);
+// PORT zuerst: Hoster wie Render weisen den Port über diese Standard-Env-Var
+// zu, unabhängig davon, was COLLAB_PORT lokal/in Docker gesetzt ist.
+const PORT = Number(process.env.PORT || process.env.COLLAB_PORT || 1234);
 const MAX_EDITORS = 3;
 const DOC_PREFIX = "protocol-";
 
