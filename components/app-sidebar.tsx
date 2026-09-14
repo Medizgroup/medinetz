@@ -69,21 +69,22 @@ export function AppSidebar({
         // count: eventsCount,
       },
       {
-        title: "Protokolle",
-        url: "/protocols",
-        icon: DocumentAdd,
-      },
-      {
         title: "Fälle",
         url: "/cases",
         icon: FolderOpen,
         count: assignedCasesCount,
       },
+
       {
         title: "Todo's",
         url: "/todos",
         icon: Checklist,
         count: openTodosCount,
+      },
+      {
+        title: "Protokolle",
+        url: "/protocols",
+        icon: DocumentAdd,
       },
       {
         title: "Aktivitäten",
