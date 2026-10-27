@@ -2,7 +2,14 @@
 "use client";
 
 import * as React from "react";
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  EyeOff,
+  RotateCcw,
+} from "lucide-react";
+import { toast } from "sonner";
 import { formatDistanceToNow, format } from "date-fns";
 import { de } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
@@ -11,7 +18,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectItem,
@@ -19,13 +25,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import ActivityLine from "@/components/activity/activity-line";
 import { detailedIcon } from "@/lib/utils/activities";
 import { groupByDay } from "@/lib/utils/group-by-day";
 import { cn } from "@/lib/utils";
-import { getInitials } from "@/lib/helper/user";
 
 type ActivityItem = {
   id: string;
@@ -37,7 +41,8 @@ type ActivityItem = {
     | "CLOSED"
     | "REOPENED"
     | "MENTIONED"
-    | "ATTACHED";
+    | "ATTACHED"
+    | "DELETED";
   targetType: string;
   targetId: string;
   createdAt: string;
@@ -62,6 +67,7 @@ const ACTION_LABELS: Record<string, string> = {
   REOPENED: "Wiedergeöffnet",
   MENTIONED: "Erwähnt",
   ATTACHED: "Anhang",
+  DELETED: "Gelöscht",
 };
 
 const TARGET_TYPE_LABELS: Record<string, string> = {
@@ -132,6 +138,38 @@ export default function ActivitiesList() {
     () => (grouped ? groupByDay(items) : null),
     [grouped, items],
   );
+
+  async function hide(ids: string[]) {
+    if (ids.length === 0) return;
+    setItems((prev) => prev.filter((a) => !ids.includes(a.id)));
+    setTotal((t) => Math.max(0, t - ids.length));
+    const r = await fetch("/api/activities", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
+    }).catch(() => null);
+    if (!r?.ok) {
+      toast.error("Ausblenden fehlgeschlagen.");
+      load();
+    }
+  }
+
+  async function restoreAll() {
+    const r = await fetch("/api/activities", { method: "DELETE" }).catch(
+      () => null,
+    );
+    const data = await r?.json().catch(() => null);
+    if (!r?.ok) {
+      toast.error("Wiederherstellen fehlgeschlagen.");
+      return;
+    }
+    toast.success(
+      data?.restored
+        ? `${data.restored} Einträge wieder eingeblendet.`
+        : "Keine ausgeblendeten Einträge.",
+    );
+    load();
+  }
 
   function resetFilters() {
     setOrgFilter("all");
@@ -259,11 +297,26 @@ export default function ActivitiesList() {
             {grouped ? "Chronologisch anzeigen" : "Nach Tag gruppieren"}
           </button>
 
-          {hasFilters ? (
-            <Button variant="ghost" size="sm" onClick={resetFilters}>
-              Filter zurücksetzen
+          <div className="flex items-center gap-1">
+            {hasFilters ? (
+              <Button variant="ghost" size="sm" onClick={resetFilters}>
+                Filter zurücksetzen
+              </Button>
+            ) : null}
+            {items.length > 0 ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => hide(items.map((a) => a.id))}>
+                <EyeOff className="size-4" />
+                Diese Seite ausblenden
+              </Button>
+            ) : null}
+            <Button variant="ghost" size="sm" onClick={restoreAll}>
+              <RotateCcw className="size-4" />
+              Ausgeblendete anzeigen
             </Button>
-          ) : null}
+          </div>
         </div>
       </div>
 
@@ -288,11 +341,14 @@ export default function ActivitiesList() {
                   )}>
                   {g.label}
                 </div>
-                <ItemList items={g.items as ActivityItem[]} />
+                <ItemList
+                  items={g.items as ActivityItem[]}
+                  onHide={(id) => hide([id])}
+                />
               </div>
             ))
           ) : (
-            <ItemList items={items} />
+            <ItemList items={items} onHide={(id) => hide([id])} />
           )}
         </div>
       )}
@@ -326,7 +382,13 @@ export default function ActivitiesList() {
   );
 }
 
-function ItemList({ items }: { items: ActivityItem[] }) {
+function ItemList({
+  items,
+  onHide,
+}: {
+  items: ActivityItem[];
+  onHide: (id: string) => void;
+}) {
   return (
     <ul className="divide-y">
       {items.map((a) => {
@@ -337,13 +399,10 @@ function ItemList({ items }: { items: ActivityItem[] }) {
           metadata: a.metadata ?? {},
           user: a.user,
         });
-        const userName =
-          a.user.displayName ?? a.user.name ?? `User ${a.user.id.slice(0, 6)}`;
-
         return (
           <li
             key={a.id}
-            className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-muted/40">
+            className="group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-muted/40">
             <Icon className="mt-0.5 size-5.5 shrink-0 text-muted-foreground" />
 
             <div className="min-w-0 flex-1 space-y-1">
@@ -375,6 +434,15 @@ function ItemList({ items }: { items: ActivityItem[] }) {
                 </span>
               </div>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+              title="Für mich ausblenden"
+              aria-label="Für mich ausblenden"
+              onClick={() => onHide(a.id)}>
+              <EyeOff className="size-4" />
+            </Button>
           </li>
         );
       })}

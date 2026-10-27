@@ -88,11 +88,8 @@ export default async function HomeComponent() {
   // 5) Activity Feed (limit 6) aus allen Orgas
   const activities = await prisma.activity.findMany({
     where: {
-      OR: [
-        { organizationId: { in: orgIds } },
-        // optional:
-        // { organizationId: null },
-      ],
+      organizationId: { in: orgIds },
+      hiddenBy: { none: { userId } },
     },
     orderBy: { createdAt: "desc" },
     take: 6,
