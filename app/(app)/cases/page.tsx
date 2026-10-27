@@ -49,15 +49,20 @@ export default async function CasesPage() {
       priority: true,
       createdAt: true,
       updatedAt: true,
+      dueDate: true,
+      totalCosts: true,
       patient: {
         select: { pseudonym: true },
       },
       organization: { select: { id: true, name: true } },
       creator: { select: { displayName: true, name: true } },
-      assignee: { select: { id: true, displayName: true, name: true, avatarUrl: true } },
-      _count: { select: { comments: true } },
+      assignee: {
+        select: { id: true, displayName: true, name: true, avatarUrl: true },
+      },
     },
   });
+  // Decimal ist nicht an Client-Komponenten serialisierbar.
+  const rows = cases.map((c) => ({ ...c, totalCosts: Number(c.totalCosts) }));
 
   const orgOptions = Array.from(
     new Map(
@@ -87,7 +92,8 @@ export default async function CasesPage() {
       </div>
 
       <CasesTable
-        data={cases}
+        data={rows}
+        currentUserId={session.user.id}
         orgOptions={orgOptions}
         adminOrgIds={adminOrgIds}
         canDeleteAll={canDeleteAll}

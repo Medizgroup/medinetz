@@ -73,6 +73,7 @@ type Props = {
   status: string;
   assigneeId: string | null;
   members: Member[];
+  currentUserId: string;
   estimatedCosts: number | null;
   totalCosts: number;
   dueDate: Date | null;
@@ -88,6 +89,7 @@ export default function CaseSidebar({
   status,
   assigneeId,
   members,
+  currentUserId,
   estimatedCosts,
   totalCosts,
   dueDate,
@@ -196,6 +198,7 @@ export default function CaseSidebar({
           status={status}
           assigneeId={assigneeId}
           members={members}
+          currentUserId={currentUserId}
         />
       ) : null}
 

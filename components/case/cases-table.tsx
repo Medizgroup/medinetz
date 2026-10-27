@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  type RowSelectionState,
   type SortingState,
   flexRender,
   getCoreRowModel,
@@ -18,16 +19,20 @@ import {
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  Download,
   MoreHorizontal,
   SearchIcon,
   Trash2,
+  UserRoundX,
+  Users,
 } from "lucide-react";
+import { format } from "date-fns";
 import { toast } from "sonner";
-import AssigneeFilter, { type AssigneeOption } from "./assignee-filter";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectItem,
@@ -65,22 +70,28 @@ import {
   statusColorClass,
   statusIcon,
 } from "@/lib/utils/cases";
+import { toCsv, downloadCsv } from "@/lib/utils/csv";
 import type { CasePriority, CaseStatus } from "@/generated/prisma/client";
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getInitials } from "@/lib/helper/user";
-import UserDefaultAvatar from "../user/user-default-avatar";
-import { SortFromBottomToTop, SortFromTopToBottom, SortVertical } from "@solar-icons/react-perf/category/style/LineDuotone";
+import UserAvatar from "../user/user-avatar";
+import UserCombobox, { type UserComboboxUser } from "../user/user-combobox";
+import {
+  SortFromBottomToTop,
+  SortFromTopToBottom,
+  SortVertical,
+} from "@solar-icons/react-perf/category/style/LineDuotone";
 
-type CaseRow = {
+export type CaseRow = {
   id: string;
   caseNumber: number;
   title: string;
   status: CaseStatus;
   priority: CasePriority;
-  patient: { pseudonym: string } | null;
   createdAt: Date;
   updatedAt: Date;
+  dueDate: Date | null;
+  totalCosts: number;
+  patient: { pseudonym: string } | null;
   organization: { id: string; name: string };
   creator: { displayName: string | null; name: string | null };
   assignee: {
@@ -89,21 +100,31 @@ type CaseRow = {
     name: string | null;
     avatarUrl: string | null;
   } | null;
-  _count: { comments: number };
 };
 
 type OrgOption = { id: string; name: string };
+
+const ASSIGNEE_SPECIALS = [
+  { value: "all", label: "Alle", icon: Users },
+  { value: "unassigned", label: "Nicht zugewiesen", icon: UserRoundX },
+];
+
+function personName(p: { displayName: string | null; name: string | null }) {
+  return p.displayName ?? p.name ?? "—";
+}
 
 export default function CasesTable({
   data,
   orgOptions,
   adminOrgIds = [],
   canDeleteAll = false,
+  currentUserId,
 }: {
   data: CaseRow[];
   orgOptions: OrgOption[];
   adminOrgIds?: string[];
   canDeleteAll?: boolean;
+  currentUserId: string;
 }) {
   const router = useRouter();
   const [rows, setRows] = React.useState(data);
@@ -113,54 +134,66 @@ export default function CasesTable({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>(
+    {},
+  );
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 25,
   });
   const [search, setSearch] = React.useState("");
-  const [deleteTarget, setDeleteTarget] = React.useState<CaseRow | null>(null);
+  const [assigneeFilter, setAssigneeFilter] = React.useState("all");
+  const [deleteTargets, setDeleteTargets] = React.useState<CaseRow[]>([]);
   const [deleting, setDeleting] = React.useState(false);
 
   React.useEffect(() => {
     setRows(data);
+    setRowSelection({});
   }, [data]);
 
-  function canDelete(organizationId: string) {
-    return canDeleteAll || adminOrgIds.includes(organizationId);
-  }
+  const canDelete = React.useCallback(
+    (organizationId: string) =>
+      canDeleteAll || adminOrgIds.includes(organizationId),
+    [canDeleteAll, adminOrgIds],
+  );
+  const canDeleteAny = canDeleteAll || adminOrgIds.length > 0;
 
   async function handleDelete() {
-    if (!deleteTarget) return;
+    if (deleteTargets.length === 0) return;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/cases/${deleteTarget.id}`, {
-        method: "DELETE",
+      const ids = deleteTargets.map((c) => c.id);
+      const res = await fetch("/api/cases/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "delete", ids }),
       });
+      const body = await res.json().catch(() => null);
       if (!res.ok) {
-        const body = await res.json().catch(() => null);
-        toast.error(body?.error ?? "Fall konnte nicht gelöscht werden.");
+        toast.error(body?.error ?? "Fälle konnten nicht gelöscht werden.");
         return;
       }
-      setRows((prev) => prev.filter((r) => r.id !== deleteTarget.id));
-      toast.success("Fall gelöscht.");
-      setDeleteTarget(null);
+      setRows((prev) => prev.filter((r) => !ids.includes(r.id)));
+      setRowSelection({});
+      toast.success(
+        body.deleted === 1 ? "Fall gelöscht." : `${body.deleted} Fälle gelöscht.`,
+      );
+      setDeleteTargets([]);
       router.refresh();
     } finally {
       setDeleting(false);
     }
   }
 
-  const assigneeOptions = React.useMemo<AssigneeOption[]>(() => {
-    const map = new Map<string, AssigneeOption>();
+  const assigneeOptions = React.useMemo<UserComboboxUser[]>(() => {
+    const map = new Map<string, UserComboboxUser>();
     for (const c of data) {
-      if (c.assignee?.id) {
-        const name =
-          c.assignee.displayName ??
-          c.assignee.name ??
-          `User ${c.assignee.id.slice(0, 6)}`;
-        if (!map.has(c.assignee.id)) {
-          map.set(c.assignee.id, { id: c.assignee.id, name });
-        }
+      if (c.assignee && !map.has(c.assignee.id)) {
+        map.set(c.assignee.id, {
+          id: c.assignee.id,
+          name: personName(c.assignee),
+          avatarUrl: c.assignee.avatarUrl,
+        });
       }
     }
     return Array.from(map.values()).sort((a, b) =>
@@ -168,18 +201,42 @@ export default function CasesTable({
     );
   }, [data]);
 
-  const [assigneeFilter, setAssigneeFilter] = React.useState<string>("all");
-
   const columns = React.useMemo<ColumnDef<CaseRow>[]>(
     () => [
+      ...(canDeleteAny
+        ? [
+            {
+              id: "select",
+              enableSorting: false,
+              header: ({ table }) => (
+                <Checkbox
+                  aria-label="Alle auf dieser Seite auswählen"
+                  checked={table.getIsAllPageRowsSelected()}
+                  indeterminate={
+                    table.getIsSomePageRowsSelected() &&
+                    !table.getIsAllPageRowsSelected()
+                  }
+                  onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
+                />
+              ),
+              cell: ({ row }) => (
+                <div onClick={(e) => e.stopPropagation()}>
+                  <Checkbox
+                    aria-label={`Fall #${row.original.caseNumber} auswählen`}
+                    checked={row.getIsSelected()}
+                    disabled={!row.getCanSelect()}
+                    onCheckedChange={(v) => row.toggleSelected(!!v)}
+                  />
+                </div>
+              ),
+            } satisfies ColumnDef<CaseRow>,
+          ]
+        : []),
       {
         accessorKey: "caseNumber",
         header: "Nr.",
         cell: ({ row }) => (
-          <div
-            className={`tabular-nums `}>
-            #{row.original.caseNumber}
-          </div>
+          <div className="tabular-nums">#{row.original.caseNumber}</div>
         ),
       },
       {
@@ -187,7 +244,6 @@ export default function CasesTable({
         header: "Titel",
         filterFn: (row, _id, value: string) => {
           const v = value.toLowerCase().trim();
-        
           return (
             row.original.title.toLowerCase().includes(v) ||
             (row.original.patient?.pseudonym ?? "").toLowerCase().includes(v) ||
@@ -197,15 +253,16 @@ export default function CasesTable({
         cell: ({ row }) => (
           <Link
             href={`/cases/${row.original.id}`}
-            className={`hover:text-muted-foreground `}>
-            {row.original.title} {row.original.status === "CLOSED" ? "(Abgeschlossen)" : ""}
+            onClick={(e) => e.stopPropagation()}
+            className="hover:text-muted-foreground">
+            {row.original.title}{" "}
+            {row.original.status === "CLOSED" ? "(Abgeschlossen)" : ""}
           </Link>
         ),
       },
       {
         id: "patient",
         accessorFn: (row) => row.patient?.pseudonym ?? "",
-
         header: "Patient",
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground tabular-nums">
@@ -215,7 +272,7 @@ export default function CasesTable({
       },
       {
         id: "assignee",
-        accessorFn: (row) => row.assignee?.id ?? "__none__",
+        accessorFn: (row) => (row.assignee ? personName(row.assignee) : ""),
         header: "Zugewiesen",
         filterFn: (row, _id, value) => {
           if (!value || value === "all") return true;
@@ -227,25 +284,18 @@ export default function CasesTable({
             <Link
               href={`/m/${row.original.assignee.id}`}
               onClick={(e) => e.stopPropagation()}
-              className="text-sm text-muted-foreground hover:text-primary hover:underline flex items-center gap-2">
-                {
-                  row.original.assignee.avatarUrl ? (
-                    <Avatar className="size-6">
-                      <AvatarImage src={row.original.assignee.avatarUrl ?? undefined} alt={row.original.assignee.displayName ?? row.original.assignee.name ?? ""} />
-                      <AvatarFallback>
-                        {getInitials(row.original.assignee.displayName ?? row.original.assignee.name ?? "")}
-                      </AvatarFallback>
-                    </Avatar>
-                  ) : (
-                    <UserDefaultAvatar name={row.original.assignee.displayName ?? row.original.assignee.name ?? ""} />
-                  )
-                }
-                {row.original.assignee.displayName ??
-                row.original.assignee.name ??
-                "-"}
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary hover:underline">
+              <UserAvatar
+                name={personName(row.original.assignee)}
+                avatarUrl={row.original.assignee.avatarUrl}
+                size={24}
+              />
+              {personName(row.original.assignee)}
             </Link>
           ) : (
-            <span className="text-sm text-muted-foreground">Nicht zugewiesen</span>
+            <span className="text-sm text-muted-foreground">
+              Nicht zugewiesen
+            </span>
           ),
       },
       {
@@ -299,6 +349,7 @@ export default function CasesTable({
       {
         id: "actions",
         header: "",
+        enableSorting: false,
         cell: ({ row }) =>
           canDelete(row.original.organization.id) ? (
             <DropdownMenu>
@@ -307,6 +358,7 @@ export default function CasesTable({
                   variant="ghost"
                   size="icon"
                   className="size-7"
+                  aria-label="Aktionen"
                   onClick={(e) => e.stopPropagation()}>
                   <MoreHorizontal className="size-4" />
                 </Button>
@@ -316,7 +368,7 @@ export default function CasesTable({
                   className="text-destructive"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setDeleteTarget(row.original);
+                    setDeleteTargets([row.original]);
                   }}>
                   <Trash2 className="size-4" />
                   Löschen
@@ -326,14 +378,16 @@ export default function CasesTable({
           ) : null,
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [adminOrgIds, canDeleteAll],
+    [canDelete, canDeleteAny],
   );
 
   const table = useReactTable({
     data: rows,
     columns,
-    state: { sorting, columnFilters, pagination },
+    getRowId: (row) => row.id,
+    state: { sorting, columnFilters, pagination, rowSelection },
+    enableRowSelection: (row) => canDelete(row.original.organization.id),
+    onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,
@@ -352,11 +406,46 @@ export default function CasesTable({
     table.getColumn("assignee")?.setFilterValue(assigneeFilter);
   }, [assigneeFilter, table]);
 
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+
+  function exportCsv() {
+    // Auswahl hat Vorrang, sonst alles, was die Filter gerade zeigen.
+    // Bewusst ohne Patienten-Referenz: die Datei landet auf privaten Geräten.
+    const exportRows = selectedRows.length
+      ? selectedRows
+      : table.getFilteredRowModel().rows.map((r) => r.original);
+    const csv = toCsv(exportRows, [
+      { header: "Nr.", value: (c) => c.caseNumber },
+      { header: "Titel", value: (c) => c.title },
+      { header: "Status", value: (c) => STATUS_LABEL[c.status] },
+      { header: "Priorität", value: (c) => PRIORITY_LABEL[c.priority] },
+      { header: "Organisation", value: (c) => c.organization.name },
+      {
+        header: "Zugewiesen",
+        value: (c) => (c.assignee ? personName(c.assignee) : ""),
+      },
+      { header: "Erstellt von", value: (c) => personName(c.creator) },
+      {
+        header: "Erstellt am",
+        value: (c) => format(new Date(c.createdAt), "dd.MM.yyyy"),
+      },
+      {
+        header: "Frist",
+        value: (c) => (c.dueDate ? format(new Date(c.dueDate), "dd.MM.yyyy") : ""),
+      },
+      {
+        header: "Kosten (EUR)",
+        value: (c) => c.totalCosts.toFixed(2).replace(".", ","),
+      },
+    ]);
+    downloadCsv(`faelle-${format(new Date(), "yyyy-MM-dd")}.csv`, csv);
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative max-w-sm flex-1 w-full">
-          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 opacity-60 z-10" />
+        <div className="relative w-full max-w-sm flex-1">
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 opacity-60" />
           <Input
             placeholder="Suche nach Titel oder Patient…"
             value={search}
@@ -430,21 +519,66 @@ export default function CasesTable({
           </Select>
         ) : null}
 
-        {/* Select für zugewiesene Person */}
-        <AssigneeFilter
-          options={assigneeOptions}
+        <UserCombobox
+          users={assigneeOptions}
+          specialOptions={ASSIGNEE_SPECIALS}
           value={assigneeFilter}
-          onChange={setAssigneeFilter}
+          onValueChange={(v) => setAssigneeFilter(v ?? "all")}
+          currentUserId={currentUserId}
+          className="w-[220px]"
         />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="ml-auto rounded-full"
+              aria-label="Weitere Aktionen">
+              <MoreHorizontal className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={exportCsv}>
+              <Download className="size-4" />
+              {selectedRows.length
+                ? `${selectedRows.length} ausgewählte als CSV`
+                : "Als CSV exportieren"}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      <div className=" rounded-2xl  ">
+      {selectedRows.length > 0 ? (
+        <div className="flex items-center gap-3 rounded-lg border bg-muted/50 px-3 py-2 text-sm">
+          <span className="text-muted-foreground">
+            {selectedRows.length} ausgewählt
+          </span>
+          <Button
+            size="sm"
+            variant="destructive-outline"
+            onClick={() => setDeleteTargets(selectedRows)}>
+            <Trash2 className="size-4" />
+            Löschen
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => table.resetRowSelection()}>
+            Auswahl aufheben
+          </Button>
+        </div>
+      ) : null}
+
+      <div className="rounded-2xl">
         <Table>
-          <TableHeader className="bg-muted/60 rounded-2xl!">
+          <TableHeader className="bg-muted/60">
             {table.getHeaderGroups().map((hg) => (
               <TableRow key={hg.id}>
                 {hg.headers.map((header) => (
-                  <TableHead key={header.id} >
+                  <TableHead
+                    key={header.id}
+                    className={header.id === "select" ? "w-10" : undefined}>
                     {header.column.getCanSort() ? (
                       <button
                         className="inline-flex items-center gap-1"
@@ -454,10 +588,12 @@ export default function CasesTable({
                           header.getContext(),
                         )}
                         {header.column.getIsSorted() === "asc" ? (
-                          <SortFromBottomToTop className="size-4 " />
+                          <SortFromBottomToTop className="size-4" />
                         ) : header.column.getIsSorted() === "desc" ? (
-                          <SortFromTopToBottom className="size-4 " />
-                        ) : <SortVertical className="size-5 " />}
+                          <SortFromTopToBottom className="size-4" />
+                        ) : (
+                          <SortVertical className="size-5" />
+                        )}
                       </button>
                     ) : (
                       flexRender(
@@ -475,10 +611,12 @@ export default function CasesTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className={cn("cursor-pointer hover:bg-muted/40", row.original.status === "CLOSED" ? "opacity-40" : "")}
-                  onClick={() =>
-                    (window.location.href = `/cases/${row.original.id}`)
-                  }>
+                  data-state={row.getIsSelected() ? "selected" : undefined}
+                  className={cn(
+                    "cursor-pointer hover:bg-muted/40",
+                    row.original.status === "CLOSED" && "opacity-40",
+                  )}
+                  onClick={() => router.push(`/cases/${row.original.id}`)}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="h-12">
                       {flexRender(
@@ -501,12 +639,12 @@ export default function CasesTable({
           </TableBody>
         </Table>
       </div>
-      {/* nach dem </div> der Table */}
+
       <div className="flex items-center justify-between px-1 pt-3 text-sm text-muted-foreground">
         <span>
           Seite {table.getState().pagination.pageIndex + 1} von{" "}
-          {table.getPageCount()} · {table.getFilteredRowModel().rows.length}{" "}
-          Fälle
+          {Math.max(table.getPageCount(), 1)} ·{" "}
+          {table.getFilteredRowModel().rows.length} Fälle
         </span>
         <div className="flex items-center gap-2">
           <Button
@@ -529,30 +667,35 @@ export default function CasesTable({
       </div>
 
       <AlertDialog
-        open={!!deleteTarget}
-        onOpenChange={(o) => !o && setDeleteTarget(null)}>
+        open={deleteTargets.length > 0}
+        onOpenChange={(o) => !o && setDeleteTargets([])}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Fall löschen?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {deleteTargets.length === 1
+                ? "Fall löschen?"
+                : `${deleteTargets.length} Fälle löschen?`}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              „{deleteTarget?.title}&quot; wird unwiderruflich gelöscht,
-              inklusive
-              aller Kommentare, Kosten, Anhänge und Zuordnungen. Dies kann
-              nicht rückgängig gemacht werden.
+              {deleteTargets.length === 1
+                ? `„${deleteTargets[0]?.title}“ wird`
+                : "Die ausgewählten Fälle werden"}{" "}
+              unwiderruflich gelöscht, inklusive aller Kommentare, Kosten,
+              Anhänge und Zuordnungen. Dies kann nicht rückgängig gemacht
+              werden.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <Button
-              variant="destructive-outline"
-              onClick={() => setDeleteTarget(null)}
+              variant="outline"
+              onClick={() => setDeleteTargets([])}
               disabled={deleting}>
               Abbrechen
             </Button>
             <Button
               variant="destructive"
               onClick={handleDelete}
-              disabled={deleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              disabled={deleting}>
               Löschen
             </Button>
           </AlertDialogFooter>

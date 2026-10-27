@@ -444,6 +444,7 @@ export default async function CaseDetailPage({
           status={c.status}
           assigneeId={c.assigneeId}
           members={memberOptions}
+          currentUserId={session.user.id}
           estimatedCosts={c.estimatedCosts ? Number(c.estimatedCosts) : null}
           totalCosts={Number(c.totalCosts)}
           dueDate={c.dueDate}

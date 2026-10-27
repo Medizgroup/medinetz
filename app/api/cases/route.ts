@@ -57,9 +57,9 @@ export async function POST(req: Request) {
   } else {
     // Mode: create or reuse by pseudonym
     const basePseudonym = String(body?.patientPseudonym ?? "").trim();
-    if (!basePseudonym) {
+    if (basePseudonym.length < 2 || basePseudonym.length > 64) {
       return NextResponse.json(
-        { error: "Patient-Pseudonym ist erforderlich." },
+        { error: "Patienten-Referenz muss 2–64 Zeichen lang sein." },
         { status: 400 },
       );
     }
