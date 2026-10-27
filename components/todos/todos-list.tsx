@@ -3,15 +3,24 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, Users } from "lucide-react";
 import { format, isPast, isToday } from "date-fns";
 import { de } from "date-fns/locale";
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardPanel } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Select,
   SelectItem,
@@ -19,21 +28,44 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Spinner } from "../ui/spinner";
+import UserAvatar from "../user/user-avatar";
 
 import TodoEditDialog, { type TodoForEdit } from "./todo-edit-dialog";
-import UserPicker from "./user-picker";
-import { priorities_todos, PRIORITY_LABEL } from "@/lib/utils/todos/priority";
-import { getInitials } from "@/lib/helper/user";
-import { Field, FieldLabel } from "../ui/field";
-import { Textarea } from "../ui/textarea";
-import { Badge } from "../ui/badge";
-import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
-import { Calendar } from "../ui/calendar";
-import { Separator } from "../ui/separator";
-import { Spinner } from "../ui/spinner";
+import { PRIORITY_LABEL } from "@/lib/utils/todos/priority";
 
 type Todo = TodoForEdit;
 type View = "mine" | "created" | "unassigned" | "all";
+
+const PRIORITY_VARIANT: Record<number, "info" | "warning" | "error"> = {
+  1: "info",
+  2: "warning",
+  3: "error",
+};
+
+function personName(p: { displayName: string | null; name: string | null }) {
+  return p.displayName ?? p.name ?? "?";
+}
+
+function targetHref(t: Todo) {
+  if (t.targetType === "case") return `/cases/${t.targetId}`;
+  if (t.targetType === "protocol") return `/protocols/${t.targetId}`;
+  return null;
+}
 
 export default function TodosList({
   currentUserId,
@@ -45,20 +77,16 @@ export default function TodosList({
   const [doneCount, setDoneCount] = React.useState(0);
   const [mineOpen, setMineOpen] = React.useState(0);
   const [unassignedOpen, setUnassignedOpen] = React.useState(0);
-  const [description, setDescription] = React.useState("");
+  const [canDeleteAll, setCanDeleteAll] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
   const [view, setView] = React.useState<View>("all");
   const [filter, setFilter] = React.useState<"open" | "done" | "all">("open");
   const [priorityFilter, setPriorityFilter] = React.useState<string>("all");
 
-  const [newTitle, setNewTitle] = React.useState("");
-  const [newPriority, setNewPriority] = React.useState(2);
-  const [newDueDate, setNewDueDate] = React.useState<Date | undefined>();
-  const [newAssigneeId, setNewAssigneeId] = React.useState<string | null>(
-    currentUserId,
-  );
-  const [adding, setAdding] = React.useState(false);
+  const [selected, setSelected] = React.useState<Set<string>>(new Set());
+  const [deleteTargets, setDeleteTargets] = React.useState<Todo[]>([]);
+  const [deleting, setDeleting] = React.useState(false);
 
   const [editingTodo, setEditingTodo] = React.useState<Todo | null>(null);
   const [editOpen, setEditOpen] = React.useState(false);
@@ -80,6 +108,8 @@ export default function TodosList({
       setDoneCount(data.doneCount ?? 0);
       setMineOpen(data.mineOpen ?? 0);
       setUnassignedOpen(data.unassignedOpen ?? 0);
+      setCanDeleteAll(Boolean(data.canDeleteAll));
+      setSelected(new Set());
     } finally {
       setLoading(false);
     }
@@ -89,31 +119,29 @@ export default function TodosList({
     load();
   }, [load]);
 
-  async function handleQuickAdd(e?: React.FormEvent) {
-    e?.preventDefault();
-    if (!newTitle.trim() || adding) return;
-    setAdding(true);
-    try {
-      const res = await fetch("/api/todos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: newTitle.trim(),
-          priority: Number(newPriority),
-          dueDate: newDueDate || null,
-          assigneeId: newAssigneeId,
-        }),
-      });
-      if (!res.ok) return;
-      setNewTitle("");
-      setNewDueDate(undefined);
-      setNewPriority(2);
-      setNewAssigneeId(currentUserId);
-      window.dispatchEvent(new Event("todos:changed"));
-      await load();
-    } finally {
-      setAdding(false);
-    }
+  // Neue Todos aus dem Header-Schnellzugriff sofort übernehmen.
+  React.useEffect(() => {
+    const onChange = () => load();
+    window.addEventListener("todos:changed", onChange);
+    return () => window.removeEventListener("todos:changed", onChange);
+  }, [load]);
+
+  const canDelete = React.useCallback(
+    (t: Todo) => canDeleteAll || t.creatorId === currentUserId,
+    [canDeleteAll, currentUserId],
+  );
+  const deletable = items.filter(canDelete);
+  const allSelected =
+    deletable.length > 0 && deletable.every((t) => selected.has(t.id));
+  const selectedTodos = items.filter((t) => selected.has(t.id));
+
+  function toggleSelect(id: string, value: boolean) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (value) next.add(id);
+      else next.delete(id);
+      return next;
+    });
   }
 
   async function toggleDone(t: Todo) {
@@ -123,14 +151,42 @@ export default function TodosList({
     setOpenCount((c) => (t.done ? c + 1 : Math.max(0, c - 1)));
     setDoneCount((c) => (t.done ? Math.max(0, c - 1) : c + 1));
 
-    await fetch(`/api/todos/${t.id}`, {
+    const res = await fetch(`/api/todos/${t.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ done: !t.done }),
-    }).catch(() => {});
+    }).catch(() => null);
+    if (!res?.ok) toast.error("Status konnte nicht geändert werden.");
 
     window.dispatchEvent(new Event("todos:changed"));
-    if (filter !== "all") await load();
+  }
+
+  async function handleDelete() {
+    if (deleteTargets.length === 0) return;
+    setDeleting(true);
+    try {
+      const res = await fetch("/api/todos/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "delete",
+          ids: deleteTargets.map((t) => t.id),
+        }),
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok) {
+        toast.error(body?.error ?? "Löschen fehlgeschlagen.");
+        return;
+      }
+      toast.success(
+        body.deleted === 1 ? "Todo gelöscht." : `${body.deleted} Todos gelöscht.`,
+      );
+      setDeleteTargets([]);
+      setEditOpen(false);
+      window.dispatchEvent(new Event("todos:changed"));
+    } finally {
+      setDeleting(false);
+    }
   }
 
   function openEdit(t: Todo) {
@@ -140,30 +196,12 @@ export default function TodosList({
 
   return (
     <div className="space-y-4">
-      
-
-      {/* View-Tabs + Filter */}
       <div className="flex flex-wrap items-center gap-2">
         <Select
           value={view}
           items={[
-            {
-              value: "mine",
-              label: (
-                <span className="flex items-center gap-2">
-                  Meine <Badge variant="secondary">{mineOpen}</Badge>
-                </span>
-              ),
-            },
-            {
-              value: "unassigned",
-              label: (
-                <span className="flex items-center gap-2">
-                  Offen für alle{" "}
-                  <Badge variant="secondary">{unassignedOpen}</Badge>
-                </span>
-              ),
-            },
+            { value: "mine", label: `Meine (${mineOpen})` },
+            { value: "unassigned", label: `Offen für alle (${unassignedOpen})` },
             { value: "created", label: "Von mir erstellt" },
             { value: "all", label: "Alle sichtbaren" },
           ]}
@@ -172,9 +210,8 @@ export default function TodosList({
             <SelectValue />
           </SelectTrigger>
           <SelectPopup alignItemWithTrigger={false} className="w-auto">
-            <SelectItem value="mine" className="justify-between!">
-              <span>Meine</span>
-              <Badge variant="secondary">{mineOpen}</Badge>
+            <SelectItem value="mine">
+              Meine <Badge variant="secondary">{mineOpen}</Badge>
             </SelectItem>
             <SelectItem value="unassigned">
               Offen für alle <Badge variant="secondary">{unassignedOpen}</Badge>
@@ -187,26 +224,12 @@ export default function TodosList({
         <Select
           value={filter}
           items={[
-            {
-              value: "open",
-              label: (
-                <span className="flex items-center gap-2">
-                  Offen <Badge variant="secondary">{openCount}</Badge>
-                </span>
-              ),
-            },
-            {
-              value: "done",
-              label: (
-                <span className="flex items-center gap-2">
-                  Erledigt <Badge variant="secondary">{doneCount}</Badge>
-                </span>
-              ),
-            },
+            { value: "open", label: `Offen (${openCount})` },
+            { value: "done", label: `Erledigt (${doneCount})` },
             { value: "all", label: "Alle" },
           ]}
           onValueChange={(v) => setFilter((v ?? "open") as typeof filter)}>
-          <SelectTrigger className="w-37.5">
+          <SelectTrigger className="w-40">
             <SelectValue />
           </SelectTrigger>
           <SelectPopup alignItemWithTrigger={false} className="w-auto">
@@ -241,136 +264,87 @@ export default function TodosList({
         </Select>
       </div>
 
-      {/* Liste */}
-      {loading ? (
-        <div className="w-full flex items-center justify-center text-muted-foreground gap-2 py-8">
-          <Spinner className="size-4" /> Loading...
+      {selectedTodos.length > 0 ? (
+        <div className="flex items-center gap-3 rounded-lg border bg-muted/50 px-3 py-2 text-sm">
+          <span className="text-muted-foreground">
+            {selectedTodos.length} ausgewählt
+          </span>
+          <Button
+            size="sm"
+            variant="destructive-outline"
+            onClick={() => setDeleteTargets(selectedTodos)}>
+            <Trash2 className="size-4" />
+            Löschen
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>
+            Auswahl aufheben
+          </Button>
         </div>
-      ) : items.length === 0 ? (
-        <div className="rounded-lg  p-12 text-center text-sm text-muted-foreground">
-          {filter === "done"
-            ? "Noch nichts erledigt."
-            : view === "unassigned"
-              ? "Keine offenen Aufgaben für alle."
-              : "Keine offenen Todos."}
-        </div>
-      ) : (
-        <ul className="space-y-4">
-          {items.map((t) => {
-            const due = t.dueDate ? new Date(t.dueDate) : null;
-            const isOverdue = due && !t.done && isPast(due) && !isToday(due);
-            const isDueToday = due && !t.done && isToday(due);
-            const isMine = t.assignee?.id === currentUserId;
+      ) : null}
 
-            return (
-              <li
-                key={t.id}
-                className={cn(
-                  "group flex items-start gap-3 px-4 py-3 bg-accent rounded-lg cursor-pointer hover:shadow-sm transition-shadow",
-                  isOverdue && "",
-                  t.done && "opacity-60",
-                )}>
-                <Checkbox
-                  checked={t.done}
-                  onCheckedChange={() => toggleDone(t)}
-                  className="mt-0.5 "
-                />
-                <div
-                  className="min-w-0 flex-1 cursor-pointer"
-                  onClick={() => openEdit(t)}>
-                  <div className="flex items-start gap-2 ">
-                    {t.priority && (
-                      <Badge
-                        variant={
-                          t.priority === 1
-                            ? "info"
-                            : t.priority === 2
-                              ? "warning"
-                              : "destructive"
-                        }
-                        size="sm"
-                        className="inline-flex mt-0.5">
-                        {PRIORITY_LABEL[t.priority]}
-                      </Badge>
-                    )}
-                    <span
-                      className={cn(
-                        "text-sm leading-snug",
-                        t.done && "line-through",
-                      )}>
-                      {t.title}
-                    </span>
-                  </div>
-
-                  <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
-                    {t.targetLabel ? (
-                      <>
-                        {due ? <span>·</span> : null}
-                        <Link
-                          href={
-                            t.targetType === "case"
-                              ? `/cases/${t.targetId}`
-                              : t.targetType === "protocol"
-                                ? `/protocols/${t.targetId}`
-                                : "#"
-                          }
-                          className="hover:text-foreground hover:underline"
-                          onClick={(e) => e.stopPropagation()}>
-                          {t.targetLabel}
-                        </Link>
-                      </>
-                    ) : null}
-
-                    {t.description ? (
-                      <span className="truncate">{t.description}</span>
-                    ) : null}
-
-                    {t.creator && t.creator.id !== currentUserId ? (
-                      <span className="text-foreground">
-                        erstellt von {t.creator.displayName ?? t.creator.name}
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="mt-2 flex flex-wrap items-center text-xs text-muted-foreground">
-                    {due ? (
-                      <span
-                        className={cn(
-                          isOverdue && "text-red-500 font-medium",
-                          isDueToday && "text-amber-500 font-medium",
-                        )}>
-                        {!isDueToday
-                          ? format(due, "dd. MMM yyyy", { locale: de })
-                          : null}
-                        {isDueToday ? " Heute fällig!!" : null}
-                        {isOverdue ? " Überfällig !!" : null}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-
-                {/* Assignee-Avatar */}
-                {t.assignee ? (
-                
-                  <Avatar
-                    className="size-6 shrink-0"
-                    title={
-                      isMine
-                        ? "Dir zugewiesen"
-                        : `Zugewiesen: ${t.assignee.displayName ?? t.assignee.name}`
-                    }>
-                    <AvatarImage src={t.assignee.avatarUrl ?? ""} />
-                    <AvatarFallback className="text-[10px]">
-                      {getInitials(
-                        t.assignee.displayName ?? t.assignee.name ?? "?",
-                      )}
-                    </AvatarFallback>
-                  </Avatar>
-                ) : null}
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <Card className="p-0">
+        <CardPanel className="overflow-x-auto p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-10">
+                  <Checkbox
+                    aria-label="Alle auswählen"
+                    checked={allSelected}
+                    indeterminate={selected.size > 0 && !allSelected}
+                    disabled={deletable.length === 0}
+                    onCheckedChange={(v) =>
+                      setSelected(v ? new Set(deletable.map((t) => t.id)) : new Set())
+                    }
+                  />
+                </TableHead>
+                <TableHead>Todo</TableHead>
+                <TableHead>Zugewiesen</TableHead>
+                <TableHead>Fällig</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="w-10" />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="h-24">
+                    <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                      <Spinner className="size-4" /> Lädt…
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : items.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={6}
+                    className="h-24 text-center text-muted-foreground">
+                    {filter === "done"
+                      ? "Noch nichts erledigt."
+                      : view === "unassigned"
+                        ? "Keine offenen Aufgaben für alle."
+                        : "Keine offenen Todos."}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                items.map((t) => (
+                  <TodoRow
+                    key={t.id}
+                    todo={t}
+                    currentUserId={currentUserId}
+                    selected={selected.has(t.id)}
+                    canDelete={canDelete(t)}
+                    onSelect={(v) => toggleSelect(t.id, v)}
+                    onToggleDone={() => toggleDone(t)}
+                    onEdit={() => openEdit(t)}
+                    onDelete={() => setDeleteTargets([t])}
+                  />
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardPanel>
+      </Card>
 
       {editingTodo ? (
         <TodoEditDialog
@@ -379,98 +353,186 @@ export default function TodosList({
           todo={editingTodo}
           currentUserId={currentUserId}
           onSaved={load}
+          onDelete={
+            canDelete(editingTodo)
+              ? () => setDeleteTargets([editingTodo])
+              : undefined
+          }
         />
       ) : null}
 
-      <Separator className="my-6 hidden" />
-      {/* Quick-Add */}
-      <form onSubmit={handleQuickAdd} className={cn("space-y-2 hidden")}>
-        <div className="grid gap-4">
-          <Input
-            value={newTitle}
-            size="lg"
-            onChange={(e) => setNewTitle(e.target.value)}
-            placeholder="Neues Todo…"
-          />
-
-          <div className="grid gap-2 sm:grid-cols-3">
-            <Select
-              items={priorities_todos}
-              value={newPriority}
-              onValueChange={(v) => setNewPriority(v ?? 2)}>
-              <SelectTrigger className="text-xs">
-                <SelectValue>
-                  {(() => {
-                    const selectedPriority = priorities_todos.find(
-                      (p) => p.value === newPriority,
-                    );
-                    return selectedPriority ? (
-                      <span className="flex items-center gap-2">
-                        <Badge variant={selectedPriority.variant} size="sm">
-                          {selectedPriority.label}
-                        </Badge>
-                      </span>
-                    ) : null;
-                  })()}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectPopup alignItemWithTrigger={false} className="w-auto">
-                {priorities_todos.map((priority) => (
-                  <SelectItem key={priority.value} value={priority.value}>
-                    <span className="flex items-center gap-2">
-                      <Badge variant={priority.variant} size="sm">
-                        {priority.label}
-                      </Badge>
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
-            <Popover>
-              <PopoverTrigger
-                render={
-                  <Button className="w-full justify-start" variant="outline" />
-                }>
-                <CalendarIcon aria-hidden="true" />
-                {newDueDate
-                  ? format(newDueDate, "PPP", { locale: de })
-                  : "Datum auswählen"}
-              </PopoverTrigger>
-              <PopoverPopup>
-                <Calendar
-                  defaultMonth={newDueDate ? new Date(newDueDate) : undefined}
-                  mode="single"
-                  onSelect={setNewDueDate}
-                  selected={newDueDate}
-                />
-              </PopoverPopup>
-            </Popover>
-
-            <UserPicker
-              value={newAssigneeId}
-              onChange={setNewAssigneeId}
-              placeholder={
-                newAssigneeId ? "Default Benutzer" : "Für alle sichtbar"
-              }
-            />
-          </div>
-          <Field className="w-full">
-            <FieldLabel htmlFor="textarea-with-desc">Beschreibung</FieldLabel>
-            <Textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              id="textarea-with-desc"
-              placeholder="Worum geht es bei dieser Aufgabe?"
-              rows={6}
-            />
-          </Field>
-          <Button type="submit" disabled={!newTitle.trim() || adding}>
-            {adding ? <Loader2 className="size-4 animate-spin" /> : null}
-            Hinzufügen
-          </Button>
-        </div>
-      </form>
-
+      <AlertDialog
+        open={deleteTargets.length > 0}
+        onOpenChange={(o) => !o && setDeleteTargets([])}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {deleteTargets.length === 1
+                ? "Todo löschen?"
+                : `${deleteTargets.length} Todos löschen?`}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteTargets.length === 1
+                ? `„${deleteTargets[0]?.title}“ wird`
+                : "Die ausgewählten Todos werden"}{" "}
+              endgültig gelöscht.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteTargets([])}
+              disabled={deleting}>
+              Abbrechen
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleting}>
+              Löschen
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
+  );
+}
+
+function TodoRow({
+  todo: t,
+  currentUserId,
+  selected,
+  canDelete,
+  onSelect,
+  onToggleDone,
+  onEdit,
+  onDelete,
+}: {
+  todo: Todo;
+  currentUserId: string;
+  selected: boolean;
+  canDelete: boolean;
+  onSelect: (value: boolean) => void;
+  onToggleDone: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  const due = t.dueDate ? new Date(t.dueDate) : null;
+  const isOverdue = due && !t.done && isPast(due) && !isToday(due);
+  const isDueToday = due && !t.done && isToday(due);
+  const href = targetHref(t);
+
+  return (
+    <TableRow
+      data-state={selected ? "selected" : undefined}
+      className={cn("cursor-pointer", t.done && "opacity-60")}
+      onClick={onEdit}>
+      <TableCell onClick={(e) => e.stopPropagation()}>
+        <Checkbox
+          aria-label={`„${t.title}“ auswählen`}
+          checked={selected}
+          disabled={!canDelete}
+          onCheckedChange={(v) => onSelect(!!v)}
+        />
+      </TableCell>
+      <TableCell className="max-w-md">
+        <div className="flex items-center gap-2">
+          <span
+            className={cn(
+              "truncate text-sm font-medium",
+              t.done && "line-through",
+            )}>
+            {t.title}
+          </span>
+          <Badge variant={PRIORITY_VARIANT[t.priority] ?? "outline"} size="sm">
+            {PRIORITY_LABEL[t.priority]}
+          </Badge>
+        </div>
+        {t.targetLabel || (t.creator && t.creator.id !== currentUserId) ? (
+          <div className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-muted-foreground">
+            {t.targetLabel && href ? (
+              <Link
+                href={href}
+                className="hover:text-foreground hover:underline"
+                onClick={(e) => e.stopPropagation()}>
+                {t.targetLabel}
+              </Link>
+            ) : null}
+            {t.creator && t.creator.id !== currentUserId ? (
+              <span>von {personName(t.creator)}</span>
+            ) : null}
+          </div>
+        ) : null}
+      </TableCell>
+      <TableCell>
+        {t.assignee ? (
+          <div className="flex items-center gap-2">
+            <UserAvatar
+              name={personName(t.assignee)}
+              avatarUrl={t.assignee.avatarUrl}
+              size={24}
+            />
+            <span className="text-sm">
+              {t.assignee.id === currentUserId ? "Ich" : personName(t.assignee)}
+            </span>
+          </div>
+        ) : (
+          <span className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Users className="size-4" /> Für alle
+          </span>
+        )}
+      </TableCell>
+      <TableCell className="whitespace-nowrap text-sm">
+        {due ? (
+          <span
+            className={cn(
+              "text-muted-foreground",
+              isOverdue && "font-medium text-destructive",
+              isDueToday && "font-medium text-warning-foreground",
+            )}>
+            {isDueToday
+              ? "Heute"
+              : format(due, "dd. MMM yyyy", { locale: de })}
+            {isOverdue ? " · überfällig" : null}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        )}
+      </TableCell>
+      <TableCell onClick={(e) => e.stopPropagation()}>
+        <Badge
+          render={<button type="button" onClick={onToggleDone} />}
+          variant={t.done ? "success" : "info"}
+          size="sm"
+          title={t.done ? "Wieder öffnen" : "Als erledigt markieren"}>
+          {t.done ? "Erledigt" : "Offen"}
+        </Badge>
+      </TableCell>
+      <TableCell onClick={(e) => e.stopPropagation()}>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7"
+              aria-label="Aktionen">
+              <MoreHorizontal className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={onEdit}>
+              <Pencil className="size-4" />
+              Bearbeiten
+            </DropdownMenuItem>
+            {canDelete ? (
+              <DropdownMenuItem className="text-destructive" onClick={onDelete}>
+                <Trash2 className="size-4" />
+                Löschen
+              </DropdownMenuItem>
+            ) : null}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+    </TableRow>
   );
 }

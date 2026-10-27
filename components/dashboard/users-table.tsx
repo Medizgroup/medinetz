@@ -1,5 +1,6 @@
 "use client";
 
+import UserAvatar from "@/components/user/user-avatar";
 import * as React from "react";
 import {
   ChevronLeft,
@@ -19,7 +20,6 @@ import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { toast } from "sonner";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,13 +46,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { getInitials } from "@/lib/helper/user";
 import ResetPasswordDialog from "./reset-password-dialog";
 import { ButtonGroup } from "../ui/group";
 import { DropdownMenuGroup, DropdownMenuLabel } from "../ui/menu";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "../ui/checkbox";
-import UserDefaultAvatar from "../user/user-default-avatar";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -355,21 +353,11 @@ export default function UsersTable() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      {
-                        u.avatarUrl ?
-                      <Avatar
-                        className="size-8 ">
-                        <AvatarImage
-                          src={u.avatarUrl ?? undefined}
-                          alt={userName(u)}
-                        />
-                        <AvatarFallback className="text-xs">
-                          {getInitials(userName(u))}
-                        </AvatarFallback>
-                      </Avatar>
-                      :
-                      <UserDefaultAvatar name= {getInitials(userName(u))} size={30} />
-                      }
+                      <UserAvatar
+                        name={userName(u)}
+                        avatarUrl={u.avatarUrl}
+                        size={30}
+                      />
                       <div>
                         <div className="flex items-center gap-1.5 font-medium text-sm">
                           {userName(u)}  {u.isInstanceAdmin && <Badge size="sm" variant="destructive"> Admin </Badge>}

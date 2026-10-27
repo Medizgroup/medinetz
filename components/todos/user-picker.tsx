@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
+import UserAvatar from "@/components/user/user-avatar";
 import * as React from "react";
 import { ChevronsUpDown, X, Check } from "lucide-react";
 
@@ -13,8 +14,6 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Popover, PopoverPopup, PopoverTrigger } from "@/components/ui/popover";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "@/lib/helper/user";
 import { Field } from "../ui/field";
 import {
   InputGroup,
@@ -118,12 +117,11 @@ export default function UserPicker({
             <span className="flex items-center gap-2 truncate">
               {resolvedSelected ? (
                 <>
-                  <Avatar className="size-5">
-                    <AvatarImage src={resolvedSelected.avatarUrl ?? ""} />
-                    <AvatarFallback className="text-[10px]">
-                      {getInitials(resolvedSelected.displayName)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar
+                    name={resolvedSelected.displayName}
+                    avatarUrl={resolvedSelected.avatarUrl}
+                    size={20}
+                  />
                   <span className="truncate">
                     {resolvedSelected.displayName}
                   </span>
@@ -194,12 +192,11 @@ export default function UserPicker({
                 {value === item.id && (
                   <Check className="size-4 absolute right-2" />
                 )}
-                <Avatar className="size-6">
-                  <AvatarImage src={item.avatarUrl ?? ""} />
-                  <AvatarFallback className="text-[10px]">
-                    {getInitials(item.displayName)}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar
+                  name={item.displayName}
+                  avatarUrl={item.avatarUrl}
+                  size={24}
+                />
                 <div className="flex flex-col">
                   <span>{item.displayName}</span>
                 </div>

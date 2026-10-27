@@ -26,11 +26,9 @@ import {
   TimelineSeparator,
   TimelineTitle,
 } from "@/components/ui/timeline";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 import { actionMeta, detailedIcon } from "@/lib/utils/index";
-import { getInitials } from "@/lib/helper/user";
 import ActivityLine from "@/components/activity/activity-line";
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipContent } from "@radix-ui/react-tooltip";
@@ -44,7 +42,7 @@ import {
 import { cn } from "@/lib/utils";
 import { CheckCircle, ClockCircle, Like, RecordAudioCircle } from "@solar-icons/react-perf/category/style/LineDuotone";
 import { ProtocolShell } from "@/components/protocols/protocol-shell";
-import UserDefaultAvatar from "@/components/user/user-default-avatar";
+import UserAvatar from "@/components/user/user-avatar";
 
 function canEdit(role?: string) {
   return role === "COORDINATOR" || role === "ADMIN";
@@ -270,27 +268,11 @@ export default async function ProtocolDetailPage({
                   return (
                     <Tooltip key={u.id}>
                       <TooltipTrigger asChild>
-                        {
-                          u.avatarUrl ? 
                         <Link
                           href={`/m/${u.id}`}
-                          className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105">
-
-                          <Avatar className="size-8">
-                            <AvatarImage
-                              src={u.avatarUrl ?? undefined}
-                              alt={name}
-                            />
-                            <AvatarFallback>{getInitials(name)}</AvatarFallback>
-                          </Avatar>
+                          className="rounded-full ring-2 ring-background transition-transform hover:z-10 hover:scale-105">
+                          <UserAvatar name={name} avatarUrl={u.avatarUrl} size={32} />
                         </Link>
-                        :
-                        <Link
-                          href={`/m/${u.id}`} 
-                          className="ring-2 ring-background rounded-full transition-transform hover:z-10 hover:scale-105">
-                            <UserDefaultAvatar name={name} size={32}/>
-                          </Link>
-                }
                       </TooltipTrigger>
                       <TooltipContent>{name}</TooltipContent>
                     </Tooltip>
@@ -340,20 +322,15 @@ export default async function ProtocolDetailPage({
                         </span>
                       </TimelineTitle>
                       <TimelineIndicator className="group-data-[orientation=vertical]/timeline:-left-7 flex size-6 items-center justify-center border-none">
-                        <Avatar>
-                          <AvatarImage
-                            alt={comment.user.avatarUrl ?? ""}
-                            className="size-6 rounded-full"
-                            src={comment.user.avatarUrl ?? undefined}
-                          />
-                          <AvatarFallback>
-                            {getInitials(
-                              comment.user.displayName ??
-                                comment.user.name ??
-                                "User",
-                            )}
-                          </AvatarFallback>
-                        </Avatar>
+                        <UserAvatar
+                          name={
+                            comment.user.displayName ??
+                            comment.user.name ??
+                            "User"
+                          }
+                          avatarUrl={comment.user.avatarUrl}
+                          size={24}
+                        />
                       </TimelineIndicator>
                     </TimelineHeader>
                     <TimelineContent className="mt-2 text-foreground">

@@ -9,11 +9,11 @@ export default async function TodosPage() {
   if (!session?.user?.id) redirect("/sign-in");
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-8 space-y-6">
+    <div className="mx-auto w-full max-w-5xl px-6 py-8 space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">Meine Todos</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Die welt ein kleines Stück verbessern - ein Todo nach dem anderen.
+          Die Welt ein kleines Stück verbessern – ein Todo nach dem anderen.
         </p>
       </div>
       <TodosList currentUserId={session.user.id} />
