@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { stat, readFile } from "node:fs/promises";
 import path from "node:path";
+import { UPLOAD_DIR } from "@/lib/uploads";
 
 import { auth } from "@/lib/auth";
 
@@ -11,7 +12,6 @@ import { auth } from "@/lib/auth";
 // sonst in einem 404). Uploads laufen deshalb über diese Route statt über
 // den statischen public/uploads-Ordner: API-Routes lesen bei jedem Request
 // live vom Dateisystem, unabhängig vom Build-Zeitpunkt.
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 const EXT_TO_MIME: Record<string, string> = {
   ".png": "image/png",

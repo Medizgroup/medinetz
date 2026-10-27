@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { UPLOAD_DIR } from "@/lib/uploads";
 
 import { auth } from "@/lib/auth";
 
@@ -11,7 +12,6 @@ import { auth } from "@/lib/auth";
 // andere statische Datei ausgeliefert. In Docker sollte dieses Verzeichnis
 // auf ein persistentes Volume gemountet werden, sonst gehen Uploads beim
 // Container-Neustart verloren.
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10 MB
 const MAX_FILE_BYTES = 25 * 1024 * 1024; // 25 MB

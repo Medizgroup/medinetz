@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { unlink } from "node:fs/promises";
 import path from "node:path";
+import { UPLOAD_DIR } from "@/lib/uploads";
 
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -16,7 +17,6 @@ import {
 } from "@/lib/avatar/dicebear";
 import { Prisma } from "@/generated/prisma/client";
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 function isLocalUpload(url: string | null | undefined): url is string {
   return !!url && url.startsWith("/api/uploads/");
