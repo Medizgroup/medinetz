@@ -8,5 +8,3 @@ generated
 public/uploads
 **/.DS_Store
 tsconfig.tsbuildinfo
-Dockerfile.collab
-railway.json

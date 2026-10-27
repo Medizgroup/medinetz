@@ -13,7 +13,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Schlanker Produktions-Build für den VPS: nur die tatsächlich benötigten
   // node_modules landen in .next/standalone (siehe Dockerfile/server.ts).
-  output: "standalone",
+  // Auf Vercel (Testumgebung) übernimmt Vercel das Packaging selbst.
+  output: process.env.VERCEL ? undefined : "standalone",
   // Dynamische Pfade (process.cwd() für Uploads) lassen den Tracer sonst
   // TypeScript und sharp (~40 MB) in den Build kopieren. Quellordner NICHT
   // ausschließen — von dort verfolgt der Tracer @prisma/client und pg.
