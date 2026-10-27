@@ -1,16 +1,15 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import CasesTable from "@/components/case/cases-table";
 import { isInstanceAdmin } from "@/lib/utils/admin/permissions";
+import { getSession } from "@/lib/auth-session";
 
 export default async function CasesPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   const memberships = await prisma.organizationMember.findMany({

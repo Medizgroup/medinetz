@@ -1,12 +1,11 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import { requireInstanceAdmin } from "@/lib/utils/admin/permissions";
 import OrgsTable from "@/components/dashboard/orgs-table";
+import { getSession } from "@/lib/auth-session";
 
 export default async function DashboardOrgsPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
   await requireInstanceAdmin(session.user.id);
 

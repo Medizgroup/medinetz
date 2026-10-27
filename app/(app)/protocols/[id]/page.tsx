@@ -1,9 +1,7 @@
 // app/(app)/protocols/[id]/page.tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { createCollabToken } from "@/lib/collab/token";
 
@@ -43,6 +41,7 @@ import { cn } from "@/lib/utils";
 import { CheckCircle, ClockCircle, Like, RecordAudioCircle } from "@solar-icons/react-perf/category/style/LineDuotone";
 import { ProtocolShell } from "@/components/protocols/protocol-shell";
 import UserAvatar from "@/components/user/user-avatar";
+import { getSession } from "@/lib/auth-session";
 
 function canEdit(role?: string) {
   return role === "COORDINATOR" || role === "ADMIN";
@@ -59,7 +58,7 @@ export default async function ProtocolDetailPage({
 }) {
   const { id } = await params;
 
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   const protocol = await prisma.protocol.findUnique({

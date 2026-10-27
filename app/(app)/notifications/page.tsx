@@ -1,11 +1,10 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import NotificationsList from "@/components/notifications/notifications-list";
+import { getSession } from "@/lib/auth-session";
 
 export default async function NotificationsPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   return (

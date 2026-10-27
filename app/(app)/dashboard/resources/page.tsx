@@ -1,12 +1,11 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import { requireInstanceAdmin } from "@/lib/utils/admin/permissions";
 import DashboardResourcesTable from "@/components/dashboard/resources-table";
+import { getSession } from "@/lib/auth-session";
 
 export default async function DashboardResourcesPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
   await requireInstanceAdmin(session.user.id);
 

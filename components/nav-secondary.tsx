@@ -26,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import type { News } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import { institutName } from "@/lib/config";
+import HelpDialog from "./help/help-dialog";
 
 const categoryLabels: Record<News["category"], string> = {
   RELEASE: "Veröffentlichung",
@@ -47,6 +48,8 @@ export function NavSecondary({
   news?: News[];
   newsCount?: number;
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+  const [helpOpen, setHelpOpen] = React.useState(false);
+
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
@@ -98,6 +101,17 @@ export function NavSecondary({
               );
             }
 
+            if (item.url === "#help") {
+              return (
+                <SidebarMenuItem key={key}>
+                  <SidebarMenuButton size="sm" onClick={() => setHelpOpen(true)}>
+                    <item.icon className="size-4" />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            }
+
             return (
               <SidebarMenuItem key={key}>
                 <SidebarMenuButton asChild size="sm">
@@ -113,6 +127,7 @@ export function NavSecondary({
           })}
         </SidebarMenu>
       </SidebarGroupContent>
+      <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
     </SidebarGroup>
   );
 }

@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MoreHorizontal, Pencil, Trash2, Users } from "lucide-react";
 import { format, isPast, isToday } from "date-fns";
 import { de } from "date-fns/locale";
@@ -72,6 +73,7 @@ export default function TodosList({
 }: {
   currentUserId: string;
 }) {
+  const router = useRouter();
   const [items, setItems] = React.useState<Todo[]>([]);
   const [openCount, setOpenCount] = React.useState(0);
   const [doneCount, setDoneCount] = React.useState(0);
@@ -119,12 +121,16 @@ export default function TodosList({
     load();
   }, [load]);
 
-  // Neue Todos aus dem Header-Schnellzugriff sofort übernehmen.
+  // Neue Todos aus dem Header-Schnellzugriff sofort übernehmen und die
+  // Zähler in Sidebar/Header (Server-gerendert) aktualisieren.
   React.useEffect(() => {
-    const onChange = () => load();
+    const onChange = () => {
+      load();
+      router.refresh();
+    };
     window.addEventListener("todos:changed", onChange);
     return () => window.removeEventListener("todos:changed", onChange);
-  }, [load]);
+  }, [load, router]);
 
   const canDelete = React.useCallback(
     (t: Todo) => canDeleteAll || t.creatorId === currentUserId,

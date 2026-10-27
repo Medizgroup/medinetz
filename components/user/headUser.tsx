@@ -1,50 +1,30 @@
 import { Separator } from "@/components/ui/separator";
 import UserBadge from "./user-badge";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import prisma from "@/lib/prisma";
 import NotificationsPopover from "@/components/notifications/notifications-popover";
 import Link from "next/link";
 import QuickAddTodo from "../header/quick-add-todo";
 import { Checklist, FolderOpen } from "@/lib/icons";
 
-async function HeadUser() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  const userId = session?.user?.id;
-
-  if (!userId) return null;
-
-  // Parallel fetchen — schneller als sequenziell
-  const [user, openCasesCount, openTodosCount] = await Promise.all([
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        displayName: true,
-        avatarUrl: true,
-        email: true,
-        id: true,
-        isInstanceAdmin: true,
-      },
-    }),
-    prisma.case.count({
-      where: {
-        OR: [{ assigneeId: userId }, { creatorId: userId, assigneeId: null }],
-        status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] },
-      },
-    }),
-    prisma.todo.count({
-      where: {
-        assigneeId: userId,
-        done: false,
-      },
-    }),
-  ]);
-
-  if (!user) return null;
-
+// Daten kommen aus dem App-Layout, damit Header und Sidebar dieselben
+// Zahlen zeigen und nichts doppelt abgefragt wird.
+function HeadUser({
+  user,
+  openCasesCount,
+  openTodosCount,
+}: {
+  user: {
+    id: string;
+    email: string;
+    displayName: string | null;
+    avatarUrl: string | null;
+    isInstanceAdmin: boolean;
+  };
+  openCasesCount: number;
+  openTodosCount: number;
+}) {
   return (
     <div className="flex items-center gap-4 px-4 h-4">
-      <QuickAddTodo currentUserId={userId} />
+      <QuickAddTodo currentUserId={user.id} />
 
       <NotificationsPopover />
 
@@ -53,7 +33,7 @@ async function HeadUser() {
       <Link
         href="/cases"
         className="flex items-center gap-1 transition-colors hover:text-foreground"
-        title="Offene Fälle">
+        title="Mir zugewiesene offene Fälle">
         <FolderOpen className="size-5" />
         <span className="text-sm text-muted-foreground tabular-nums">
           {openCasesCount}
@@ -63,7 +43,7 @@ async function HeadUser() {
       <Link
         href="/todos"
         className="flex items-center gap-1 transition-colors hover:text-foreground"
-        title="Offene Todos">
+        title="Meine offenen Todos">
         <Checklist className="size-5" />
         <span className="text-sm text-muted-foreground tabular-nums">
           {openTodosCount}

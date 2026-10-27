@@ -1,11 +1,10 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import ActivitiesList from "@/components/activity/activities-list";
+import { getSession } from "@/lib/auth-session";
 
 export default async function ActivitiesPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   return (

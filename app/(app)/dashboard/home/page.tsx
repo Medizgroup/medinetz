@@ -1,7 +1,5 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import {
   getCasesPerMonth,
@@ -26,6 +24,7 @@ import {
   ResourcesCard,
   UpcomingEventsCard,
 } from "@/components/dashboard/sidebar-cards";
+import { getSession } from "@/lib/auth-session";
 
 const VALID_RANGES: StatsRange[] = ["year", "12m", "lifetime", "custom"];
 
@@ -34,7 +33,7 @@ export default async function DashboardHomePage({
 }: {
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   const sp = await searchParams;

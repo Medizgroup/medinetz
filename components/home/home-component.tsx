@@ -1,16 +1,15 @@
 // components/home/home-component.tsx
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
 
 import HomeWelcome from "./home-welcome";
 import HomeCard from "./home-card";
 import HomeActivity from "./home-activity";
 import { Case, User } from "@/generated/prisma/client";
 import { getOnboardingStatus } from "@/lib/utils/onboarding";
+import { getSession } from "@/lib/auth-session";
 
 export default async function HomeComponent() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) {

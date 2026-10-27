@@ -10,10 +10,8 @@ import {
   Bell,
   History,
   Checklist,
-  Documents,
   Layers,
   QuestionMark,
-  Plain,
 } from "@/lib/icons";
 
 import {
@@ -24,32 +22,25 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
-import { NavProjects } from "./nav-projects";
 import { NavSecondary } from "./nav-secondary";
 import Link from "next/link";
 import { NavRessources } from "./nav-ressources";
 import { NavSettings } from "./settings/nav/nav-settings";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 import { Routing2 } from "@solar-icons/react-perf/category/style/LineDuotone";
-import { News } from "@/generated/prisma/client";
-import Avatar from "boring-avatars";
+import type { News } from "@/generated/prisma/client";
 import InstitutLogo from "./institut-logo";
 import { institutName } from "@/lib/config";
 
 export function AppSidebar({
   openTodosCount,
   assignedCasesCount,
-  eventsCount,
-  // organizations,
   news,
   newsCount,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   openTodosCount: number;
   assignedCasesCount: number;
-  eventsCount: number;
-  // organizations: { id: string; name: string; color: string; slug: string }[];
   news: News[];
   newsCount: number;
 }) {
@@ -66,7 +57,6 @@ export function AppSidebar({
         title: "Kalender",
         url: "/events",
         icon: Calendar,
-        // count: eventsCount,
       },
       {
         title: "Fälle",
@@ -96,11 +86,6 @@ export function AppSidebar({
         url: "/notifications",
         icon: Bell,
       },
-      {
-        title: "Wikis",
-        url: "/wikis",
-        icon: Documents,
-      },
     ],
     navSecondary: [
       {
@@ -110,16 +95,10 @@ export function AppSidebar({
       },
       {
         title: "Hilfe",
-        url: "#",
+        url: "#help",
         icon: QuestionMark,
       },
-      {
-        title: "Feedback",
-        url: "#",
-        icon: Plain,
-      },
     ],
-    // organizations: organizations,
     ressources: [
       {
         name: "Ärzte & Dolmetscher",
@@ -142,21 +121,6 @@ export function AppSidebar({
                 <span className="size-1.5 bg-[#86efac] block rounded-full opacity-60"></span>
            
                 </div>
-
-                {/* <Image
-                  className="dark:hidden"
-                  src="/Logo/Medizgroup-light.svg"
-                  alt="Medizgroup Logo"
-                  width={180}
-                  height={75}
-                />
-                <Image
-                  className="hidden dark:inline"
-                  src="/Logo/Medizgroup-dark.svg"
-                  alt="Medizgroup Logo"
-                  width={180}
-                  height={80}
-                /> */}
               </Link>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -169,7 +133,6 @@ export function AppSidebar({
       ) : (
         <SidebarContent>
           <NavMain items={data.navMain} />
-          {/* <NavProjects organizations={data.organizations} /> */}
           <NavRessources ressources={data.ressources} />
           <NavSecondary
             items={data.navSecondary}

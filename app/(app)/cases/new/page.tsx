@@ -1,12 +1,11 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import NewCaseForm from "@/components/case/new-case-form";
+import { getSession } from "@/lib/auth-session";
 
 export default async function NewCasePage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   const memberships = await prisma.organizationMember.findMany({

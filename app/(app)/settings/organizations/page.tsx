@@ -1,14 +1,13 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
 import { isInstanceAdmin } from "@/lib/utils/admin/permissions";
 
 import { Separator } from "@/components/ui/separator";
 import { OrganizationsComponent } from "@/components/settings/organizations-component";
+import { getSession } from "@/lib/auth-session";
 
 export default async function OrganizationsPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   const [memberships, instanceAdmin] = await Promise.all([

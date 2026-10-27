@@ -1,13 +1,12 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { requireInstanceAdmin } from "@/lib/utils/admin/permissions";
 import FinanceTable from "@/components/dashboard/finance-table";
+import { getSession } from "@/lib/auth-session";
 
 export default async function DashboardFinancePage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
   await requireInstanceAdmin(session.user.id);
 
