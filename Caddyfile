@@ -1,0 +1,6 @@
+# Automatisches HTTPS (Let's Encrypt) für die in .env gesetzte DOMAIN.
+# WebSockets für die Live-Kollaboration (/collab) leitet Caddy automatisch weiter.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:3000
+}

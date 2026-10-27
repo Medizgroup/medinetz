@@ -20,7 +20,8 @@ export async function GET(req: Request) {
   const pageSize = 30;
   const filterActive = searchParams.get("active"); // "true" | "false" | null
 
-  const where: Record<string, unknown> = {};
+  // Anonymisierte (gelöschte) Konten tauchen in der Verwaltung nicht mehr auf.
+  const where: Record<string, unknown> = { deletedAt: null };
 
   if (search.trim()) {
     where.OR = [

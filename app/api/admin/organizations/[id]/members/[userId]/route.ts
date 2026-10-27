@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { isInstanceAdmin } from "@/lib/utils/admin/permissions";
+import { canManageOrgMembers } from "@/lib/utils/organizations/permissions";
 import type { UserRole } from "@/generated/prisma/client";
 
 const VALID_ROLES: UserRole[] = ["LIMITED", "VIEWER", "COORDINATOR", "ADMIN"];
@@ -14,7 +14,7 @@ export async function PATCH(req: Request, { params }: Params) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!(await isInstanceAdmin(session.user.id)))
+  if (!(await canManageOrgMembers(session.user.id, id)).allowed)
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json().catch(() => null);
@@ -35,7 +35,7 @@ export async function DELETE(_req: Request, { params }: Params) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!(await isInstanceAdmin(session.user.id)))
+  if (!(await canManageOrgMembers(session.user.id, id)).allowed)
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   await prisma.organizationMember.delete({

@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 
-import { signUp } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import Image from "next/image";
 import { Spinner } from "@/components/ui/spinner";
 import { toastManager } from "@/components/ui/toast";
 import InstitutLogo from "@/components/institut-logo";
-import { institutName } from "@/lib/config";
+import { useInstitut } from "@/components/providers/institut-provider";
 
 type Step = "email" | "profile" | "password";
 type Errors = Record<string, string | string[]>;
@@ -83,6 +83,7 @@ async function checkEmailExists(email: string) {
 
 export default function SignUpPage() {
   const router = useRouter();
+  const institut = useInstitut();
 
   const [step, setStep] = useState<Step>("email");
   const [loading, setLoading] = useState(false);
@@ -195,13 +196,23 @@ export default function SignUpPage() {
         return;
       }
 
+      // Login versuchen: klappt nur, wenn das Konto schon aktiv ist (z.B. die
+      // erste Person einer frischen Instanz = Admin). Sonst wartet es auf
+      // Freischaltung durch einen Admin.
+      const login = await signIn.email({
+        email: nextDraft.email.trim().toLowerCase(),
+        password: parsed.data.password,
+      });
+
       toastManager.add({
         title: "Willkommen!",
-        description: "Dein Konto wurde erfolgreich erstellt.",
+        description: login?.error
+          ? "Dein Konto wurde erstellt und wartet auf Freischaltung."
+          : "Dein Konto wurde erstellt.",
         type: "success",
       });
 
-      router.replace("/home");
+      router.replace(login?.error ? "/inactive" : "/home");
     } catch (e) {
       setServerError(e instanceof Error ? e.message : "Unbekannter Fehler.");
     } finally {
@@ -220,7 +231,7 @@ export default function SignUpPage() {
                 <InstitutLogo size={80}/>
                 </div>
                 <h1 className="text-balance text-3xl font-semibold text-foreground">
-                  {institutName}
+                  {institut.name}
                 </h1>
                 <p className="text-pretty text-foreground/80 text-sm">
                 erstelle dein Konto um deinen Mediznetz-Arbeitsplatz zu nutzen.

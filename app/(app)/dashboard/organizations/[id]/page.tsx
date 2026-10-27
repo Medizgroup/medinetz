@@ -1,8 +1,12 @@
-// app/dashboard/organizations/[id]/page.tsx
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { ChevronLeft, MoreHorizontal, UserRoundPlus } from "lucide-react";
+import { format } from "date-fns";
+import { de } from "date-fns/locale";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -34,30 +38,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  ChevronLeft,
-  GitPullRequestCreateArrow,
-  MoreHorizontal,
-} from "lucide-react";
-import { format } from "date-fns";
-import { de } from "date-fns/locale";
 import { NotProduct } from "@/components/not-product";
 import { Loading } from "@/components/loading-component";
-import Link from "next/link";
-
-const ROLE_LABELS: Record<string, string> = {
-  LIMITED: "Eingeschränkt",
-  VIEWER: "Betrachter",
-  COORDINATOR: "Koordinator",
-  ADMIN: "Admin",
-};
-
-// const ROLE_COLORS: Record<string, string> = {
-//   LIMITED: "secondary",
-//   VIEWER: "secondary",
-//   COORDINATOR: "default",
-//   ADMIN: "destructive",
-// } as const;
+import UserAvatar from "@/components/user/user-avatar";
+import AddMemberDialog from "@/components/dashboard/add-member-dialog";
+import { ROLE_OPTIONS } from "@/lib/utils/organizations/roles";
 
 type Member = {
   id: string;
@@ -66,9 +51,9 @@ type Member = {
   user: {
     id: string;
     email: string;
-    displayName?: string;
-    firstName?: string;
-    lastName?: string;
+    displayName: string | null;
+    name: string | null;
+    avatarUrl: string | null;
     isActive: boolean;
   };
 };
@@ -78,8 +63,13 @@ type OrgDetail = {
   name: string;
   slug: string;
   isArchived: boolean;
+  canAddInactive: boolean;
   members: Member[];
 };
+
+function memberName(m: Member) {
+  return m.user.displayName || m.user.name || m.user.email;
+}
 
 export default function OrgDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -88,163 +78,171 @@ export default function OrgDetailPage() {
   const [loading, setLoading] = useState(true);
   const [removeTarget, setRemoveTarget] = useState<Member | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [addOpen, setAddOpen] = useState(false);
 
   const load = useCallback(async () => {
-    setLoading(true);
-    const res = await fetch(`/api/admin/organizations/${id}/members`);
-    const json = await res.json();
-
-    if (!res.ok) {
-      setOrg(null);
-      setLoading(false);
-      return;
-    }
-
-    setOrg(json);
+    const res = await fetch(`/api/admin/organizations/${id}/members`, {
+      cache: "no-store",
+    });
+    setOrg(res.ok ? await res.json() : null);
     setLoading(false);
   }, [id]);
 
   useEffect(() => {
-    (async () => {
-      await load();
-    })();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    load();
   }, [load]);
 
   async function handleRoleChange(userId: string, role: string) {
     setSavingId(userId);
-    await fetch(`/api/admin/organizations/${id}/members/${userId}`, {
+    const res = await fetch(`/api/admin/organizations/${id}/members/${userId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ role }),
     });
     setSavingId(null);
+    if (!res.ok) toast.error("Rolle konnte nicht geändert werden.");
     load();
   }
 
   async function handleRemove() {
     if (!removeTarget) return;
-    await fetch(
+    const res = await fetch(
       `/api/admin/organizations/${id}/members/${removeTarget.user.id}`,
-      {
-        method: "DELETE",
-      },
+      { method: "DELETE" },
     );
+    if (!res.ok) toast.error("Mitglied konnte nicht entfernt werden.");
     setRemoveTarget(null);
     load();
   }
 
-  function memberName(m: Member) {
-    if (m.user.displayName) return m.user.displayName;
-    if (m.user.firstName || m.user.lastName)
-      return [m.user.firstName, m.user.lastName].filter(Boolean).join(" ");
-    return m.user.email;
-  }
-
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (!org) {
-    return NotProduct();
-  }
+  if (loading) return <Loading />;
+  if (!org) return NotProduct();
 
   return (
     <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => router.push("/dashboard/organizations")}>
+            aria-label="Zurück"
+            onClick={() => router.back()}>
             <ChevronLeft className="size-4" />
           </Button>
           <div>
             <h1 className="text-xl font-semibold">{org.name}</h1>
+            <p className="text-sm text-muted-foreground">
+              {org.members.length} Mitglieder
+            </p>
           </div>
           {org.isArchived && <Badge variant="outline">Archiviert</Badge>}
         </div>
-        <Link href={`/dashboard/organizations/${org.id}/invitations`}>
-          <Button variant="ghost" size="sm">
-            <GitPullRequestCreateArrow className="size-4 mr-2" />
-            Beitrittsanfragen
+        {!org.isArchived ? (
+          <Button className="rounded-full" onClick={() => setAddOpen(true)}>
+            <UserRoundPlus className="size-4" />
+            Mitglied hinzufügen
           </Button>
-        </Link>
+        ) : null}
       </div>
 
-      <div>
-        <Table>
-          <TableHeader>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>E-Mail</TableHead>
+            <TableHead>Rolle</TableHead>
+            <TableHead>Beigetreten</TableHead>
+            <TableHead className="w-10" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {org.members.length === 0 && (
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>E-Mail</TableHead>
-              <TableHead>Rolle</TableHead>
-              <TableHead>Beigetreten</TableHead>
-              <TableHead className="w-10" />
+              <TableCell
+                colSpan={5}
+                className="text-center text-muted-foreground">
+                Keine Mitglieder.
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {org.members.length === 0 && (
-              <TableRow>
-                <TableCell
-                  colSpan={5}
-                  className="text-center text-muted-foreground">
-                  Keine Mitglieder.
-                </TableCell>
-              </TableRow>
-            )}
-            {org.members.map((m) => (
-              <TableRow key={m.id}>
-                <TableCell className="font-medium">{memberName(m)}</TableCell>
-                <TableCell className="text-muted-foreground">
-                  {m.user.email}
-                </TableCell>
-                <TableCell>
-                  <Select
-                    value={m.role}
-                    items={Object.keys(ROLE_LABELS).map((val) => ({
-                      value: val,
-                      label: ROLE_LABELS[val] ?? val,
-                    }))}
-                    disabled={savingId === m.user.id}
-                    onValueChange={(val) =>
-                      handleRoleChange(m.user.id, val ?? "")
-                    }>
-                    <SelectTrigger className="h-7 w-36  rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectPopup alignItemWithTrigger={false}>
-                      {Object.entries(ROLE_LABELS).map(([val, label]) => (
-                        <SelectItem key={val} value={val} className="text-xs">
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectPopup>
-                  </Select>
-                </TableCell>
-                <TableCell className="text-muted-foreground text-xs">
-                  {format(new Date(m.joinedAt), "dd. MMM yyyy", { locale: de })}
-                </TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="size-7">
-                        <MoreHorizontal className="size-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        className="text-destructive"
-                        onClick={() => setRemoveTarget(m)}>
-                        Entfernen
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+          )}
+          {org.members.map((m) => (
+            <TableRow key={m.id}>
+              <TableCell>
+                <div className="flex items-center gap-2 font-medium">
+                  <UserAvatar
+                    name={memberName(m)}
+                    avatarUrl={m.user.avatarUrl}
+                    size={24}
+                  />
+                  {memberName(m)}
+                  {!m.user.isActive ? (
+                    <Badge variant="outline" size="sm">
+                      Inaktiv
+                    </Badge>
+                  ) : null}
+                </div>
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {m.user.email}
+              </TableCell>
+              <TableCell>
+                <Select
+                  value={m.role}
+                  items={ROLE_OPTIONS}
+                  disabled={savingId === m.user.id}
+                  onValueChange={(val) =>
+                    val && handleRoleChange(m.user.id, val)
+                  }>
+                  <SelectTrigger className="h-7 w-36 rounded-xl">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectPopup alignItemWithTrigger={false}>
+                    {ROLE_OPTIONS.map((r) => (
+                      <SelectItem key={r.value} value={r.value} className="text-xs">
+                        {r.label}
+                      </SelectItem>
+                    ))}
+                  </SelectPopup>
+                </Select>
+              </TableCell>
+              <TableCell className="text-xs text-muted-foreground">
+                {format(new Date(m.joinedAt), "dd. MMM yyyy", { locale: de })}
+              </TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-7"
+                      aria-label="Aktionen">
+                      <MoreHorizontal className="size-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={() => setRemoveTarget(m)}>
+                      Entfernen
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <AddMemberDialog
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        orgId={org.id}
+        orgName={org.name}
+        includeInactive={org.canAddInactive}
+        existingUserIds={org.members.map((m) => m.user.id)}
+        onAdded={load}
+      />
 
       <AlertDialog
         open={!!removeTarget}
@@ -253,17 +251,16 @@ export default function OrgDetailPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Mitglied entfernen?</AlertDialogTitle>
             <AlertDialogDescription>
-              {removeTarget && memberName(removeTarget)} wird aus {org.name}{" "}
-              entfernt. Diese Aktion kann rückgängig gemacht werden, indem du
-              den User neu einlädst.
+              {removeTarget ? memberName(removeTarget) : ""} wird aus{" "}
+              {org.name} entfernt. Du kannst die Person jederzeit wieder
+              hinzufügen.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button variant="destructive-outline">Abbrechen</Button>
-            <Button
-              variant="destructive"
-              onClick={handleRemove}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <Button variant="outline" onClick={() => setRemoveTarget(null)}>
+              Abbrechen
+            </Button>
+            <Button variant="destructive" onClick={handleRemove}>
               Entfernen
             </Button>
           </AlertDialogFooter>

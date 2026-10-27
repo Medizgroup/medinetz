@@ -7,7 +7,6 @@ import {
   canAccessPatient,
   canEditPatient,
 } from "@/lib/utils/patients/permissions";
-import { logPatientAccess } from "@/lib/utils/patients/access-log";
 
 export async function POST(
   req: Request,
@@ -45,13 +44,6 @@ export async function POST(
       createdBy: session.user.id,
     },
     select: { id: true },
-  });
-
-  await logPatientAccess({
-    patientId: id,
-    userId: session.user.id,
-    context: "medication_edit",
-    contextId: created.id,
   });
 
   return NextResponse.json({ id: created.id });

@@ -1,16 +1,15 @@
 // components/home/home-component.tsx
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
 
 import HomeWelcome from "./home-welcome";
 import HomeCard from "./home-card";
 import HomeActivity from "./home-activity";
 import { Case, User } from "@/generated/prisma/client";
 import { getOnboardingStatus } from "@/lib/utils/onboarding";
+import { getSession } from "@/lib/auth-session";
 
 export default async function HomeComponent() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) {
@@ -88,11 +87,8 @@ export default async function HomeComponent() {
   // 5) Activity Feed (limit 6) aus allen Orgas
   const activities = await prisma.activity.findMany({
     where: {
-      OR: [
-        { organizationId: { in: orgIds } },
-        // optional:
-        // { organizationId: null },
-      ],
+      organizationId: { in: orgIds },
+      hiddenBy: { none: { userId } },
     },
     orderBy: { createdAt: "desc" },
     take: 6,

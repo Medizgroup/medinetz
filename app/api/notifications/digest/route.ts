@@ -13,18 +13,9 @@ export async function GET() {
 
   const me = await prisma.user.findUnique({
     where: { id: userId },
-    select: { email: true, isInstanceAdmin: true },
+    select: { isInstanceAdmin: true },
   });
   if (!me) return NextResponse.json({ error: "Not found" }, { status: 404 });
-
-  const memberships = await prisma.organizationMember.findMany({
-    where: { userId },
-    select: { organizationId: true, role: true },
-  });
-  const orgIds = memberships.map((m) => m.organizationId);
-  const adminOrgIds = memberships
-    .filter((m) => m.role === "COORDINATOR" || m.role === "ADMIN")
-    .map((m) => m.organizationId);
 
   const now = new Date();
   const startOfToday = new Date(now);
@@ -32,7 +23,13 @@ export async function GET() {
   const startOfTomorrow = new Date(startOfToday);
   startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
 
-  const [todos, events, invites, joinRequests, inactiveUsers] =
+  const memberships = await prisma.organizationMember.findMany({
+    where: { userId },
+    select: { organizationId: true },
+  });
+  const orgIds = memberships.map((m) => m.organizationId);
+
+  const [todos, events, inactiveUsers] =
     await Promise.all([
       // Todos: offen, heute fällig oder überfällig, mir zugewiesen oder für alle
       prisma.todo.findMany({
@@ -65,33 +62,10 @@ export async function GET() {
         orderBy: { startsAt: "asc" },
         take: 20,
       }),
-      // Einladungen an mich
-      prisma.organizationInvite.findMany({
-        where: { email: me.email, acceptedAt: null, expiresAt: { gt: now } },
-        select: {
-          id: true,
-          token: true,
-          organization: { select: { name: true } },
-        },
-        take: 20,
-      }),
-      // Beitrittsanfragen — nur wenn ich COORDINATOR/ADMIN bin
-      adminOrgIds.length
-        ? prisma.organizationJoinRequest.findMany({
-            where: { status: "PENDING", organizationId: { in: adminOrgIds } },
-            select: {
-              id: true,
-              organizationId: true,
-              organization: { select: { name: true, slug: true } },
-              user: { select: { displayName: true, name: true, email: true } },
-            },
-            take: 20,
-          })
-        : Promise.resolve([]),
       // Inaktive Accounts — nur Instanz-Admin
       me.isInstanceAdmin
         ? prisma.user.findMany({
-            where: { isActive: false },
+            where: { isActive: false, deletedAt: null },
             select: { id: true, email: true, name: true, displayName: true },
             orderBy: { createdAt: "desc" },
             take: 20,
@@ -117,24 +91,9 @@ export async function GET() {
       startsAt: e.startsAt,
       allDay: e.allDay,
       location: e.location,
-      href: "/calendar",
-    })),
-    pendingInvites: invites.map((i) => ({
-      id: `invite:${i.id}`,
-      kind: "invite",
-      dedup: "once",
-      orgName: i.organization.name,
-      href: `/invite/${i.token}`,
+      href: "/events",
     })),
     pendingApprovals: [
-      ...joinRequests.map((r) => ({
-        id: `join:${r.id}`,
-        kind: "join",
-        dedup: "once",
-        orgName: r.organization.name,
-        userLabel: r.user.displayName ?? r.user.name ?? r.user.email,
-        href: `/dashboard/organizations/${r.organizationId}/invitations`,
-      })),
       ...inactiveUsers.map((u) => ({
         id: `inactive:${u.id}`,
         kind: "inactive",

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { isInstanceAdmin } from "@/lib/utils/admin/permissions";
+import { cleanupAllUploads } from "@/lib/utils/protocols/upload-cleanup";
 
 // Der Protokoll-Inhalt (description) läuft seit der Live-Kollaboration nicht
 // mehr über diese Route, sondern wird vom Collab-Server (Yjs/Hocuspocus)
@@ -96,7 +97,13 @@ export async function DELETE(
 
   const protocol = await prisma.protocol.findUnique({
     where: { id },
-    select: { id: true, organizationId: true, title: true, protocolNumber: true },
+    select: {
+      id: true,
+      organizationId: true,
+      title: true,
+      protocolNumber: true,
+      description: true,
+    },
   });
   if (!protocol) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -132,6 +139,7 @@ export async function DELETE(
       },
     }),
   ]);
+  await cleanupAllUploads(protocol.description);
 
   return NextResponse.json({ ok: true });
 }

@@ -1,7 +1,5 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import {
   getCasesPerMonth,
@@ -18,14 +16,14 @@ import DashboardFilters from "@/components/dashboard/dashboard-filters";
 import KpiCards from "@/components/dashboard/kpi-cards";
 import {
   CasesPerMonthChart,
+  DistributionPie,
   FinancePerMonthChart,
-  ResidenceDonut,
-  TopBars,
-} from "@/components/dashboard/charts";
+} from "@/components/dashboard/charts-client";
 import {
   ResourcesCard,
   UpcomingEventsCard,
 } from "@/components/dashboard/sidebar-cards";
+import { getSession } from "@/lib/auth-session";
 
 const VALID_RANGES: StatsRange[] = ["year", "12m", "lifetime", "custom"];
 
@@ -34,7 +32,7 @@ export default async function DashboardHomePage({
 }: {
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   const sp = await searchParams;
@@ -124,9 +122,9 @@ export default async function DashboardHomePage({
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <ResidenceDonut data={residence} />
-        <TopBars title="Top Sprachen" data={languages} />
-        <TopBars title="Top Diagnosen" data={diagnoses} />
+        <DistributionPie title="Aufenthaltsstatus" data={residence} />
+        <DistributionPie title="Top Sprachen" data={languages} />
+        <DistributionPie title="Top Diagnosen" data={diagnoses} />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">

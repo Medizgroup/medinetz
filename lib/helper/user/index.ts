@@ -13,3 +13,6 @@ export function getInitials(displayName: string): string {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 }
+
+// Anzeigename für anonymisierte Konten (siehe DELETE /api/admin/users/[id]).
+export const DELETED_USER_NAME = "Gelöschter Benutzer";

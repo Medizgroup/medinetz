@@ -1,10 +1,8 @@
 /* eslint-disable react-hooks/static-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 import { Button } from "@/components/ui/button";
@@ -45,6 +43,7 @@ import CaseSidebar from "@/components/case/case-sidebar";
 import { ChevronLeft } from "lucide-react";
 import { NotProduct } from "@/components/not-product";
 import UserDefaultAvatar from "@/components/user/user-default-avatar";
+import { getSession } from "@/lib/auth-session";
 
 export default async function CaseDetailPage({
   params,
@@ -53,7 +52,7 @@ export default async function CaseDetailPage({
 }) {
   const { id } = await params;
 
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session?.user?.id) redirect("/sign-in");
 
   const c = await prisma.case.findUnique({
@@ -444,6 +443,7 @@ export default async function CaseDetailPage({
           status={c.status}
           assigneeId={c.assigneeId}
           members={memberOptions}
+          currentUserId={session.user.id}
           estimatedCosts={c.estimatedCosts ? Number(c.estimatedCosts) : null}
           totalCosts={Number(c.totalCosts)}
           dueDate={c.dueDate}

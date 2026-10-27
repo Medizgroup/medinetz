@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -27,6 +25,7 @@ import { NotProduct } from "@/components/not-product";
 import Image from "next/image";
 import HomeCase from "@/components/home/home-cases";
 import UserDefaultAvatar from "@/components/user/user-default-avatar";
+import { getSession } from "@/lib/auth-session";
 
 // --- helpers ---
 function toISODate(date: Date): string {
@@ -90,7 +89,7 @@ export default async function Page({
   }
 
   // Optional session: Profil ist öffentlich
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   const isOwner = session?.user?.id === id;
 
   const today = new Date();

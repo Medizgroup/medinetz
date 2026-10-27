@@ -35,6 +35,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -43,7 +44,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/lib/generated/prisma
+# Prisma-Client wird bei `pnpm install` (postinstall) neu erzeugt
+/generated/prisma
 
 # lokale Datei-Uploads (Phase-B-Ersatz für Uploadthing) — in Docker als
 # persistentes Volume mounten, sonst gehen Uploads beim Neustart verloren

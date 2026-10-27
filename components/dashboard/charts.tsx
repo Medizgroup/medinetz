@@ -1,41 +1,105 @@
 "use client";
 
 import * as React from "react";
-import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart } from "@/components/charts/bar-chart";
+import { Bar } from "@/components/charts/bar";
+import { BarXAxis } from "@/components/charts/bar-x-axis";
+import { AreaChart, Area } from "@/components/charts/area-chart";
+import { XAxis } from "@/components/charts/x-axis";
+import { Grid } from "@/components/charts/grid";
+import { ChartTooltip } from "@/components/charts/tooltip";
+import { PieChart } from "@/components/charts/pie-chart";
+import { PieSlice } from "@/components/charts/pie-slice";
+import { PieCenter } from "@/components/charts/pie-center";
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "../ui/chart";
+  Legend,
+  LegendItem,
+  LegendLabel,
+  LegendMarker,
+  LegendValue,
+} from "@/components/charts/legend";
 
-const COLORS = [
+// Status-Farben wie in der Fall-Liste (statusColorClass)
+const CASE_SERIES = [
+  { key: "open", label: "Offen", color: "#10b981" },
+  { key: "in_progress", label: "In Bearbeitung", color: "#f59e0b" },
+  { key: "waiting", label: "Wartend", color: "#94a3b8" },
+  { key: "closed", label: "Abgeschlossen", color: "#0ea5e9" },
+] as const;
+
+const FINANCE_SERIES = [
+  { key: "donations", label: "Spenden", color: "#10b981" },
+  { key: "expenses", label: "Ausgaben", color: "#f43f5e" },
+] as const;
+
+const PIE_COLORS = [
   "#0ea5e9",
   "#10b981",
   "#f59e0b",
-  "#ef4444",
   "#8b5cf6",
   "#ec4899",
+  "#f43f5e",
   "#06b6d4",
   "#84cc16",
   "#f97316",
   "#6366f1",
 ];
+
+const eur = new Intl.NumberFormat("de-DE", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
+
+function ChartCard({
+  title,
+  children,
+  legend,
+}: {
+  title: string;
+  children: React.ReactNode;
+  legend?: React.ReactNode;
+}) {
+  return (
+    <Card className="bg-transparent">
+      <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2">
+        <CardTitle className="text-base">{title}</CardTitle>
+        {legend}
+      </CardHeader>
+      <CardContent>{children}</CardContent>
+    </Card>
+  );
+}
+
+function SeriesLegend({
+  series,
+}: {
+  series: readonly { key: string; label: string; color: string }[];
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+      {series.map((s) => (
+        <span key={s.key} className="flex items-center gap-1.5">
+          <span
+            className="size-2 rounded-full"
+            style={{ backgroundColor: s.color }}
+          />
+          {s.label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function Empty() {
+  return (
+    <div className="flex h-56 items-center justify-center text-sm text-muted-foreground">
+      Keine Daten im gewählten Zeitraum.
+    </div>
+  );
+}
 
 export function CasesPerMonthChart({
   data,
@@ -49,357 +113,119 @@ export function CasesPerMonthChart({
     total: number;
   }[];
 }) {
-  const chartConfig = {
-    open: {
-      label: "Offen",
-      color: "var(--chart-1)",
-    },
-    in_progress: {
-      label: "In Bearbeitung",
-      color: "var(--chart-2)",
-    },
-    waiting: {
-      label: "Wartend",
-      color: "var(--chart-3)",
-    },
-    closed: {
-      label: "Abgeschlossen",
-      color: "var(--chart-4)",
-    },
-  } satisfies ChartConfig;
-  return (
-    <Card className="bg-transparent">
-      <CardHeader>
-        <CardTitle className="text-base">Fälle pro Monat</CardTitle>
-      </CardHeader>
-      <CardContent className="h-[280px]">
-        <ChartContainer config={chartConfig}>
-          <BarChart data={data} accessibilityLayer>
-            {/* <CartesianGrid /> */}
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
+  const hasData = data.some((d) => d.total > 0);
 
-            <CartesianGrid vertical={false} />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Bar
-              dataKey="open"
-              stackId="s"
-              fill="#10b981"
-              name="Offen"
-              radius={8}
-            />
-            <Bar
-              dataKey="in_progress"
-              stackId="s"
-              fill="#f59e0b"
-              name="In Bearbeitung"
-              radius={8}
-            />
-            <Bar
-              dataKey="waiting"
-              stackId="s"
-              fill="#94a3b8"
-              name="Wartend"
-              radius={8}
-            />
-            <Bar
-              dataKey="closed"
-              stackId="s"
-              fill="#0ea5e9"
-              name="Abgeschlossen"
-              radius={8}
-            />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+  return (
+    <ChartCard
+      title="Fälle pro Monat"
+      legend={<SeriesLegend series={CASE_SERIES} />}>
+      {hasData ? (
+        <BarChart data={data} xDataKey="month" aspectRatio="2 / 1">
+          <Grid horizontal />
+          {CASE_SERIES.map((s) => (
+            <Bar key={s.key} dataKey={s.key} fill={s.color} lineCap="round" />
+          ))}
+          <BarXAxis maxLabels={6} />
+          <ChartTooltip
+            rows={(point) =>
+              CASE_SERIES.map((s) => ({
+                color: s.color,
+                label: s.label,
+                value: Number(point[s.key] ?? 0),
+              }))
+            }
+          />
+        </BarChart>
+      ) : (
+        <Empty />
+      )}
+    </ChartCard>
   );
 }
 
 export function FinancePerMonthChart({
   data,
 }: {
-  data: { month: string; donations: number; expenses: number }[];
+  data: { month: string; date: Date; donations: number; expenses: number }[];
 }) {
-  const chartConfig = {
-    donations: {
-      label: "Spenden",
-      color: "#10b981",
-    },
-    expenses: {
-      label: "Ausgaben",
-      color: "#f43f5e",
-    },
-  } satisfies ChartConfig;
+  const hasData = data.some((d) => d.donations > 0 || d.expenses > 0);
+  const labels = data.map((d) => d.month);
+
   return (
-    <Card className="bg-transparent">
-      <CardHeader>
-        <CardTitle className="text-base">Spenden vs. Ausgaben</CardTitle>
-      </CardHeader>
-      <CardContent className="h-[280px]">
-        <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
-            data={data}
-            margin={{ top: 20, right: 2, bottom: 0, left: 2 }}>
-            <defs>
-              <linearGradient id="chart16-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-donations)"
-                  stopOpacity={0.35}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-expenses)"
-                  stopOpacity={0}
-                />
-              </linearGradient>
-              <filter
-                id="chart16-dot-glow"
-                x="-50%"
-                y="-50%"
-                width="200%"
-                height="200%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-              <filter
-                id="chart16-line-glow"
-                x="-10%"
-                y="-20%"
-                width="120%"
-                height="140%">
-                <feGaussianBlur stdDeviation="8" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-            </defs>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  indicator="dot"
-                  className="min-w-36 gap-2.5"
-                  formatter={(value, name) => (
-                    <div className="flex w-full items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5">
-                        <div
-                          className="h-2.5 w-2.5 shrink-0 rounded-xs bg-(--color-bg)"
-                          style={
-                            {
-                              "--color-bg": `var(--color-${name})`,
-                            } as React.CSSProperties
-                          }
-                        />
-                        <span className="text-muted-foreground">
-                          {chartConfig[name as keyof typeof chartConfig]
-                            ?.label || name}
-                        </span>
-                      </div>
-                      <span className="text-foreground font-semibold tabular-nums">
-                        {Number(value).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                />
-              }
-            />
-            <Area
-              dataKey="donations"
-              type="natural"
-              fill="rgba(16, 185, 129, 0.05)"
-              stroke="var(--color-donations)"
-              strokeWidth={2}
-              filter="url(#chart16-line-glow)"
-              dot={{
-                r: 4,
-                fill: "var(--color-donations)",
-                strokeWidth: 2,
-                stroke: "var(--background)",
-                filter: "url(#chart16-dot-glow)",
-              }}
-              activeDot={{ r: 6, strokeWidth: 3, stroke: "var(--background)" }}
-            />
-            <Area
-              dataKey="expenses"
-              type="natural"
-              fill="rgba(244, 63, 94, 0.05)"
-              stroke="var(--color-expenses)"
-              strokeWidth={2}
-              filter="url(#chart16-line-glow)"
-              dot={{
-                r: 4,
-                fill: "var(--color-expenses)",
-                strokeWidth: 2,
-                stroke: "var(--background)",
-                filter: "url(#chart16-dot-glow)",
-              }}
-              activeDot={{ r: 6, strokeWidth: 3, stroke: "var(--background)" }}
-            />
-          </AreaChart>
-          {/* <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis dataKey="month" className="text-xs" />
-            <YAxis className="text-xs" />
-            <Tooltip
-              contentStyle={{
-                background: "hsl(var(--background))",
-                border: "1px solid hsl(var(--border))",
-                borderRadius: 8,
-              }}
-              formatter={(v: number) =>
-                v.toLocaleString("de-DE", {
-                  style: "currency",
-                  currency: "EUR",
-                })
-              }
-            />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="donations"
-              stroke="#10b981"
-              strokeWidth={2}
-              name="Spenden"
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="expenses"
-              stroke="#ef4444"
-              strokeWidth={2}
-              name="Ausgaben"
-              dot={false}
-            />
-          </LineChart> */}
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <ChartCard
+      title="Spenden vs. Ausgaben"
+      legend={<SeriesLegend series={FINANCE_SERIES} />}>
+      {hasData ? (
+        <AreaChart data={data} xDataKey="date" aspectRatio="2 / 1">
+          <Grid horizontal />
+          {FINANCE_SERIES.map((s) => (
+            <Area key={s.key} dataKey={s.key} fill={s.color} fillOpacity={0.3} />
+          ))}
+          <XAxis labels={labels} numTicks={6} />
+          <ChartTooltip
+            dateLabels={labels}
+            rows={(point) =>
+              FINANCE_SERIES.map((s) => ({
+                color: s.color,
+                label: s.label,
+                value: eur.format(Number(point[s.key] ?? 0)),
+              }))
+            }
+          />
+        </AreaChart>
+      ) : (
+        <Empty />
+      )}
+    </ChartCard>
   );
 }
 
-export function ResidenceDonut({
-  data,
-}: {
-  data: { name: string; value: number; key: string }[];
-}) {
-  const total = data.reduce((s, d) => s + d.value, 0);
-
-  const chartConfig = Object.fromEntries(
-    data.map((d, i) => [
-      d.key,
-      {
-        label: d.name,
-        color: COLORS[i],
-      },
-    ]),
-  );
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Aufenthaltsstatus</CardTitle>
-      </CardHeader>
-      <CardContent className="">
-        {total === 0 ? (
-          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            Keine Daten.
-          </div>
-        ) : (
-          <ChartContainer
-            config={chartConfig}
-            className="mx-auto aspect-square max-h-[300px]">
-            <PieChart accessibilityLayer>
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Pie
-                data={data}
-                dataKey="value"
-                nameKey="name"
-                innerRadius={60}
-                cornerRadius={5}
-                paddingAngle={3}
-                strokeWidth={3}
-                stroke="var(--background)">
-                {data.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i]} />
-                ))}
-              </Pie>
-
-              <ChartLegend content={<ChartLegendContent />} />
-            </PieChart>
-          </ChartContainer>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
-export function TopBars({
+export function DistributionPie({
   title,
   data,
 }: {
   title: string;
   data: { name: string; value: number }[];
 }) {
-  const chartConfig = data.reduce<
-    Record<string, { label: string; color: string }>
-  >((acc, d) => {
-    acc[d.name] = {
-      label: d.name,
-      color: COLORS[Object.keys(acc).length % COLORS.length],
-    };
-    return acc;
-  }, {});
+  const [hovered, setHovered] = React.useState<number | null>(null);
+  const slices = data.map((d, i) => ({
+    label: d.name,
+    value: d.value,
+    color: PIE_COLORS[i % PIE_COLORS.length],
+  }));
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="h-[280px]">
-        {data.length === 0 ? (
-          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            Keine Daten.
-          </div>
-        ) : (
-          <ChartContainer config={chartConfig}>
-            <BarChart
-              data={data}
-              layout="vertical"
-              margin={{
-                left: -20,
-              }}
-              accessibilityLayer>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis type="number" dataKey="value" hide />
-              <YAxis
-                type="category"
-                dataKey="name"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
-              />
-              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-              <Bar dataKey="value" fill="#0ea5e9" radius={10} />
-            </BarChart>
-          </ChartContainer>
-        )}
-      </CardContent>
-    </Card>
+    <ChartCard title={title}>
+      {slices.length === 0 ? (
+        <Empty />
+      ) : (
+        <div className="flex flex-col items-center gap-5">
+          <PieChart
+            data={slices}
+            size={200}
+            innerRadius={62}
+            padAngle={0.03}
+            cornerRadius={4}
+            hoveredIndex={hovered}
+            onHoverChange={setHovered}>
+            {slices.map((_, i) => (
+              <PieSlice key={i} index={i} />
+            ))}
+            <PieCenter defaultLabel="Gesamt" />
+          </PieChart>
+          <Legend
+            items={slices}
+            hoveredIndex={hovered}
+            onHoverChange={setHovered}
+            className="w-full">
+            <LegendItem className="flex items-center gap-2 text-sm">
+              <LegendMarker />
+              <LegendLabel className="flex-1 truncate" />
+              <LegendValue showPercentage />
+            </LegendItem>
+          </Legend>
+        </div>
+      )}
+    </ChartCard>
   );
 }

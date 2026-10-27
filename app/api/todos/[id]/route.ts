@@ -8,6 +8,7 @@ import {
   notifyTodoCompleted,
   logTodoActivity,
 } from "@/lib/utils/notifications/todos";
+import { canDeleteAllTodos } from "@/lib/utils/todos/permissions";
 
 async function loadAndAuthorize(todoId: string, userId: string) {
   const t = await prisma.todo.findUnique({
@@ -204,9 +205,9 @@ export async function DELETE(
   const r = await loadAndAuthorize(id, session.user.id);
   if ("error" in r)
     return NextResponse.json({ error: r.error }, { status: r.status });
-  if (!r.isCreator) {
+  if (!r.isCreator && !(await canDeleteAllTodos(session.user.id))) {
     return NextResponse.json(
-      { error: "Nur der Ersteller darf löschen." },
+      { error: "Nur der Ersteller oder Koordinator:innen dürfen löschen." },
       { status: 403 },
     );
   }

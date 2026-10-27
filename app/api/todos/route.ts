@@ -8,6 +8,10 @@ import {
   notifyTodoAssignment,
   logTodoActivity,
 } from "@/lib/utils/notifications/todos";
+import {
+  canDeleteAllTodos,
+  todoVisibility,
+} from "@/lib/utils/todos/permissions";
 
 export async function GET(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -21,11 +25,7 @@ export async function GET(req: Request) {
   const filter = searchParams.get("filter") ?? "open"; // open | done | all
   const priorityParam = searchParams.get("priority");
 
-  // Sichtbarkeit: User sieht Todos die ihm zugewiesen sind, die er erstellt hat,
-  // oder unzugewiesene ("für alle").
-  const visibility: Prisma.TodoWhereInput = {
-    OR: [{ assigneeId: userId }, { creatorId: userId }, { assigneeId: null }],
-  };
+  const visibility = todoVisibility(userId);
 
   // View-spezifischer Scope (innerhalb des sichtbaren Set)
   let scope: Prisma.TodoWhereInput = {};
@@ -112,13 +112,15 @@ export async function GET(req: Request) {
 
   // Counts für die aktuelle View
   const baseCountWhere: Prisma.TodoWhereInput = { AND: [visibility, scope] };
-  const [openCount, doneCount, mineOpen, unassignedOpen] = await Promise.all([
+  const [openCount, doneCount, mineOpen, unassignedOpen, canDeleteAll] =
+    await Promise.all([
     prisma.todo.count({ where: { ...baseCountWhere, done: false } }),
     prisma.todo.count({ where: { ...baseCountWhere, done: true } }),
     prisma.todo.count({ where: { assigneeId: userId, done: false } }),
     prisma.todo.count({
       where: { AND: [visibility, { assigneeId: null }], done: false },
     }),
+    canDeleteAllTodos(userId),
   ]);
 
   return NextResponse.json({
@@ -127,6 +129,7 @@ export async function GET(req: Request) {
     doneCount,
     mineOpen,
     unassignedOpen,
+    canDeleteAll,
   });
 }
 

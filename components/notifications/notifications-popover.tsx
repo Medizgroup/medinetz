@@ -92,6 +92,12 @@ export default function NotificationsPopover() {
     if (open) load();
   }, [open, load]);
 
+  // Änderungen auf der Benachrichtigungs-Seite (z.B. Löschen) übernehmen
+  React.useEffect(() => {
+    window.addEventListener("notifications:changed", load);
+    return () => window.removeEventListener("notifications:changed", load);
+  }, [load]);
+
   async function handleClickItem(n: Notification) {
     // Optimistic mark-as-read
     if (!n.read) {

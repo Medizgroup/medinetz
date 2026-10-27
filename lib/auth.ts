@@ -1,7 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware, APIError } from "better-auth/api";
-import { OrganizationType, UserRole } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { nextCookies } from "better-auth/next-js";
 
@@ -12,6 +11,10 @@ export const auth = betterAuth({
   trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"],
   emailAndPassword: {
     enabled: true,
+    // Neue Konten sind inaktiv, bis ein Admin sie freischaltet — ein
+    // automatischer Login nach der Registrierung würde sonst eine Session
+    // für ein nicht freigeschaltetes Konto erzeugen.
+    autoSignIn: false,
   },
 
   // 1) BLOCK sign-in wenn user inaktiv (vor dem Login)
@@ -32,63 +35,43 @@ export const auth = betterAuth({
     }),
   },
 
-  // 2) Beim User-Erstellen: isActive=false setzen + Default Org membership anlegen
   databaseHooks: {
     user: {
       create: {
-        before: async (user) => {
-          return {
-            data: {
-              ...user,
-              isActive: false,
-            },
-          };
-        },
-
+        // Neue Konten sind inaktiv (DB-Default is_active=false) und in keiner
+        // Organisation — ein Admin schaltet sie frei und fügt sie direkt
+        // einer Organisation hinzu. Ausnahme: der allererste User einer
+        // frischen Instanz wird aktiver Instanz-Admin, sonst käme beim
+        // Self-Hosting niemand hinein.
         after: async (user) => {
-          // 1) User ist jetzt angelegt, firstName und lastName setzten
           const firstName = user.name?.split(" ")[0] || "";
           const lastName = user.name?.split(" ").slice(1).join(" ") || "";
           const displayName = user.name || "";
+          const isFirstUser = (await prisma.user.count()) === 1;
 
           await prisma.user.update({
             where: { id: user.id },
-            data: { firstName, lastName, displayName },
-          });
-
-          // Default Org finden/erstellen
-          const org = await prisma.organization.upsert({
-            where: { slug: "routine" },
-            update: {},
-            create: {
-              name: "Routine",
-              slug: "routine",
-              type: OrganizationType.ROUTINE,
+            data: {
+              firstName,
+              lastName,
+              displayName,
+              ...(isFirstUser ? { isActive: true, isInstanceAdmin: true } : {}),
             },
           });
-
-          // Member anlegen (default role: LIMITED)
-          await prisma.organizationMember.upsert({
-            where: {
-              organizationId_userId: {
-                organizationId: org.id,
-                userId: user.id,
-              },
-            },
-            update: {},
-            create: {
-              organizationId: org.id,
-              userId: user.id,
-              role: UserRole.COORDINATOR,
-            },
+        },
+      },
+    },
+    session: {
+      create: {
+        // Zweite Absicherung zum Sign-in-Hook: inaktive Konten (nicht
+        // freigeschaltet oder vom Admin deaktiviert) bekommen nie eine
+        // Session und damit auch keinen Zugriff auf API-Routen.
+        before: async (session) => {
+          const user = await prisma.user.findUnique({
+            where: { id: session.userId },
+            select: { isActive: true },
           });
-
-          // Optional: preferences default org setzen
-          await prisma.userPreference.upsert({
-            where: { userId: user.id },
-            update: { defaultOrganizationId: org.id },
-            create: { userId: user.id, defaultOrganizationId: org.id },
-          });
+          if (!user?.isActive) return false;
         },
       },
     },

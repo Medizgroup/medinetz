@@ -3,15 +3,29 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCheck, Loader2 } from "lucide-react";
+import { CheckCheck, Loader2, MoreHorizontal, Trash2, X } from "lucide-react";
+import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Select,
-  SelectContent,
   SelectItem,
   SelectPopup,
   SelectTrigger,
@@ -41,6 +55,7 @@ const TYPE_LABELS: Record<string, string> = {
   CASE_UPDATE: "Fall-Updates",
   PROTOCOL_UPDATE: "Protokoll-Updates",
   EVENT_INVITE: "Termine",
+  ORGANIZATION: "Organisationen",
 };
 
 export default function NotificationsList() {
@@ -54,6 +69,7 @@ export default function NotificationsList() {
   const [filter, setFilter] = React.useState<"all" | "unread">("all");
   const [typeFilter, setTypeFilter] = React.useState<string>("all");
   const [grouped, setGrouped] = React.useState(true);
+  const [confirmDeleteAll, setConfirmDeleteAll] = React.useState(false);
 
   const load = React.useCallback(
     async (opts?: { reset?: boolean; cursor?: string }) => {
@@ -128,6 +144,42 @@ export default function NotificationsList() {
     }).catch(() => {});
   }
 
+  async function remove(body: { ids?: string[]; read?: boolean; all?: boolean }) {
+    const r = await fetch("/api/notifications", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).catch(() => null);
+    if (!r?.ok) {
+      toast.error("Löschen fehlgeschlagen.");
+      return false;
+    }
+    // Glocke im Header aktualisieren
+    window.dispatchEvent(new Event("notifications:changed"));
+    return true;
+  }
+
+  async function deleteOne(n: Notification) {
+    setItems((prev) => prev.filter((it) => it.id !== n.id));
+    if (!n.read) setUnreadCount((c) => Math.max(0, c - 1));
+    if (!(await remove({ ids: [n.id] }))) load({ reset: true });
+  }
+
+  async function deleteRead() {
+    if (await remove({ read: true })) {
+      toast.success("Gelesene Benachrichtigungen gelöscht.");
+      load({ reset: true });
+    }
+  }
+
+  async function deleteAll() {
+    setConfirmDeleteAll(false);
+    if (await remove({ all: true })) {
+      toast.success("Alle Benachrichtigungen gelöscht.");
+      load({ reset: true });
+    }
+  }
+
   const groups = React.useMemo(
     () => (grouped ? groupByDay(items) : null),
     [grouped, items],
@@ -197,6 +249,29 @@ export default function NotificationsList() {
               Alle gelesen
             </Button>
           ) : null}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-8"
+                aria-label="Weitere Aktionen">
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={deleteRead}>
+                <Trash2 className="size-4" />
+                Gelesene löschen
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => setConfirmDeleteAll(true)}>
+                <Trash2 className="size-4" />
+                Alle löschen
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -220,11 +295,19 @@ export default function NotificationsList() {
                   )}>
                   {g.label}
                 </div>
-                <ItemList items={g.items} onClick={handleClickItem} />
+                <ItemList
+                  items={g.items}
+                  onClick={handleClickItem}
+                  onDelete={deleteOne}
+                />
               </div>
             ))
           ) : (
-            <ItemList items={items} onClick={handleClickItem} />
+            <ItemList
+              items={items}
+              onClick={handleClickItem}
+              onDelete={deleteOne}
+            />
           )}
         </div>
       )}
@@ -240,6 +323,25 @@ export default function NotificationsList() {
           </Button>
         </div>
       ) : null}
+
+      <AlertDialog open={confirmDeleteAll} onOpenChange={setConfirmDeleteAll}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Alle Benachrichtigungen löschen?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Alle deine Benachrichtigungen werden endgültig gelöscht.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button variant="outline" onClick={() => setConfirmDeleteAll(false)}>
+              Abbrechen
+            </Button>
+            <Button variant="destructive" onClick={deleteAll}>
+              Alle löschen
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -247,9 +349,11 @@ export default function NotificationsList() {
 function ItemList({
   items,
   onClick,
+  onDelete,
 }: {
   items: Notification[];
   onClick: (n: Notification) => void;
+  onDelete: (n: Notification) => void;
 }) {
   return (
     <ul className="divide-y">
@@ -259,7 +363,7 @@ function ItemList({
         const Inner = (
           <div
             className={cn(
-              "flex cursor-pointer gap-3 px-4 py-3 transition-colors hover:bg-muted/40",
+              "group flex cursor-pointer gap-3 px-4 py-3 transition-colors hover:bg-muted/40",
               !n.read && "bg-primary/5",
             )}
             onClick={() => onClick(n)}>
@@ -301,6 +405,19 @@ function ItemList({
                 className="mt-2 size-2 shrink-0 rounded-full bg-emerald-500"
               />
             ) : null}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+              title="Löschen"
+              aria-label="Benachrichtigung löschen"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onDelete(n);
+              }}>
+              <X className="size-4" />
+            </Button>
           </div>
         );
 

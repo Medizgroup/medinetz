@@ -7,7 +7,6 @@ import {
   canAccessPatient,
   canEditPatient,
 } from "@/lib/utils/patients/permissions";
-import { logPatientAccess } from "@/lib/utils/patients/access-log";
 import type {
   Gender,
   ResidenceStatus,
@@ -55,12 +54,6 @@ export async function GET(
   if (!patient || patient.deletedAt) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
-
-  await logPatientAccess({
-    patientId: id,
-    userId: session.user.id,
-    context: "patient_view",
-  });
 
   return NextResponse.json({ patient });
 }
@@ -134,12 +127,6 @@ export async function PATCH(
   await prisma.patient.update({
     where: { id },
     data,
-  });
-
-  await logPatientAccess({
-    patientId: id,
-    userId: session.user.id,
-    context: "patient_edit",
   });
 
   return NextResponse.json({ ok: true });

@@ -3,4 +3,8 @@ node_modules
 .git
 .env
 .env.*
+!.env.example
+generated
 public/uploads
+**/.DS_Store
+tsconfig.tsbuildinfo

@@ -12,6 +12,7 @@ const VALID_TYPES: NotificationType[] = [
   "CASE_UPDATE",
   "PROTOCOL_UPDATE",
   "EVENT_INVITE",
+  "ORGANIZATION",
 ];
 
 export async function GET(req: Request) {
@@ -107,4 +108,31 @@ export async function PATCH(req: Request) {
   }
 
   return NextResponse.json({ error: "Nichts zu tun." }, { status: 400 });
+}
+
+/**
+ * DELETE: { ids?: string[], read?: boolean, all?: boolean }
+ * - ids: bestimmte eigene Benachrichtigungen löschen
+ * - read: alle gelesenen löschen
+ * - all: alle eigenen löschen
+ */
+export async function DELETE(req: Request) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await req.json().catch(() => null);
+  const ids: string[] = Array.isArray(body?.ids)
+    ? body.ids.map(String).slice(0, 500)
+    : [];
+
+  let where: { userId: string; id?: { in: string[] }; read?: boolean };
+  if (body?.all === true) where = { userId: session.user.id };
+  else if (body?.read === true) where = { userId: session.user.id, read: true };
+  else if (ids.length) where = { userId: session.user.id, id: { in: ids } };
+  else return NextResponse.json({ error: "Nichts zu tun." }, { status: 400 });
+
+  const { count } = await prisma.notification.deleteMany({ where });
+  return NextResponse.json({ deleted: count });
 }

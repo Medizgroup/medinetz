@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { stat, readFile } from "node:fs/promises";
 import path from "node:path";
+import { UPLOAD_DIR } from "@/lib/uploads";
+
+import { auth } from "@/lib/auth";
 
 // Next.js liefert Dateien unter public/ in Produktion NICHT zuverlässig aus,
 // wenn sie erst NACH dem Build hinzukommen (next start scheint eine zur
@@ -8,7 +12,6 @@ import path from "node:path";
 // sonst in einem 404). Uploads laufen deshalb über diese Route statt über
 // den statischen public/uploads-Ordner: API-Routes lesen bei jedem Request
 // live vom Dateisystem, unabhängig vom Build-Zeitpunkt.
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 const EXT_TO_MIME: Record<string, string> = {
   ".png": "image/png",
@@ -32,6 +35,13 @@ export async function GET(
   _req: Request,
   { params }: { params: Promise<{ filename: string }> },
 ) {
+  // Uploads stammen aus Protokollen und können sensible Inhalte zeigen —
+  // nur für eingeloggte (und damit aktive, siehe lib/auth.ts) User.
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { filename } = await params;
 
   const safeName = path.basename(filename);
@@ -54,7 +64,13 @@ export async function GET(
       headers: {
         "Content-Type": contentType,
         "Content-Length": String(stats.size),
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control": "private, max-age=31536000, immutable",
+        "X-Content-Type-Options": "nosniff",
+        // Ältere SVG-Uploads dürfen kein Script im App-Origin ausführen. PDFs
+        // ausgenommen: Chromes PDF-Viewer verweigert sandboxed Dokumente.
+        ...(contentType === "application/pdf"
+          ? {}
+          : { "Content-Security-Policy": "default-src 'none'; sandbox" }),
       },
     });
   } catch {

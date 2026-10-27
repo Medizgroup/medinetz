@@ -14,6 +14,7 @@ const VALID_ACTIONS: ActivityAction[] = [
   "REOPENED",
   "MENTIONED",
   "ATTACHED",
+  "DELETED",
 ];
 
 export async function GET(req: Request) {
@@ -62,6 +63,8 @@ export async function GET(req: Request) {
 
   const where: Prisma.ActivityWhereInput = {
     organizationId: { in: orgIdsToQuery },
+    // „Gelöscht“ heißt bei Aktivitäten: nur für mich ausgeblendet.
+    hiddenBy: { none: { userId: session.user.id } },
   };
 
   if (
@@ -120,4 +123,57 @@ export async function GET(req: Request) {
   ]);
 
   return NextResponse.json({ items, total, page, pageSize, orgs });
+}
+
+/**
+ * Aktivitäten für mich ausblenden (der gemeinsame Org-Verlauf bleibt für
+ * alle anderen erhalten). Body: { ids: string[] }
+ */
+export async function POST(req: Request) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await req.json().catch(() => null);
+  const ids: string[] = Array.isArray(body?.ids)
+    ? body.ids.map(String).slice(0, 500)
+    : [];
+  if (ids.length === 0) {
+    return NextResponse.json({ error: "Keine Einträge." }, { status: 400 });
+  }
+
+  const memberships = await prisma.organizationMember.findMany({
+    where: { userId: session.user.id },
+    select: { organizationId: true },
+  });
+  const visible = await prisma.activity.findMany({
+    where: {
+      id: { in: ids },
+      organizationId: { in: memberships.map((m) => m.organizationId) },
+    },
+    select: { id: true },
+  });
+
+  const { count } = await prisma.hiddenActivity.createMany({
+    data: visible.map((a) => ({
+      userId: session.user.id,
+      activityId: a.id,
+    })),
+    skipDuplicates: true,
+  });
+
+  return NextResponse.json({ hidden: count });
+}
+
+/** Alle ausgeblendeten Aktivitäten wieder anzeigen. */
+export async function DELETE() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { count } = await prisma.hiddenActivity.deleteMany({
+    where: { userId: session.user.id },
+  });
+  return NextResponse.json({ restored: count });
 }

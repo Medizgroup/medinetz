@@ -7,7 +7,6 @@ import {
   canAccessPatient,
   canEditPatient,
 } from "@/lib/utils/patients/permissions";
-import { logPatientAccess } from "@/lib/utils/patients/access-log";
 
 async function loadAndAuthorize(medId: string, userId: string) {
   const m = await prisma.medication.findUnique({
@@ -56,13 +55,6 @@ export async function PATCH(
 
   await prisma.medication.update({ where: { id }, data });
 
-  await logPatientAccess({
-    patientId: r.m.patientId,
-    userId: session.user.id,
-    context: "medication_edit",
-    contextId: id,
-  });
-
   return NextResponse.json({ ok: true });
 }
 
@@ -81,13 +73,6 @@ export async function DELETE(
     return NextResponse.json({ error: r.error }, { status: r.status });
 
   await prisma.medication.delete({ where: { id } });
-
-  await logPatientAccess({
-    patientId: r.m.patientId,
-    userId: session.user.id,
-    context: "medication_edit",
-    contextId: id,
-  });
 
   return NextResponse.json({ ok: true });
 }

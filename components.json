@@ -23,6 +23,7 @@
     "@coss": "https://coss.com/ui/r/{name}.json",
     "@plate": "https://platejs.org/r/{name}.json",
     "@mapcn": "https://mapcn.dev/r/{name}.json",
-    "@magicui": "https://magicui.design/r/{name}"
+    "@magicui": "https://magicui.design/r/{name}",
+    "@bklit": "https://bklit.com/r/{name}.json"
   }
 }

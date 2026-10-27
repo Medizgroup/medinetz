@@ -64,6 +64,8 @@ type Props = {
   todo: TodoForEdit;
   currentUserId: string;
   onSaved: () => void;
+  /** Nur gesetzt, wenn die Person löschen darf (öffnet die Bestätigung). */
+  onDelete?: () => void;
 };
 
 export default function TodoEditDialog({
@@ -72,6 +74,7 @@ export default function TodoEditDialog({
   todo,
   currentUserId,
   onSaved,
+  onDelete,
 }: Props) {
   const isCreator = todo.creatorId === currentUserId;
   const isAssignee = todo.assigneeId === currentUserId;
@@ -125,16 +128,10 @@ export default function TodoEditDialog({
     });
     setSaving(false);
     if (!res.ok) {
-      /* error handling wie gehabt */ return;
+      const data = await res.json().catch(() => null);
+      setError(data?.error ?? "Speichern fehlgeschlagen.");
+      return;
     }
-    onSaved();
-    onOpenChange(false);
-  }
-
-  async function handleDelete() {
-    if (!confirm("Todo wirklich löschen?")) return;
-    const res = await fetch(`/api/todos/${todo.id}`, { method: "DELETE" });
-    if (!res.ok) return;
     onSaved();
     onOpenChange(false);
   }
@@ -280,13 +277,17 @@ export default function TodoEditDialog({
         </DialogPanel>
 
         <DialogFooter className="sm:justify-between">
-          <Button
-            variant="destructive-outline"
-            className="rounded-xl"
-            onClick={handleDelete}>
-            <Trash2 className="size-4" />
-            Löschen
-          </Button>
+          {onDelete ? (
+            <Button
+              variant="destructive-outline"
+              className="rounded-xl"
+              onClick={onDelete}>
+              <Trash2 className="size-4" />
+              Löschen
+            </Button>
+          ) : (
+            <span />
+          )}
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Abbrechen

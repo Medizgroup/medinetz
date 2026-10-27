@@ -1,13 +1,18 @@
-// Zentrale Institut-Konfiguration.
-//
-// Muss mit NEXT_PUBLIC_ Prefix gesetzt werden, damit Next.js den Wert beim
-// Build in Client Components einbettet (reines process.env.INSTITUT_NAME
-// ist im Browser-Bundle immer undefined). Jedes Medinetz (Gießen, Marburg,
-// Berlin, ...) setzt beim Docker-Build nur seine eigenen NEXT_PUBLIC_INSTITUT_*
-// Variablen, der Rest der App bleibt unverändert.
-export const institutName =
-  process.env.NEXT_PUBLIC_INSTITUT_NAME || "Medizgroup";
+// Zentrale Institut-Konfiguration — zur LAUFZEIT aus der Umgebung gelesen,
+// damit jedes Medinetz (Gießen, Marburg, Berlin, ...) dasselbe Docker-Image
+// nutzen kann und nur INSTITUT_NAME / INSTITUT_SUBTITLE setzt.
+// Client Components bekommen die Werte über <InstitutProvider> (app/layout).
+export type InstitutConfig = { name: string; subtitle: string };
 
-export const institutSubtitle =
-  process.env.NEXT_PUBLIC_INSTITUT_SUBTITLE ||
-  "Dein digitaler Mediznetz-Arbeitsplatz";
+export function getInstitutConfig(): InstitutConfig {
+  return {
+    name:
+      process.env.INSTITUT_NAME ||
+      process.env.NEXT_PUBLIC_INSTITUT_NAME ||
+      "Medinetz",
+    subtitle:
+      process.env.INSTITUT_SUBTITLE ||
+      process.env.NEXT_PUBLIC_INSTITUT_SUBTITLE ||
+      "Dein digitaler Medinetz-Arbeitsplatz",
+  };
+}

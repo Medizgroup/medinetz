@@ -1,6 +1,4 @@
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import NotificationDigestToaster from "@/components/notifications/notification-digest-toaster";
@@ -15,86 +13,49 @@ import HeadUser from "@/components/user/headUser";
 import BreadcrumbComponent from "@/components/breadcrumb-component";
 import { getNews } from "@/lib/news/get-news";
 import ForcePasswordChangeDialog from "@/components/auth/force-password-change-dialog";
+import { getSession } from "@/lib/auth-session";
 
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const h = await headers();
-  const session = await auth.api.getSession({ headers: h });
+  const session = await getSession();
 
   // Nicht eingeloggt redirect zu login
   if (!session?.user?.id) {
     redirect("/sign-in");
   }
+  const userId = session.user.id;
 
-  // DB-Check: aktiv?
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { isActive: true, mustChangePassword: true },
-  });
+  // Alles, was Sidebar und Header brauchen, in einem Durchgang.
+  const [user, openTodosCount, assignedCasesCount, { news, recentCount }] =
+    await Promise.all([
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          email: true,
+          displayName: true,
+          avatarUrl: true,
+          isActive: true,
+          isInstanceAdmin: true,
+          mustChangePassword: true,
+        },
+      }),
+      prisma.todo.count({ where: { assigneeId: userId, done: false } }),
+      prisma.case.count({
+        where: {
+          assigneeId: userId,
+          status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] },
+        },
+      }),
+      getNews(),
+    ]);
 
   if (!user?.isActive) {
     redirect("/inactive");
   }
-
-  // get OrgIds
-  const orgIds = await prisma.organizationMember.findMany({
-    where: { userId: session.user.id },
-    select: { organizationId: true },
-  });
-
-  const orgIdsArray = orgIds.map((m) => m.organizationId);
-
-  const userId = session.user.id;
-
-  const [openTodosCount, assignedCasesCount, eventsCount] = await Promise.all([
-    prisma.todo.count({
-      where: {
-        done: false,
-        OR: [
-          { assigneeId: userId },
-          { creatorId: userId },
-          { assigneeId: null },
-        ],
-      },
-    }),
-
-    prisma.case.count({
-      where: {
-        assigneeId: userId,
-        status: { in: ["OPEN", "IN_PROGRESS", "WAITING"] },
-      },
-    }),
-
-    prisma.event.count({
-      where: {
-        OR: [
-          {
-            creatorId: userId,
-            visibility: "PRIVATE",
-          },
-          {
-            visibility: "ORGANIZATION",
-            organizationId: { in: orgIdsArray },
-          },
-        ],
-      },
-    }),
-  ]);
-
-  const organizations = await prisma.organizationMember.findMany({
-    where: { userId },
-    select: {
-      organization: {
-        select: { id: true, name: true, color: true, slug: true },
-      },
-    },
-    orderBy: { organization: { createdAt: "asc" } },
-  });
-
-  const { news, recentCount } = await getNews();
 
   return (
     <SidebarProvider>
@@ -102,15 +63,8 @@ export default async function AppLayout({
       <AppSidebar
         openTodosCount={openTodosCount}
         assignedCasesCount={assignedCasesCount}
-        eventsCount={eventsCount}
         news={news}
         newsCount={recentCount}
-        // organizations={organizations.map((org) => ({
-        //   id: org.organization.id,
-        //   name: org.organization.name,
-        //   color: org.organization.color ?? "#cccccc",
-        //   slug: org.organization.slug,
-        // }))}
       />
       <SidebarInset className="overflow-x-clip">
         <NotificationDigestToaster />
@@ -124,7 +78,11 @@ export default async function AppLayout({
               />
               <BreadcrumbComponent />
             </div>
-            <HeadUser />
+            <HeadUser
+              user={user}
+              openCasesCount={assignedCasesCount}
+              openTodosCount={openTodosCount}
+            />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

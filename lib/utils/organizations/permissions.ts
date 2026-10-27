@@ -1,47 +1,26 @@
 import prisma from "@/lib/prisma";
-import type { UserRole } from "@/generated/prisma/client";
-
-// Rang der Org-Rollen (höher = mehr Rechte)
-export const ROLE_RANK: Record<UserRole, number> = {
-  LIMITED: 1,
-  VIEWER: 2,
-  COORDINATOR: 3,
-  ADMIN: 4,
-};
-
-/** Mindestens Koordinator? */
-export function isOrgManagerRole(role: UserRole): boolean {
-  return ROLE_RANK[role] >= ROLE_RANK.COORDINATOR;
-}
 
 /**
- * Darf der User diese Org verwalten?
- * Instanz-Admin ODER Mitglied mit mindestens Koordinator-Rolle.
+ * Darf der User die Mitglieder dieser Org verwalten (hinzufügen, Rolle
+ * ändern, entfernen)? Instanz-Admin überall, sonst nur ADMIN der Org.
  */
-export async function canManageOrg(
+export async function canManageOrgMembers(
   userId: string,
   organizationId: string,
-): Promise<boolean> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { isInstanceAdmin: true },
-  });
-  if (user?.isInstanceAdmin) return true;
-
-  const membership = await prisma.organizationMember.findUnique({
-    where: { organizationId_userId: { organizationId, userId } },
-    select: { role: true },
-  });
-  return membership ? isOrgManagerRole(membership.role) : false;
-}
-
-/** Für Server Components: notFound() wenn keine Berechtigung. */
-export async function requireOrgManager(
-  userId: string,
-  organizationId: string,
-): Promise<void> {
-  if (!(await canManageOrg(userId, organizationId))) {
-    const { notFound } = await import("next/navigation");
-    notFound();
-  }
+): Promise<{ allowed: boolean; isInstanceAdmin: boolean }> {
+  const [user, membership] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { isInstanceAdmin: true },
+    }),
+    prisma.organizationMember.findUnique({
+      where: { organizationId_userId: { organizationId, userId } },
+      select: { role: true },
+    }),
+  ]);
+  const isInstanceAdmin = Boolean(user?.isInstanceAdmin);
+  return {
+    allowed: isInstanceAdmin || membership?.role === "ADMIN",
+    isInstanceAdmin,
+  };
 }

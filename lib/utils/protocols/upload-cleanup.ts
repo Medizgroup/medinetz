@@ -1,9 +1,9 @@
 import { unlink } from "node:fs/promises";
 import path from "node:path";
+import { UPLOAD_DIR } from "../../uploads";
 
 import { extractUploadedFileUrls } from "./extract";
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 /**
  * Löscht Dateien unter public/uploads, die in `oldNodes` referenziert waren,

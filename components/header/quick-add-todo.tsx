@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { Plus, Loader2, CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ import { priorities_todos } from "@/lib/utils/todos/priority";
 type Props = { currentUserId: string };
 
 export default function QuickAddTodo({ currentUserId }: Props) {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [priority, setPriority] = React.useState(2);
@@ -90,9 +92,8 @@ export default function QuickAddTodo({ currentUserId }: Props) {
 
     reset();
     setOpen(false);
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new Event("todos:changed"));
-    }
+    window.dispatchEvent(new Event("todos:changed"));
+    router.refresh(); // Zähler in Sidebar/Header aktualisieren
   }
 
   return (

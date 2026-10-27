@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  type RowSelectionState,
   type SortingState,
   flexRender,
   getCoreRowModel,
@@ -14,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import {
@@ -28,6 +29,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectItem,
@@ -105,32 +107,45 @@ export default function ProtocolsTable({
     pageIndex: 0,
     pageSize: 25,
   });
-  const [deleteTarget, setDeleteTarget] = useState<ProtocolRow | null>(null);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [deleteTargets, setDeleteTargets] = useState<ProtocolRow[]>([]);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     setRows(data);
+    setRowSelection({});
   }, [data]);
 
-  function canDelete(organizationId: string) {
-    return canDeleteAll || adminOrgIds.includes(organizationId);
-  }
+  const canDelete = useCallback(
+    (organizationId: string) =>
+      canDeleteAll || adminOrgIds.includes(organizationId),
+    [canDeleteAll, adminOrgIds],
+  );
+  const canDeleteAny = canDeleteAll || adminOrgIds.length > 0;
 
   async function handleDelete() {
-    if (!deleteTarget) return;
+    if (deleteTargets.length === 0) return;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/protocols/${deleteTarget.id}`, {
-        method: "DELETE",
+      const ids = deleteTargets.map((p) => p.id);
+      const res = await fetch("/api/protocols/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "delete", ids }),
       });
+      const body = await res.json().catch(() => null);
       if (!res.ok) {
-        const body = await res.json().catch(() => null);
-        toast.error(body?.error ?? "Protokoll konnte nicht gelöscht werden.");
+        toast.error(body?.error ?? "Protokolle konnten nicht gelöscht werden.");
         return;
       }
-      setRows((prev) => prev.filter((r) => r.id !== deleteTarget.id));
-      toast.success("Protokoll gelöscht.");
-      setDeleteTarget(null);
+      setRows((prev) => prev.filter((r) => !ids.includes(r.id)));
+      setRowSelection({});
+      toast.success(
+        body.deleted === 1
+          ? "Protokoll gelöscht."
+          : `${body.deleted} Protokolle gelöscht.`,
+      );
+      setDeleteTargets([]);
       router.refresh();
     } finally {
       setDeleting(false);
@@ -139,6 +154,35 @@ export default function ProtocolsTable({
 
   const columns = useMemo<ColumnDef<ProtocolRow>[]>(
     () => [
+      ...(canDeleteAny
+        ? [
+            {
+              id: "select",
+              enableSorting: false,
+              header: ({ table }) => (
+                <Checkbox
+                  aria-label="Alle auf dieser Seite auswählen"
+                  checked={table.getIsAllPageRowsSelected()}
+                  indeterminate={
+                    table.getIsSomePageRowsSelected() &&
+                    !table.getIsAllPageRowsSelected()
+                  }
+                  onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
+                />
+              ),
+              cell: ({ row }) => (
+                <div onClick={(e) => e.stopPropagation()}>
+                  <Checkbox
+                    aria-label={`Protokoll #${row.original.protocolNumber} auswählen`}
+                    checked={row.getIsSelected()}
+                    disabled={!row.getCanSelect()}
+                    onCheckedChange={(v) => row.toggleSelected(!!v)}
+                  />
+                </div>
+              ),
+            } satisfies ColumnDef<ProtocolRow>,
+          ]
+        : []),
       {
         accessorKey: "protocolNumber",
         header: "Nr.",
@@ -160,8 +204,8 @@ export default function ProtocolsTable({
         cell: ({ row }) => (
           <Link
             href={`/protocols/${row.original.id}`}
-            className="font-medium hover:underline"
-          >
+            onClick={(e) => e.stopPropagation()}
+            className="font-medium hover:underline">
             {row.original.title}
           </Link>
         ),
@@ -224,6 +268,7 @@ export default function ProtocolsTable({
       {
         id: "actions",
         header: "",
+        enableSorting: false,
         cell: ({ row }) =>
           canDelete(row.original.organization.id) ? (
             <DropdownMenu>
@@ -232,6 +277,7 @@ export default function ProtocolsTable({
                   variant="ghost"
                   size="icon"
                   className="size-7"
+                  aria-label="Aktionen"
                   onClick={(e) => e.stopPropagation()}>
                   <MoreHorizontal className="size-4" />
                 </Button>
@@ -241,7 +287,7 @@ export default function ProtocolsTable({
                   className="text-destructive"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setDeleteTarget(row.original);
+                    setDeleteTargets([row.original]);
                   }}>
                   <Trash2 className="size-4" />
                   Löschen
@@ -251,18 +297,21 @@ export default function ProtocolsTable({
           ) : null,
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [adminOrgIds, canDeleteAll],
+    [canDelete, canDeleteAny],
   );
 
   const table = useReactTable({
     data: rows,
     columns,
+    getRowId: (row) => row.id,
     state: {
       sorting,
       columnFilters,
       pagination,
+      rowSelection,
     },
+    enableRowSelection: (row) => canDelete(row.original.organization.id),
+    onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,
@@ -275,6 +324,7 @@ export default function ProtocolsTable({
     enableSortingRemoval: false,
   });
 
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
   const titleColumn = table.getColumn("title");
   const orgColumn = table.getColumn("organization");
 
@@ -342,7 +392,28 @@ export default function ProtocolsTable({
           }></Button>
       </div>
 
-      <div className="overflow-hidden ">
+      {selectedRows.length > 0 ? (
+        <div className="flex items-center gap-3 rounded-lg border bg-muted/50 px-3 py-2 text-sm">
+          <span className="text-muted-foreground">
+            {selectedRows.length} ausgewählt
+          </span>
+          <Button
+            size="sm"
+            variant="destructive-outline"
+            onClick={() => setDeleteTargets(selectedRows)}>
+            <Trash2 className="size-4" />
+            Löschen
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => table.resetRowSelection()}>
+            Auswahl aufheben
+          </Button>
+        </div>
+      ) : null}
+
+      <div className="overflow-hidden">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -381,10 +452,9 @@ export default function ProtocolsTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  data-state={row.getIsSelected() ? "selected" : undefined}
                   className="cursor-pointer hover:bg-muted/40"
-                  onClick={() =>
-                    (window.location.href = `/protocols/${row.original.id}`)
-                  }>
+                  onClick={() => router.push(`/protocols/${row.original.id}`)}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -409,14 +479,12 @@ export default function ProtocolsTable({
         <div className="flex items-center justify-between pt-3 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
 
-            <span>
-                pro Seite 
-            </span>
+            <span>Pro Seite</span>
             <Select
               value={String(table.getState().pagination.pageSize)}
               onValueChange={(value) => table.setPageSize(Number(value))}
             >
-              <SelectTrigger className="w-5">
+              <SelectTrigger className="w-20">
                 <SelectValue />
               </SelectTrigger>
               <SelectPopup>
@@ -452,30 +520,34 @@ export default function ProtocolsTable({
       </div>
 
       <AlertDialog
-        open={!!deleteTarget}
-        onOpenChange={(o) => !o && setDeleteTarget(null)}>
+        open={deleteTargets.length > 0}
+        onOpenChange={(o) => !o && setDeleteTargets([])}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Protokoll löschen?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {deleteTargets.length === 1
+                ? "Protokoll löschen?"
+                : `${deleteTargets.length} Protokolle löschen?`}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              „{deleteTarget?.title}&quot; wird unwiderruflich gelöscht,
-              inklusive
-              aller Kommentare und Fall-Verknüpfungen. Dies kann nicht
-              rückgängig gemacht werden.
+              {deleteTargets.length === 1
+                ? `„${deleteTargets[0]?.title}“ wird`
+                : "Die ausgewählten Protokolle werden"}{" "}
+              unwiderruflich gelöscht, inklusive aller Kommentare, Uploads und
+              Fall-Verknüpfungen. Dies kann nicht rückgängig gemacht werden.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <Button
-              variant="destructive-outline"
-              onClick={() => setDeleteTarget(null)}
+              variant="outline"
+              onClick={() => setDeleteTargets([])}
               disabled={deleting}>
               Abbrechen
             </Button>
             <Button
               variant="destructive"
               onClick={handleDelete}
-              disabled={deleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              disabled={deleting}>
               Löschen
             </Button>
           </AlertDialogFooter>
