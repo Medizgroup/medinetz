@@ -1,4 +1,6 @@
+import { cache } from "react";
 import prisma from "@/lib/prisma";
+import { de } from "date-fns/locale";
 import {
   startOfMonth,
   endOfMonth,
@@ -36,6 +38,53 @@ function resolveRange(params: StatsParams): {
         to: params.customTo ?? null,
       };
   }
+}
+
+// Monats-Buckets für Zeitreihen (deutsche Monatsnamen)
+function monthBuckets(from: Date, to: Date) {
+  const months: { key: string; label: string; date: Date }[] = [];
+  let cursor = startOfMonth(from);
+  while (cursor <= to) {
+    months.push({
+      key: format(cursor, "yyyy-MM"),
+      label: format(cursor, "LLL yy", { locale: de }),
+      date: new Date(cursor),
+    });
+    cursor = startOfMonth(subMonths(cursor, -1));
+  }
+  return months;
+}
+
+// Patienten aus Fällen der gewählten Orgs/Zeitraum. Wird von drei Charts
+// gebraucht — React cache() sorgt für nur eine Abfrage pro Request.
+const casePatientIds = cache(
+  async (orgKey: string, fromMs: number | null, toMs: number | null) => {
+    const cases = await prisma.case.findMany({
+      where: {
+        organizationId: { in: orgKey.split(",") },
+        ...(fromMs !== null || toMs !== null
+          ? {
+              createdAt: {
+                ...(fromMs !== null ? { gte: new Date(fromMs) } : {}),
+                ...(toMs !== null ? { lte: new Date(toMs) } : {}),
+              },
+            }
+          : {}),
+      },
+      select: { patientId: true },
+      distinct: ["patientId"],
+    });
+    return cases.map((c) => c.patientId);
+  },
+);
+
+function patientIdsFor(params: StatsParams) {
+  const { from, to } = resolveRange(params);
+  return casePatientIds(
+    [...params.orgIds].sort().join(","),
+    from?.getTime() ?? null,
+    to?.getTime() ?? null,
+  );
 }
 
 function dateFilter(from: Date | null, to: Date | null) {
@@ -238,16 +287,7 @@ export async function getCasesPerMonth(params: StatsParams) {
   });
 
   // Buckets aufbauen
-  const months: { key: string; label: string; date: Date }[] = [];
-  let cursor = startOfMonth(rangeFrom);
-  while (cursor <= rangeTo) {
-    months.push({
-      key: format(cursor, "yyyy-MM"),
-      label: format(cursor, "MMM yy"),
-      date: new Date(cursor),
-    });
-    cursor = startOfMonth(subMonths(cursor, -1));
-  }
+  const months = monthBuckets(rangeFrom, rangeTo);
 
   const byMonth = new Map<
     string,
@@ -303,16 +343,7 @@ export async function getFinancePerMonth(params: StatsParams) {
     }),
   ]);
 
-  const months: { key: string; label: string; date: Date }[] = [];
-  let cursor = startOfMonth(rangeFrom);
-  while (cursor <= rangeTo) {
-    months.push({
-      key: format(cursor, "yyyy-MM"),
-      label: format(cursor, "MMM yy"),
-      date: new Date(cursor),
-    });
-    cursor = startOfMonth(subMonths(cursor, -1));
-  }
+  const months = monthBuckets(rangeFrom, rangeTo);
 
   const byMonth = new Map<string, { donations: number; expenses: number }>();
   for (const m of months) {
@@ -332,33 +363,13 @@ export async function getFinancePerMonth(params: StatsParams) {
 
   return months.map((m) => {
     const b = byMonth.get(m.key)!;
-    return { month: m.label, ...b };
+    return { month: m.label, date: m.date, ...b };
   });
 }
 
 // === Verteilung Aufenthaltsstatus (Donut) ===
 export async function getResidenceDistribution(params: StatsParams) {
-  const { orgIds } = params;
-  const { from, to } = resolveRange(params);
-
-  // Patienten via ihrer Cases finden, die in den orgIds + Zeitraum liegen
-  const cases = await prisma.case.findMany({
-    where: {
-      organizationId: { in: orgIds },
-      ...(from || to
-        ? {
-            createdAt: {
-              ...(from ? { gte: from } : {}),
-              ...(to ? { lte: to } : {}),
-            },
-          }
-        : {}),
-    },
-    select: { patientId: true },
-    distinct: ["patientId"],
-  });
-
-  const patientIds = cases.map((c) => c.patientId);
+  const patientIds = await patientIdsFor(params);
   if (patientIds.length === 0) return [];
 
   const grouped = await prisma.patient.groupBy({
@@ -385,26 +396,7 @@ export async function getResidenceDistribution(params: StatsParams) {
 
 // === Top-Sprachen ===
 export async function getLanguageDistribution(params: StatsParams) {
-  const { orgIds } = params;
-  const { from, to } = resolveRange(params);
-
-  const cases = await prisma.case.findMany({
-    where: {
-      organizationId: { in: orgIds },
-      ...(from || to
-        ? {
-            createdAt: {
-              ...(from ? { gte: from } : {}),
-              ...(to ? { lte: to } : {}),
-            },
-          }
-        : {}),
-    },
-    select: { patientId: true },
-    distinct: ["patientId"],
-  });
-
-  const patientIds = cases.map((c) => c.patientId);
+  const patientIds = await patientIdsFor(params);
   if (patientIds.length === 0) return [];
 
   const patients = await prisma.patient.findMany({
@@ -426,26 +418,7 @@ export async function getLanguageDistribution(params: StatsParams) {
 
 // === Top-Diagnosen ===
 export async function getDiagnosisDistribution(params: StatsParams) {
-  const { orgIds } = params;
-  const { from, to } = resolveRange(params);
-
-  const cases = await prisma.case.findMany({
-    where: {
-      organizationId: { in: orgIds },
-      ...(from || to
-        ? {
-            createdAt: {
-              ...(from ? { gte: from } : {}),
-              ...(to ? { lte: to } : {}),
-            },
-          }
-        : {}),
-    },
-    select: { patientId: true },
-    distinct: ["patientId"],
-  });
-
-  const patientIds = cases.map((c) => c.patientId);
+  const patientIds = await patientIdsFor(params);
   if (patientIds.length === 0) return [];
 
   const diagnoses = await prisma.diagnosis.findMany({

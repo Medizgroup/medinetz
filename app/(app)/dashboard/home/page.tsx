@@ -16,9 +16,8 @@ import DashboardFilters from "@/components/dashboard/dashboard-filters";
 import KpiCards from "@/components/dashboard/kpi-cards";
 import {
   CasesPerMonthChart,
+  DistributionPie,
   FinancePerMonthChart,
-  ResidenceDonut,
-  TopBars,
 } from "@/components/dashboard/charts";
 import {
   ResourcesCard,
@@ -123,9 +122,9 @@ export default async function DashboardHomePage({
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <ResidenceDonut data={residence} />
-        <TopBars title="Top Sprachen" data={languages} />
-        <TopBars title="Top Diagnosen" data={diagnoses} />
+        <DistributionPie title="Aufenthaltsstatus" data={residence} />
+        <DistributionPie title="Top Sprachen" data={languages} />
+        <DistributionPie title="Top Diagnosen" data={diagnoses} />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
