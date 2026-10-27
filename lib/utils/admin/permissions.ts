@@ -26,3 +26,23 @@ export async function requireInstanceAdmin(userId: string): Promise<void> {
     notFound();
   }
 }
+
+/**
+ * Für Löschaktionen auf Org-Daten (Fälle, Protokolle): Instanz-Admin darf
+ * alles, sonst nur in Orgs, in denen der User ADMIN ist.
+ */
+export async function getDeleteScope(
+  userId: string,
+): Promise<{ isInstanceAdmin: boolean; adminOrgIds: string[] }> {
+  const [instanceAdmin, memberships] = await Promise.all([
+    isInstanceAdmin(userId),
+    prisma.organizationMember.findMany({
+      where: { userId, role: "ADMIN" },
+      select: { organizationId: true },
+    }),
+  ]);
+  return {
+    isInstanceAdmin: instanceAdmin,
+    adminOrgIds: memberships.map((m) => m.organizationId),
+  };
+}

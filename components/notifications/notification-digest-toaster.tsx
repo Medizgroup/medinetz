@@ -7,7 +7,7 @@ import { toastManager } from "../ui/toast";
 
 type DigestItem = {
   id: string;
-  kind: "todo" | "event" | "invite" | "join" | "inactive";
+  kind: "todo" | "event" | "inactive";
   dedup: "daily" | "once";
   href: string;
   title?: string;
@@ -23,7 +23,6 @@ type DigestItem = {
 type Digest = {
   todosToday: DigestItem[];
   eventsToday: DigestItem[];
-  pendingInvites: DigestItem[];
   pendingApprovals: DigestItem[];
 };
 
@@ -71,24 +70,10 @@ function metaFor(it: DigestItem) {
       return {
         title: "Termin heute",
         description: `${it.title ?? ""} · ${time}${it.location ? " · " + it.location : ""}`,
-        action: "Kalendar",
+        action: "Kalender",
         type: "warning",
       };
     }
-    case "invite":
-      return {
-        title: "Einladung",
-        description: `Du wurdest zu „${it.orgName}" eingeladen.`,
-        action: "Ansehen",
-        type: "info",
-      };
-    case "join":
-      return {
-        title: "Beitrittsanfrage",
-        description: `${it.userLabel} möchte „${it.orgName}" beitreten.`,
-        action: "Prüfen",
-        type: "info",
-      };
     case "inactive":
       return {
         title: "Freischaltung ausstehend",
@@ -117,7 +102,6 @@ export default function NotificationDigestToaster() {
         // Wichtige zuerst
         const items: DigestItem[] = [
           ...data.pendingApprovals,
-          ...data.pendingInvites,
           ...data.todosToday,
           ...data.eventsToday,
         ];

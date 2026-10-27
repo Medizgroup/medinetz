@@ -2,48 +2,18 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { isInstanceAdmin } from "@/lib/utils/admin/permissions";
 
 import { Separator } from "@/components/ui/separator";
 import { OrganizationsComponent } from "@/components/settings/organizations-component";
 
 export default async function OrganizationsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user?.id || !session.user.email) redirect("/sign-in");
+  if (!session?.user?.id) redirect("/sign-in");
 
-  const memberships = await prisma.organizationMember.findMany({
-    where: { userId: session.user.id },
-    include: {
-      organization: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-          type: true,
-          isArchived: true,
-        },
-      },
-    },
-    orderBy: { joinedAt: "desc" },
-  });
-
-  // Beitrittsanfragen automatisch entfernen, wenn der User bereits Mitglied ist
-  const memberOrgIds = memberships.map((m) => m.organization.id);
-  if (memberOrgIds.length) {
-    await prisma.organizationJoinRequest.deleteMany({
-      where: {
-        userId: session.user.id,
-        organizationId: { in: memberOrgIds },
-      },
-    });
-  }
-
-  const [invites, joinRequests] = await Promise.all([
-    prisma.organizationInvite.findMany({
-      where: {
-        email: session.user.email,
-        acceptedAt: null,
-        expiresAt: { gt: new Date() },
-      },
+  const [memberships, instanceAdmin] = await Promise.all([
+    prisma.organizationMember.findMany({
+      where: { userId: session.user.id },
       include: {
         organization: {
           select: {
@@ -54,19 +24,10 @@ export default async function OrganizationsPage() {
             isArchived: true,
           },
         },
-        inviter: { select: { id: true, name: true, email: true } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { joinedAt: "desc" },
     }),
-    prisma.organizationJoinRequest.findMany({
-      where: { userId: session.user.id },
-      include: {
-        organization: {
-          select: { id: true, name: true, slug: true, type: true },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    }),
+    isInstanceAdmin(session.user.id),
   ]);
 
   return (
@@ -74,7 +35,7 @@ export default async function OrganizationsPage() {
       <div>
         <h1 className="text-2xl font-semibold">Organisationen</h1>
         <p className="text-sm text-muted-foreground">
-          Verwalte deine Mitgliedschaften, Einladungen und Beitrittsanfragen.
+          Deine Mitgliedschaften.
         </p>
       </div>
 
@@ -82,8 +43,7 @@ export default async function OrganizationsPage() {
 
       <OrganizationsComponent
         memberships={memberships}
-        invites={invites}
-        joinRequests={joinRequests}
+        isInstanceAdmin={instanceAdmin}
       />
     </div>
   );

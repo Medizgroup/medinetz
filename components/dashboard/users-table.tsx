@@ -11,8 +11,8 @@ import {
   MoreHorizontalIcon,
   Search,
   Shield,
+  Trash2,
   UserRoundCheck,
-  UserRoundPlus,
   UserRoundX,
 } from "lucide-react";
 import { format } from "date-fns";
@@ -47,13 +47,20 @@ import {
 } from "@/components/ui/table";
 
 import { getInitials } from "@/lib/helper/user";
-import InviteUserDialog from "./invite-user-dialog";
 import ResetPasswordDialog from "./reset-password-dialog";
 import { ButtonGroup } from "../ui/group";
 import { DropdownMenuGroup, DropdownMenuLabel } from "../ui/menu";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "../ui/checkbox";
 import UserDefaultAvatar from "../user/user-default-avatar";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type OrgMember = {
   role: string;
@@ -72,8 +79,6 @@ type User = {
   organizationMembers: OrgMember[];
 };
 
-type Org = { id: string; name: string };
-
 const ROLE_VARIANT: Record<string, "secondary" | "info" | "warning" | "error"> =
   {
     LIMITED: "secondary",
@@ -82,11 +87,7 @@ const ROLE_VARIANT: Record<string, "secondary" | "info" | "warning" | "error"> =
     ADMIN: "error",
   };
 
-export default function UsersTable({
-  availableOrgs,
-}: {
-  availableOrgs: Org[];
-}) {
+export default function UsersTable() {
   const [users, setUsers] = React.useState<User[]>([]);
   const [total, setTotal] = React.useState(0);
   const [page, setPage] = React.useState(1);
@@ -98,7 +99,8 @@ export default function UsersTable({
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
   const [activeFilter, setActiveFilter] = React.useState<string>("all");
 
-  const [inviteOpen, setInviteOpen] = React.useState(false);
+  const [deleteTarget, setDeleteTarget] = React.useState<User | null>(null);
+  const [deleting, setDeleting] = React.useState(false);
   const [resetPasswordUser, setResetPasswordUser] = React.useState<User | null>(
     null,
   );
@@ -167,6 +169,26 @@ export default function UsersTable({
       `Admin-Status ${!u.isInstanceAdmin ? "vergeben" : "entzogen"}.`,
     );
     load();
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const r = await fetch(`/api/admin/users/${deleteTarget.id}`, {
+        method: "DELETE",
+      });
+      const data = await r.json().catch(() => null);
+      if (!r.ok) {
+        toast.error(data?.error ?? "Benutzer konnte nicht gelöscht werden.");
+        return;
+      }
+      toast.success("Benutzer gelöscht.");
+      setDeleteTarget(null);
+      await load();
+    } finally {
+      setDeleting(false);
+    }
   }
 
   function handleExport() {
@@ -266,15 +288,6 @@ export default function UsersTable({
         )}
         <div className="flex gap-4">
           <ButtonGroup>
-            <Button
-              onClick={() => setInviteOpen(true)}
-              variant="outline"
-              size="default"
-              className="rounded-full px-4"
-              aria-label="Invite Users ">
-              <UserRoundPlus aria-hidden="true" />
-              Einladen
-            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -437,17 +450,9 @@ export default function UsersTable({
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             className="text-destructive"
-                            onClick={() => {
-                              if (
-                                confirm(
-                                  `User "${userName(u)}" wirklich deaktivieren?`,
-                                )
-                              ) {
-                                toggleActive({ ...u, isActive: true });
-                              }
-                            }}>
-                            <UserRoundX className="size-4" />
-                            Deaktivieren & sperren
+                            onClick={() => setDeleteTarget(u)}>
+                            <Trash2 className="size-4" />
+                            Benutzer löschen
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -486,12 +491,36 @@ export default function UsersTable({
         </div>
       ) : null}
 
-      <InviteUserDialog
-        open={inviteOpen}
-        onOpenChange={setInviteOpen}
-        availableOrgs={availableOrgs}
-        onInvited={load}
-      />
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(o) => !o && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Benutzer löschen?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Login, E-Mail, Name, Avatar und alle Mitgliedschaften von „
+              {deleteTarget ? userName(deleteTarget) : ""}“ werden endgültig
+              gelöscht. Fälle, Kommentare und Protokolle bleiben erhalten und
+              werden „Gelöschter Benutzer“ zugeordnet.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteTarget(null)}
+              disabled={deleting}>
+              Abbrechen
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleting}>
+              {deleting ? <Loader2 className="size-4 animate-spin" /> : null}
+              Endgültig löschen
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <ResetPasswordDialog
         open={resetPasswordUser !== null}

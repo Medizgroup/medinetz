@@ -81,12 +81,6 @@ enum ResourceAvailability {
   LOW
 }
 
-enum JoinRequestStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
 enum EventRecurrence {
   NONE
   DAILY
@@ -178,6 +172,9 @@ model User {
   isInstanceAdmin Boolean @default(false) @map("is_instance_admin")
   mustChangePassword Boolean @default(false) @map("must_change_password")
   lastLoginAt   DateTime? @map("last_login_at")
+  // Gesetzt, wenn ein Admin das Konto gelöscht hat: personenbezogene Daten
+  // sind dann anonymisiert, der Datensatz bleibt für Fälle/Kommentare erhalten.
+  deletedAt     DateTime? @map("deleted_at")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
   
@@ -186,10 +183,7 @@ model User {
   sessions              Session[]
   accounts              Account[]
   organizationMembers   OrganizationMember[]
-  organizationInvites   OrganizationInvite[] @relation("InvitedBy")
   preferences           UserPreference?
-  organizationJoinRequests OrganizationJoinRequest[]
-  decidedJoinRequests OrganizationJoinRequest[] @relation("JoinRequestDecider")
   // Cases
   createdCases          Case[]               @relation("CaseCreator")
   assignedCases         Case[]               @relation("CaseAssignee")
@@ -216,6 +210,7 @@ model User {
 
   // System
   activities            Activity[]
+  hiddenActivities      HiddenActivity[]
   notifications         Notification[]
   mentions              Mention[]            @relation("MentionedUser")
   mentioning            Mention[]            @relation("MentioningUser")
@@ -227,6 +222,7 @@ model User {
 
   @@index([email])
   @@index([isActive])
+  @@index([deletedAt])
   @@map("users")
 }
 
@@ -290,7 +286,6 @@ model Organization {
 
   // Relations
   members     OrganizationMember[]
-  invites     OrganizationInvite[]
   cases       Case[]
   protocols   Protocol[]
   budgets     Budget[]
@@ -298,7 +293,6 @@ model Organization {
   expenses    Expense[]
   activities  Activity[]
   events  Event[]
-  joinRequests OrganizationJoinRequest[]
 
   @@index([slug])
   @@index([isArchived])
@@ -323,46 +317,6 @@ model OrganizationMember {
   @@index([role])
   @@map("organization_members")
 }
-
-model OrganizationInvite {
-  id             String   @id @default(uuid())
-  organizationId String   @map("organization_id")
-  email          String
-  role           UserRole
-  invitedBy      String   @map("invited_by")
-  token          String   @unique
-  expiresAt      DateTime @map("expires_at")
-  acceptedAt     DateTime? @map("accepted_at")
-  createdAt      DateTime @default(now()) @map("created_at")
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  inviter      User         @relation("InvitedBy", fields: [invitedBy], references: [id])
-
-  @@index([organizationId, email])
-  @@index([token])
-  @@map("organization_invites")
-}
-
-model OrganizationJoinRequest {
-  id             String            @id @default(uuid())
-  organizationId String            @map("organization_id")
-  userId         String            @map("user_id")
-  message        String?           @db.Text
-  status         JoinRequestStatus @default(PENDING)
-  decidedBy      String?           @map("decided_by")
-  decidedAt      DateTime?         @map("decided_at")
-  createdAt      DateTime          @default(now()) @map("created_at")
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  decider      User?        @relation("JoinRequestDecider", fields: [decidedBy], references: [id])
-
-  @@unique([organizationId, userId])
-  @@index([organizationId, status])
-  @@index([userId, status])
-  @@map("organization_join_requests")
-}
-
 
 model UserPreference {
   userId                 String   @id @map("user_id")
@@ -826,6 +780,7 @@ model Activity {
 
   organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user         User          @relation(fields: [userId], references: [id])
+  hiddenBy     HiddenActivity[]
 
   @@index([organizationId])
   @@index([userId])
@@ -836,6 +791,21 @@ model Activity {
   @@index([userId, createdAt(sort: Desc)])
   @@index([targetType, targetId])
   @@map("activities")
+}
+
+// Aktivitäten sind ein gemeinsamer Org-Verlauf — „löschen“ blendet einen
+// Eintrag nur für die jeweilige Person aus, alle anderen sehen ihn weiter.
+model HiddenActivity {
+  userId     String   @map("user_id")
+  activityId String   @map("activity_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@id([userId, activityId])
+  @@index([activityId])
+  @@map("hidden_activities")
 }
 
 model Notification {
@@ -1070,19 +1040,6 @@ model Medication {
   @@index([patientId])
   @@index([isActive])
   @@map("medications")
-}
-
-model PatientAccessLog {
-  id         String   @id @default(uuid())
-  patientId  String   @map("patient_id")
-  userId     String   @map("user_id")
-  context    String   // 'case_view', 'patient_edit', 'diagnosis_edit', etc.
-  contextId  String?  @map("context_id")  // optional Case-ID o.ä.
-  createdAt  DateTime @default(now()) @map("created_at")
-  
-  @@index([patientId, createdAt(sort: Desc)])
-  @@index([userId, createdAt(sort: Desc)])
-  @@map("patient_access_logs")
 }
 
 model News {
