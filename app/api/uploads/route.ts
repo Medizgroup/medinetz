@@ -21,7 +21,6 @@ const ALLOWED_IMAGE_TYPES = new Set([
   "image/jpeg",
   "image/webp",
   "image/gif",
-  "image/svg+xml",
 ]);
 
 const ALLOWED_FILE_TYPES = new Set([

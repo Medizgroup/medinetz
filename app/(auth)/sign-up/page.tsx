@@ -197,11 +197,11 @@ export default function SignUpPage() {
 
       toastManager.add({
         title: "Willkommen!",
-        description: "Dein Konto wurde erfolgreich erstellt.",
+        description: "Dein Konto wurde erstellt und wartet auf Freischaltung.",
         type: "success",
       });
 
-      router.replace("/home");
+      router.replace("/inactive");
     } catch (e) {
       setServerError(e instanceof Error ? e.message : "Unbekannter Fehler.");
     } finally {

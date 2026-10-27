@@ -17,8 +17,8 @@ export default function InactiveComponent() {
         </EmptyMedia>
         <EmptyTitle>Dein Konto wartet auf Freischaltung</EmptyTitle>
         <EmptyDescription>
-          Dein Konto wurde erstellt, ist aber noch nicht aktiv. Ein Admin muss
-          dich erst freischalten.
+          Dein Konto ist noch nicht aktiv. Sobald ein Admin dich freigeschaltet
+          und einer Organisation hinzugefügt hat, kannst du dich anmelden.
         </EmptyDescription>
       </EmptyHeader>
       <RefreshComponent />

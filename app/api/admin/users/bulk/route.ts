@@ -25,10 +25,13 @@ export async function POST(req: Request) {
   const safeIds = userIds.filter((id) => id !== session.user.id);
 
   if (action === "deactivate") {
-    await prisma.user.updateMany({
-      where: { id: { in: safeIds } },
-      data: { isActive: false },
-    });
+    await prisma.$transaction([
+      prisma.user.updateMany({
+        where: { id: { in: safeIds } },
+        data: { isActive: false },
+      }),
+      prisma.session.deleteMany({ where: { userId: { in: safeIds } } }),
+    ]);
   } else if (action === "activate") {
     await prisma.user.updateMany({
       where: { id: { in: safeIds } },
