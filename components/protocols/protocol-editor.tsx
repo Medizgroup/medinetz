@@ -60,8 +60,16 @@ export type PresenceUser = {
   color: string;
 };
 
-const COLLAB_WS_URL =
-  process.env.NEXT_PUBLIC_COLLAB_WS_URL || "ws://localhost:1234";
+// Produktion: Collab läuft im App-Prozess unter /collab (server.ts), also
+// same-origin. Für `pnpm dev` + separaten Collab-Server per Env überschreiben.
+function collabWsUrl() {
+  if (process.env.NEXT_PUBLIC_COLLAB_WS_URL) {
+    return process.env.NEXT_PUBLIC_COLLAB_WS_URL;
+  }
+  if (typeof window === "undefined") return ""; // SSR: Provider verbindet erst im Browser
+  const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+  return `${scheme}://${window.location.host}/collab`;
+}
 
 export default function ProtocolEditor({
   value,
@@ -169,7 +177,7 @@ export default function ProtocolEditor({
                       type: "hocuspocus",
                       options: {
                         name: `protocol-${collab.protocolId}`,
-                        url: COLLAB_WS_URL,
+                        url: collabWsUrl(),
                         token: collab.token,
                         onStateless: ({ payload }: { payload: string }) => {
                           try {

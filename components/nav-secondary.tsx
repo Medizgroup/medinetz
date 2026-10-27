@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { News } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
-import { institutName } from "@/lib/config";
+import { useInstitut } from "@/components/providers/institut-provider";
 import HelpDialog from "./help/help-dialog";
 
 const categoryLabels: Record<News["category"], string> = {
@@ -49,6 +49,7 @@ export function NavSecondary({
   newsCount?: number;
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   const [helpOpen, setHelpOpen] = React.useState(false);
+  const institut = useInstitut();
 
   return (
     <SidebarGroup {...props}>
@@ -75,7 +76,7 @@ export function NavSecondary({
                   <SheetContent>
                     <SheetHeader>
                       <SheetTitle>
-                        Was ist neu bei {institutName}
+                        Was ist neu bei {institut.name}
                       </SheetTitle>
                     </SheetHeader>
 

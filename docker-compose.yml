@@ -1,0 +1,92 @@
+# Medinetz auf einem eigenen Server (VPS) — App, Datenbank und HTTPS.
+#
+#   cp .env.example .env   # Werte eintragen
+#   docker compose up -d
+#
+# Details, Backups und Updates: DEPLOYMENT.md
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: medinetz
+      POSTGRES_USER: medinetz
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD fehlt in .env}
+    # Für kleine Server (ab 1 GB RAM) abgestimmt.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=64MB
+      - -c
+      - effective_cache_size=192MB
+      - -c
+      - work_mem=4MB
+      - -c
+      - maintenance_work_mem=32MB
+      - -c
+      - max_connections=30
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medinetz -d medinetz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: ${MEDINETZ_IMAGE:-medinetz}:migrate
+    build:
+      context: .
+      target: migrate
+    environment:
+      DATABASE_URL: postgresql://medinetz:${POSTGRES_PASSWORD}@db:5432/medinetz
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  app:
+    image: ${MEDINETZ_IMAGE:-medinetz}:latest
+    build:
+      context: .
+      target: runner
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://medinetz:${POSTGRES_PASSWORD}@db:5432/medinetz
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET fehlt in .env}
+      BETTER_AUTH_URL: https://${DOMAIN:?DOMAIN fehlt in .env}
+      INSTITUT_NAME: ${INSTITUT_NAME:-Medinetz}
+      INSTITUT_SUBTITLE: ${INSTITUT_SUBTITLE:-Dein digitaler Medinetz-Arbeitsplatz}
+      DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-5}
+      # Begrenzt den Heap, damit der Prozess auf kleinen Servern stabil bleibt.
+      NODE_OPTIONS: --max-old-space-size=${NODE_MAX_MEMORY_MB:-384}
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+
+volumes:
+  pgdata:
+  uploads:
+  caddy_data:
+  caddy_config:

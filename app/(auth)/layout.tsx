@@ -1,11 +1,11 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { institutName } from "@/lib/config";
+import { getInstitutConfig } from "@/lib/config";
 
-export const metadata = {
-  title: `Anmelden | ${institutName}`,
-};
+export function generateMetadata() {
+  return { title: `Anmelden | ${getInstitutConfig().name}` };
+}
 
 export default async function AuthLayout({
   children,

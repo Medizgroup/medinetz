@@ -3,17 +3,22 @@ import { Quicksand } from "next/font/google";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { institutName, institutSubtitle } from "@/lib/config";
+import { getInstitutConfig } from "@/lib/config";
+import { InstitutProvider } from "@/components/providers/institut-provider";
 
 const quicksand = Quicksand({
   variable: "--font-roboto",
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: institutName,
-  description: institutSubtitle,
-};
+// Institut-Name/-Untertitel kommen zur Laufzeit aus der Umgebung (siehe
+// lib/config.ts) — daher nichts statisch vorrendern.
+export const dynamic = "force-dynamic";
+
+export function generateMetadata(): Metadata {
+  const { name, subtitle } = getInstitutConfig();
+  return { title: name, description: subtitle };
+}
 
 export default function RootLayout({
   children,
@@ -28,9 +33,11 @@ export default function RootLayout({
           defaultTheme="default"
           enableSystem
           disableTransitionOnChange>
-          <ToastProvider limit={3}>
-            <AnchoredToastProvider>{children}</AnchoredToastProvider>
-          </ToastProvider>
+          <InstitutProvider value={getInstitutConfig()}>
+            <ToastProvider limit={3}>
+              <AnchoredToastProvider>{children}</AnchoredToastProvider>
+            </ToastProvider>
+          </InstitutProvider>
         </ThemeProvider>
       </body>
     </html>

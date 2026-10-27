@@ -125,7 +125,7 @@ export function CasesPerMonthChart({
           {CASE_SERIES.map((s) => (
             <Bar key={s.key} dataKey={s.key} fill={s.color} lineCap="round" />
           ))}
-          <BarXAxis />
+          <BarXAxis maxLabels={6} />
           <ChartTooltip
             rows={(point) =>
               CASE_SERIES.map((s) => ({
@@ -161,7 +161,7 @@ export function FinancePerMonthChart({
           {FINANCE_SERIES.map((s) => (
             <Area key={s.key} dataKey={s.key} fill={s.color} fillOpacity={0.3} />
           ))}
-          <XAxis labels={labels} />
+          <XAxis labels={labels} numTicks={6} />
           <ChartTooltip
             dateLabels={labels}
             rows={(point) =>

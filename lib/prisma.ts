@@ -3,6 +3,9 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
+  // Klein halten: App und Collab-Server teilen sich einen Prozess und eine
+  // (oft kleine) Postgres-Instanz auf dem VPS.
+  max: Number(process.env.DATABASE_POOL_MAX || 5),
 });
 
 const globalForPrisma = global as unknown as {

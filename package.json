@@ -9,7 +9,8 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "collab-server": "tsx --env-file=.env collab-server/index.ts",
-    "collab-server:watch": "tsx watch --env-file=.env collab-server/index.ts"
+    "collab-server:watch": "tsx watch --env-file=.env collab-server/index.ts",
+    "build:server": "esbuild server.ts --bundle --platform=node --format=esm --target=node22 --outfile=.next/standalone/server.mjs --external:next --minify-syntax --legal-comments=none --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\""
   },
   "prisma": {
     "seed": "ts-node --transpile-only prisma/seed.ts"
@@ -129,6 +130,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "prisma": "^7.4.1",

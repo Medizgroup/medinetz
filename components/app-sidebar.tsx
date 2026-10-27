@@ -30,7 +30,7 @@ import { usePathname } from "next/navigation";
 import { Routing2 } from "@solar-icons/react-perf/category/style/LineDuotone";
 import type { News } from "@/generated/prisma/client";
 import InstitutLogo from "./institut-logo";
-import { institutName } from "@/lib/config";
+import { useInstitut } from "@/components/providers/institut-provider";
 
 export function AppSidebar({
   openTodosCount,
@@ -45,6 +45,7 @@ export function AppSidebar({
   newsCount: number;
 }) {
   const pathname = usePathname();
+  const institut = useInstitut();
 
   const data = {
     navMain: [
@@ -117,7 +118,7 @@ export function AppSidebar({
               <InstitutLogo size={28}/>
                 <div className="flex items-end">
 
-                <span className="text-xl font-semibold font-mono tracking-wide">{institutName}</span>
+                <span className="text-xl font-semibold font-mono tracking-wide">{institut.name}</span>
                 <span className="size-1.5 bg-[#86efac] block rounded-full opacity-60"></span>
            
                 </div>

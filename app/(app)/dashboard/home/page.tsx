@@ -18,7 +18,7 @@ import {
   CasesPerMonthChart,
   DistributionPie,
   FinancePerMonthChart,
-} from "@/components/dashboard/charts";
+} from "@/components/dashboard/charts-client";
 import {
   ResourcesCard,
   UpcomingEventsCard,
